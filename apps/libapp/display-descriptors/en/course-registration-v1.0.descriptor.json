@@ -1,0 +1,151 @@
+{
+  "title": {
+    "path": [
+      "$.provider.name",
+      "$.credentialSubject.provider.name"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "subtitle": {
+    "path": [
+      "$.courseName",
+      "$.credentialSubject.courseName"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.registrationDate",
+      "$.credentialSubject.registrationDate"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "date"
+    },
+    "fallback": "-"
+  },
+  "description": {
+    "text": "Course registration"
+  },
+  "logo": {
+    "path": [
+      "$.provider.image",
+      "$.credentialSubject.provider.image"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "properties": [
+    {
+      "label": "Description",
+      "path": [
+        "$.description",
+        "$.credentialSubject.description"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Registration date",
+      "path": [
+        "$.registrationDate",
+        "$.credentialSubject.registrationDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "Start date",
+      "path": [
+        "$.startDate",
+        "$.credentialSubject.startDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "Course type",
+      "path": [
+        "$.courseType",
+        "$.credentialSubject.courseType"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course mode",
+      "path": [
+        "$.courseMode",
+        "$.credentialSubject.courseMode"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course level",
+      "path": [
+        "$.courseLevel",
+        "$.credentialSubject.courseLevel"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course duration",
+      "path": [
+        "$.courseDuration",
+        "$.credentialSubject.courseDuration"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment",
+      "path": [
+        "$.alignment[0].targetName",
+        "$.credentialSubject.alignment[0].targetName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment URL",
+      "path": [
+        "$.alignment[0].targetUrl",
+        "$.credentialSubject.alignment[0].targetUrl"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    {
+      "label": "Alignment framework",
+      "path": [
+        "$.alignment[0].targetFramework",
+        "$.credentialSubject.alignment[0].targetFramework"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

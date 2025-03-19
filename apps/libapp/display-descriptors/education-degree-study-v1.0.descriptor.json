@@ -1,0 +1,212 @@
+{
+  "title": {
+    "path": [
+      "$.institution.name",
+      "$.credentialSubject.institution.name"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "subtitle": {
+    "path": [
+      "$.degreeName",
+      "$.credentialSubject.degreeName"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.startDate",
+      "$.credentialSubject.startDate"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "date"
+    },
+    "fallback": "-"
+  },
+  "description": {
+    "text": "Degree study"
+  },
+  "logo": {
+    "path": [
+      "$.institution.image",
+      "$.credentialSubject.institution.image"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "properties": [
+    {
+      "label": "School or department",
+      "path": [
+        "$.school.name",
+        "$.credentialSubject.school.name"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Description",
+      "path": [
+        "$.description",
+        "$.credentialSubject.description"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Registration date",
+      "path": [
+        "$.registrationDate",
+        "$.credentialSubject.registrationDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "Start date",
+      "path": [
+        "$.startDate",
+        "$.credentialSubject.startDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "End date",
+      "path": [
+        "$.endDate",
+        "$.credentialSubject.endDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "Grade",
+      "path": [
+        "$.grade.scoreValue",
+        "$.credentialSubject.grade.scoreValue"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Result",
+      "path": [
+        "$.grade.result",
+        "$.credentialSubject.grade.result"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Pass or fail",
+      "path": [
+        "$.grade.passFail",
+        "$.credentialSubject.grade.passFail"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Major",
+      "path": [
+        "$.degreeMajor[*]",
+        "$.credentialSubject.degreeMajor[*]"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Minor",
+      "path": [
+        "$.degreeMinor[*]",
+        "$.credentialSubject.degreeMinor[*]"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Program",
+      "path": [
+        "$.programName",
+        "$.credentialSubject.programName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Program type",
+      "path": [
+        "$.programType",
+        "$.credentialSubject.programType"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Program mode",
+      "path": [
+        "$.programMode",
+        "$.credentialSubject.programMode"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment",
+      "path": [
+        "$.alignment[0].targetName",
+        "$.credentialSubject.alignment[0].targetName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment URL",
+      "path": [
+        "$.alignment[0].targetUrl",
+        "$.credentialSubject.alignment[0].targetUrl"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    {
+      "label": "Alignment framework",
+      "path": [
+        "$.alignment[0].targetFramework",
+        "$.credentialSubject.alignment[0].targetFramework"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

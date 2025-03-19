@@ -1,0 +1,46 @@
+{
+  "title": "organization-registry-service-response",
+  "$id": "https://velocitycareerlabs.io/organization-registry-service-response.schema.json",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "credentialTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "logoUrl": {
+          "type": "string"
+        },
+        "playStoreUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "appleAppStoreUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "appleAppId": {
+          "type": "string"
+        },
+        "googlePlayId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "$ref": "did-service#"
+    }
+  ],
+  "required": [
+    "id",
+    "type",
+    "serviceEndpoint"
+  ]
+}

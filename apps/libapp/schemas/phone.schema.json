@@ -1,0 +1,19 @@
+{
+  "title": "Phone",
+  "type": "object",
+  "$id": "phone",
+  "description": "phone schema",
+  "properties": {
+    "type": {
+      "type": "string",
+      "default": "Phone"
+    },
+    "phone": {
+      "type": "string",
+      "pattern": "^\\+[1-9]\\d{1,14}$"
+    }
+  },
+  "required": [
+    "phone"
+  ]
+}

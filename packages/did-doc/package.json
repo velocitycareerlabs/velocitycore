@@ -1,0 +1,32 @@
+{
+  "name": "@velocitycareerlabs/did-doc",
+  "version": "0.5.0-build",
+  "description": "Velocity DID documents library",
+  "repository": "https://github.com/velocitycareerlabs/packages",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "jest --config ./jest.config.js --runInBand --coverage",
+    "lint": "eslint . --format json >> eslint.json",
+    "lint:fix": "eslint --fix --ext .js ."
+  },
+  "author": "Itay Podhajcer",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@velocitycareerlabs/blockchain-functions": "0.5.0-build",
+    "@velocitycareerlabs/crypto": "0.5.0-build",
+    "@velocitycareerlabs/jwt": "0.5.0-build",
+    "bs58": "^6.0.0",
+    "canonicalize": "~2.0.0",
+    "http-errors": "^2.0.0",
+    "lodash": "^4.17.21",
+    "jose": "~5.10.0"
+  },
+  "devDependencies": {
+    "@velocitycareerlabs/sample-data": "0.5.0-build",
+    "jest": "29.7.0",
+    "nock": "13.5.6"
+  }
+}

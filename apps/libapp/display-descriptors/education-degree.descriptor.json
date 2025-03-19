@@ -1,0 +1,110 @@
+{
+  "title": {
+    "path": [
+      "$.schoolName.localized.en",
+      "$.credentialSubject.schoolName.localized.en"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "subtitle": {
+    "path": [
+      "$.degreeName.localized.en",
+      "$.credentialSubject.degreeName.localized.en"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.endMonthYear",
+      "$.credentialSubject.endMonthYear"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "date"
+    },
+    "fallback": "-"
+  },
+  "description": {
+    "text": "Education Degree"
+  },
+  "properties": [
+    {
+      "label": "Program",
+      "path": [
+        "$.program.localized.en",
+        "$.credentialSubject.program.localized.en"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Fields of study",
+      "path": [
+        "$.fieldsOFStudy.localized.en",
+        "$.credentialSubject.fieldsOFStudy.localized.en"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Start date",
+      "path": [
+        "$.startMonthYear",
+        "$.credentialSubject.startMonthYear"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "Grade",
+      "path": [
+        "$.grade.localized.en",
+        "$.credentialSubject.grade.localized.en"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment",
+      "path": [
+        "$.alignment[0].targetName",
+        "$.credentialSubject.alignment[0].targetName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment URL",
+      "path": [
+        "$.alignment[0].targetUrl",
+        "$.credentialSubject.alignment[0].targetUrl"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    {
+      "label": "Alignment framework",
+      "path": [
+        "$.alignment[0].targetFramework",
+        "$.credentialSubject.alignment[0].targetFramework"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

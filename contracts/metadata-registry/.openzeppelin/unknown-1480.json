@@ -1,0 +1,1336 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0xD28e71b757CD85f2007bE389D4f1A5026C52871d",
+    "txHash": "0x6df0bcebd4b53b3812c3c7a4e5f6cb71eb2a9393114421d0a35d69b0e4c24ce2"
+  },
+  "proxies": [
+    {
+      "address": "0x800B4740470C85035015a7B38DedB0f4bB82c985",
+      "txHash": "0x1ab76672b0308916bcf1a222f58fdafcbd80c27043335778c7149b1fda267d32",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "5873a89620d7744f3c2117d15d8754a86af885a103480439bacc99b510fd47ce": {
+      "address": "0xED021b52Ffd3D4CEDCb554d9F9CADa825bb14FaB",
+      "txHash": "0x4496e6cdb35244fac0db67fa5330820826dbffa030782509aa568a3387d2ec8d",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)4484",
+            "src": "../project:/contracts/MetadataRegistry.sol:9"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:38"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3332_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3323_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)4484": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3332_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)3332_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)3332_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3323_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3323_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)3323_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)3323_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "c2dc6f576c6b7fe2cc803029cbfd104e9913cfa63cdcabf19c06582ee23563c3": {
+      "address": "0x1356e005423c538496Bb2decc1e60AD744dbfA78",
+      "txHash": "0x12d338ae540f0a7a85aba59c9b87a765d8a7a9e720728b8b44a5d3d2ccad9197",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)4567",
+            "src": "../project:/contracts/MetadataRegistry.sol:9"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:38"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3332_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3323_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)4567": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3332_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)3332_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)3332_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3323_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3323_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)3323_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)3323_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "6eddc74ba130fe1b48c5a2966e81d92267d793a4739af152afc3fbaf82644553": {
+      "address": "0x1E563bc3e8EFDf9657451b55Cd696af6A02cF4e6",
+      "txHash": "0x73940f57640e24a5755b55e8384c4323d67a9e188c8a42314bfeddc5ed044c2f",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)4418",
+            "src": "../project:/contracts/MetadataRegistry.sol:9"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:38"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3214_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3205_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)4418": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3214_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)3214_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)3214_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3205_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3205_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)3205_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)3205_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "2307048e0ccf0a0db61036784f2124a169d881899ccdbc93f64f0ed48979a06c": {
+      "address": "0xd33C5f9897B8DC97a7085A73B2dfF2190a8341A2",
+      "txHash": "0x43fea5a91d541863aa502db8232e1c33e577d1b20f4eaa4e72eb8b7d97bcb3a7",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)4780",
+            "src": "../project:/contracts/MetadataRegistry.sol:9"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:38"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3545_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3536_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)4780": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3545_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)3545_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)3545_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3536_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3536_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)3536_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)3536_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "1a4575c949aa4723c990377c1cde2876c10fc4eccd31fcf1c32b23e6eaf782e5": {
+      "address": "0x9c8519a029c81a7a0b41288DA014137861Cea359",
+      "txHash": "0x471d8353d282a2cc9637bba58495431ecf6423667d43d97c225c14d990663f96",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)5104",
+            "src": "../project:/contracts/MetadataRegistry.sol:9"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:38"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3787_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3778_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "permissions",
+            "type": "t_contract(Permissions)3760",
+            "src": "../project:/contracts/MetadataRegistry.sol:42"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)5104": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)3787_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)3787_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)3787_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3778_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)3778_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)3778_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)3778_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_contract(Permissions)3760": {
+            "label": "contract Permissions"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "ff9332e5d5d64434ae28de1917f668370d4442cf4a69a71a8aefbaa31c6ec782": {
+      "address": "0x3F816DE00ba8cEeBE208d5a209BDba1d2481fB8f",
+      "txHash": "0x8c070d1b91ba0e981d4d24c0a590d3f0cee629cdae7137c5b4f1fa597651e350",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)5477",
+            "src": "../project:/contracts/MetadataRegistry.sol:10"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)5505_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5496_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:41"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "permissions",
+            "type": "t_contract(Permissions)4861",
+            "src": "../project:/contracts/MetadataRegistry.sol:43"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)5477": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)5505_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)5505_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)5505_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5496_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5496_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)5496_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)5496_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_contract(Permissions)4861": {
+            "label": "contract Permissions"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "d7b1f5801d2073099718853972b77180aa8e2a3873cbae557acc14f91a2d07f7": {
+      "address": "0x278321FCe5046a7e5d9986e1395B0Bd775Ea0320",
+      "txHash": "0x9e8b90d2afa0565a642bfc07d64b97810ef2ab02eefca3d7506932fd4f8fdda4",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)5477",
+            "src": "../project:/contracts/MetadataRegistry.sol:10"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)5505_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5496_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:41"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "permissions",
+            "type": "t_contract(Permissions)4861",
+            "src": "../project:/contracts/MetadataRegistry.sol:43"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)5477": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)5505_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)5505_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)5505_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5496_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5496_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)5496_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)5496_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_contract(Permissions)4861": {
+            "label": "contract Permissions"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "fc5f64d938e812af7b0d9ef4c41877160348460ccde293329f69534298c3efbe": {
+      "address": "0x32c3494F968b642Eb6Fa801AbFE34fd3AA5c973c",
+      "txHash": "0xdeae8f4b965d28edc294b535cc3a2409d16b261b034574cfd8cf50a966c29ab1",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)5961",
+            "src": "../project:/contracts/MetadataRegistry.sol:10"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)5989_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5980_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:41"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "permissions",
+            "type": "t_contract(Permissions)5345",
+            "src": "../project:/contracts/MetadataRegistry.sol:43"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)5961": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)5989_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)5989_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)5989_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5980_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5980_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)5980_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)5980_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_contract(Permissions)5345": {
+            "label": "contract Permissions"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        },
+        "namespaces": {}
+      }
+    },
+    "bc0a9412f5c201d2551d11699a8e186d77089c3bd2344dd4391e93757e84f86a": {
+      "address": "0xCD6Ed450e3716BB69e6da22D5F62378E3430C204",
+      "txHash": "0xb6e23f82e3a22312c96915cbb03000f3f39893f3ff693d657d03dbde33b2cc2c",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)6016",
+            "src": "../project:/contracts/MetadataRegistry.sol:10"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)6044_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)6035_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:41"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "permissions",
+            "type": "t_contract(Permissions)5400",
+            "src": "../project:/contracts/MetadataRegistry.sol:43"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)6016": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)6044_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)6044_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)6044_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)6035_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)6035_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)6035_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)6035_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_contract(Permissions)5400": {
+            "label": "contract Permissions"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        },
+        "namespaces": {}
+      }
+    },
+    "37a89b04f1d10f8caab440a86c45ddc5cc77585ab2e597550feaa4c234b4b152": {
+      "address": "0x1CD97936b0C9fB1701e91e77a238b7bF822CDe34",
+      "txHash": "0x5006411e5ddad2fdafc7b5039e27691a4f917ad025fbc7ace06cbc53f1edd447",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "Coupon",
+            "type": "t_contract(VerificationCoupon)5974",
+            "src": "../project:/contracts/MetadataRegistry.sol:10"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "freeCredentialTypes",
+            "type": "t_mapping(t_bytes2,t_bool)",
+            "src": "../project:/contracts/MetadataRegistry.sol:39"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "lists",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)6002_storage))",
+            "src": "../project:/contracts/MetadataRegistry.sol:40"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "indexUsed",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5993_storage)))",
+            "src": "../project:/contracts/MetadataRegistry.sol:41"
+          },
+          {
+            "contract": "MetadataRegistry",
+            "label": "permissions",
+            "type": "t_contract(Permissions)5358",
+            "src": "../project:/contracts/MetadataRegistry.sol:43"
+          }
+        ],
+        "types": {
+          "t_contract(VerificationCoupon)5974": {
+            "label": "contract VerificationCoupon"
+          },
+          "t_mapping(t_bytes2,t_bool)": {
+            "label": "mapping(bytes2 => bool)"
+          },
+          "t_bytes2": {
+            "label": "bytes2"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(ListMetadata)6002_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MetadataRegistry.ListMetadata))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_struct(ListMetadata)6002_storage)": {
+            "label": "mapping(uint256 => struct MetadataRegistry.ListMetadata)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(ListMetadata)6002_storage": {
+            "label": "struct MetadataRegistry.ListMetadata",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "algType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "issuerVc",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bytes_storage": {
+            "label": "bytes"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5993_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint32,t_struct(CredentialEntry)5993_storage))": {
+            "label": "mapping(uint256 => mapping(uint32 => struct MetadataRegistry.CredentialEntry))"
+          },
+          "t_mapping(t_uint32,t_struct(CredentialEntry)5993_storage)": {
+            "label": "mapping(uint32 => struct MetadataRegistry.CredentialEntry)"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_struct(CredentialEntry)5993_storage": {
+            "label": "struct MetadataRegistry.CredentialEntry",
+            "members": [
+              {
+                "label": "credentialType",
+                "type": "t_bytes2"
+              },
+              {
+                "label": "encryptedPublicKey",
+                "type": "t_bytes_storage"
+              },
+              {
+                "label": "used",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_contract(Permissions)5358": {
+            "label": "contract Permissions"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        },
+        "namespaces": {}
+      }
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Certification",
+  "$id": "certification",
+  "type": "object",
+  "definitions": {
+    "DID": {
+      "type": "string",
+      "pattern": "^did:[a-z0-9]+:[A-Za-z0-9._:?=&%;-]+$"
+    },
+    "Alignment": {
+      "type": "object",
+      "properties": {
+        "targetName": {
+          "type": "string",
+          "description": "CCSS.ELA-Literacy.RST.11-12.3"
+        },
+        "targetUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "http://www.corestandards.org/ELA-Literacy/RST/11-12/3"
+        },
+        "targetDescription": {
+          "type": "string",
+          "description": "A description of the ELA ltieracy certification."
+        },
+        "targetCode": {
+          "type": "string",
+          "description": "CCSS.ELA-Literacy.RST.11-12.3"
+        },
+        "targetFramework": {
+          "type": "string",
+          "description": "Mozilla 21st Century Skills"
+        }
+      },
+      "required": [
+        "targetName",
+        "targetUrl"
+      ],
+      "additionalProperties": false
+    },
+    "MultiLingualString": {
+      "type": "object",
+      "properties": {
+        "localized": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z]{2}(_[A-Z]{2})?$"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "preferredLocale": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            },
+            "language": {
+              "type": "string",
+              "pattern": "^[a-z]{2}$"
+            }
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "localized"
+      ]
+    },
+    "Date": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 31
+        },
+        "month": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1950
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "authority": {
+      "$ref": "#/definitions/DID",
+      "description": "Standardized referenced Organization DID."
+    },
+    "authorityName": {
+      "$ref": "#/definitions/MultiLingualString",
+      "description": "Issuing authority's name."
+    },
+    "type": {
+      "$ref": "#/definitions/MultiLingualString",
+      "description": "The kind of certification."
+    },
+    "name": {
+      "$ref": "#/definitions/MultiLingualString",
+      "description": "Certification attained from this authority."
+    },
+    "number": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9\\s]*$",
+      "maxLength": 64
+    },
+    "notes": {
+      "$ref": "#/definitions/MultiLingualString",
+      "description": "Description for additional details about this certification."
+    },
+    "fieldsOfStudy": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/MultiLingualString",
+        "description": "Degrees achieved in respective fields of study."
+      }
+    },
+    "certificationDate": {
+      "$ref": "#/definitions/Date",
+      "description": "Certification date. It is a Date."
+    },
+    "datesRenewed": {
+      "$ref": "#/definitions/Date",
+      "description": "Date it was renewed"
+    },
+    "alignment": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Alignment"
+      }
+    }
+  },
+  "required": [
+    "authority",
+    "authorityName",
+    "type",
+    "name",
+    "certificationDate"
+  ]
+}

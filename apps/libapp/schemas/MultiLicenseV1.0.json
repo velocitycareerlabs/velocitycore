@@ -1,0 +1,997 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JSON Schema NCSBN Multilicense.",
+  "description": "",
+  "definitions": {
+    "Action": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "ActionDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "3nvk4x9mbpzys"
+          }
+        },
+        "ActionCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "f2my7mfldyldm"
+          }
+        },
+        "ActionDescription": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "txg6ogouctdgy"
+          }
+        },
+        "ActionStayedFlag": {
+          "type": "boolean",
+          "x-stoplight": {
+            "id": "9ok7iejrti0y7"
+          }
+        },
+        "StartDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "1qo69l3mpmtj8"
+          }
+        },
+        "EndDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "8g7e8wc405xcw"
+          }
+        },
+        "Duration": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "v86d6cj72anys"
+          }
+        },
+        "AutomaticReinstatement": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "l8pjski0x1x60"
+          }
+        }
+      },
+      "required": [
+        "ActionDate",
+        "ActionCode",
+        "ActionDescription",
+        "ActionStayedFlag",
+        "StartDate",
+        "EndDate",
+        "Duration",
+        "AutomaticReinstatement"
+      ],
+      "x-stoplight": {
+        "id": "hsd41lor4iw30"
+      }
+    },
+    "Alignment": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "AlignmentObject",
+          "x-stoplight": {
+            "id": "u9hx3re1cefdb"
+          }
+        },
+        "targetName": {
+          "type": "string",
+          "description": "Name of the target alignment.",
+          "maxLength": 256,
+          "x-stoplight": {
+            "id": "w5hy4yq2g71z8"
+          }
+        },
+        "targetUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the target alignment. ",
+          "maxLength": 2048,
+          "x-stoplight": {
+            "id": "nhk4vxvoqbaxi"
+          }
+        },
+        "targetDescription": {
+          "type": "string",
+          "description": "Detailed description of the target alignment. ",
+          "maxLength": 2048,
+          "x-stoplight": {
+            "id": "fxj4tp7t2r0vj"
+          }
+        },
+        "targetCode": {
+          "type": "string",
+          "description": "Code of the target alignment. ",
+          "maxLength": 256,
+          "x-stoplight": {
+            "id": "h2w46yr7ceu2k"
+          }
+        },
+        "targetFramework": {
+          "type": "string",
+          "description": "The framework to which the target belongs. ",
+          "maxLength": 256,
+          "x-stoplight": {
+            "id": "pk3lr2rhf7ktj"
+          }
+        }
+      },
+      "required": [
+        "targetName",
+        "targetUrl"
+      ],
+      "x-stoplight": {
+        "id": "x0rwz35p9iq1z"
+      }
+    },
+    "PersonName": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "PersonName",
+          "x-stoplight": {
+            "id": "u10ulnqfoytqe"
+          }
+        },
+        "givenName": {
+          "type": "string",
+          "description": "The given name or first name of the person.",
+          "maxLength": 64,
+          "x-stoplight": {
+            "id": "uq2ghdlwbo9ur"
+          }
+        },
+        "familyName": {
+          "type": "string",
+          "description": "The family name or surname of the person.",
+          "maxLength": 64,
+          "x-stoplight": {
+            "id": "es3hve994cso3"
+          }
+        },
+        "middleName": {
+          "type": "string",
+          "description": "The middle name of the person.",
+          "maxLength": 256,
+          "x-stoplight": {
+            "id": "6ddvig03dbtfp"
+          }
+        },
+        "namePrefix": {
+          "type": "string",
+          "description": "A prefix to the name such as Dr or Sir.",
+          "maxLength": 8,
+          "x-stoplight": {
+            "id": "qi3qtgknjcg6z"
+          }
+        },
+        "nameSuffix": {
+          "type": "string",
+          "description": "A suffix to the name such as Jr. or Sr.",
+          "maxLength": 16,
+          "x-stoplight": {
+            "id": "gs9oieevkljlg"
+          }
+        }
+      },
+      "required": [
+        "givenName",
+        "familyName"
+      ],
+      "x-stoplight": {
+        "id": "dehjkrrkhiwd6"
+      }
+    },
+    "AdvancedPractice": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "FocusSpecialty": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "vky9tvorf23s2"
+          }
+        },
+        "PrescriptionAuthority": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "6rv7124t4mhtm"
+          }
+        },
+        "CertificationExpirationDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "qu6zztu5xy17r"
+          }
+        },
+        "FocusSpecialtyExpirationDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "r16akfij2h1s5"
+          }
+        }
+      },
+      "required": [
+        "FocusSpecialty",
+        "PrescriptionAuthority",
+        "CertificationExpirationDate",
+        "FocusSpecialtyExpirationDate"
+      ],
+      "x-stoplight": {
+        "id": "0m8mofx7iw4wu"
+      }
+    },
+    "AuthorizationToPractice": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "LicenseType": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "StateAbbreviation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "4rthnd0sov1m3"
+          }
+        },
+        "StateDescription": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "8mrgibajxxwvh"
+          }
+        },
+        "AuthorizationToPracticeCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "x3mwqtx0z11wz"
+          }
+        },
+        "AuthorizationToPracticeDescription": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "v2rpefzyywzrx"
+          }
+        },
+        "AuthorizationToPracticeNarrative": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "lckthsa5qyhhv"
+          }
+        }
+      },
+      "required": [
+        "LicenseType",
+        "StateAbbreviation",
+        "StateDescription",
+        "AuthorizationToPracticeCode",
+        "AuthorizationToPracticeDescription",
+        "AuthorizationToPracticeNarrative"
+      ],
+      "x-stoplight": {
+        "id": "fy546xvsy2mng"
+      }
+    },
+    "BasisForAction": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "BasisForActionCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "224mzb05axp81"
+          }
+        },
+        "BasisForActionDescription": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "65o451nwu4zj9"
+          }
+        }
+      },
+      "required": [
+        "BasisForActionCode",
+        "BasisForActionDescription"
+      ],
+      "x-stoplight": {
+        "id": "dl4x22hlpp4p0"
+      }
+    },
+    "Discipline": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "JurisdictionAbbreviation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "j1gwe597wocaf"
+          }
+        },
+        "Jurisdiction": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "4te7d1872tfne"
+          }
+        },
+        "DateActionWasTaken": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "zvmnpp91qv740"
+          }
+        },
+        "AgainstPrivilegeToPracticeFlag": {
+          "type": "boolean",
+          "x-stoplight": {
+            "id": "z1rnxqt0hc722"
+          }
+        },
+        "BasisForActions": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/BasisForAction",
+            "x-stoplight": {
+              "id": "6vwah9ewtt5gg"
+            }
+          },
+          "x-stoplight": {
+            "id": "932w6u1zniz7f"
+          }
+        },
+        "InitialActions": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/Action",
+            "x-stoplight": {
+              "id": "he1hwyb3i8m7r"
+            }
+          },
+          "x-stoplight": {
+            "id": "s7szb2x3r5ttn"
+          }
+        },
+        "InitialActionDocuments": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/Document",
+            "x-stoplight": {
+              "id": "8mo3ufui2je4s"
+            }
+          },
+          "x-stoplight": {
+            "id": "u0k67xh4vv12z"
+          }
+        },
+        "RevisionReports": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/RevisionReport",
+            "x-stoplight": {
+              "id": "grsmpifmp17et"
+            }
+          },
+          "x-stoplight": {
+            "id": "qjkr851hm7c0i"
+          }
+        }
+      },
+      "required": [
+        "JurisdictionAbbreviation",
+        "Jurisdiction",
+        "DateActionWasTaken",
+        "AgainstPrivilegeToPracticeFlag",
+        "BasisForActions",
+        "InitialActions",
+        "InitialActionDocuments",
+        "RevisionReports"
+      ],
+      "x-stoplight": {
+        "id": "tgo0y2hfe7c25"
+      }
+    },
+    "Document": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "ActionDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "vffnk302mfpk8"
+          }
+        },
+        "DocumentId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "jxjda1dxli7ix"
+          }
+        },
+        "DocumentName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "c0b4s72v1h6h5"
+          }
+        }
+      },
+      "required": [
+        "ActionDate",
+        "DocumentId",
+        "DocumentName"
+      ],
+      "x-stoplight": {
+        "id": "mfzg6r315y8zg"
+      }
+    },
+    "License": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "Name": {
+          "$ref": "#/definitions/PersonName",
+          "x-stoplight": {
+            "id": "ev1yufzt3npr6"
+          }
+        },
+        "LicenseType": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "g8qnptrnzxp8z"
+          }
+        },
+        "JurisdictionAbbreviation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "ytc2adcwabwbq"
+          }
+        },
+        "Jurisdiction": {
+          "type": "string",
+          "x-stoplight": {
+            "id": "mqfp56u6nldzo"
+          }
+        },
+        "LicenseNumber": {
+          "type": "string",
+          "x-stoplight": {
+            "id": "7ewg914bajldq"
+          }
+        },
+        "Active": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "o9ux48sm6aqdg"
+          }
+        },
+        "LicenseStatus": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "jjtwsot2yvrl1"
+          }
+        },
+        "LicenseOriginalIssueDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "gxt9pt932j1x3"
+          }
+        },
+        "LicenseExpirationDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "a9jnc9sl2ey6v"
+          }
+        },
+        "CompactStatus": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "0ca2d0happ67k"
+          }
+        },
+        "CompactPrivileges": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/CompactPrivileges"
+          }
+        },
+        "Messages": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-stoplight": {
+              "id": "sffgyp0yga2jd"
+            }
+          },
+          "x-stoplight": {
+            "id": "tk8u984hw65q0"
+          }
+        },
+        "Disciplines": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/Discipline",
+            "x-stoplight": {
+              "id": "4gz7xgo66xhee"
+            }
+          },
+          "x-stoplight": {
+            "id": "6t63x8vcqkxm3"
+          }
+        },
+        "Notifications": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/Notification",
+            "x-stoplight": {
+              "id": "ji7pwexzecfww"
+            }
+          },
+          "x-stoplight": {
+            "id": "5dkwf6iumfrav"
+          }
+        },
+        "AdvancedPractices": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/AdvancedPractice",
+            "x-stoplight": {
+              "id": "w3er93cpuiicq"
+            }
+          },
+          "x-stoplight": {
+            "id": "efmlmvrkiatm1"
+          }
+        },
+        "alignment": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "minItems": 1,
+          "description": "A public resource to which the certification or license is aligned.",
+          "items": {
+            "$ref": "#/definitions/Alignment",
+            "x-stoplight": {
+              "id": "qk7p2z7e66yde"
+            }
+          },
+          "x-stoplight": {
+            "id": "xdvumjjob1x4y"
+          }
+        }
+      },
+      "required": [
+        "Name",
+        "LicenseType",
+        "JurisdictionAbbreviation",
+        "Jurisdiction",
+        "LicenseNumber",
+        "Active",
+        "LicenseStatus",
+        "LicenseOriginalIssueDate",
+        "LicenseExpirationDate",
+        "CompactStatus",
+        "CompactPrivileges",
+        "Messages",
+        "Disciplines",
+        "Notifications",
+        "AdvancedPractices",
+        "Alignment"
+      ],
+      "x-stoplight": {
+        "id": "vidm1pqmlp4od"
+      }
+    },
+    "CompactPrivileges": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "JurisdictionAbbreviation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Jurisdiction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "HomeJurisdictionAbbreviation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "HomeJurisdiction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "IssueDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "ExpirationDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "RenewalDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "Status": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Active",
+            "Expired",
+            "Terminated"
+          ]
+        },
+        "Number": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "JurisdictionAbbreviation",
+        "Jurisdiction",
+        "HomeJurisdictionAbbreviation",
+        "HomeJurisdiction",
+        "IssueDate",
+        "ExpirationDate",
+        "RenewalDate",
+        "Status",
+        "Number"
+      ]
+    },
+    "Notification": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "JurisdictionAbbreviation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "h8mh79c4mjjkg"
+          }
+        },
+        "Jurisdiction": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "xl05bee1iip51"
+          }
+        },
+        "NotficationDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "h55d7rvuna77v"
+          }
+        },
+        "NotificationMessage": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stoplight": {
+            "id": "e3ocpkx54e26v"
+          }
+        },
+        "NotificationDocuments": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/Document",
+            "x-stoplight": {
+              "id": "rifj0tzdb11gu"
+            }
+          },
+          "x-stoplight": {
+            "id": "o5tnnsuckuc55"
+          }
+        }
+      },
+      "required": [
+        "JurisdictionAbbreviation",
+        "Jurisdiction",
+        "NotficationDate",
+        "NotificationMessage",
+        "NotificationDocuments"
+      ],
+      "x-stoplight": {
+        "id": "hrc308i5wafq7"
+      }
+    },
+    "RevisionReport": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "RevisionReportDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "x-stoplight": {
+            "id": "4ls8v2qfd8d6n"
+          }
+        },
+        "RevisionActions": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/Action",
+            "x-stoplight": {
+              "id": "9fe0v3w1fgkeu"
+            }
+          },
+          "x-stoplight": {
+            "id": "mczbyfocobwvu"
+          }
+        },
+        "RevisionActionDocuments": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/Document",
+            "x-stoplight": {
+              "id": "ilcld3wu176aa"
+            }
+          },
+          "x-stoplight": {
+            "id": "bpgc8lm58pthx"
+          }
+        }
+      },
+      "required": [
+        "RevisionReportDate",
+        "RevisionActions",
+        "RevisionActionDocuments"
+      ],
+      "x-stoplight": {
+        "id": "2d9s1srzx2mkv"
+      }
+    }
+  },
+  "x-stoplight": {
+    "id": "4fe4f0w546dze"
+  },
+  "type": "object",
+  "properties": {
+    "Name": {
+      "$ref": "#/definitions/PersonName"      
+    },
+    "Id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Messages": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "Licenses": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/License"
+      }
+    },
+    "AuthorizationToPractice": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/AuthorizationToPractice"
+      }
+    }  
+  },
+  "required": [
+    "Name",
+    "Id",
+    "Messages",
+    "Licenses",
+    "AuthorizationToPractice"
+  ]
+}

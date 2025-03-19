@@ -1,0 +1,192 @@
+{
+  "title": {
+    "path": [
+      "$.provider.name",
+      "$.credentialSubject.provider.name"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "subtitle": {
+    "path": [
+      "$.courseName",
+      "$.credentialSubject.courseName"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.completionDate",
+      "$.credentialSubject.completionDate"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "date"
+    },
+    "fallback": "-"
+  },
+  "description": {
+    "text": "Course completion"
+  },
+  "logo": {
+    "path": [
+      "$.provider.image",
+      "$.credentialSubject.provider.image"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "properties": [
+    {
+      "label": "Description",
+      "path": [
+        "$.description",
+        "$.credentialSubject.description"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Registration Date",
+      "path": [
+        "$.registrationDate",
+        "$.credentialSubject.registrationDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "Start Date",
+      "path": [
+        "$.startDate",
+        "$.credentialSubject.startDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "Completion Date",
+      "path": [
+        "$.completionDate",
+        "$.credentialSubject.completionDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "Grade",
+      "path": [
+        "$.grade.scoreValue",
+        "$.credentialSubject.grade.scoreValue"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Result",
+      "path": [
+        "$.grade.result",
+        "$.credentialSubject.grade.result"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Pass or fail",
+      "path": [
+        "$.grade.passFail",
+        "$.credentialSubject.grade.passFail"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course type",
+      "path": [
+        "$.courseType",
+        "$.credentialSubject.courseType"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course mode",
+      "path": [
+        "$.courseMode",
+        "$.credentialSubject.courseMode"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course level",
+      "path": [
+        "$.courseLevel",
+        "$.credentialSubject.courseLevel"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course duration",
+      "path": [
+        "$.courseDuration",
+        "$.credentialSubject.courseDuration"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment",
+      "path": [
+        "$.alignment[0].targetName",
+        "$.credentialSubject.alignment[0].targetName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment URL",
+      "path": [
+        "$.alignment[0].targetUrl",
+        "$.credentialSubject.alignment[0].targetUrl"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    {
+      "label": "Alignment framework",
+      "path": [
+        "$.alignment[0].targetFramework",
+        "$.credentialSubject.alignment[0].targetFramework"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

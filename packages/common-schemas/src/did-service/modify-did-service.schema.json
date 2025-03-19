@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "modify-did-service",
+  "title": "modify-did-service",
+  "type": "object",
+  "properties": {
+    "serviceEndpoint": {
+      "type": "string"
+    },
+    "logoUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "playStoreUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "appleAppStoreUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "appleAppId": {
+      "type": "string"
+    },
+    "googlePlayId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "serviceEndpoint"
+  ]
+}

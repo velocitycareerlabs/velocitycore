@@ -1,0 +1,25 @@
+{
+  "name": "@velocitycareerlabs/contracts-deployment",
+  "version": "0.5.0-build",
+  "description": "A tool for deploying our contracts locally.",
+  "repository": "https://github.com/velocitycareerlabs/packages",
+  "main": "index.js",
+  "bin": "index.js",
+  "scripts": {
+    "deploy": "node ./index.js",
+    "test": "jest --config ./jest.config.js --runInBand --coverage --passWithNoTests",
+    "lint": "eslint . --format json >> eslint.json",
+    "lint:fix": "eslint --fix --ext .js ."
+  },
+  "author": "Itay Podhajcer",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@velocitycareerlabs/crypto": "^0.5.0-build",
+    "@velocitycareerlabs/base-contract-io": "^0.5.0-build",
+    "@velocitycareerlabs/contract-permissions": "^0.5.0-build",
+    "@velocitycareerlabs/metadata-registration": "^0.5.0-build"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "authority": {
+    "name": {
+      "ui:title": "Authority"
+    },
+    "identifier": {
+      "ui:widget": "hidden"
+    },
+    "place": {
+      "ui:widget": "hidden"
+    }
+  },
+  "name": {
+    "ui:title": "Assessment name"
+  },
+  "assesses": {
+    "ui:widget": "hidden"
+  },
+  "description": {
+    "ui:title": "Assessment description"
+  },
+  "assessmentDate": {
+    "ui:title": "Date",
+    "ui:widget": "date"
+  },
+  "alignment": {
+    "ui:widget": "hidden"
+  },
+  "score": {
+    "scoreValue": {
+      "ui:title": "Score"
+    },
+    "result": {
+      "ui:title": "Result"
+    },
+    "passFail": {
+      "ui:title": "Pass or fail"
+    },
+    "scoreMethod": {
+      "ui:widget": "hidden"
+    },
+    "ui:order": [
+      "scoreValue",
+      "result",
+      "passFail"
+    ]
+  },
+  "assessmentLevel": {
+    "ui:widget": "hidden"
+  },
+  "assessmentMethod": {
+    "ui:widget": "hidden"
+  },
+  "assessmentDimensions": {
+    "ui:widget": "hidden"
+  },
+    "recipient": {
+    "givenName": {
+      "ui:title": "First name"
+    },
+    "middleName": {
+      "ui:title": "Middle name"
+    },
+    "familyName": {
+      "ui:title": "Last name"
+    },
+    "namePrefix": {
+      "ui:title": "Name prefix"
+    },
+    "nameSuffix": {
+      "ui:title": "Name suffix"
+    },
+    "ui:order": [
+      "givenName",
+      "middleName",
+      "familyName",
+      "namePrefix",
+      "nameSuffix"
+    ]
+  },
+  "ui:order": [
+    "authority",
+    "name",
+    "description",
+    "assessmentDate",
+    "score",
+    "recipient"
+  ]
+}

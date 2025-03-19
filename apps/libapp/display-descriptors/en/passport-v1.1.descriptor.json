@@ -1,0 +1,239 @@
+{
+  "title": {
+    "path": [
+      "$.authority.name",
+      "$.credentialSubject.authority.name"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "Passport"
+  },
+  "subtitle": {
+    "path": [
+      "$.authority.place.addressCountry",
+      "$.credentialSubject.authority.place.addressCountry"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.identifier",
+      "$.credentialSubject.identifier"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "description": {
+    "text": "Passport"
+  },
+  "logo": {
+    "path": [
+      "$.authority.image",
+      "$.credentialSubject.authority.image"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "properties": [
+    {
+      "label": "Country of issuing authority",
+      "path": [
+        "$.authority.place.addressCountry",
+        "$.credentialSubject.authority.place.addressCountry"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Nationality",
+      "path": [
+        "$.nationality",
+        "$.credentialSubject.nationality"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Passport number",
+      "path": [
+        "$.identifier",
+        "$.credentialSubject.identifier"
+      ],
+      "schema": {
+        "type": "string"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Passport type",
+      "path": [
+        "$.documentCode",
+        "$.credentialSubject.documentCode"
+      ],
+      "schema": {
+        "type": "string"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Date issued",
+      "path": [
+        "$.validity.firstValidFrom",
+        "$.credentialSubject.validity.firstValidFrom"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Date renewed",
+      "path": [
+        "$.validity.validFrom",
+        "$.credentialSubject.validity.validFrom"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Valid until",
+      "path": [
+        "$.validity.validUntil",
+        "$.credentialSubject.validity.validUntil"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "First name",
+      "path": [
+        "$.person.givenName",
+        "$.credentialSubject.person.givenName"
+      ],
+      "schema": {
+        "type": "string"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Middle name",
+      "path": [
+        "$.person.additionalName",
+        "$.credentialSubject.person.additionalName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Last name",
+      "path": [
+        "$.person.familyName",
+        "$.credentialSubject.person.familyName"
+      ],
+      "schema": {
+        "type": "string"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Name prefix",
+      "path": [
+        "$.person.namePrefix",
+        "$.credentialSubject.person.namePrefix"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Name suffix",
+      "path": [
+        "$.person.nameSuffix",
+        "$.credentialSubject.person.nameSuffix"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Date of birth",
+      "path": [
+        "$.person.birthDate",
+        "$.credentialSubject.person.birthDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Country of birth",
+      "path": [
+        "$.person.birthPlace.addressCountry",
+        "$.credentialSubject.person.birthPlace.addressCountry"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Region or state of birth",
+      "path": [
+        "$.person.birthPlace.addressRegion",
+        "$.credentialSubject.person.birthPlace.addressRegion"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Place of birth",
+      "path": [
+        "$.person.birthPlace.addressLocality",
+        "$.credentialSubject.person.birthPlace.addressLocality"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Gender",
+      "path": [
+        "$.person.gender",
+        "$.credentialSubject.person.gender"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Address",
+      "path": [
+        "$.streetAddress",
+        "$.credentialSubject.streetAddress"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

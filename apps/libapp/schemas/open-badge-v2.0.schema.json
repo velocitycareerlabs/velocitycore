@@ -1,0 +1,348 @@
+{
+  "title": "Open Badge",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Badge",
+  "$id": "https://velocitynetwork.foundation/schemas/open-badge-v2.0",
+  "type": "object",
+  "definitions": {
+    "obiProfile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri",
+          "description": "Unique IRI for the Issuer/Profile file. Most platforms to date can only handle HTTP-based IRIs such as https://example.com/profiles/alice",
+          "maxLength": 2048
+        },
+        "type": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "Profile",
+                "Issuer"
+              ],
+              "minLength": 1,
+              "maxLength": 64
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              }
+            }
+          ],
+          "description": "Valid JSON-LD representation of the Issuer or Profile type. In most cases, this will simply be the string Issuer or the more general Profile. An array including Issuer and other string elements that are either URLs or compact IRIs within the current context are allowed."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the entity or organization",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "description": {
+          "type": "string",
+          "description": "A short description of the issuer entity or organization.\n",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "image": {
+          "type": "string",
+          "format": "uri",
+          "description": "IRI or document representing an image of the issuer. This must be a PNG or SVG image",
+          "maxLength": 2048
+        },
+        "url": {
+          "type": "string",
+          "description": "The homepage or social media profile of the entity, whether individual or institutional. Should be a URL/URI Accessible via HTTP. ",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "telephone": {
+          "type": "string",
+          "pattern": "^\\+[1-9]\\d{1,14}$",
+          "minLength": 8,
+          "maxLength": 15,
+          "description": "A phone number for the entity. For maximum compatibility, the value should be expressed as a + and country code followed by the number with no spaces or other punctuation, like +16175551212 (E.164 format)."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Contact address for the individual or organization."
+        }
+      },
+      "description": "Organization profile information is stored on Velocity Network registrar making most of this information redundant. a wallet may not show this information to the user in favour of the latest information on Velocity Network Registrar. Regular open badges also permit inclusion of `verification`, `publicKey` and `revocationList` properties which are not necessary when using standards aligned verifiable credentials on the velocity network. In particular only signed badges are supported and credentials are not signed using an organizations public key. revocation lists are handled on-chain",
+      "required": [
+        "id",
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "Json-ld-context_Schema": {
+      "title": "json-ld-context",
+      "oneOf": [
+        {
+          "type": "string",
+          "maxLength": 2048
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "maxLength": 2048
+          }
+        }
+      ],
+      "description": "Simplified context for Velocity Publishers to Use"
+    },
+    "Alignment_Schema": {
+      "title": "Alignment",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "AlignmentObject"
+        },
+        "targetName": {
+          "type": "string",
+          "description": "Name of the target alignment.",
+          "maxLength": 256
+        },
+        "targetUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the target alignment. ",
+          "maxLength": 2048
+        },
+        "targetDescription": {
+          "type": "string",
+          "description": "Detailed description of the target alignment. ",
+          "maxLength": 2048
+        },
+        "targetCode": {
+          "type": "string",
+          "description": "Code of the target alignment. ",
+          "maxLength": 256
+        },
+        "targetFramework": {
+          "type": "string",
+          "description": "The framework to which the target belongs. ",
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "targetName",
+        "targetUrl"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "@context": {
+      "$ref": "#/definitions/Json-ld-context_Schema"
+    },
+    "type": {
+      "type": "string",
+      "default": "Badge"
+    },
+    "hasCredential": {
+      "type": "object",
+      "required": [
+        "type",
+        "name",
+        "description",
+        "image",
+        "criteria",
+        "issuer"
+      ],
+      "properties": {
+        "@context": {
+          "oneOf": [
+            {
+              "type": "string",
+              "default": "https://openbadgespec.org/v2/context.json"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        }, 
+        "type": {
+          "oneOf": [
+            {
+              "type": "string",
+              "default": "BadgeClass",
+              "maxLength": 64
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "maxLength": 64
+              }
+            }
+          ],
+          "description": "valid JSON-LD representation of the BadgeClass type. In most cases, this will simply be the string BadgeClass. An array including BadgeClass and other string elements that are either URLs or compact IRIs within the current context are allowed."
+        },
+        "id": {
+          "type": "string",
+          "format": "uri",
+          "description": "Unique IRI for the BadgeClass. Most platforms to date can only handle HTTP-based IRIs. Issuers using signed assertions are encouraged to publish BadgeClasses using HTTP IRIs but may instead use ephemeral BadgeClasses that use an id in another scheme such as urn:uuid.",
+          "maxLength": 2048
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "The name of the achievement."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2048,
+          "description": "A short description of the achievement."
+        },
+        "image": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "uri",
+              "description": "IRI or document representing an image of the achievement. This must be a PNG or SVG image.",
+              "maxLength": 2048
+            },
+            {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "type": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "default": "ImageObject",
+                      "maxLength": 64
+                    },
+                    {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "string",
+                        "maxLength": 64
+                      }
+                    }
+                  ],
+                  "description": "Defaults to schema:ImageObject."
+                },
+                "id": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "The URI or Data URI of the image.",
+                  "maxLength": 2048
+                },
+                "caption": {
+                  "type": "string",
+                  "description": "The caption for the image",
+                  "maxLength": 256
+                },
+                "author": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "format": "uri",
+                      "maxLength": 2048
+                    },
+                    {
+                      "$ref": "#/definitions/obiProfile"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "criteria": {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "Unique URI for a webpage that describes in a human-readable format the criteria for the BadgeClass such as https://example.org/robotics-badge.html",
+              "format": "uri",
+              "maxLength": 2048
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Unique URI for a webpage that describes in a human-readable format the criteria for the BadgeClass.",
+                  "maxLength": 2048
+                },
+                "type": {
+                  "type": "string",
+                  "description": "JSON-LD type. Defaults to criteria.",
+                  "default": "Criteria",
+                  "maxLength": 32
+                },
+                "narrative": {
+                  "type": "string",
+                  "maxLength": 2048
+                }
+              }
+            }
+          ]
+        },
+        "issuer": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 2048
+            },
+            {
+              "$ref": "#/definitions/obiProfile"
+            }
+          ],
+          "description": "The organization that issued the badge. On Velocity Network this should be DID"
+        },
+        "alignment": {
+          "type": "array",
+          "description": "An array of objects describing which objectives or educational standards this badge aligns to, if any. Unlike Open Badge v2.1 must ALWAYS be defined in an array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/Alignment_Schema"
+          }
+        },
+        "tags": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              }
+            }
+          ],
+          "description": "Tags that describes the type of achievement."
+        }
+      }
+    }
+  },
+  "required": [
+    "hasCredential"
+  ]
+}
