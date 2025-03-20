@@ -23,26 +23,27 @@ const {
 const {
   getSignedUrl: awsGetSignedUrl,
 } = require('@aws-sdk/s3-request-presigner');
+const { buildClientConfig } = require('./client-config');
 
 const initS3Client = ({
   awsRegion,
   awsEndpoint,
   s3Bucket,
-  s3PresignedUrlExpiration,
   accessKeyId,
   secretAccessKey,
+  s3PresignedUrlExpiration,
   isTest,
 }) => {
   const s3Client = new S3Client({
-    apiVersion: '2006-03-01',
-    region: awsRegion,
-    signatureVersion: 'v4',
-    credentials: {
+    ...buildClientConfig({
+      apiVersion: '2006-03-01',
+      awsRegion,
+      awsEndpoint,
       accessKeyId,
       secretAccessKey,
-    },
+    }),
     forcePathStyle: isTest,
-    endpoint: awsEndpoint,
+    signatureVersion: 'v4',
   });
 
   const getSignedUrl = async ({ key, contentType, metadata }) => {

@@ -20,20 +20,17 @@ const {
   GetCommand,
   PutCommand,
 } = require('@aws-sdk/lib-dynamodb');
+const { buildClientConfig } = require('./client-config');
 
 const createDynamoDbDocumentClient = ({ awsRegion, awsEndpoint }) =>
   DynamoDBDocumentClient.from(
-    new DynamoDB({
-      apiVersion: '2012-08-10',
-      region: awsRegion,
-      credentials: awsEndpoint
-        ? {
-            accessKeyId: 'tests-key-id',
-            secretAccessKey: 'tests-key',
-          }
-        : awsEndpoint,
-      endpoint: awsEndpoint,
-    })
+    new DynamoDB(
+      buildClientConfig({
+        apiVersion: '2012-08-10',
+        awsRegion,
+        awsEndpoint,
+      })
+    )
   );
 
 const initReadDocument =
