@@ -16,7 +16,7 @@ stdin.on('end', () => {
 });
 
 const validLicenseRegex =
-  /MIT|MIT OR X11|BSD|ISC|Apache 2.0|Apache-2.0|Unlicense|Public Domain|CC-BY-3.0|CC-BY-4.0|ODC-By-1.0|CC0-1.0|WTFPL|Python-2.0/;
+  /MIT|MIT OR X11|BSD|ISC|Apache 2.0|Apache-2.0|Unlicense|Public Domain|CC-BY-3.0|CC-BY-4.0|ODC-By-1.0|CC0-1.0|WTFPL|Python-2.0|BlueOak-1.0.0/;
 
 const getBadLicenses = (licenses) => {
   const nameLicenseExceptionsMap = {};
