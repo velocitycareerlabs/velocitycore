@@ -1,11 +1,11 @@
 name: Publish Packages
 on:
-  workflow_call:
-    inputs:
-      config-env:
-        required: false
-        type: string
-        default: 'dev'
+  push:
+    branches: [ main ]
+    paths:
+      - 'packages/**'
+      - 'servers/**'
+      - 'tools/**'
   workflow_dispatch:
     inputs:
       environment:
@@ -22,12 +22,16 @@ env:
   NX_VERSION: '17.2.7'
   DIST_TAG: 'prerelease'
   NODE_VERSION: '22.x'
-  GLOBAL_ENV: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || inputs.config-env }}
+  GLOBAL_ENV: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || format('{0}', 'dev') }}
 jobs:
   # Publish Packages
   publish-packages:
     name: Publish Packages
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     steps:
       # Checkout Repository
       - name: Checkout Repository
