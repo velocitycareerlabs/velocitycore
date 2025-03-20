@@ -9,7 +9,6 @@ on:
   pull_request:
     branches: 
       - main
-      - release/**
     types:
       - opened
       - synchronize
@@ -215,11 +214,6 @@ jobs:
     - name: Run Credential Agent Migrations
       working-directory: ./servers/credentialagent
       run: MONGO_URI=mongodb://localhost:27017/test-credential-agent yarn migrate:up
-    - name: Run Oracle Migrations
-      working-directory: ./servers/oracle
-      run: MIGRATION_ENV=test yarn migrate:up
-      env:
-        IS_CI: true
     - name: Test
       uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3
       with: 
