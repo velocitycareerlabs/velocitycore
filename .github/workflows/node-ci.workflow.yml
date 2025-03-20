@@ -247,6 +247,9 @@ jobs:
   post-test:
     name: Post Test
     needs: test
+    permissions:
+      checks: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
     - name: Download All Test Reports
