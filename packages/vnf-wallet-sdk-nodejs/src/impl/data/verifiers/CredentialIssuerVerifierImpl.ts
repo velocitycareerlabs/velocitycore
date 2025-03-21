@@ -38,7 +38,7 @@ export default class CredentialIssuerVerifierImpl
                         finalizeOffersDescriptor.credentialManifest
                             .verifiedProfile.credentialSubject,
                     credentialTypeMetadata: getCredentialTypeMetadataByVc(
-                        this.credentialTypesModel.data?.all || [],
+                        this.credentialTypesModel.data?.payload,
                         jwtCredential.payload.vc
                     ),
                     jsonLdContext,

@@ -8,10 +8,10 @@ import { find, get } from 'lodash';
 import { Dictionary } from '../../../api/VCLTypes';
 
 export const getCredentialTypeMetadataByVc = (
-    credentialTypeMetadataArr: Dictionary<any>[],
+    credentialTypeMetadataDict: Dictionary<any> | undefined,
     vc: Dictionary<any>
 ): Dictionary<any> => {
-    return find(credentialTypeMetadataArr, getCredentialTypeName(vc)) || {};
+    return find(credentialTypeMetadataDict, getCredentialTypeName(vc)) || {};
 };
 
 const getCredentialTypeName = (vc: Dictionary<any>): string => {
