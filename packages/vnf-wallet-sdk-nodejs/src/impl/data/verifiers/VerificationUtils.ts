@@ -4,19 +4,33 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { find, get } from 'lodash';
-import { Dictionary } from '../../../api/VCLTypes';
+import { Dictionary, Nullish } from '../../../api/VCLTypes';
+import VCLCredentialTypes from '../../../api/entities/VCLCredentialTypes';
+import VCLJwt from '../../../api/entities/VCLJwt';
 
 export const getCredentialTypeMetadataByVc = (
-    credentialTypeMetadataDict: Dictionary<any> | undefined,
-    vc: Dictionary<any>
+    credentialTypes: Nullish<VCLCredentialTypes>,
+    jwtVc: VCLJwt
 ): Dictionary<any> => {
-    return find(credentialTypeMetadataDict, getCredentialTypeName(vc)) || {};
+    if (!credentialTypes || !credentialTypes?.all) return {};
+
+    const credentialTypeName = getCredentialTypeName(jwtVc);
+
+    const result = credentialTypes.all.find(
+        (credentialTypeObj) =>
+            credentialTypeObj.payload?.credentialType?.toLowerCase() ===
+            credentialTypeName.toLowerCase()
+    );
+    return result?.payload || {};
 };
 
-const getCredentialTypeName = (vc: Dictionary<any>): string => {
-    const types = get(vc, CodingKeys.KeyType, []);
-    return types[0] || '';
+const getCredentialTypeName = (jwtVc: VCLJwt): string => {
+    try {
+        const types = jwtVc.payload.vc[CodingKeys.KeyType] || [];
+        return types[0] || '';
+    } catch (e) {
+        return '';
+    }
 };
 
 class CodingKeys {

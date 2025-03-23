@@ -30,6 +30,10 @@ export default class CredentialIssuerVerifierImpl
                 jwtCredential.payload.vc,
                 this.networkService
             );
+            const credentialTypeMetadata = getCredentialTypeMetadataByVc(
+                this.credentialTypesModel.data,
+                jwtCredential
+            );
             return verifyIssuerForCredentialType(
                 jwtCredential.payload.vc,
                 finalizeOffersDescriptor.credentialManifest.issuerId,
@@ -37,10 +41,7 @@ export default class CredentialIssuerVerifierImpl
                     issuerAccreditation:
                         finalizeOffersDescriptor.credentialManifest
                             .verifiedProfile.credentialSubject,
-                    credentialTypeMetadata: getCredentialTypeMetadataByVc(
-                        this.credentialTypesModel.data?.payload,
-                        jwtCredential.payload.vc
-                    ),
+                    credentialTypeMetadata,
                     jsonLdContext,
                 },
                 {
