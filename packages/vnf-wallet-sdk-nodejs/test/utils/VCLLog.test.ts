@@ -1,7 +1,6 @@
 import VCLLog from '../../src/impl/utils/VCLLog';
 import GlobalConfig from '../../src/impl/GlobalConfig';
 
-// Mock LoggerService with spies for its methods
 const mockLoggerService = {
     error: jest.fn(),
     warn: jest.fn(),
@@ -17,13 +16,8 @@ describe('VCLLog', () => {
 
     describe('LoggerService', () => {
         it('should set and get the LoggerService correctly', () => {
-            const customLoggerService = {
-                error: jest.fn(),
-                warn: jest.fn(),
-                info: jest.fn(),
-            };
-            VCLLog.LoggerService = customLoggerService;
-            expect(VCLLog.LoggerService).toBe(customLoggerService);
+            VCLLog.LoggerService = mockLoggerService;
+            expect(VCLLog.LoggerService).toBe(mockLoggerService);
         });
     });
 
