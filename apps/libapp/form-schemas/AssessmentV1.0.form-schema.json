@@ -1,0 +1,64 @@
+{
+  "authority": {
+    "name": {
+      "ui:title": "Authority"
+    },
+    "identifier": {
+      "ui:widget": "hidden"
+    },
+    "place": {
+      "ui:widget": "hidden"
+    }
+  },
+  "name": {
+    "ui:title": "Assessment name"
+  },
+  "assesses": {
+    "ui:widget": "hidden"
+  },
+  "description": {
+    "ui:title": "Description"
+  },
+  "assessmentDate": {
+    "ui:title": "Date",
+    "ui:widget": "date"
+  },
+  "alignment": {
+    "ui:widget": "hidden"
+  },
+  "score": {
+    "scoreValue": {
+      "ui:title": "Score"
+    },
+    "result": {
+      "ui:title": "Result"
+    },
+    "passFail": {
+      "ui:title": "Pass or fail"
+    },
+    "scoreMethod": {
+      "ui:widget": "hidden"
+    },
+    "ui:order": [
+      "scoreValue",
+      "result",
+      "passFail"
+    ]
+  },
+  "assessmentLevel": {
+    "ui:widget": "hidden"
+  },
+  "assessmentMethod": {
+    "ui:widget": "hidden"
+  },
+  "assessmentDimensions": {
+    "ui:widget": "hidden"
+  },
+  "ui:order": [
+    "authority",
+    "name",
+    "description",
+    "assessmentDate",
+    "score"
+  ]
+}

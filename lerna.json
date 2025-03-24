@@ -1,0 +1,30 @@
+{
+  "lerna": "2.6.0",
+  "packages": [
+    "!contracts/*",
+    "packages/*",
+    "servers/*",
+    "tools/*",
+    "lambdas/*",
+    "apps/*",
+    "samples/*/*"
+  ],
+  "tagVersionPrefix": "",
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "useNx": true,
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "!contracts/**",
+        "!servers/**",
+        "!packages/**",
+        "!tools/**",
+        "!lambdas/**",
+        "!apps/*",
+        "!samples/*/*"
+      ]
+    }
+  }
+}

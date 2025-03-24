@@ -1,0 +1,131 @@
+{
+  "title": {
+    "path": [
+      "$.companyName.localized.en",
+      "$.credentialSubject.companyName.localized.en"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "subtitle": {
+    "path": [
+      "$.title.localized.en",
+      "$.credentialSubject.title.localized.en"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.endMonthYear",
+      "$.credentialSubject.endMonthYear"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "date"
+    },
+    "fallback": "-"
+  },
+  "description": {
+    "text": "Current employment position"
+  },
+  "properties": [
+    {
+      "label": "Role description",
+      "path": [
+        "$.description.localized.en",
+        "$.credentialSubject.description.localized.en"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Start date",
+      "path": [
+        "$.startMonthYear",
+        "$.credentialSubject.startMonthYear"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "End date",
+      "path": [
+        "$.endMonthYear",
+        "$.credentialSubject.endMonthYear"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "State or region of work",
+      "path": [
+        "$.location.regionCode",
+        "$.credentialSubject.location.regionCode"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Country of work",
+      "path": [
+        "$.location.countryCode",
+        "$.credentialSubject.location.countryCode"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Location",
+      "path": [
+        "$.locationName.localized.en",
+        "$.credentialSubject.locationName.localized.en"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment",
+      "path": [
+        "$.alignment[0].targetName",
+        "$.credentialSubject.alignment[0].targetName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment URL",
+      "path": [
+        "$.alignment[0].targetUrl",
+        "$.credentialSubject.alignment[0].targetUrl"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    {
+      "label": "Alignment framework",
+      "path": [
+        "$.alignment[0].targetFramework",
+        "$.credentialSubject.alignment[0].targetFramework"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "title": {
+    "path": [
+      "$.title.localized.en",
+      "$.credentialSubject.title.localized.en"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "subtitle": {
+    "path": [
+      "$.type",
+      "$.credentialSubject.type"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.completionDate",
+      "$.credentialSubject.completionDate"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "date"
+    },
+    "fallback": {
+      "path": [
+        "$.startDate",
+        "$.credentialSubject.startDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    "description": {
+      "text": "Course"
+    },
+    "properties": [
+      {
+        "label": "Content Provider",
+        "path": [
+          "$.contentProviderName.localized.en",
+          "$.credentialSubject.contentProviderName.localized.en"
+        ],
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "label": "Description",
+        "path": [
+          "$.description.localized.en",
+          "$.credentialSubject.description.localized.en"
+        ],
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "label": "Registration Date",
+        "path": [
+          "$.registrationDate",
+          "$.credentialSubject.registrationDate"
+        ],
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      {
+        "label": "Start Date",
+        "path": [
+          "$.startDate",
+          "$.credentialSubject.startDate"
+        ],
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      {
+        "label": "Course duration",
+        "path": [
+          "$.duration",
+          "$.credentialSubject.duration"
+        ],
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "label": "Grade",
+        "path": [
+          "$.score",
+          "$.credentialSubject.score"
+        ],
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "label": "Grade range",
+        "path": [
+          "$.scoreRange",
+          "$.credentialSubject.scoreRange"
+        ],
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "label": "Alignment",
+        "path": [
+          "$.alignment[0].targetName",
+          "$.credentialSubject.alignment[0].targetName"
+        ],
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "label": "Alignment URL",
+        "path": [
+          "$.alignment[0].targetUrl",
+          "$.credentialSubject.alignment[0].targetUrl"
+        ],
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      {
+        "label": "Alignment framework",
+        "path": [
+          "$.alignment[0].targetFramework",
+          "$.credentialSubject.alignment[0].targetFramework"
+        ],
+        "schema": {
+          "type": "string"
+        }
+      }
+    ]
+  }
+}

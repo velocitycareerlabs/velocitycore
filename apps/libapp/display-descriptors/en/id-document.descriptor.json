@@ -1,0 +1,152 @@
+{
+  "title": {
+    "path": [
+      "$.kind",
+      "$.credentialSubject.kind"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "subtitle": {
+    "path": [
+      "$.authority.localized.en",
+      "$.credentialSubject.authority.localized.en"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.location.countryCode",
+      "$.credentialSubject.location.countryCode"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "description": {
+    "text": "ID document"
+  },
+  "properties": [
+    {
+      "label": "Document number",
+      "path": [
+        "$.identityNumber",
+        "$.credentialSubject.identityNumber"
+      ],
+      "schema": {
+        "type": "string"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "First name",
+      "path": [
+        "$.firstName.localized.en",
+        "$.credentialSubject.firstName.localized.en"
+      ],
+      "schema": {
+        "type": "string"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Middle names",
+      "path": [
+        "$.middleNames.localized.en",
+        "$.credentialSubject.middleNames.localized.en"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Last name",
+      "path": [
+        "$.lastName.localized.en",
+        "$.credentialSubject.lastName.localized.en"
+      ],
+      "schema": {
+        "type": "string"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Date of birth",
+      "path": [
+        "$.dob",
+        "$.credentialSubject.dob"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Street address",
+      "path": [
+        "$.address.line1",
+        "$.credentialSubject.address.line1"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Address line 2",
+      "path": [
+        "$.address.line2",
+        "$.credentialSubject.address.line2"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Address line 3",
+      "path": [
+        "$.address.line3",
+        "$.credentialSubject.address.line3"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Address region or state",
+      "path": [
+        "$.regionCode",
+        "$.credentialSubject.regionCode"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Address post code",
+      "path": [
+        "$.postCode",
+        "$.credentialSubject.postCode"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Address country",
+      "path": [
+        "$.countryCode",
+        "$.credentialSubject.countryCode"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": {
+    "text": "Email"
+  },
+  "subtitle": {
+    "path": [
+      "$.email",
+      "$.credentialSubject.email"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "email"
+    },
+    "fallback": "-"
+  }
+}

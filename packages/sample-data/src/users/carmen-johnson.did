@@ -1,0 +1,24 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/v1"
+  ],
+  "id": "did:velocity:0x0da81603abe1fbde885c8e5bc529dfb773be168d",
+  "publicKey": [
+    {
+      "id": "did:velocity:0x0da81603abe1fbde885c8e5bc529dfb773be168d#key-1",
+      "type": "EcdsaSecp256k1VerificationKey2019",
+      "controller": "did:velocity:0x0da81603abe1fbde885c8e5bc529dfb773be168d",
+      "publicKeyBase58": "RjSkM3f4KoNN3yFYsVSygtmsL7E3tQEGGnipiAizuVnYYgynPYvFVJ3SrBgB2tkz28FTMDPhKMF1JwJDrWmXXyx5"
+    }
+  ],
+  "created": "2021-08-10T16:29:24.134Z",
+  "updated": "2021-08-10T16:29:24.134Z",
+  "proof": {
+    "type": "EcdsaSecp256k1Signature2019",
+    "proofPurpose": "assertionMethod",
+    "created": "2021-08-10T16:29:24.134Z",
+    "verificationMethod": "a996414d7b2990c9fb044059955c89379f3a3ee40bccb31af9145eb949867424",
+    "jws": "3046022100fff181c84aa00bfa9b5bbb271d64520142d5e9f1225a894eb0703d5fbf6e203d022100eab8ef1c4ade8d2b09e8bf772605b16b5a1ef4a2a346c808ad0b97ea8cd78b32"
+  }
+}

@@ -1,0 +1,268 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x6EAc146a55dfacc9208eAC2964445C33401F3aed",
+    "txHash": "0x4ae4d2346d04e5409529a9f8ac92ab0201109e5aa0881ead9e56959d21ca745b"
+  },
+  "proxies": [
+    {
+      "address": "0x1499c888409D62b8eC5016F4E2b6bb4beE1EDF44",
+      "txHash": "0xb2148e38d6658063bfa7dc399ac6fb046c4fd07e3bc29372b41cf5953a105970",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "e27561195d8bf9de896372c7eb4adb60cad2f50abf5f86b8099deae57c362fd2": {
+      "address": "0x623D5D8F2eb86267d01Fb91fd26ECa7571A80a1b",
+      "txHash": "0x0096ed63d416662ff4f99e3cb527fc3e8cd9464340190661a29e209227960771",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "contract": "RevocationRegistry",
+            "label": "registry",
+            "type": "t_mapping(t_address,t_struct(WalletRevocationRegistry)841_storage)",
+            "src": "../project:/contracts/RevocationRegistry.sol:27"
+          },
+          {
+            "contract": "RevocationRegistry",
+            "label": "permissions",
+            "type": "t_contract(Permissions)757",
+            "src": "../project:/contracts/RevocationRegistry.sol:29"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_struct(WalletRevocationRegistry)841_storage)": {
+            "label": "mapping(address => struct RevocationRegistry.WalletRevocationRegistry)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(WalletRevocationRegistry)841_storage": {
+            "label": "struct RevocationRegistry.WalletRevocationRegistry",
+            "members": [
+              {
+                "label": "walletInRegistry",
+                "type": "t_bool"
+              },
+              {
+                "label": "totalLists",
+                "type": "t_uint256"
+              },
+              {
+                "label": "listIdUsage",
+                "type": "t_mapping(t_uint256,t_bool)"
+              },
+              {
+                "label": "lists",
+                "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)"
+          },
+          "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(uint256 => uint256[])"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_contract(Permissions)757": {
+            "label": "contract Permissions"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "f6303b4c5fa75079f81fc6480eb3b894230d0ad5f018b901db05c4bfdb207695": {
+      "address": "0x6DcB61A30b7E73b10aa76d7b1A2f21c8CC8bA8a4",
+      "txHash": "0xe6311ead372c8c6432d4f3b4d05ae7eb9d8dc494aebd5349f2ee6e24d68ead20",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "RevocationRegistry",
+            "label": "registry",
+            "type": "t_mapping(t_address,t_struct(WalletRevocationRegistry)1028_storage)",
+            "src": "../project:/contracts/RevocationRegistry.sol:28"
+          },
+          {
+            "contract": "RevocationRegistry",
+            "label": "permissions",
+            "type": "t_contract(Permissions)874",
+            "src": "../project:/contracts/RevocationRegistry.sol:30"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_struct(WalletRevocationRegistry)1028_storage)": {
+            "label": "mapping(address => struct RevocationRegistry.WalletRevocationRegistry)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(WalletRevocationRegistry)1028_storage": {
+            "label": "struct RevocationRegistry.WalletRevocationRegistry",
+            "members": [
+              {
+                "label": "walletInRegistry",
+                "type": "t_bool"
+              },
+              {
+                "label": "totalLists",
+                "type": "t_uint256"
+              },
+              {
+                "label": "listIdUsage",
+                "type": "t_mapping(t_uint256,t_bool)"
+              },
+              {
+                "label": "lists",
+                "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)"
+          },
+          "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(uint256 => uint256[])"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_contract(Permissions)874": {
+            "label": "contract Permissions"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "0cc5b0f250986e208e7ec776b81307ad3f8c206a16c04c4dd89545cbb6f53da4": {
+      "address": "0x9412faa160504ff11dC307cbDf15d830f02cfEd5",
+      "txHash": "0x69a257d064a525af93e909411634b4c62174916e0a022d0be3d6108481a3fa5a",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "RevocationRegistry",
+            "label": "registry",
+            "type": "t_mapping(t_address,t_struct(WalletRevocationRegistry)1512_storage)",
+            "src": "../project:/contracts/RevocationRegistry.sol:28"
+          },
+          {
+            "contract": "RevocationRegistry",
+            "label": "permissions",
+            "type": "t_contract(Permissions)1358",
+            "src": "../project:/contracts/RevocationRegistry.sol:30"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_struct(WalletRevocationRegistry)1512_storage)": {
+            "label": "mapping(address => struct RevocationRegistry.WalletRevocationRegistry)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(WalletRevocationRegistry)1512_storage": {
+            "label": "struct RevocationRegistry.WalletRevocationRegistry",
+            "members": [
+              {
+                "label": "walletInRegistry",
+                "type": "t_bool"
+              },
+              {
+                "label": "totalLists",
+                "type": "t_uint256"
+              },
+              {
+                "label": "listIdUsage",
+                "type": "t_mapping(t_uint256,t_bool)"
+              },
+              {
+                "label": "lists",
+                "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)"
+          },
+          "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(uint256 => uint256[])"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]"
+          },
+          "t_contract(Permissions)1358": {
+            "label": "contract Permissions"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        },
+        "namespaces": {}
+      }
+    }
+  }
+}

@@ -1,0 +1,233 @@
+{
+  "title": "Certification",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://velocitynetwork.foundation/schemas/certification-v1.0",
+  "allOf": [
+    {
+      "$ref": "#/definitions/Certification-license-base"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "CertificationLicense"
+        },
+        "identifier": {
+          "type": "string",
+          "description": "The number or other unique identifier of the certification held by the person.",
+          "maxLength": 512
+        },
+        "validity": {
+          "$ref": "#/definitions/Validity_Schema"
+        }
+      }
+    }
+  ],
+  "required": [
+    "authority",
+    "name"
+  ],
+  "definitions": {
+    "Certification-license-base": {
+      "title": "Certification-license-base",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "properties": {
+        "@context": {
+          "$ref": "#/definitions/Json-ld-context_Schema"
+        },
+        "authority": {
+          "$ref": "#/definitions/Organization_Schema"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the certification or license.",
+          "maxLength": 256
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the certification or license.",
+          "maxLength": 2048
+        },
+        "alignment": {
+          "type": "array",
+          "description": "A public resource to which the certification or license is aligned.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/Alignment_Schema"
+          }
+        }
+      }
+    },
+    "Json-ld-context_Schema": {
+      "title": "json-ld-context",
+      "oneOf": [
+        {
+          "type": "string",
+          "maxLength": 2048
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "maxLength": 2048
+          }
+        }
+      ],
+      "description": "Simplified context for Velocity Publishers to Use"
+    },
+    "Alignment_Schema": {
+      "title": "Alignment",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "AlignmentObject"
+        },
+        "targetName": {
+          "type": "string",
+          "description": "Name of the target alignment.",
+          "maxLength": 256
+        },
+        "targetUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the target alignment. ",
+          "maxLength": 2048
+        },
+        "targetDescription": {
+          "type": "string",
+          "description": "Detailed description of the target alignment. ",
+          "maxLength": 2048
+        },
+        "targetCode": {
+          "type": "string",
+          "description": "Code of the target alignment. ",
+          "maxLength": 256
+        },
+        "targetFramework": {
+          "type": "string",
+          "description": "The framework to which the target belongs. ",
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "targetName",
+        "targetUrl"
+      ]
+    },
+    "Did_Schema": {
+      "title": "DID",
+      "type": "string",
+      "pattern": "^did:[a-z0-9]+:[A-Za-z0-9._:?=&%;-]+$"
+    },
+    "Organization_Schema": {
+      "title": "Organization",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "Organization"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the organization.",
+          "maxLength": 256
+        },
+        "identifier": {
+          "$ref": "#/definitions/Did_Schema"
+        },
+        "place": {
+          "$ref": "#/definitions/Place_Schema"
+        }
+      },
+      "required": [
+        "name",
+        "place"
+      ]
+    },
+    "Place_Schema": {
+      "title": "Place",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "Place"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the place, e.g., building name, branch name, etc.",
+          "maxLength": 256
+        },
+        "addressLocality": {
+          "type": "string",
+          "description": "The locality where the place is, e.g., town or city name.",
+          "maxLength": 256
+        },
+        "addressRegion": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}(-[A-Z0-9]{1,3})?$",
+          "description": "The region where the place is. These are states, provinces, etc. Must be an [ISO 3166-2 subdivision code](https://en.wikipedia.org/wiki/ISO_3166-2)",
+          "maxLength": 6
+        },
+        "addressCountry": {
+          "type": "string",
+          "description": "The country where the place is. Must be an [ISO 3166 2 letter country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes)",
+          "pattern": "^[A-Z]{2}$",
+          "maxLength": 2
+        }
+      },
+      "required": [
+        "addressCountry"
+      ]
+    },
+    "Validity_Schema": {
+      "title": "Validity",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "Validity"
+        },
+        "firstValidFrom": {
+          "type": "string",
+          "format": "date",
+          "description": "The original date from which a certification, document or license is valid. "
+        },
+        "validFrom": {
+          "oneOf": [
+            {
+              "format": "date"
+            },
+            {
+              "format": "date-time"
+            }
+          ],
+          "description": "The date from which a certification, document or license is valid. In case of renewal, validFrom date will state the date or renewal. ",
+          "type": "string"
+        },
+        "validUntil": {
+          "oneOf": [
+            {
+              "format": "date"
+            },
+            {
+              "format": "date-time"
+            }
+          ],
+          "description": "The date until which a certification, document or license is valid. ",
+          "type": "string"
+        },
+        "validIn": {
+          "$ref": "#/definitions/Place_Schema"
+        }
+      }
+    }
+  }
+}

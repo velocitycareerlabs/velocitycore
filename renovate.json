@@ -1,0 +1,129 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "hostRules": [
+    {
+      "hostType": "npm",
+      "matchHost": "npm.pkg.github.com",
+      "token": "{{ secrets.GITHUB_TOKEN }}"
+    }
+  ],
+  "timezone": "Asia/Jerusalem",
+  "extends": [
+    "config:best-practices",  
+    "npm:unpublishSafe",
+    "group:linters",
+    "group:jsTest",
+    "group:postcss",
+    "group:react",
+    "security:openssf-scorecard",
+    "schedule:weekly"
+  ],
+  "prHourlyLimit": 10,
+  "addLabels": [
+    "dependencies"
+  ],
+  "draftPR": true,
+  "packageRules": [
+    {
+      "groupName": "fastify packages",
+      "matchPackageNames": [
+        "@fastify/{/,}**",
+        "fastify{/,}**",
+        "avvio{/,}**",
+        "fast-json{/,}**",
+        "pino{/,}**"
+      ]
+    },
+    {
+      "matchFileNames": [
+        "lambdas/**",
+        "packages/**",
+        "servers/**",
+        "tools/**"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true,
+      "extends": [
+        "schedule:weekly"
+      ]
+    },
+    {
+      "matchFileNames": [
+        "apps/**"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "addLabels": [
+        "apps"
+      ],
+      "extends": [
+        "schedule:monthly"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "matchFileNames": [
+        "eng/**",
+        ".github/**",
+        "docker*.yml",
+        "Dockerfile*"
+      ],
+      "addLabels": [
+        "eng"
+      ],
+      "extends": [
+        "schedule:monthly"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "matchFileNames": [
+        "contracts/**"
+      ],
+      "addLabels": [
+        "contracts"
+      ],
+      "extends": [
+        "schedule:monthly"
+      ]
+    },
+    {
+      "matchPackageNames": [
+        "aws-sdk"
+      ],
+      "extends": [
+        "schedule:monthly"
+      ]
+    },
+    {
+      "matchPackageNames": [
+        "nx",
+        "@nx/{/,}**"
+      ],
+      "enabled": false
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "title": {
+    "path": [
+      "$.authority.name",
+      "$.credentialSubject.authority.name"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "subtitle": {
+    "path": [
+      "$.name",
+      "$.credentialSubject.name"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.assessmentDate",
+      "$.credentialSubject.assessmentDate"
+    ],
+    "schema": {
+      "type": "string"
+    }
+  },
+  "description": {
+    "text": "Assessment"
+  },
+  "logo": {
+    "path": [
+      "$.authority.image",
+      "$.credentialSubject.authority.image"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "properties": [
+    {
+      "label": "Description",
+      "path": [
+        "$.description",
+        "$.credentialSubject.description"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Assesses",
+      "path": [
+        "$.assesses",
+        "$.credentialSubject.assesses"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Score",
+      "path": [
+        "$.score.scoreValue",
+        "$.credentialSubject.score.scoreValue"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Result",
+      "path": [
+        "$.score.result",
+        "$.credentialSubject.score.result"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Pass or fail",
+      "path": [
+        "$.score.passFail",
+        "$.credentialSubject.score.passFail"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Score method type",
+      "path": [
+        "$.score.scoreMethod.scoreMethodType",
+        "$.credentialSubject.score.scoreMethod.scoreMethodType"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Score method description",
+      "path": [
+        "$.score.scoreMethod.scoreMethodDescription",
+        "$.credentialSubject.score.scoreMethod.scoreMethodDescription"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Passing score",
+      "path": [
+        "$.score.scoreMethod.passingScore",
+        "$.credentialSubject.score.scoreMethod.passingScore"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Assessment level",
+      "path": [
+        "$.assessmentLevel",
+        "$.credentialSubject.assessmentLevel"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Assessment method",
+      "path": [
+        "$.assessmentMethod",
+        "$.credentialSubject.assessmentMethod"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Dimension Name",
+      "path": [
+        "$.assessmentDimensions[*].name",
+        "$.credentialSubject.assessmentDimensions[*].name"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Description",
+      "path": [
+        "$.assessmentDimensions[*].description",
+        "$.credentialSubject.assessmentDimensions[*].description"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Assesses",
+      "path": [
+        "$.assessmentDimensions[*].assesses",
+        "$.credentialSubject.assessmentDimensions[*].assesses"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Score",
+      "path": [
+        "$.assessmentDimensions[*].score.scoreValue",
+        "$.credentialSubject.assessmentDimensions[*].score.scoreValue"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Result",
+      "path": [
+        "$.assessmentDimensions[*].score.result",
+        "$.credentialSubject.assessmentDimensions[*].score.result"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Pass or fail",
+      "path": [
+        "$.assessmentDimensions[*].score.passFail",
+        "$.credentialSubject.assessmentDimensions[*].score.passFail"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Score method type",
+      "path": [
+        "$.assessmentDimensions[*].score.scoreMethod.scoreMethodType",
+        "$.credentialSubject.assessmentDimensions[*].score.scoreMethod.scoreMethodType"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Score method description",
+      "path": [
+        "$.assessmentDimensions[*].score.scoreMethod.scoreMethodDescription",
+        "$.credentialSubject.assessmentDimensions[*].score.scoreMethod.scoreMethodDescription"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Passing score",
+      "path": [
+        "$.assessmentDimensions[*].score.scoreMethod.passingScore",
+        "$.credentialSubject.assessmentDimensions[*].score.scoreMethod.passingScore"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment",
+      "path": [
+        "$.alignment[0].targetName",
+        "$.credentialSubject.alignment[0].targetName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment URL",
+      "path": [
+        "$.alignment[0].targetUrl",
+        "$.credentialSubject.alignment[0].targetUrl"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    {
+      "label": "Alignment framework",
+      "path": [
+        "$.alignment[0].targetFramework",
+        "$.credentialSubject.alignment[0].targetFramework"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

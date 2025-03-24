@@ -1,0 +1,123 @@
+{
+  "title": {
+    "path": [
+      "$.source.name",
+      "$.credentialSubject.source.name"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "CLR"
+  },
+  "subtitle": {
+    "text": "Comprehensive Learner Record"
+  },
+  "summary_detail": {
+    "path": [
+      "$.achievement.name",
+      "$.credentialSubject.achievement.name"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "description": {
+    "text": "Comprehensive Learner Record"
+  },
+  "logo": {
+    "path": [
+      "$.achievement.image.id",
+      "$.credentialSubject.achievement.image.id"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "properties": [
+    {
+      "label": "",
+      "path": [
+        "$.achievement.image.id",
+        "$.credentialSubject.achievement.image.id"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Achievement type",
+      "path": [
+        "$.achievement.type",
+        "$.credentialSubject.achievement.type"
+      ],
+      "schema": {
+        "type": "string"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Description",
+      "path": [
+        "$.achievement.description",
+        "$.credentialSubject.achievement.description"
+      ],
+      "schema": {
+        "type": "string"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Criteria",
+      "path": [
+        "$.achievement.criteria.narrative",
+        "$.credentialSubject.achievement.criteria.narrative"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Criteria type",
+      "path": [
+        "$.achievement.criteria.type",
+        "$.credentialSubject.achievement.criteria.type"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment",
+      "path": [
+        "$.achievement.alignment[0].targetName",
+        "$.credentialSubject.achievement.alignment[0].targetName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Alignment URL",
+      "path": [
+        "$.achievement.alignment[0].targetUrl",
+        "$.credentialSubject.achievement.alignment[0].targetUrl"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    {
+      "label": "Alignment framework",
+      "path": [
+        "$.achievement.alignment[0].targetFramework",
+        "$.credentialSubject.achievement.alignment[0].targetFramework"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+!build/contracts/RevocationRegistry.json
+!build/contracts/Migrations.json
+test-logs.txt

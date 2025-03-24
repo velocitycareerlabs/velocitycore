@@ -1,0 +1,40 @@
+{
+  "name": "@velocitycareerlabs/metadata-registry-contract",
+  "version": "0.5.0-build",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test-bg": "ganache --miner.defaultGasPrice=0 --miner.blockGasLimit=0x1ffffffffffffe --miner.defaultTransactionGasLimit=0x1ffffffffffffe --miner.callGasLimit=0x1ffffffffffffe --wallet.mnemonic=foo",
+    "test": "npm run test-bg > test-logs.txt & truffle test --migrate-none --bail",
+    "build": "truffle compile --all",
+    "migrate:dev": "truffle migrate --network dev",
+    "migrate:qa": "truffle migrate --network qa",
+    "migrate:staging": "truffle migrate --network staging",
+    "migrate:prod": "truffle migrate --network prod"
+  },
+  "author": "",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {},
+  "devDependencies": {
+    "@openzeppelin/contracts": "4.9.6",
+    "@openzeppelin/contracts-upgradeable": "4.9.6",
+    "@openzeppelin/truffle-upgrades": "^1.11.0",
+    "@truffle/hdwallet-provider": "^1.7.0",
+    "@velocitycareerlabs/blockchain-functions": "^0.5.0-build",
+    "@velocitycareerlabs/verification-coupon-contract": "^0.5.0-build",
+    "@velocitycareerlabs/permissions-contract": "^0.5.0-build",
+    "@velocitycareerlabs/signature-verification-library": "^0.5.0-build",
+    "bignumber.js": "^9.0.1",
+    "cbor": "^7.0.5",
+    "ethers": "6.13.5",
+    "fs": "^0.0.1-security",
+    "ganache": "7.9.2",
+    "lodash": "^4.17.21",
+    "lzutf8": "^0.6.0",
+    "truffle": "5.11.5",
+    "truffle-assertions": "^0.9.2"
+  }
+}

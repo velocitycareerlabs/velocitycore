@@ -1,0 +1,314 @@
+{
+  "title": "Assessment",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://velocitynetwork.foundation/schemas/assessment-v1.0",
+  "allOf": [
+    {
+      "$ref": "#/definitions/Assessment-dimension-base_Schema"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "Assessment"
+        },
+        "authority": {
+          "$ref": "#/definitions/Organization_Schema"
+        },
+        "assessmentDimensions": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Dimensions are sub-assessments within the parent assessment. Each dimension refers to a different aspect of what is being assessed.",
+          "items": {
+            "$ref": "#/definitions/Assessment-dimension_Schema"
+          }
+        }
+      }
+    }
+  ],
+  "required": [
+    "authority",
+    "name"
+  ],
+  "definitions": {
+    "Assessment-dimension-base_Schema": {
+      "title": "Assessment-dimension-base",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "properties": {
+        "@context": {
+          "$ref": "#/definitions/Json-ld-context_Schema"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the assessment.",
+          "maxLength": 64
+        },
+        "assesses": {
+          "type": "string",
+          "description": "The competency or learning outcome that is being assessed by the assessment.",
+          "maxLength": 960
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the assessment.",
+          "maxLength": 2048
+        },
+        "assessmentLevel": {
+          "type": "string",
+          "description": "The level of the assessment, e.g., standard, basic, advanced, etc. ",
+          "maxLength": 32
+        },
+        "assessmentMethod": {
+          "type": "string",
+          "description": "The method for assessing, such as written exam, oral exam, role play, multiple choice, etc. ",
+          "maxLength": 256
+        },
+        "alignment": {
+          "type": "array",
+          "description": "A public resource to which the assessment is aligned. ",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/Alignment_Schema"
+          }
+        },
+        "score": {
+          "$ref": "#/definitions/Score_Schema"
+        },
+        "assessmentDate": {
+          "$ref": "#/definitions/Date_Schema"
+        }
+      }
+    },
+    "Assessment-dimension_Schema": {
+      "title": "Assessment dimension",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Assessment-dimension-base_Schema"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "default": "AssessmentDimension"
+            }
+          }
+        }
+      ],
+      "required": [
+        "name"
+      ]
+    },
+    "Json-ld-context_Schema": {
+      "title": "json-ld-context",
+      "oneOf": [
+        {
+          "type": "string",
+          "maxLength": 2048
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "maxLength": 2048
+          }
+        }
+      ],
+      "description": "Simplified context for Velocity Publishers to Use"
+    },
+    "Alignment_Schema": {
+      "title": "Alignment",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "AlignmentObject"
+        },
+        "targetName": {
+          "type": "string",
+          "description": "Name of the target alignment.",
+          "maxLength": 256
+        },
+        "targetUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the target alignment. ",
+          "maxLength": 2048
+        },
+        "targetDescription": {
+          "type": "string",
+          "description": "Detailed description of the target alignment. ",
+          "maxLength": 2048
+        },
+        "targetCode": {
+          "type": "string",
+          "description": "Code of the target alignment. ",
+          "maxLength": 256
+        },
+        "targetFramework": {
+          "type": "string",
+          "description": "The framework to which the target belongs. ",
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "targetName",
+        "targetUrl"
+      ]
+    },
+    "Date_Schema": {
+      "title": "Calendar date",
+      "type": "string",
+      "pattern": "^[1,2]\\d\\d\\d(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2]\\d|30|31))?)?$"
+    },
+    "Did_Schema": {
+      "title": "DID",
+      "type": "string",
+      "pattern": "^did:[a-z0-9]+:[A-Za-z0-9._:?=&%;-]+$"
+    },
+    "Organization_Schema": {
+      "title": "Organization",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "Organization"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the organization.",
+          "maxLength": 256
+        },
+        "identifier": {
+          "$ref": "#/definitions/Did_Schema"
+        },
+        "place": {
+          "$ref": "#/definitions/Place_Schema"
+        },
+        "image": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "description": "IRI representing the logo of the organization. This must be JPG, PNG or SVG file. \nFor PNG or JPG: 300px x 300px minimum, maximum size 500kb. "
+        }
+      },
+      "required": [
+        "name",
+        "place"
+      ]
+    },
+    "Place_Schema": {
+      "title": "Place",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "Place"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the place, e.g., building name, branch name, etc.",
+          "maxLength": 256
+        },
+        "addressLocality": {
+          "type": "string",
+          "description": "The locality where the place is, e.g., town or city name.",
+          "maxLength": 256
+        },
+        "addressRegion": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}(-[A-Z0-9]{1,3})?$",
+          "description": "The region where the place is. These are states, provinces, etc. Must be an [ISO 3166-2 subdivision code](https://en.wikipedia.org/wiki/ISO_3166-2)",
+          "maxLength": 6
+        },
+        "addressCountry": {
+          "type": "string",
+          "description": "The country where the place is. Must be an [ISO 3166 2 letter country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes)",
+          "pattern": "^[A-Z]{2}$",
+          "maxLength": 2
+        }
+      },
+      "required": [
+        "addressCountry"
+      ]
+    },
+    "Score_Schema": {
+      "title": "Score",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "scoreMethod": {
+          "type": "object",
+          "description": "The method according to which the score is given. ",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "default": "ScoreMethod"
+            },
+            "scoreMethodType": {
+              "type": "string",
+              "enum": [
+                "NormReferenced",
+                "CriterionReferenced"
+              ],
+              "description": "One of: NormReferenced, CriterionReferenced."
+            },
+            "scoreMethodDescription": {
+              "type": "string",
+              "description": "A description of the scoring method used.",
+              "maxLength": 2048
+            },
+            "alignment": {
+              "type": "array",
+              "description": "A public resource to which the scoring method is aligned.",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/Alignment_Schema"
+              }
+            },
+            "passingScore": {
+              "type": "string",
+              "description": "The minimum passing score",
+              "maxLength": 16
+            }
+          }
+        },
+        "scoreValue": {
+          "type": "string",
+          "description": "The score achieved by the person.",
+          "maxLength": 16
+        },
+        "type": {
+          "type": "string",
+          "default": "Score"
+        },
+        "result": {
+          "type": "string",
+          "description": "The result achieved by the person, e.g. acceptable, excellent, poor. Applicable when results are not stated as scores. ",
+          "maxLength": 2048
+        },
+        "passFail": {
+          "type": "string",
+          "enum": [
+            "Pass",
+            "Fail"
+          ],
+          "description": "One of: Pass, Fail"
+        },
+        "scoreDescription": {
+          "type": "string",
+          "description": "Explanation or description of the meaning of the score and/or result achieved. ",
+          "maxLength": 2048
+        }
+      }
+    }
+  }
+}

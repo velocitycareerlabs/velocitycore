@@ -1,0 +1,242 @@
+{
+  "title": {
+    "path": [
+      "$.provider.name",
+      "$.credentialSubject.provider.name"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "subtitle": {
+    "path": [
+      "$.courseName",
+      "$.credentialSubject.courseName"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "-"
+  },
+  "summary_detail": {
+    "path": [
+      "$.courseType",
+      "$.credentialSubject.courseType"
+    ],
+    "schema": {
+      "type": "string"
+    },
+    "fallback": "$.courseMode"
+  },
+  "description": {
+    "text": "Course attendance"
+  },
+  "logo": {
+    "path": [
+      "$.provider.image",
+      "$.credentialSubject.provider.image"
+    ],
+    "schema": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "properties": [
+    {
+      "label": "Course description",
+      "path": [
+        "$.description",
+        "$.credentialSubject.description"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Registration date",
+      "path": [
+        "$.registrationDate",
+        "$.credentialSubject.registrationDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    {
+      "label": "Start date",
+      "path": [
+        "$.startDate",
+        "$.credentialSubject.startDate"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "date"
+      },
+      "fallback": "-"
+    },
+    {
+      "label": "Grade",
+      "path": [
+        "$.grade.scoreValue",
+        "$.credentialSubject.grade.scoreValue"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Result",
+      "path": [
+        "$.grade.result",
+        "$.credentialSubject.grade.result"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Pass or fail",
+      "path": [
+        "$.grade.passFail",
+        "$.credentialSubject.grade.passFail"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Score method",
+      "path": [
+        "$.score.scoreMethod.scoreMethodType",
+        "$.credentialSubject.score.scoreMethod.scoreMethodType"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Score method details",
+      "path": [
+        "$.score.scoreMethod.scoreMethodDescription",
+        "$.credentialSubject.score.scoreMethod.scoreMethodDescription"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Passing score",
+      "path": [
+        "$.score.scoreMethod.passingScore",
+        "$.credentialSubject.score.scoreMethod.passingScore"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course type",
+      "path": [
+        "$.courseType",
+        "$.credentialSubject.courseType"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course mode",
+      "path": [
+        "$.courseMode",
+        "$.credentialSubject.courseMode"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course level",
+      "path": [
+        "$.courseLevel",
+        "$.credentialSubject.courseLevel"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Course duration",
+      "path": [
+        "$.courseDuration",
+        "$.credentialSubject.courseDuration"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "duration"
+      }
+    },
+    {
+      "label": "First name",
+      "path": [
+        "$.recipient.givenName",
+        "$.credentialSubject.recipient.givenName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Middle name",
+      "path": [
+        "$.recipient.middleName",
+        "$.credentialSubject.recipient.middleName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Last name",
+      "path": [
+        "$.recipient.familyName",
+        "$.credentialSubject.recipient.familyName"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Name prefix",
+      "path": [
+        "$.recipient.namePrefix",
+        "$.credentialSubject.recipient.namePrefix"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Name suffix",
+      "path": [
+        "$.recipient.nameSuffix",
+        "$.credentialSubject.recipient.nameSuffix"
+      ],
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "label": "Learn more about the credential",
+      "path": [
+        "$.alignment[0].targetUrl",
+        "$.credentialSubject.alignment[0].targetUrl"
+      ],
+      "schema": {
+        "type": "string",
+        "format": "uri"
+      }
+    }
+  ]
+}

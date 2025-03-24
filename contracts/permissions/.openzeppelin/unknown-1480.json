@@ -1,0 +1,574 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0xbc9Edb69Cd0D014176e2DfA46fA4Da0fD8F01119",
+    "txHash": "0x7f0955a52046cba3e34ef31e52b016ad164f25cea774b1f29e90b33d15bed851"
+  },
+  "proxies": [
+    {
+      "address": "0x823e6B949D4972230cc9637FE83EdB080e0D72dd",
+      "txHash": "0x11368e29e7535d01c7d0a27233ecff825379e78a02df69a8be702839d8b84351",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "74686663c64b9f5a2bbd0049598732356e6d2b17a7eab80cd731684272252e51": {
+      "address": "0x051aAd8E9bB66CD2D787D79dd50a0440eC943eaB",
+      "txHash": "0x5b51a78c0a78563b1ff3fe066f633963b05732949d9db820d7aa5a2582f2e974",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "contract": "Permissions",
+            "label": "VNF",
+            "type": "t_address",
+            "src": "../project:/contracts/Permissions.sol:7"
+          },
+          {
+            "contract": "Permissions",
+            "label": "addressToPermissions",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))",
+            "src": "../project:/contracts/Permissions.sol:8"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))": {
+            "label": "mapping(address => mapping(string => bool))"
+          },
+          "t_mapping(t_string_memory_ptr,t_bool)": {
+            "label": "mapping(string => bool)"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "5dbd3e47f398fa17b010a028a737e2638537e6151181c39fc75f98b54632f7d7": {
+      "address": "0x856379B3406CA31f1fFe48273D2bd01fA32E8f1a",
+      "txHash": "0x4b0c81cff6255b2ec9426c373583a9b0587730a1d264b66afa9e2c552b36a774",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "contract": "Permissions",
+            "label": "VNF",
+            "type": "t_address",
+            "src": "../project:/contracts/Permissions.sol:7"
+          },
+          {
+            "contract": "Permissions",
+            "label": "addressToPermissions",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))",
+            "src": "../project:/contracts/Permissions.sol:8"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToPermissioning",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:10"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToRotation",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:11"
+          },
+          {
+            "contract": "Permissions",
+            "label": "operatorToPrimary",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:12"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaries",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "../project:/contracts/Permissions.sol:13"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))": {
+            "label": "mapping(address => mapping(string => bool))"
+          },
+          "t_mapping(t_string_memory_ptr,t_bool)": {
+            "label": "mapping(string => bool)"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "69ae3d577660a2b3a106406249dff5f60fec3f6f2baed3bbee0ac8ad70a292af": {
+      "address": "0xe9213c760F9dd621767605A162004Df72c7095C1",
+      "txHash": "0x5849e52a6489375149a3b868a5060d232e161480e892673eeb59e58679899239",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "contract": "Permissions",
+            "label": "VNF",
+            "type": "t_address",
+            "src": "../project:/contracts/Migrations.sol:8"
+          },
+          {
+            "contract": "Permissions",
+            "label": "addressToPermissions",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))",
+            "src": "../project:/contracts/Migrations.sol:9"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToPermissioning",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Migrations.sol:11"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToRotation",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Migrations.sol:16"
+          },
+          {
+            "contract": "Permissions",
+            "label": "operatorToPrimary",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Migrations.sol:17"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaries",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "../project:/contracts/Migrations.sol:20"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))": {
+            "label": "mapping(address => mapping(string => bool))"
+          },
+          "t_mapping(t_string_memory_ptr,t_bool)": {
+            "label": "mapping(string => bool)"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "a966a8927b68b257d7f511476d52587bc1267641406c0d87596419db7bb25ce8": {
+      "address": "0xD3562e3470B609b4fD08920f18C4007a6C709BF7",
+      "txHash": "0xa19504222b6e157ca284d733daa9efddf3dae1deec009b9fde72995c8cce5f80",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "Permissions",
+            "label": "VNF",
+            "type": "t_address",
+            "src": "../project:/contracts/Permissions.sol:7"
+          },
+          {
+            "contract": "Permissions",
+            "label": "addressToPermissions",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))",
+            "src": "../project:/contracts/Permissions.sol:8"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToPermissioning",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:10"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToRotation",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:11"
+          },
+          {
+            "contract": "Permissions",
+            "label": "operatorToPrimary",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:12"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaries",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "../project:/contracts/Permissions.sol:13"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))": {
+            "label": "mapping(address => mapping(string => bool))"
+          },
+          "t_mapping(t_string_memory_ptr,t_bool)": {
+            "label": "mapping(string => bool)"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "1e4ffc8b23e626fd79d98f0aaea81eb826c53836b6576b4d68826207afd67d27": {
+      "address": "0xf5F0aBc17C8417b50c298EdC408C672b299Ec808",
+      "txHash": "0xbc34281a22329b8fa25e946e9170995e0908daa2ba576521af241b128ae6d993",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "Permissions",
+            "label": "VNF",
+            "type": "t_address",
+            "src": "../project:/contracts/Permissions.sol:7"
+          },
+          {
+            "contract": "Permissions",
+            "label": "addressToPermissions",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))",
+            "src": "../project:/contracts/Permissions.sol:8"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToPermissioning",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:10"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToRotation",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:11"
+          },
+          {
+            "contract": "Permissions",
+            "label": "operatorToPrimary",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:12"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaries",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "../project:/contracts/Permissions.sol:13"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))": {
+            "label": "mapping(address => mapping(string => bool))"
+          },
+          "t_mapping(t_string_memory_ptr,t_bool)": {
+            "label": "mapping(string => bool)"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        },
+        "namespaces": {}
+      }
+    },
+    "ffd801761b3d5e51e2fbe0f8fe199b8cb18a3008c9b2c6600e6e065351673ab1": {
+      "address": "0x038AAA096C3C35a541001727cCDDcd70a69aC530",
+      "txHash": "0xb9eadd18c9ac0e33c7845eb64d68281cd1c609dcba60ffe7a8c5c435e4e125e5",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "Permissions",
+            "label": "VNF",
+            "type": "t_address",
+            "src": "../project:/contracts/Permissions.sol:7"
+          },
+          {
+            "contract": "Permissions",
+            "label": "addressToPermissions",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))",
+            "src": "../project:/contracts/Permissions.sol:8"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToPermissioning",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:10"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToRotation",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:11"
+          },
+          {
+            "contract": "Permissions",
+            "label": "operatorToPrimary",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:12"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaries",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "../project:/contracts/Permissions.sol:13"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))": {
+            "label": "mapping(address => mapping(string => bool))"
+          },
+          "t_mapping(t_string_memory_ptr,t_bool)": {
+            "label": "mapping(string => bool)"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        },
+        "namespaces": {}
+      }
+    },
+    "07623b3477e4200c634eb574547621768bb2c2cb48a68cda594aa48dafc712ab": {
+      "address": "0xB47ac36dEFF400663BDDB2FA5e0e051E95638B6A",
+      "txHash": "0x9cf90d97a5f60b62a6810170a407d1ab7d18f0e107a29896432fd3d7e9222f8d",
+      "layout": {
+        "solcVersion": "0.8.4",
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "contract": "Permissions",
+            "label": "VNF",
+            "type": "t_address",
+            "src": "../project:/contracts/Permissions.sol:7"
+          },
+          {
+            "contract": "Permissions",
+            "label": "addressToPermissions",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))",
+            "src": "../project:/contracts/Permissions.sol:8"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToPermissioning",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:10"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaryToRotation",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:11"
+          },
+          {
+            "contract": "Permissions",
+            "label": "operatorToPrimary",
+            "type": "t_mapping(t_address,t_address)",
+            "src": "../project:/contracts/Permissions.sol:12"
+          },
+          {
+            "contract": "Permissions",
+            "label": "primaries",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "../project:/contracts/Permissions.sol:13"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_bool))": {
+            "label": "mapping(address => mapping(string => bool))"
+          },
+          "t_mapping(t_string_memory_ptr,t_bool)": {
+            "label": "mapping(string => bool)"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        },
+        "namespaces": {}
+      }
+    }
+  }
+}
