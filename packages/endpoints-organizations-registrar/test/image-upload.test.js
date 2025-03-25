@@ -17,7 +17,7 @@
 
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { errorResponseMatcher } = require('@velocitycareerlabs/tests-helpers');
-const initImageFactory = require('./factories/images-factory');
+const initImageFactory = require('../src/entities/images/factories/images-factory');
 const buildFastify = require('./helpers/build-fastify');
 const { ImageState } = require('../src/entities');
 

@@ -19,8 +19,8 @@ const { register } = require('@spencejs/spence-factories');
 
 const { compact, uniq } = require('lodash/fp');
 const { DEFAULT_GROUP_ID } = require('@velocitycareerlabs/tests-helpers');
-const initOrganizationFactory = require('./organizations-factory');
-const groupsRepoPlugin = require('../../src/entities/groups/repo');
+const initOrganizationFactory = require('../../organizations/factories/organizations-factory');
+const groupsRepoPlugin = require('../repo');
 
 module.exports = (app) =>
   register(

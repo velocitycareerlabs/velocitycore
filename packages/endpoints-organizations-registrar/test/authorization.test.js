@@ -43,7 +43,7 @@ require('auth0');
 
 const console = require('console');
 const { nanoid } = require('nanoid');
-const initGroupsFactory = require('./factories/groups-factory');
+const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
 const buildFastify = require('./helpers/build-fastify');
 const groupsRepoPlugin = require('../src/entities/groups/repo');
 const {

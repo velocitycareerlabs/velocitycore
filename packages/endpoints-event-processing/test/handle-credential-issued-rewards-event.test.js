@@ -41,7 +41,8 @@ const {
 } = require('@spencejs/spence-mongo-repos');
 const { ObjectId } = require('mongodb');
 const { mongoCloseWrapper } = require('@velocitycareerlabs/tests-helpers');
-const initOrganizationFactory = require('@velocitycareerlabs/endpoints-organizations-registrar/test/factories/organizations-factory');
+// eslint-disable-next-line max-len
+const initOrganizationFactory = require('@velocitycareerlabs/endpoints-organizations-registrar/src/entities/organizations/factories/organizations-factory');
 const organizationsRepoPlugin = require('@velocitycareerlabs/endpoints-organizations-registrar/src/entities/organizations/repos/repo');
 const initCredentialSchemaFactory = require('../../endpoints-credential-types-registrar/test/factories/credential-schema-factory');
 const credentialSchemasRepoPlugin = require('../../endpoints-credential-types-registrar/src/entities/credential-types/repos/repo');

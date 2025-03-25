@@ -17,9 +17,9 @@
 
 const { register } = require('@spencejs/spence-factories');
 
-const initOrganizationFactory = require('./organizations-factory');
-const { SignatoryEventStatus } = require('../../src/entities');
-const signatoryStatusPlugin = require('../../src/entities/signatories/repos/repo');
+const initOrganizationFactory = require('../../organizations/factories/organizations-factory');
+const { SignatoryEventStatus } = require('../../index');
+const signatoryStatusPlugin = require('../repos/repo');
 
 module.exports = (app) =>
   register(

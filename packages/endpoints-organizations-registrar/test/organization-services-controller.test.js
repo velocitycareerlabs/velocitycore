@@ -81,11 +81,11 @@ const console = require('console');
 const nock = require('nock');
 const { subDays } = require('date-fns/fp');
 
-const initOrganizationFactory = require('./factories/organizations-factory');
-const initOrganizationKeysFactory = require('./factories/organization-keys-factory');
-const initGroupsFactory = require('./factories/groups-factory');
-const initInvitationsFactory = require('./factories/invitations-factory');
-const initRegistrarConsentFactory = require('./factories/registrar-consents-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
+const initOrganizationKeysFactory = require('../src/entities/organization-keys/factories/organization-keys-factory');
+const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
+const initInvitationsFactory = require('../src/entities/invitations/factories/invitations-factory');
+const initRegistrarConsentFactory = require('../src/entities/registrar-consents/factories/registrar-consents-factory');
 const {
   sendServicesActivatedEmailMatcher,
   sendServicesActivatedEmailToCAOsMatcher,

@@ -26,7 +26,7 @@ const {
 const { jwkFromSecp256k1Key, hexFromJwk } = require('@velocitycareerlabs/jwt');
 const { errorResponseMatcher } = require('@velocitycareerlabs/tests-helpers');
 const { default: bs58 } = require('bs58');
-const initOrganizationFactory = require('./factories/organizations-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const buildFastify = require('./helpers/build-fastify');
 
 const DEFAULT_KEYS = [

@@ -31,7 +31,7 @@ const {
 const console = require('console');
 
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
-const initGroupsFactory = require('./factories/groups-factory');
+const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
 const buildFastify = require('./helpers/build-fastify');
 
 const groupsRepoPlugin = require('../src/entities/groups/repo');
