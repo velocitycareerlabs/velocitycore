@@ -8,6 +8,8 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
+    "build": "nx run-many --target=build --all",
+    "build:affected": "nx affected --target=build",
     "lint": "nx run-many --target=lint --all",
     "lint:affected": "nx affected --target=lint",
     "lint:fix": "nx run-many --target=lint:fix --all",
