@@ -77,7 +77,6 @@
   },
   "devDependencies": {
     "@spencejs/spence-config": "0.10.2",
-    "@velocitycareerlabs/endpoints-organizations-registrar": "0.5.0-build",
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",

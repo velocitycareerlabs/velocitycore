@@ -58,9 +58,6 @@ const { initProvider } = require('@velocitycareerlabs/base-contract-io');
 const dotenv = require('dotenv');
 const path = require('path');
 const { toHexString } = require('@velocitycareerlabs/blockchain-functions');
-const {
-  Authorities,
-} = require('@velocitycareerlabs/endpoints-organizations-registrar');
 const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
 const {
   sampleEducationDegreeGraduation,
@@ -117,7 +114,7 @@ describe('org registration and issuing e2e', () => {
       website: 'https://www.credentialagent.com',
       registrationNumbers: [
         {
-          authority: Authorities.DunnAndBradstreet,
+          authority: 'DunnAndBradstreet',
           number: '123457779',
           uri: 'https://uri.com',
         },
