@@ -28,5 +28,8 @@
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
     "@spencejs/spence-config":  "0.10.2",
     "@velocitycareerlabs/crypto": "0.5.0-build"
+  },
+  "nx": {
+    "tags": ["lib"]
   }
 }

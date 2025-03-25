@@ -10,5 +10,8 @@
     "access": "public"
   },
   "dependencies": {
+  },
+  "nx": {
+    "tags": ["lib"]
   }
 }

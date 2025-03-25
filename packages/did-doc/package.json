@@ -28,5 +28,8 @@
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "jest": "29.7.0",
     "nock": "13.5.6"
+  },
+  "nx": {
+    "tags": ["lib"]
   }
 }
