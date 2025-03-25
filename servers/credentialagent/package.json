@@ -1,7 +1,6 @@
 {
   "name": "@velocitycareerlabs/server-credentialagent",
   "version": "0.5.0-build",
-  "private": true,
   "description": "Credential Agent application",
   "main": "src/main.js",
   "repository": "https://github.com/velocitycareerlabs/packages",
@@ -24,6 +23,9 @@
   },
   "author": "Yauheni Pozdnyakov",
   "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@fastify/autoload": "5.10.0",
     "@fastify/routes": "5.1.0",
