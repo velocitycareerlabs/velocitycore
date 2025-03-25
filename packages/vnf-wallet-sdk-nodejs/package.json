@@ -16,8 +16,7 @@
         "prepublish": "tsc --declaration",
         "build": "tsc",
         "test": "jest",
-        "publish-test": "npm run prepublish && npm run build && npm pack",
-        "postinstall": "if test \"$NODE_ENV\" != \"production\" ; then yarn build ; fi"
+        "publish-test": "npm run prepublish && npm run build && npm pack"
     },
     "engines": {
         "node": ">= 20.0.0"
