@@ -6,7 +6,6 @@
   "repository": "git@github.com:velocitycareerlabs/velocitycore.git",
   "author": "Andres Olave",
   "license": "Apache-2.0",
-  "private": true,
   "scripts": {
     "lint": "nx run-many --target=lint --all",
     "lint:affected": "nx affected --target=lint",
