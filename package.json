@@ -69,7 +69,6 @@
     "contracts/*",
     "packages/*",
     "servers/*",
-    "lambdas/*",
     "tools/*",
     "apps/*",
     "samples/*/*"
