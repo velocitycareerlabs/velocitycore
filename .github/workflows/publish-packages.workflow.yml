@@ -14,8 +14,6 @@ on:
         default: 'dev'
         options: 
         - dev
-        - qa    
-        - staging
         - prod
 env:
   LERNA_VERSION: '6.6.2'
