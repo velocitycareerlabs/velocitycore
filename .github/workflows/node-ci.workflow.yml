@@ -131,6 +131,8 @@ jobs:
         key: ${{ runner.os }}-${{ matrix.node-version }}-yarn-${{ hashFiles('yarn.lock') }}
     - name: Install Dependencies
       run: yarn install --frozen-lockfile --prefer-offline
+    - name: Build Libs
+      run: yarn build:lib
     - name: Lint
       run: yarn nx run ${{ matrix.package }}:lint
     - name: Create Artifact Name
@@ -211,6 +213,8 @@ jobs:
         key: ${{ runner.os }}-${{ matrix.node-version }}-yarn-${{ hashFiles('yarn.lock') }}
     - name: Install Dependencies
       run: yarn install --frozen-lockfile --prefer-offline
+    - name: Build Libs
+      run: yarn build:lib
     - name: Run Credential Agent Migrations
       working-directory: ./servers/credentialagent
       run: MONGO_URI=mongodb://localhost:27017/test-credential-agent yarn migrate:up
