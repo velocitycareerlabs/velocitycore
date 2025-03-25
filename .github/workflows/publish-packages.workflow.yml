@@ -96,7 +96,7 @@ jobs:
         run: git commit -am "Creating Version ${{ env.VER_NUM }}"
       # Publish Github Repo
       - name: Publish Github Repo
-        run: lerna publish --dist-tag ${{ env.DIST_TAG }} from-package --yes --registry ${{ env.REGISTRY_URL }} "*"
+        run: lerna publish --dist-tag ${{ env.DIST_TAG }} from-package --yes --registry ${{ env.REGISTRY_URL }}
       # Set Github Packages Config
       # lerna doesn't have --access public key, so required to set publicConfig for all public packages
       # private: true required for all private packages
