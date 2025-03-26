@@ -10,17 +10,17 @@ import {
   VCLJwt,
   Nullish,
   Dictionary,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import { getJwtVerifyServiceUrl } from './Urls';
-import { CurrentEnvironment } from '../../GlobalConfig';
 import fetcher from './Fetcher';
+import { GlobalConfig } from '../../GlobalConfig';
 
 export const verifyJwtFetcher = async (
   jwt: VCLJwt,
   publicJwk: Nullish<VCLPublicJwk>
 ): Promise<Dictionary<any>> => {
   const config = {
-    url: getJwtVerifyServiceUrl(CurrentEnvironment),
+    url: getJwtVerifyServiceUrl(GlobalConfig.environment),
     method: 'POST',
     data: {
       jwt: jwt.encodedJwt,

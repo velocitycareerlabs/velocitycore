@@ -9,25 +9,26 @@ import {
   VCLCryptoServicesDescriptor,
   VCLInitializationDescriptor,
   VCLProvider,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
-import { CurrentEnvironment, XVnfProtocolVersion } from '../GlobalConfig';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import {
   JwtSignServiceImpl,
   JwtVerifyServiceImpl,
   KeyServiceImpl,
 } from '../crypto-services';
+import { GlobalConfig } from '../GlobalConfig';
 
-const vclSdkPlugin = async (fastify) => {
+const vclSdkPlugin = async (fastify: any) => {
   const vclSdk = VCLProvider.getInstance();
 
   const initializationDescriptor = new VCLInitializationDescriptor(
-    CurrentEnvironment,
-    XVnfProtocolVersion,
+    GlobalConfig.environment,
+    GlobalConfig.xVnfProtocolVersion,
     new VCLCryptoServicesDescriptor(
       new KeyServiceImpl(),
       new JwtSignServiceImpl(),
       new JwtVerifyServiceImpl()
-    )
+    ),
+    GlobalConfig.isDebugOn
   );
 
   try {
