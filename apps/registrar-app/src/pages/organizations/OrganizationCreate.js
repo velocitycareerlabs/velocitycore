@@ -30,11 +30,10 @@ import {
   FormDataConsumer,
   useGetOne,
   useNotify,
+  useGetList,
 } from 'react-admin';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useFormContext } from 'react-hook-form';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { useQueryClient } from '@tanstack/react-query';
 import { kebabCase } from 'lodash/string';
 import { Box, Stack, Tooltip, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -117,7 +116,9 @@ const organizationPlaceholder =
   'Add a few words describing your organization (boilerplate text) so that other Network participants can learn about it.';
 
 const OrganizationCreate = () => {
-  const queryClient = useQueryClient();
+  const { refetch } = useGetList('organizations', undefined, {
+    enabled: false,
+  });
   const redirect = useRedirect();
   const { data: countryCodes, isLoading } = useCountryCodes();
   const [did, setDid] = useSelectedOrganization();
@@ -168,7 +169,7 @@ const OrganizationCreate = () => {
     resource: 'organizations',
     mutationOptions: {
       onSuccess: async (resp) => {
-        await queryClient.invalidateQueries(['organizations', 'getList']);
+        refetch();
         setDid(resp.id);
         setSecretKeys({ keys: resp.keys, authClients: resp.authClients });
         setServiceCreated(true);
