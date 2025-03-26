@@ -23,10 +23,10 @@ const {
   KeyAlgorithms,
 } = require('@velocitycareerlabs/crypto');
 
-const initOrganizationFactory = require('./organizations-factory');
-const initKmsFactory = require('./kms-factory');
+const initOrganizationFactory = require('../../organizations/factories/organizations-factory');
+const initKmsFactory = require('../../kms/factories/kms-factory');
 
-const organizationKeysRepoPlugin = require('../../src/entities/organization-keys/repos/repo');
+const organizationKeysRepoPlugin = require('../repos/repo');
 
 module.exports = (app) =>
   register(

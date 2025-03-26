@@ -40,10 +40,10 @@ const {
   initBuildProfileVerifiableCredential,
   initBuildProfileVcUrl,
   normalizeProfileName,
-} = require('../../src/entities/organizations');
+  Authorities,
+} = require('../domains');
 
-const organizationsRepoPlugin = require('../../src/entities/organizations/repos/repo');
-const { Authorities } = require('../../src/entities/organizations');
+const organizationsRepoPlugin = require('../repos/repo');
 
 module.exports = (app) => {
   const buildProfileVerifiableCredential =
@@ -94,6 +94,7 @@ module.exports = (app) => {
         alsoKnownAs,
       });
 
+      // eslint-disable-next-line better-mutation/no-mutation
       didDoc.id = await getOrBuild('didDocId', () => didDoc.id);
 
       const mergeIds = await getOrBuild('_mergeIds', () => {});

@@ -16,30 +16,28 @@
  */
 
 const { register } = require('@spencejs/spence-factories');
-const { addWeeks } = require('date-fns/fp');
-const { invitationsRepoPlugin } = require('../../src/entities');
+
+const { testRegistrarUser } = require('@velocitycareerlabs/tests-helpers');
+const imagesRepoPlugin = require('../repo');
+const { ImageState } = require('../domain');
 
 module.exports = (app) =>
   register(
-    'invitation',
-    invitationsRepoPlugin(app)({ config: app.config }),
-    async (overrides) => {
-      const overridesResult = overrides();
-      const inviteeService = overridesResult.organization?.didDoc.service;
-      const inviteeProfile = overridesResult.organization?.profile;
-      const inviterDid = overridesResult.organization?.didDoc.id;
+    'image',
+    imagesRepoPlugin(app)({ config: app.config }),
+    async (overrides, { getOrBuild }) => {
+      const userId = await getOrBuild('userId', () => testRegistrarUser.sub);
+
       return {
-        inviteeEmail: 'foo@example.com',
-        invitationUrl: 'https://someurl.com',
-        inviteeService,
-        inviteeProfile,
-        inviterDid,
-        code: '1234567812345678',
-        expiresAt: addWeeks(1, new Date()),
+        userId,
+        key: 'file-1234567.png',
+        url: 'http://media.localhost.test/file-1234567.png',
+        uploadUrl: 'http://aws.s3.test/file-1234567.png',
+        uploadSucceeded: false,
+        state: ImageState.PENDING_UPLOAD,
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: 'sub-123',
-        ...overridesResult,
+        ...overrides(),
       };
     }
   );

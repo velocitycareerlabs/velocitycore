@@ -24,7 +24,7 @@ const {
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
 
 const nock = require('nock');
-const initOrganizationFactory = require('./factories/organizations-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const buildFastify = require('./helpers/build-fastify');
 
 const { AuthClientTypes } = require('../src/entities');

@@ -19,7 +19,7 @@ const nock = require('nock');
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
 const { errorResponseMatcher } = require('@velocitycareerlabs/tests-helpers');
-const initOrganizationFactory = require('./factories/organizations-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const buildFastify = require('./helpers/build-fastify');
 
 const baseUrl = '/api/v0.6/resolve-did';

@@ -25,7 +25,7 @@ const {
   testNoGroupRegistrarUser,
 } = require('@velocitycareerlabs/tests-helpers');
 const { ObjectId } = require('mongodb');
-const initInvitationsFactory = require('./factories/invitations-factory');
+const initInvitationsFactory = require('../src/entities/invitations/factories/invitations-factory');
 const buildFastify = require('./helpers/build-fastify');
 
 const { invitationsRepoPlugin } = require('../src/entities/invitations');

@@ -28,8 +28,8 @@ const {
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
 
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
-const initOrganizationFactory = require('./factories/organizations-factory');
-const initGroupsFactory = require('./factories/groups-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
+const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
 const buildFastify = require('./helpers/build-fastify');
 
 const {
