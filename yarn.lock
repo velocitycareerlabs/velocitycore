@@ -3934,7 +3934,7 @@
     write-pkg "4.0.0"
     yargs "16.2.0"
 
-"@lukeed/ms@^2.0.0", "@lukeed/ms@^2.0.1":
+"@lukeed/ms@^2.0.0", "@lukeed/ms@^2.0.1", "@lukeed/ms@^2.0.2":
   version "2.0.2"
   resolved "https://registry.npmjs.org/@lukeed/ms/-/ms-2.0.2.tgz#07f09e59a74c52f4d88c6db5c1054e819538e2a8"
   integrity sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==
@@ -12973,15 +12973,15 @@ fast-json-stringify@6.0.1, fast-json-stringify@^5.7.0, fast-json-stringify@^5.8.
     json-schema-ref-resolver "^2.0.0"
     rfdc "^1.2.0"
 
-fast-jwt@^3.3.2, fast-jwt@^4.0.0:
-  version "4.0.6"
-  resolved "https://registry.npmjs.org/fast-jwt/-/fast-jwt-4.0.6.tgz#fc9d4654572fd935ff80fdef79f010a541017c1f"
-  integrity sha512-kyNxaoy/m8pDQdyn+gl4FOTNEOrLK/1iAU4MP8cTz3mErOyh+BtvoCNFxKsyY4zlEKWO5HMY526zRXdoiPc6Rg==
+fast-jwt@^3.3.2, fast-jwt@^4.0.0, fast-jwt@^5.0.0:
+  version "5.0.6"
+  resolved "https://registry.npmjs.org/fast-jwt/-/fast-jwt-5.0.6.tgz#abc2d6cf28d22ae11dbbd08622dd5e53ea9b1f4f"
+  integrity sha512-LPE7OCGUl11q3ZgW681cEU2d0d2JZ37hhJAmetCgNyW8waVaJVZXhyFF6U2so1Iim58Yc7pfxJe2P7MNetQH2g==
   dependencies:
-    "@lukeed/ms" "^2.0.1"
+    "@lukeed/ms" "^2.0.2"
     asn1.js "^5.4.1"
     ecdsa-sig-formatter "^1.0.11"
-    mnemonist "^0.39.5"
+    mnemonist "^0.40.0"
 
 fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   version "2.0.6"
@@ -17969,12 +17969,12 @@ mnemonist@0.40.0:
   dependencies:
     obliterator "^2.0.4"
 
-mnemonist@^0.39.5:
-  version "0.39.8"
-  resolved "https://registry.npmjs.org/mnemonist/-/mnemonist-0.39.8.tgz#9078cd8386081afd986cca34b52b5d84ea7a4d38"
-  integrity sha512-vyWo2K3fjrUw8YeeZ1zF0fy6Mu59RHokURlld8ymdUPjMlD9EC9ov1/YPqTgqRvUN9nTr3Gqfz29LYAmu0PHPQ==
+mnemonist@^0.40.0:
+  version "0.40.3"
+  resolved "https://registry.npmjs.org/mnemonist/-/mnemonist-0.40.3.tgz#1cd4835c110ac28ec41504834a7184e0325f75cb"
+  integrity sha512-Vjyr90sJ23CKKH/qPAgUKicw/v6pRoamxIEDFOF8uSgFME7DqPRpHgRTejWVjkdGg5dXj0/NyxZHZ9bcjH+2uQ==
   dependencies:
-    obliterator "^2.0.1"
+    obliterator "^2.0.4"
 
 mocha@10.1.0:
   version "10.1.0"
