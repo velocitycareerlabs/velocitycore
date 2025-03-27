@@ -59,13 +59,16 @@ const dotenv = require('dotenv');
 const path = require('path');
 const { toHexString } = require('@velocitycareerlabs/blockchain-functions');
 const {
-  sampleEducationDegreeGraduation,
-} = require('@velocitycareerlabs/sample-data');
+  Authorities,
+} = require('@velocitycareerlabs/endpoints-organizations-registrar');
 const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
+const {
+  sampleEducationDegreeGraduation,
+} = require('../test/helpers/sample-education-degree-graduation');
 
 const registrarUrl = 'https://localhost:13003';
 const fineractUrl = 'http://localhost:13008';
-const cihUrl = 'http://localhost:13002';
+const caUrl = 'http://localhost:13002';
 const rpcUrl = 'http://localhost:18545';
 
 const authenticate = () => 'TOKEN';
@@ -77,7 +80,7 @@ dotenv.config({
 });
 console.dir(e2eEnv);
 
-const OPERATOR_API_TOKEN = 'foo';
+const OPERATOR_API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoidmVsb2NpdHkuYWRtaW5AZXhhbXBsZS5jb20ifQ.kmp4qjkgnVOX3eXdgNdUwYKDZ7NgEfH5qMM-7k1D1c8';
 const EDUCATION_DEGREE_CREDENTIAL_TYPE = 'EducationDegreeGraduationV1.1';
 
 describe('org registration and issuing e2e', () => {
@@ -114,7 +117,7 @@ describe('org registration and issuing e2e', () => {
       website: 'https://www.credentialagent.com',
       registrationNumbers: [
         {
-          authority: 'DunnAndBradstreet',
+          authority: Authorities.DunnAndBradstreet,
           number: '123457779',
           uri: 'https://uri.com',
         },
@@ -146,17 +149,17 @@ describe('org registration and issuing e2e', () => {
       {
         id: '#cao1',
         type: ServiceTypes.CredentialAgentOperatorType,
-        serviceEndpoint: replace('http', 'https', cihUrl),
+        serviceEndpoint: replace('http', 'https', caUrl),
       },
       {
         id: '#issuer1',
         type: ServiceTypes.CareerIssuerType,
-        serviceEndpoint: replace('http', 'https', cihUrl),
+        serviceEndpoint: replace('http', 'https', caUrl),
       },
       {
         id: '#rp1',
         type: ServiceTypes.InspectionType,
-        serviceEndpoint: replace('http', 'https', cihUrl),
+        serviceEndpoint: replace('http', 'https', caUrl),
       },
     ];
 
@@ -269,7 +272,8 @@ describe('org registration and issuing e2e', () => {
 
     // Tenant Creation
     const createTenantPayload = {
-      tenant: { did, caoDid: did },
+      did,
+      serviceIds: serviceEndpoints.map(({ id }) => `${did}${id}`),
       keys: filter(
         ({ purposes }) =>
           [
@@ -280,8 +284,9 @@ describe('org registration and issuing e2e', () => {
         keys
       ),
     };
+
     const createTenantResponse = await fetch(
-      `${cihUrl}/operator/tenants/create`,
+      `${caUrl}/operator-api/v0.8/tenants`,
       {
         method: 'POST',
         body: JSON.stringify(createTenantPayload),
@@ -291,50 +296,13 @@ describe('org registration and issuing e2e', () => {
         },
       }
     );
-    expect(createTenantResponse.status).toEqual(200);
+    expect(createTenantResponse.status).toEqual(201);
     const createTenantJson = await createTenantResponse.json();
     expect(createTenantJson).toEqual({
-      tenant: expectedTenant(createTenantPayload.tenant, ids.ethereumAccount),
-      keyMetadatas: expectedKeyMetadatas(createTenantPayload.keys),
-      requestId: expect.any(String),
+      id: expect.stringMatching(OBJECT_ID_FORMAT),
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT)
     });
-    const { tenant } = createTenantJson;
-    console.dir({ msg: 'Tenant created', tenant });
-
-    // Service Creation
-    const createServicePayload = {
-      tenantId: tenant.id,
-      service: {
-        velocityNetworkServiceId: serviceEndpoints[1].id,
-        description: 'issuing service',
-        termsUrl: 'http://www.example.com/terms.html',
-        authMethods: ['preauth'],
-        authMode: 'internal',
-        authTokensExpireIn: 100000,
-        challengesExpireIn: 10000,
-        credentialTypesAvailable: ['EducationDegreeGraduationV1.1'],
-        autoCleanPII: false,
-      },
-    };
-    const createServiceResponse = await fetch(
-      `${cihUrl}/operator/issuer-services/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify(createServicePayload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    expect(createServiceResponse.status).toEqual(200);
-    const createServiceJson = await createServiceResponse.json();
-    expect(createServiceJson).toEqual({
-      service: expectedEntity(createServicePayload.service),
-      requestId: expect.any(String),
-    });
-    const { service } = createServiceJson;
-    console.dir({ msg: 'Issuer service created', service });
+    console.dir({ msg: 'Tenant created', createTenantJson });
 
     // Depot Creation
     const createDepotPayload = {
@@ -343,7 +311,7 @@ describe('org registration and issuing e2e', () => {
       depot: { userReference: 'ABC123' },
     };
     const createDepotResponse = await fetch(
-      `${cihUrl}/operator/depots/create`,
+      `${caUrl}/operator/depots/create`,
       {
         method: 'POST',
         body: JSON.stringify(createDepotPayload),
@@ -379,7 +347,7 @@ describe('org registration and issuing e2e', () => {
       },
     };
     const createCredentialResponse = await fetch(
-      `${cihUrl}/operator/credentials/create`,
+      `${caUrl}/operator/credentials/create`,
       {
         method: 'POST',
         body: JSON.stringify(createCredentialPayload),
@@ -419,7 +387,7 @@ describe('org registration and issuing e2e', () => {
       depotId: depot.id,
     };
     const issueLinksResponse = await fetch(
-      `${cihUrl}/operator/issue-links/refresh`,
+      `${caUrl}/operator/issue-links/refresh`,
       {
         method: 'POST',
         body: JSON.stringify(issueLinksPayload),
@@ -437,7 +405,7 @@ describe('org registration and issuing e2e', () => {
         depot,
         issueLinksJson.preauthCode
       )}`,
-      redirectUrl: `${cihUrl}/app-redirect?${expectedSearchParams(
+      redirectUrl: `${caUrl}/app-redirect?${expectedSearchParams(
         tenant,
         service,
         depot,
@@ -569,7 +537,7 @@ describe('org registration and issuing e2e', () => {
         body: JSON.stringify({
           approvedOfferIds: map('id', credentialOffersJson.offers),
           proof: await buildProof(
-            cihUrl,
+            caUrl,
             holderDid,
             holderKeyPair,
             credentialOffersJson.challenge
@@ -623,7 +591,7 @@ describe('org registration and issuing e2e', () => {
       ),
     };
     const presentationCheckResponse = await fetch(
-      `${cihUrl}/operator/presentations/check`,
+      `${caUrl}/operator/presentations/check`,
       {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -698,7 +666,7 @@ const expectedEntity = (payload, overrides) =>
 
 const expectedSearchParams = (tenant, service, depot, preauthCode) => {
   let searchParamsString = `request_uri=${encodeURIComponent(
-    cihUrl
+    caUrl
   )}%2Fvn-api%2Fr%2F${encodeURIComponent(
     encodeURI(tenant.did)
   )}%2Fget-credential-manifest%3Fid%3D${encodeURIComponent(service.id)}`;
@@ -736,12 +704,12 @@ const expectedCredentialManifest = (
     submission_requirements:
       issuerService.disclosureRequest?.types != null
         ? [
-            {
-              from: 'A',
-              min: 1,
-              rule: 'all',
-            },
-          ]
+          {
+            from: 'A',
+            min: 1,
+            rule: 'all',
+          },
+        ]
         : [],
     ...issuerService.presentationDefinition,
   },
@@ -751,10 +719,10 @@ const expectedCredentialManifest = (
     tos_uri: issuerService.termsUrl,
     max_retention_period:
       issuerService.disclosureRequest?.retentionPeriod ?? '',
-    progress_uri: `${cihUrl}${vnUrl(tenant)}/get-exchange-progress`,
-    submit_presentation_uri: `${cihUrl}${vnUrl(tenant)}/authenticate`,
-    check_offers_uri: `${cihUrl}${vnUrl(tenant)}/credential-offers`,
-    finalize_offers_uri: `${cihUrl}${vnUrl(tenant)}/issue-credentials`,
+    progress_uri: `${caUrl}${vnUrl(tenant)}/get-exchange-progress`,
+    submit_presentation_uri: `${caUrl}${vnUrl(tenant)}/authenticate`,
+    check_offers_uri: `${caUrl}${vnUrl(tenant)}/credential-offers`,
+    finalize_offers_uri: `${caUrl}${vnUrl(tenant)}/issue-credentials`,
   },
 });
 
