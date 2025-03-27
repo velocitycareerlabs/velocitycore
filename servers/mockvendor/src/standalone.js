@@ -5,4 +5,4 @@ const dotenv = require('dotenv');
 dotenv.config({ path: '.standalone.env' });
 dotenv.config({ path: '.localdev.env' });
 
-require('./index');
+require('./main');
