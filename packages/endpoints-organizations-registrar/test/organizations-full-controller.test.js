@@ -103,10 +103,10 @@ const console = require('console');
 const nock = require('nock');
 const { subDays } = require('date-fns/fp');
 const { ObjectId } = require('mongodb');
-const initOrganizationFactory = require('./factories/organizations-factory');
-const initImageFactory = require('./factories/images-factory');
-const initGroupsFactory = require('./factories/groups-factory');
-const initInvitationsFactory = require('./factories/invitations-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
+const initImageFactory = require('../src/entities/images/factories/images-factory');
+const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
+const initInvitationsFactory = require('../src/entities/invitations/factories/invitations-factory');
 const {
   sendServicesActivatedEmailMatcher,
   expectedSupportEmail,
@@ -2507,9 +2507,8 @@ ${flow(
       margin: 4px 2px;
       cursor: pointer;
     "
-  >
-    Approve
-  </a>
+  >Approve</a>
+  <span>&nbsp;</span>
   <a
     href="https://ui.example.com/signatories/reject?authCode=1&did=${
               orgFromDb.didDoc.id
@@ -2529,9 +2528,7 @@ ${flow(
       margin: 4px 2px;
       cursor: pointer;
     "
-  >
-    Reject
-  </a>
+  >Reject</a>
 </div>
 <br />`
                 /* eslint-enable */

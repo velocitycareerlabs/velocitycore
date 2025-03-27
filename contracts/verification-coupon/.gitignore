@@ -1,6 +1,0 @@
-_*-events-mint.json
-_*-events-mint-v2.json
-_*-balances.json
-_*-migrated-balances-v2.json
-!build/contracts/VerificationCoupon.json
-!build/contracts/Migrations.json

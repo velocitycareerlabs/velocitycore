@@ -36,8 +36,12 @@ const {
 } = require('@velocitycareerlabs/tests-helpers');
 const { hashOffer } = require('@velocitycareerlabs/velocity-issuing');
 const {
-  nockRegistrarGetOrganizationDidDoc,
-} = require('../combined/helpers/nock-registrar-get-organization-diddoc');
+  openBadgeCredentialExample,
+} = require('@velocitycareerlabs/sample-data');
+const {
+  nockRegistrarAppSchemaName,
+} = require('../combined/helpers/nock-registrar-app-schema-name');
+const initOfferRepo = require('../../src/entities/offers/repos/repo');
 const {
   ExchangeStates,
   ExchangeTypes,
@@ -48,11 +52,9 @@ const {
   initDisclosureFactory,
   NotificationTypes,
 } = require('../../src/entities');
-const initOfferRepo = require('../../src/entities/offers/repos/repo');
 const {
-  nockRegistrarAppSchemaName,
-} = require('../combined/helpers/nock-registrar-app-schema-name');
-const openBadgeCredentialExample = require('../data/open-badge-credential-example.json');
+  nockRegistrarGetOrganizationDidDoc,
+} = require('../combined/helpers/nock-registrar-get-organization-diddoc');
 
 jest.mock(
   '../../src/fetchers/push-gateway/generate-push-gateway-token',

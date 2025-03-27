@@ -33,7 +33,9 @@ const {
   mongoify,
   errorResponseMatcher,
 } = require('@velocitycareerlabs/tests-helpers');
-const testPresentationDefinition = require('../data/presentation-definition.json');
+const {
+  samplePresentationDefinition,
+} = require('@velocitycareerlabs/sample-data');
 const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
 const {
   nockRegistrarGetOrganizationVerifiedProfile,
@@ -886,7 +888,7 @@ describe('get credential manifests', () => {
         purpose: 'fooPurpose from disclosure',
         deactivationDate: '2025-12-01T00:00:00.000Z',
         duration: '6y',
-        presentationDefinition: omit(['purpose'], testPresentationDefinition),
+        presentationDefinition: omit(['purpose'], samplePresentationDefinition),
       });
       nockRegistrarGetOrganizationVerifiedProfile(
         tenant.did,
@@ -1067,7 +1069,7 @@ describe('get credential manifests', () => {
         deactivationDate: '2025-12-01T00:00:00.000Z',
         duration: '6y',
         presentationDefinition: {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           purpose: 'fooPurpose',
         },
       });

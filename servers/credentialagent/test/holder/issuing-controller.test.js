@@ -66,7 +66,9 @@ const {
 } = require('@velocitycareerlabs/blockchain-functions');
 const { hashOffer } = require('@velocitycareerlabs/velocity-issuing');
 
-const openBadgeCredentialExample = require('../data/open-badge-credential-example.json');
+const {
+  openBadgeCredentialExample,
+} = require('@velocitycareerlabs/sample-data');
 const {
   nockCredentialTypes,
   credentialTypeMetadata,

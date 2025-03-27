@@ -25,8 +25,8 @@ const {
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { ObjectId } = require('mongodb');
 const { omit } = require('lodash/fp');
-const initConsentsFactory = require('./factories/registrar-consents-factory');
-const initOrganizationFactory = require('./factories/organizations-factory');
+const initConsentsFactory = require('../src/entities/registrar-consents/factories/registrar-consents-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const buildFastify = require('./helpers/build-fastify');
 const consentsRepoPlugin = require('../src/entities/registrar-consents/repo');
 const { ConsentTypes } = require('../src/entities');

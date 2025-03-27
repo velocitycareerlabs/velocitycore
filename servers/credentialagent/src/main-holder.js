@@ -13,19 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { startHolderAppServer } = require('./start-app-server');
 
-const {
-  createServer,
-  listenServer,
-} = require('@velocitycareerlabs/server-provider');
-const { flow } = require('lodash/fp');
-const { holderConfig } = require('./config');
-const { initHolderServer } = require('./init-holder-server');
-
-/* istanbul ignore next */
-process.on('unhandledRejection', (error) => {
-  console.error(error);
-  process.exit(1);
-});
-
-flow(createServer, initHolderServer, listenServer)(holderConfig);
+startHolderAppServer();

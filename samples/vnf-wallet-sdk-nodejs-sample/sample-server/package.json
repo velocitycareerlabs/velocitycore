@@ -7,8 +7,8 @@
         "lint": "eslint . --ext .js,.ts,.tsx",
         "lint:fix": "eslint --fix --ext .js,.ts,.tsx .",
         "test": "jest",
-        "start": "NODE_ENV=dev ts-node --log-error --files src/Server.ts",
-        "start:dev": "NODE_ENV=dev ts-node-dev --log-error --files src/Server.ts"
+        "start": "ts-node --log-error --files src/Server.ts",
+        "start:dev": "ts-node-dev --log-error --files src/Server.ts"
     },
     "license": "Apache-2.0",
     "publishConfig": {
@@ -22,10 +22,11 @@
         "@fastify/cors": "^10.0.1",
         "axios": "^1.7.9",
         "env-var": "^7.5.0",
+        "dotenv": "^16.4.7",
         "fastify": "^5.2.0",
         "fastify-plugin": "^5.0.1",
         "@velocitycareerlabs/vc-checks": "0.5.0-build",
-        "@velocitycareerlabs/vnf-nodejs-wallet-sdk": "^0.5.0-build"
+        "@velocitycareerlabs/vnf-nodejs-wallet-sdk": "0.5.0-build"
     },
     "devDependencies": {
         "@jest/globals": "29.7.0",

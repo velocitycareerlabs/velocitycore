@@ -27,6 +27,9 @@ const { JWT_FORMAT } = require('@velocitycareerlabs/test-regexes');
 const { generateKeyPair, KeyPurposes } = require('@velocitycareerlabs/crypto');
 const { matchersWithOptions } = require('jest-json-schema');
 const {
+  samplePresentationDefinition,
+} = require('@velocitycareerlabs/sample-data');
+const {
   ExchangeTypes,
   ExchangeStates,
   ExchangeProtocols,
@@ -42,7 +45,6 @@ const {
   presentationRequestSchema,
   presentationDefinitionV1Schema,
 } = require('../../src/controllers/holder/inspect/schemas');
-const testPresentationDefinition = require('../data/presentation-definition.json');
 const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
 const { holderConfig } = require('../../src/config');
 
@@ -331,7 +333,7 @@ describe('presentation request', () => {
         tenant,
         purpose: 'fooPurpose from disclosure',
         presentationDefinition: {
-          ...omit(['purpose'], testPresentationDefinition),
+          ...omit(['purpose'], samplePresentationDefinition),
         },
       });
       nockRegistrarGetOrganizationVerifiedProfile(
@@ -442,7 +444,7 @@ describe('presentation request', () => {
       disclosure = await persistDisclosure({
         tenant,
         presentationDefinition: {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           purpose: 'fooPurpose',
         },
       });

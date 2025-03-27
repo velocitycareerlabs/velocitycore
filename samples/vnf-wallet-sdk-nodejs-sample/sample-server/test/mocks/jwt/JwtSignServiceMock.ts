@@ -5,7 +5,7 @@ import {
   VCLJwtDescriptor,
   VCLJwtSignService,
   VCLToken,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 
 export class JwtSignServiceMock implements VCLJwtSignService {
   constructor(readonly successValue: Nullish<string> = null) {}

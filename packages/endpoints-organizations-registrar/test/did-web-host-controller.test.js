@@ -16,7 +16,7 @@
  */
 
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
-const initOrganizationFactory = require('./factories/organizations-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const buildFastify = require('./helpers/build-fastify');
 
 const baseUrl = '/d';

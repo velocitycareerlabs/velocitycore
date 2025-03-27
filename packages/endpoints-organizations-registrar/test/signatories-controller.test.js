@@ -29,8 +29,8 @@ const { subDays, subMonths } = require('date-fns/fp');
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
 const { errorResponseMatcher } = require('@velocitycareerlabs/tests-helpers');
 const buildFastify = require('./helpers/build-fastify');
-const initOrganizationFactory = require('./factories/organizations-factory');
-const initSignatoryStatusFactory = require('./factories/signatory-status-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
+const initSignatoryStatusFactory = require('../src/entities/signatories/factories/signatory-status-factory');
 const {
   expectedSignatoryApprovedEmail,
   expectedSignatoryRejectedEmail,

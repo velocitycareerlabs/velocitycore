@@ -1,6 +1,6 @@
 import { Dictionary, Nullish } from '../VCLTypes';
 import VCLToken from './VCLToken';
-import { VCLOffer } from './VCLOffer';
+import VCLOffer from './VCLOffer';
 
 export default class VCLOffers {
     constructor(

@@ -30,7 +30,9 @@ const {
   mongoify,
   testAuthToken,
 } = require('@velocitycareerlabs/tests-helpers');
-const testPresentationDefinition = require('../data/presentation-definition.json');
+const {
+  samplePresentationDefinition,
+} = require('@velocitycareerlabs/sample-data');
 const {
   initDisclosureFactory,
   initFeedFactory,
@@ -1659,7 +1661,7 @@ describe('disclosures management', () => {
       it('should 400 when presentationDefinition and types are present', async () => {
         const payload = {
           ..._.omit(['tenantId'], await newDisclosure({ tenant })),
-          presentationDefinition: testPresentationDefinition,
+          presentationDefinition: samplePresentationDefinition,
         };
         const response = await fastify.injectJson({
           method: 'POST',
@@ -1684,7 +1686,7 @@ describe('disclosures management', () => {
 
       it('should 400 when presentationDefinition.input_descriptors is empty', async () => {
         const presentationDefinition = {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           input_descriptors: [],
         };
         const payload = {
@@ -1721,12 +1723,12 @@ describe('disclosures management', () => {
       it('should 400 when presentationDefinition.input_descriptors.*.group is missing/empty and submission_requirements is non-empty', async () => {
         const inputDescriptors = _.map(
           _.omit(['group']),
-          testPresentationDefinition.input_descriptors
+          samplePresentationDefinition.input_descriptors
         );
         const presentationDefinition = {
           input_descriptors: inputDescriptors,
           submission_requirements:
-            testPresentationDefinition.submission_requirements,
+            samplePresentationDefinition.submission_requirements,
         };
         const payload = {
           ..._.omit(
@@ -1762,10 +1764,10 @@ describe('disclosures management', () => {
       it('should 400 when submission_requirements.*.rule is missing', async () => {
         const submissionRequirements = _.map(
           _.omit(['rule']),
-          testPresentationDefinition.submission_requirements
+          samplePresentationDefinition.submission_requirements
         );
         const presentationDefinition = {
-          input_descriptors: testPresentationDefinition.input_descriptors,
+          input_descriptors: samplePresentationDefinition.input_descriptors,
           submission_requirements: submissionRequirements,
         };
         const payload = {
@@ -1801,10 +1803,10 @@ describe('disclosures management', () => {
       it('should 400 when submission_requirements.*.from is missing', async () => {
         const submissionRequirements = _.map(
           _.omit(['from']),
-          testPresentationDefinition.submission_requirements
+          samplePresentationDefinition.submission_requirements
         );
         const presentationDefinition = {
-          input_descriptors: testPresentationDefinition.input_descriptors,
+          input_descriptors: samplePresentationDefinition.input_descriptors,
           submission_requirements: submissionRequirements,
         };
         const payload = {
@@ -1840,7 +1842,7 @@ describe('disclosures management', () => {
 
       it('should 200 and strip presentationDefinition.foo property', async () => {
         const presentationDefinition = {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           foo: 'foo',
         };
         const payload = {
@@ -1875,7 +1877,7 @@ describe('disclosures management', () => {
 
       it('should 200 and strip presentationDefinition.id when present', async () => {
         const presentationDefinition = {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           id: 'fooId',
         };
         const payload = {
@@ -1910,7 +1912,7 @@ describe('disclosures management', () => {
 
       it('should 200 and strip presentationDefinition.format when present', async () => {
         const presentationDefinition = {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           format: 'format',
         };
         const payload = {
@@ -1945,10 +1947,10 @@ describe('disclosures management', () => {
 
       it('should 200 and strip input_descriptors.*.foo property', async () => {
         const presentationDefinition = {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           input_descriptors: _.map(
             _.set('foo', 'foo'),
-            testPresentationDefinition.input_descriptors
+            samplePresentationDefinition.input_descriptors
           ),
         };
         const payload = {
@@ -1990,10 +1992,10 @@ describe('disclosures management', () => {
 
       it('should 200 and strip presentationDefinition.input_descriptors.*.format when present', async () => {
         const presentationDefinition = {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           input_descriptors: _.map(
             _.set('format', 'fooFormat'),
-            testPresentationDefinition.input_descriptors
+            samplePresentationDefinition.input_descriptors
           ),
         };
         const payload = {
@@ -2035,7 +2037,7 @@ describe('disclosures management', () => {
 
       it('should 200 and allow empty submission_requirements', async () => {
         const presentationDefinition = {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           submission_requirements: [],
         };
         const payload = {
@@ -2073,7 +2075,7 @@ describe('disclosures management', () => {
 
       it('should 200 and if submission_requirements is not supplied', async () => {
         const presentationDefinition = {
-          ..._.omit(['submission_requirements'], testPresentationDefinition),
+          ..._.omit(['submission_requirements'], samplePresentationDefinition),
         };
         const payload = {
           ..._.omit(
@@ -2110,10 +2112,10 @@ describe('disclosures management', () => {
 
       it('should 200 and strip submission_requirements.*.foo property', async () => {
         const presentationDefinition = {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           submission_requirements: _.map(
             _.set('foo', 'foo'),
-            testPresentationDefinition.submission_requirements
+            samplePresentationDefinition.submission_requirements
           ),
         };
         const payload = {
@@ -2151,10 +2153,10 @@ describe('disclosures management', () => {
 
       it('should 200 and strip submission_requirements.*.from_nested property', async () => {
         const presentationDefinition = {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           submission_requirements: _.map(
             _.set('from_nested', 'foo'),
-            testPresentationDefinition.submission_requirements
+            samplePresentationDefinition.submission_requirements
           ),
         };
         const payload = {
@@ -3402,7 +3404,7 @@ describe('disclosures management', () => {
         });
         const payload = {
           ..._.omit(['_id', 'tenantId'], disclosure),
-          presentationDefinition: testPresentationDefinition,
+          presentationDefinition: samplePresentationDefinition,
         };
         const response = await fastify.injectJson({
           method: 'PUT',
@@ -3431,7 +3433,7 @@ describe('disclosures management', () => {
         });
         const payload = {
           ..._.omit(['_id', 'tenantId', 'types'], disclosure),
-          presentationDefinition: testPresentationDefinition,
+          presentationDefinition: samplePresentationDefinition,
         };
         const response = await fastify.injectJson({
           method: 'PUT',
@@ -3471,7 +3473,7 @@ describe('disclosures management', () => {
       it('should 200 and switch from presentationDefinition to types', async () => {
         const disclosure = await persistDisclosure({
           tenant,
-          presentationDefinition: testPresentationDefinition,
+          presentationDefinition: samplePresentationDefinition,
         });
         const payload = {
           ..._.omit(['_id', 'tenantId', 'presentationDefinition'], disclosure),
@@ -3567,7 +3569,7 @@ describe('disclosures management', () => {
     it('should get a particular disclosure', async () => {
       const disclosure = await persistDisclosure({
         tenant,
-        presentationDefinition: testPresentationDefinition,
+        presentationDefinition: samplePresentationDefinition,
         feed: true,
       });
       const response = await fastify.injectJson({

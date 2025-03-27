@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-const {
-  createServer,
-  listenServer,
-} = require('@velocitycareerlabs/server-provider');
-const { flow } = require('lodash/fp');
-const { operatorConfig } = require('./config');
-const { initOperatorServer } = require('./init-operator-server');
+const { startOperatorAppServer } = require('./start-app-server');
 
-/* istanbul ignore next */
-process.on('unhandledRejection', (error) => {
-  console.error(error);
-  process.exit(1);
-});
-
-flow(createServer, initOperatorServer, listenServer)(operatorConfig);
+startOperatorAppServer();

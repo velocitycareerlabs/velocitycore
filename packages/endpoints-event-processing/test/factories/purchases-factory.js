@@ -19,7 +19,8 @@ const { register } = require('@spencejs/spence-factories');
 const { ObjectId } = require('mongodb');
 const { addDays, addHours } = require('date-fns/fp');
 
-const initOrganizationFactory = require('@velocitycareerlabs/endpoints-organizations-registrar/test/factories/organizations-factory');
+// eslint-disable-next-line max-len
+const initOrganizationFactory = require('@velocitycareerlabs/endpoints-organizations-registrar/src/entities/organizations/factories/organizations-factory');
 
 const purchaseRepoPlugin = require('../../src/entities/purchases/repo');
 const { PurchaseStatus } = require('../../src/entities');

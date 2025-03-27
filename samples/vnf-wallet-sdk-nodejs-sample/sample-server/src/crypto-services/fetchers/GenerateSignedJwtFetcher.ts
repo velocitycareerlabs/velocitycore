@@ -10,10 +10,10 @@ import {
   Nullish,
   VCLDidJwk,
   VCLJwtDescriptor,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import { getJwtSignServiceUrl } from './Urls';
-import { CurrentEnvironment } from '../../GlobalConfig';
 import fetcher from './Fetcher';
+import { GlobalConfig } from '../../GlobalConfig';
 
 export const generateSignedJwtFetcher = async (
   jwtDescriptor: VCLJwtDescriptor,
@@ -21,7 +21,7 @@ export const generateSignedJwtFetcher = async (
   nonce: Nullish<string>
 ): Promise<Dictionary<any>> => {
   const config = {
-    url: getJwtSignServiceUrl(CurrentEnvironment),
+    url: getJwtSignServiceUrl(GlobalConfig.environment),
     method: 'POST',
     data: generateJwtPayloadToSign(jwtDescriptor, nonce, didJwk),
   };
