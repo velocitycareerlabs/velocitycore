@@ -58,10 +58,10 @@ const { initProvider } = require('@velocitycareerlabs/base-contract-io');
 const dotenv = require('dotenv');
 const path = require('path');
 const { toHexString } = require('@velocitycareerlabs/blockchain-functions');
-const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
 const {
   sampleEducationDegreeGraduation,
-} = require('../test/helpers/sample-education-degree-graduation');
+} = require('@velocitycareerlabs/sample-data');
+const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
 
 const registrarUrl = 'https://localhost:13003';
 const fineractUrl = 'http://localhost:13008';
