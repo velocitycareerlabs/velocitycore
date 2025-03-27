@@ -10,7 +10,7 @@ import {
   Nullish,
   VCLJwtVerifyService,
   VCLJwt,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import { verifyJwtFetcher } from './fetchers';
 
 export class JwtVerifyServiceImpl implements VCLJwtVerifyService {

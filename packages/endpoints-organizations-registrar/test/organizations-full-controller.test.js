@@ -2507,9 +2507,8 @@ ${flow(
       margin: 4px 2px;
       cursor: pointer;
     "
-  >
-    Approve
-  </a>
+  >Approve</a>
+  <span>&nbsp;</span>
   <a
     href="https://ui.example.com/signatories/reject?authCode=1&did=${
               orgFromDb.didDoc.id
@@ -2529,9 +2528,7 @@ ${flow(
       margin: 4px 2px;
       cursor: pointer;
     "
-  >
-    Reject
-  </a>
+  >Reject</a>
 </div>
 <br />`
                 /* eslint-enable */
