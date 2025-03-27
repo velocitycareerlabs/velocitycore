@@ -1,5 +1,5 @@
-/**
- * Copyright 2023 Velocity Team
+/*
+ * Copyright 2025 Velocity Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-const { startHolderAppServer } = require('./start-app-server');
 
-startHolderAppServer();
+/* istanbul ignore next */
+const { flow } = require('lodash/fp');
+const {
+  createServer,
+  listenServer,
+} = require('@velocitycareerlabs/server-provider');
+const { initServer } = require('./init-server');
+const config = require('./config/config');
+
+process.on('unhandledRejection', (error) => {
+  console.error(error);
+  process.exit(1);
+});
+
+const startAppServer = () =>
+  flow(createServer, initServer, listenServer)(config);
+
+module.exports = { startAppServer };
