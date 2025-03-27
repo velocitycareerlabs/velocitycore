@@ -20,4 +20,7 @@ module.exports = {
   ...require('./src/tampering'),
   ...require('./src/did-docs'),
   ...require('./src/organization-profiles'),
+  ...require('./src/sample-education-degree-graduation'),
+  openBadgeCredentialExample: require('./src/open-badge-credential-example.json'),
+  samplePresentationDefinition: require('./src/presentation-definition.json'),
 };

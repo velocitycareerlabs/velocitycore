@@ -44,6 +44,9 @@ const {
   VelocityRevocationListType,
 } = require('@velocitycareerlabs/vc-checks');
 const { ISO_DATETIME_FORMAT } = require('@velocitycareerlabs/test-regexes');
+const {
+  openBadgeCredentialExample,
+} = require('@velocitycareerlabs/sample-data');
 const buildFastify = require('./helpers/credentialagent-operator-build-fastify');
 const {
   initKeysFactory,
@@ -55,7 +58,6 @@ const {
   ExchangeTypes,
 } = require('../../src/entities');
 const { nockRegistrarAppSchemaName } = require('../combined/helpers');
-const openBadgeCredentialExample = require('../data/open-badge-credential-example.json');
 
 const mockAddCredentialMetadataEntry = jest.fn();
 const mockCreateCredentialMetadataList = jest.fn();
