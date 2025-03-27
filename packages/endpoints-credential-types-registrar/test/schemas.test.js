@@ -24,7 +24,7 @@ const {
 } = require('@velocitycareerlabs/sample-data');
 const buildFastify = require('./helpers/build-fastify');
 const initCredentialSchemasRepo = require('./factories/credential-schema-factory');
-const educationDegreeSchema = require('../../../apps/libapp/schemas/education-degree-graduation-v1.1.schema.json');
+const educationDegreeSchema = require('../../../apps/sample-libapp/schemas/education-degree-graduation-v1.1.schema.json');
 
 describe('Schema Management', () => {
   let fastify;
@@ -186,7 +186,7 @@ describe('Schema Management', () => {
     });
 
     it('should allow schemas be retrieved', async () => {
-      const json = require('../../../apps/libapp/schemas/education-degree-graduation-v1.1.schema.json');
+      const json = require('../../../apps/sample-libapp/schemas/education-degree-graduation-v1.1.schema.json');
       await persistCredentialSchema({
         schemaUrl: 'https://example.com/schema.json',
         displayDescriptorUrls: {
@@ -214,7 +214,7 @@ describe('Schema Management', () => {
     });
 
     it('should allow schemas be retrieved when schema name is fully kebab-cased', async () => {
-      const json = require('../../../apps/libapp/schemas/education-degree-graduation-v1.1.schema.json');
+      const json = require('../../../apps/sample-libapp/schemas/education-degree-graduation-v1.1.schema.json');
       await persistCredentialSchema({
         schemaUrl: 'https://example.com/schema.json',
         displayDescriptorUrls: {
@@ -243,7 +243,7 @@ describe('Schema Management', () => {
     });
 
     it('should allow schemas be retrieved on the old url', async () => {
-      const json = require('../../../apps/libapp/schemas/education-degree-graduation-v1.1.schema.json');
+      const json = require('../../../apps/sample-libapp/schemas/education-degree-graduation-v1.1.schema.json');
       await persistCredentialSchema({
         schemaUrl: 'https://example.com/schema.json',
         displayDescriptorUrls: {
