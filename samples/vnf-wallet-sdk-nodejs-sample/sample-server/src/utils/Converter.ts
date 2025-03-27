@@ -36,7 +36,7 @@ import {
   VCLVerifiableCredential,
   VCLVerifiedProfile,
   VCLVerifiedProfileDescriptor,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 
 export const deepLinkFrom = (deepLink: any): VCLDeepLink => {
   return new VCLDeepLink(deepLink.value ?? deepLink);

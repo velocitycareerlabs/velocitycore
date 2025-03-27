@@ -12,7 +12,7 @@ import {
   VCLDidJwk,
   VCLJwtDescriptor,
   VCLToken,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import { generateSignedJwtFetcher } from './fetchers';
 
 export class JwtSignServiceImpl implements VCLJwtSignService {

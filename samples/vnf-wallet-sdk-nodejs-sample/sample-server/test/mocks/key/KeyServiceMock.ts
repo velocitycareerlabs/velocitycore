@@ -3,7 +3,7 @@ import {
   VCLDidJwk,
   VCLDidJwkDescriptor,
   VCLKeyService,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import { DidJwkMocks } from '../DidJwkMocks';
 
 export class KeyServiceMock implements VCLKeyService {

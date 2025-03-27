@@ -8,16 +8,16 @@
 import {
   Dictionary,
   VCLDidJwkDescriptor,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import { getCreateDidKeyServiceUrl } from './Urls';
-import { CurrentEnvironment } from '../../GlobalConfig';
 import fetcher from './Fetcher';
+import { GlobalConfig } from '../../GlobalConfig';
 
 export const generateDidJwkFetcher = async (
   didJwkDescriptor: VCLDidJwkDescriptor
 ): Promise<Dictionary<any>> => {
   const config = {
-    url: getCreateDidKeyServiceUrl(CurrentEnvironment),
+    url: getCreateDidKeyServiceUrl(GlobalConfig.environment),
     method: 'POST',
     data: {
       crv: `${didJwkDescriptor.signatureAlgorithm}`,

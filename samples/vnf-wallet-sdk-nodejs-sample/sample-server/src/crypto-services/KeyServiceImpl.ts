@@ -9,7 +9,7 @@ import {
   VCLDidJwk,
   VCLDidJwkDescriptor,
   VCLKeyService,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk/src';
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import { generateDidJwkFetcher } from './fetchers';
 
 export class KeyServiceImpl implements VCLKeyService {
