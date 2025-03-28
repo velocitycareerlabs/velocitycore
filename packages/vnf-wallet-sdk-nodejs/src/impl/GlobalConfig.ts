@@ -44,10 +44,10 @@ export default class GlobalConfig {
     }
 
     public static init(
-        isDebugOn: boolean = false,
+        isDebugOn = false,
         currentEnvironment: VCLEnvironment = VCLEnvironment.Prod,
         xVnfProtocolVersion: VCLXVnfProtocolVersion = VCLXVnfProtocolVersion.XVnfProtocolVersion1,
-        isDirectIssuerOn: boolean = true
+        isDirectIssuerOn = true
     ) {
         GlobalConfig.IsDebugOn = isDebugOn;
         GlobalConfig.CurrentEnvironment = currentEnvironment;
