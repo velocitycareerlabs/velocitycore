@@ -101,7 +101,7 @@ export class VCLImpl implements VCL {
             VCLImpl.ModelsToInitializeAmount
         );
 
-        this.initGlobalConfigurations();
+        this.initGlobalConfigurations(initializationDescriptor);
 
         this.printVersion();
 
@@ -160,14 +160,16 @@ export class VCLImpl implements VCL {
         }
     }
 
-    private initGlobalConfigurations() {
+    public initGlobalConfigurations(
+        initializationDescriptor: VCLInitializationDescriptor
+    ) {
         GlobalConfig.init(
-            false,
-            this.initializationDescriptor.environment,
-            this.initializationDescriptor.xVnfProtocolVersion,
-            this.initializationDescriptor.logService,
+            initializationDescriptor.isDebugOn,
+            initializationDescriptor.environment,
+            initializationDescriptor.xVnfProtocolVersion,
             true
         );
+        VCLLog.LoggerService = initializationDescriptor.logService;
     }
 
     private initializeUseCases() {

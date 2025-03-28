@@ -16,6 +16,7 @@
 const { startsWith } = require('lodash/fp');
 const { SNSClient, PublishCommand } = require('@aws-sdk/client-sns');
 const { createTwilioClient } = require('./twilio-factory');
+const { buildClientConfig } = require('./client-config');
 
 const singaporePhoneCode = '+65';
 
@@ -39,17 +40,13 @@ const initSendSmsNotification =
     onlyTwilioSms,
   }) =>
   async ({ message, phoneNumber, senderId }) => {
-    const awsSns = new SNSClient({
-      apiVersion: '2010-03-31',
-      region: awsRegion,
-      credentials: awsEndpoint
-        ? {
-            accessKeyId: 'tests-key-id',
-            secretAccessKey: 'tests-key',
-          }
-        : awsEndpoint,
-      endpoint: awsEndpoint,
-    });
+    const awsSns = new SNSClient(
+      buildClientConfig({
+        apiVersion: '2010-03-31',
+        awsRegion,
+        awsEndpoint,
+      })
+    );
     const { sendTwilioSms } = createTwilioClient({
       twilioAccountSid,
       twilioAuthToken,
