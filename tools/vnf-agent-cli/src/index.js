@@ -1,3 +1,2 @@
 #!/usr/bin/env node
-
-require('./agentdb-cli');
+require('./vnf-agent-cli');

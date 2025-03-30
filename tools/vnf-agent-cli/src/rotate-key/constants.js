@@ -1,4 +1,0 @@
-const DEFAULT_COLLECTION = 'keys';
-const DEFAULT_SECRET_PROP = 'key';
-
-module.exports = { DEFAULT_COLLECTION, DEFAULT_SECRET_PROP };
