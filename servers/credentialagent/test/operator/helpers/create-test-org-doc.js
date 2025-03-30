@@ -39,6 +39,7 @@ const createOrgDoc = async () => {
         },
       ],
       id: did,
+      alsoKnownAs: ['did:aka:foo'],
       service: [
         {
           id: '#test-service',

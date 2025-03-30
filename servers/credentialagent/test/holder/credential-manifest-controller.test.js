@@ -33,9 +33,7 @@ const {
   mongoify,
   errorResponseMatcher,
 } = require('@velocitycareerlabs/tests-helpers');
-const {
-  samplePresentationDefinition,
-} = require('@velocitycareerlabs/sample-data');
+const testPresentationDefinition = require('../data/presentation-definition.json');
 const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
 const {
   nockRegistrarGetOrganizationVerifiedProfile,
@@ -128,8 +126,8 @@ describe('get credential manifests', () => {
   });
 
   const agentUrl = 'http://localhost.test';
-  const tenantUrl = ({ did, queryParams }, suffix) => {
-    const baseUrl = `/api/holder/v0.6/org/${did}${suffix}`;
+  const tenantUrl = ({ tenantId, queryParams }, suffix) => {
+    const baseUrl = `/api/holder/v0.6/org/${tenantId}${suffix}`;
     if (isEmpty(queryParams)) {
       return baseUrl;
     }
@@ -137,8 +135,8 @@ describe('get credential manifests', () => {
     return `${baseUrl}?${queryString}`;
   };
 
-  const issuingUrl = ({ did }, suffix = '', queryParams) =>
-    tenantUrl({ did, queryParams }, `/issue${suffix}`);
+  const issuingUrl = (tenantId, suffix = '', queryParams) =>
+    tenantUrl({ tenantId, queryParams }, `/issue${suffix}`);
 
   describe('get-credential-manifest', () => {
     it('should 404 when disclosureId cant be found', async () => {
@@ -149,7 +147,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant2, '/get-credential-manifest', {
+        url: issuingUrl(tenant2.did, '/get-credential-manifest', {
           credential_types: 'PastEmploymentPosition',
         }),
       });
@@ -165,7 +163,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           exchange_id: customExchange._id,
           credential_types: ['PastEmploymentPosition'],
         }),
@@ -248,7 +246,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(nonDidTenant, '/get-credential-manifest', {
+        url: issuingUrl(nonDidTenant.did, '/get-credential-manifest', {
           credential_types: [
             'PastEmploymentPosition',
             'CurrentEmploymentPosition',
@@ -330,7 +328,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: ['PastEmploymentPosition'],
           exchange_id: exchange._id,
         }),
@@ -386,7 +384,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           exchange_id: customExchange._id,
           credential_types: ['PastEmploymentPosition'],
         }),
@@ -449,7 +447,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           exchange_id: customExchange._id,
           id: customDisclosure._id,
           credential_types: ['PastEmploymentPosition'],
@@ -492,7 +490,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: ['PastEmploymentPosition'],
         }),
       });
@@ -511,7 +509,7 @@ describe('get credential manifests', () => {
     it('should 404 when a bad exchangeId is passed', async () => {
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           exchange_id: 'no-exchange-id',
           credential_types: [
             'PastEmploymentPosition',
@@ -588,7 +586,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: [
             'PastEmploymentPosition',
             'CurrentEmploymentPosition',
@@ -667,19 +665,19 @@ describe('get credential manifests', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -768,7 +766,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           id: customDisclosure._id,
           credential_types: ['PastEmploymentPosition'],
         }),
@@ -832,19 +830,19 @@ describe('get credential manifests', () => {
           tos_uri: customDisclosure.termsUrl,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -875,7 +873,7 @@ describe('get credential manifests', () => {
       );
     });
 
-    it('should 200, when disclosureId is passed and disclosure has a presentationDefinition without purpose', async () => {
+    it('should 200, when route has a tenantId', async () => {
       fastify.overrides.reqConfig = (config) => ({
         ...config,
         enableDeactivatedDisclosure: true,
@@ -884,11 +882,11 @@ describe('get credential manifests', () => {
       const customDisclosure = await persistDisclosure({
         tenant,
         description: 'Integrated Credential Issuance disclosure',
+        types: [{ type: 'EmailV1.0' }],
         vendorEndpoint: VendorEndpoint.INTEGRATED_ISSUING_IDENTIFICATION,
-        purpose: 'fooPurpose from disclosure',
+        purpose: 'Identification',
         deactivationDate: '2025-12-01T00:00:00.000Z',
         duration: '6y',
-        presentationDefinition: omit(['purpose'], samplePresentationDefinition),
       });
       nockRegistrarGetOrganizationVerifiedProfile(
         tenant.did,
@@ -928,7 +926,310 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant._id, '/get-credential-manifest', {
+          id: customDisclosure._id,
+          credential_types: ['PastEmploymentPosition'],
+        }),
+      });
+      expect(response.statusCode).toEqual(200);
+      expect(response.json).toEqual({
+        issuing_request: expect.any(String),
+      });
+      const { payload } = jwtDecode(response.json.issuing_request);
+      expect(payload).toEqual({
+        exchange_id: expect.any(String),
+        output_descriptors: [
+          {
+            id: 'PastEmploymentPosition',
+            name: 'Past Role',
+            schema: [
+              {
+                uri: 'http://oracle.localhost.test/schemas/PastEmploymentPosition.json',
+              },
+            ],
+            display: {
+              title: {
+                path: '$.employment',
+              },
+            },
+          },
+        ],
+        issuer: {
+          id: tenant.did,
+        },
+        presentation_definition: {
+          id: `${payload.exchange_id}.${customDisclosure._id}`,
+          name: customDisclosure.description,
+          purpose: customDisclosure.purpose,
+          format: {
+            jwt_vp: { alg: ['secp256k1'] },
+          },
+          input_descriptors: [
+            {
+              id: 'EmailV1.0',
+              name: 'Email',
+              group: ['A'],
+              schema: [
+                {
+                  uri: 'http://oracle.localhost.test/schemas/Email.json',
+                },
+              ],
+            },
+          ],
+          submission_requirements: [
+            {
+              from: 'A',
+              min: 1,
+              rule: 'all',
+            },
+          ],
+        },
+        metadata: {
+          client_name: orgDidDoc.service[0].name,
+          logo_uri: orgDidDoc.service[0].logo,
+          tos_uri: customDisclosure.termsUrl,
+          max_retention_period: customDisclosure.duration,
+          progress_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/get-exchange-progress'
+          )}`,
+          submit_presentation_uri: `${agentUrl}${issuingUrl(
+            tenant.did,
+            '/submit-identification'
+          )}`,
+          check_offers_uri: `${agentUrl}${issuingUrl(
+            tenant.did,
+            '/credential-offers'
+          )}`,
+          finalize_offers_uri: `${agentUrl}${issuingUrl(
+            tenant.did,
+            '/finalize-offers'
+          )}`,
+        },
+        iss: tenant.did,
+        exp: expect.any(Number),
+        iat: expect.any(Number),
+        nbf: expect.any(Number),
+      });
+      const dbExchange = await mongoDb()
+        .collection('exchanges')
+        .findOne({ disclosureId: new ObjectId(customDisclosure._id) });
+      expect(dbExchange).toEqual(
+        expect.objectContaining({
+          ...mongoify({
+            protocolMetadata: {
+              protocol: ExchangeProtocols.VNF_API,
+            },
+            events: expect.arrayContaining([
+              {
+                state: ExchangeStates.CREDENTIAL_MANIFEST_REQUESTED,
+                timestamp: expect.any(Date),
+              },
+            ]),
+            tenantId: tenant._id,
+            updatedAt: expect.any(Date),
+          }),
+        })
+      );
+    });
+
+    it("should 200, when route has a tenant's did alias", async () => {
+      const didAlias = 'did:aka:foo';
+      const customTenant = await persistTenant({ dids: [didAlias] });
+      const { publicKey } = generateKeyPair();
+      const customOrgDidDoc = {
+        id: customTenant.did,
+        publicKey: [
+          { id: `${customTenant.did}#key-1`, publicKeyHex: publicKey },
+        ],
+        service: [
+          {
+            id: `${customTenant.did}#service-1`,
+            type: 'BasicProfileInformation',
+            ...sampleOrganizationProfile1,
+          },
+        ],
+      };
+
+      nockRegistrarGetOrganizationDidDoc(customOrgDidDoc.id, customOrgDidDoc);
+
+      await persistKey({
+        tenant: customTenant,
+        kidFragment: '#ID2',
+        keyPair,
+      });
+
+      const customDisclosure = await persistDisclosure({
+        tenant: customTenant,
+        description: 'Integrated Credential Issuance disclosure',
+        types: [{ type: 'EmailV1.0' }],
+        vendorEndpoint: VendorEndpoint.INTEGRATED_ISSUING_IDENTIFICATION,
+        purpose: 'Identification',
+        duration: '6y',
+      });
+      nockRegistrarGetOrganizationVerifiedProfile(
+        customTenant.did,
+        sampleOrganizationVerifiedProfile1
+      );
+      nock('http://oracle.localhost.test')
+        .get(
+          '/api/v0.6/credential-type-descriptors/EmailV1.0?includeDisplay=false'
+        )
+        .reply(200, {
+          id: 'EmailV1.0',
+          name: 'Email',
+          schema: [
+            {
+              uri: 'http://oracle.localhost.test/schemas/Email.json',
+            },
+          ],
+        });
+
+      const response = await fastify.injectJson({
+        method: 'GET',
+        url: issuingUrl(didAlias, '/get-credential-manifest'),
+      });
+      expect(response.statusCode).toEqual(200);
+      expect(response.json).toEqual({
+        issuing_request: expect.any(String),
+      });
+      const { payload } = jwtDecode(response.json.issuing_request);
+      expect(payload).toEqual({
+        exchange_id: expect.any(String),
+        output_descriptors: [],
+        issuer: {
+          id: customTenant.did,
+        },
+        presentation_definition: {
+          id: `${payload.exchange_id}.${customDisclosure._id}`,
+          name: customDisclosure.description,
+          purpose: customDisclosure.purpose,
+          format: {
+            jwt_vp: { alg: ['secp256k1'] },
+          },
+          input_descriptors: [
+            {
+              id: 'EmailV1.0',
+              name: 'Email',
+              group: ['A'],
+              schema: [
+                {
+                  uri: 'http://oracle.localhost.test/schemas/Email.json',
+                },
+              ],
+            },
+          ],
+          submission_requirements: [
+            {
+              from: 'A',
+              min: 1,
+              rule: 'all',
+            },
+          ],
+        },
+        metadata: {
+          client_name: orgDidDoc.service[0].name,
+          logo_uri: orgDidDoc.service[0].logo,
+          tos_uri: customDisclosure.termsUrl,
+          max_retention_period: customDisclosure.duration,
+          progress_uri: `${agentUrl}${tenantUrl(
+            { tenantId: customTenant.did },
+            '/get-exchange-progress'
+          )}`,
+          submit_presentation_uri: `${agentUrl}${issuingUrl(
+            customTenant.did,
+            '/submit-identification'
+          )}`,
+          check_offers_uri: `${agentUrl}${issuingUrl(
+            customTenant.did,
+            '/credential-offers'
+          )}`,
+          finalize_offers_uri: `${agentUrl}${issuingUrl(
+            customTenant.did,
+            '/finalize-offers'
+          )}`,
+        },
+        iss: customTenant.did,
+        exp: expect.any(Number),
+        iat: expect.any(Number),
+        nbf: expect.any(Number),
+      });
+      const dbExchange = await mongoDb()
+        .collection('exchanges')
+        .findOne({ disclosureId: new ObjectId(customDisclosure._id) });
+      expect(dbExchange).toEqual(
+        expect.objectContaining({
+          ...mongoify({
+            protocolMetadata: {
+              protocol: ExchangeProtocols.VNF_API,
+            },
+            events: expect.arrayContaining([
+              {
+                state: ExchangeStates.CREDENTIAL_MANIFEST_REQUESTED,
+                timestamp: expect.any(Date),
+              },
+            ]),
+            tenantId: customTenant._id,
+            updatedAt: expect.any(Date),
+          }),
+        })
+      );
+    });
+
+    it('should 200, when disclosureId is passed and disclosure has a presentationDefinition without purpose', async () => {
+      fastify.overrides.reqConfig = (config) => ({
+        ...config,
+        enableDeactivatedDisclosure: true,
+      });
+
+      const customDisclosure = await persistDisclosure({
+        tenant,
+        description: 'Integrated Credential Issuance disclosure',
+        vendorEndpoint: VendorEndpoint.INTEGRATED_ISSUING_IDENTIFICATION,
+        purpose: 'fooPurpose from disclosure',
+        deactivationDate: '2025-12-01T00:00:00.000Z',
+        duration: '6y',
+        presentationDefinition: omit(['purpose'], testPresentationDefinition),
+      });
+      nockRegistrarGetOrganizationVerifiedProfile(
+        tenant.did,
+        sampleOrganizationVerifiedProfile1
+      );
+      nock('http://oracle.localhost.test')
+        .get(
+          '/api/v0.6/credential-type-descriptors/EmailV1.0?includeDisplay=false'
+        )
+        .reply(200, {
+          id: 'EmailV1.0',
+          name: 'Email',
+          schema: [
+            {
+              uri: 'http://oracle.localhost.test/schemas/Email.json',
+            },
+          ],
+        });
+      nock('http://oracle.localhost.test')
+        .get(
+          '/api/v0.6/credential-type-descriptors/PastEmploymentPosition?includeDisplay=true'
+        )
+        .reply(200, {
+          id: 'PastEmploymentPosition',
+          name: 'Past Role',
+          schema: [
+            {
+              uri: 'http://oracle.localhost.test/schemas/PastEmploymentPosition.json',
+            },
+          ],
+          display: {
+            title: {
+              path: '$.employment',
+            },
+          },
+        });
+
+      const response = await fastify.injectJson({
+        method: 'GET',
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           id: customDisclosure._id,
           credential_types: ['PastEmploymentPosition'],
         }),
@@ -1012,19 +1313,19 @@ describe('get credential manifests', () => {
           tos_uri: customDisclosure.termsUrl,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -1069,7 +1370,7 @@ describe('get credential manifests', () => {
         deactivationDate: '2025-12-01T00:00:00.000Z',
         duration: '6y',
         presentationDefinition: {
-          ...samplePresentationDefinition,
+          ...testPresentationDefinition,
           purpose: 'fooPurpose',
         },
       });
@@ -1111,7 +1412,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           id: customDisclosure._id,
           credential_types: ['PastEmploymentPosition'],
         }),
@@ -1195,19 +1496,19 @@ describe('get credential manifests', () => {
           tos_uri: customDisclosure.termsUrl,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -1267,7 +1568,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           id: customDisclosure._id,
         }),
       });
@@ -1315,19 +1616,19 @@ describe('get credential manifests', () => {
           tos_uri: customDisclosure.termsUrl,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -1411,7 +1712,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(customTenant, '/get-credential-manifest'),
+        url: issuingUrl(customTenant.did, '/get-credential-manifest'),
       });
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
@@ -1457,19 +1758,19 @@ describe('get credential manifests', () => {
           tos_uri: customDisclosure.termsUrl,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            customTenant,
+            { tenantId: customTenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            customTenant,
+            customTenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            customTenant,
+            customTenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            customTenant,
+            customTenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -1526,7 +1827,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: ['WhateverType'],
         }),
       });
@@ -1583,19 +1884,19 @@ describe('get credential manifests', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -1650,7 +1951,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {}),
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {}),
       });
 
       expect(response.statusCode).toEqual(200);
@@ -1695,19 +1996,19 @@ describe('get credential manifests', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -1792,7 +2093,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           exchange_id: customExchange._id,
           credential_types: ['PastEmploymentPosition'],
         }),
@@ -1855,19 +2156,19 @@ describe('get credential manifests', () => {
           tos_uri: customDisclosure.termsUrl,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -1951,7 +2252,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           exchange_id: customExchange._id,
           credential_types: ['PastEmploymentPosition'],
           locale: 'en',
@@ -2015,19 +2316,19 @@ describe('get credential manifests', () => {
           tos_uri: customDisclosure.termsUrl,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -2104,7 +2405,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: 'PastEmploymentPosition',
           'push_delegate.push_token': pushDelegate.pushToken,
           'push_delegate.push_url': pushDelegate.pushUrl,
@@ -2169,19 +2470,19 @@ describe('get credential manifests', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -2260,7 +2561,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: 'PastEmploymentPosition',
           'push_delegate.push_token': pushDelegate.pushToken,
         }),
@@ -2340,7 +2641,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: 'PastEmploymentPosition',
           'push_delegate.push_url': pushDelegate.pushUrl,
         }),
@@ -2433,7 +2734,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: [
             'PastEmploymentPosition',
             'CurrentEmploymentPosition',
@@ -2512,19 +2813,19 @@ describe('get credential manifests', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },
@@ -2590,7 +2891,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: [
             'PastEmploymentPosition',
             'CurrentEmploymentPosition',
@@ -2666,7 +2967,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           id: customDisclosure._id.toString(),
           credential_types: ['PastEmploymentPosition'],
         }),
@@ -2732,7 +3033,7 @@ describe('get credential manifests', () => {
 
       const response = await fastify.injectJson({
         method: 'GET',
-        url: issuingUrl(tenant, '/get-credential-manifest', {
+        url: issuingUrl(tenant.did, '/get-credential-manifest', {
           credential_types: ['PastEmploymentPosition'],
         }),
       });
@@ -2796,19 +3097,19 @@ describe('get credential manifests', () => {
           tos_uri: customDisclosure.termsUrl,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant,
+            tenant.did,
             '/finalize-offers'
           )}`,
         },

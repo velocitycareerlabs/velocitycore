@@ -27,9 +27,6 @@ const { JWT_FORMAT } = require('@velocitycareerlabs/test-regexes');
 const { generateKeyPair, KeyPurposes } = require('@velocitycareerlabs/crypto');
 const { matchersWithOptions } = require('jest-json-schema');
 const {
-  samplePresentationDefinition,
-} = require('@velocitycareerlabs/sample-data');
-const {
   ExchangeTypes,
   ExchangeStates,
   ExchangeProtocols,
@@ -45,13 +42,15 @@ const {
   presentationRequestSchema,
   presentationDefinitionV1Schema,
 } = require('../../src/controllers/holder/inspect/schemas');
+const testPresentationDefinition = require('../data/presentation-definition.json');
 const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
 const { holderConfig } = require('../../src/config');
 
 const agentUrl = 'http://localhost.test';
-const tenantUrl = ({ did }, suffix) => `/api/holder/v0.6/org/${did}${suffix}`;
-const inspectUrl = ({ did }, suffix) =>
-  `${tenantUrl({ did }, `/inspect${suffix}`)}`;
+const tenantUrl = ({ tenantId }, suffix) =>
+  `/api/holder/v0.6/org/${tenantId}${suffix}`;
+const inspectUrl = (tenantId, suffix) =>
+  `${tenantUrl({ tenantId }, `/inspect${suffix}`)}`;
 
 expect.extend(
   matchersWithOptions({
@@ -187,7 +186,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          tenant,
+          tenant.did,
           `/get-presentation-request?id=${q.disclosureId}`
         ),
       });
@@ -198,7 +197,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          { did: 'did:velocity:not-found' },
+          'did:test:not-found',
           `/get-presentation-request?id=${q.disclosureId}`
         ),
       });
@@ -209,7 +208,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          tenant,
+          tenant.did,
           `/get-presentation-request?id=${q.disclosureId}`
         ),
       });
@@ -225,7 +224,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          nonDidTenant,
+          nonDidTenant.did,
           `/get-presentation-request?id=${q.disclosureId}`
         ),
       });
@@ -262,7 +261,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          tenant,
+          tenant.did,
           `/get-presentation-request?id=${q.disclosureId}`
         ),
       });
@@ -280,11 +279,11 @@ describe('presentation request', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant,
+            tenant.did,
             '/submit-presentation'
           )}`,
         },
@@ -333,7 +332,7 @@ describe('presentation request', () => {
         tenant,
         purpose: 'fooPurpose from disclosure',
         presentationDefinition: {
-          ...omit(['purpose'], samplePresentationDefinition),
+          ...omit(['purpose'], testPresentationDefinition),
         },
       });
       nockRegistrarGetOrganizationVerifiedProfile(
@@ -345,7 +344,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          tenant,
+          tenant.did,
           `/get-presentation-request?id=${q.disclosureId}`
         ),
       });
@@ -363,11 +362,11 @@ describe('presentation request', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant,
+            tenant.did,
             '/submit-presentation'
           )}`,
         },
@@ -440,11 +439,68 @@ describe('presentation request', () => {
         updatedAt: expect.any(Date),
       });
     });
+    it('should 200 when route has tenantId', async () => {
+      disclosure = await persistDisclosure({
+        tenant,
+        purpose: 'fooPurpose from disclosure',
+        presentationDefinition: {
+          ...omit(['purpose'], testPresentationDefinition),
+        },
+      });
+      nockRegistrarGetOrganizationVerifiedProfile(
+        tenant.did,
+        sampleOrganizationVerifiedProfile1
+      );
+      nockRegistrarGetCredentialTypes();
+      const q = { disclosureId: disclosure._id };
+      const response = await fastify.injectJson({
+        method: 'GET',
+        url: inspectUrl(
+          tenant._id,
+          `/get-presentation-request?id=${q.disclosureId}`
+        ),
+      });
+      expect(response.statusCode).toEqual(200);
+    });
+    it("should 200 when route has tenant's did alias", async () => {
+      const didAlias = 'did:aka:foo';
+      const customTenant = await persistTenant({ dids: [didAlias] });
+      const keyPair = generateKeyPair({
+        format: 'jwk',
+      });
+      await persistKey({
+        tenant: customTenant,
+        kidFragment: '#exchanges-1',
+        keyPair,
+        purposes: [KeyPurposes.EXCHANGES],
+      });
+      disclosure = await persistDisclosure({
+        tenant: customTenant,
+        purpose: 'fooPurpose from disclosure',
+        presentationDefinition: {
+          ...omit(['purpose'], testPresentationDefinition),
+        },
+      });
+      nockRegistrarGetOrganizationVerifiedProfile(
+        customTenant.did,
+        sampleOrganizationVerifiedProfile1
+      );
+      nockRegistrarGetCredentialTypes();
+      const q = { disclosureId: disclosure._id };
+      const response = await fastify.injectJson({
+        method: 'GET',
+        url: inspectUrl(
+          didAlias,
+          `/get-presentation-request?id=${q.disclosureId}`
+        ),
+      });
+      expect(response.statusCode).toEqual(200);
+    });
     it('should 200, use presentationDefinition from disclosure and override disclosure purpose ', async () => {
       disclosure = await persistDisclosure({
         tenant,
         presentationDefinition: {
-          ...samplePresentationDefinition,
+          ...testPresentationDefinition,
           purpose: 'fooPurpose',
         },
       });
@@ -457,7 +513,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          tenant,
+          tenant.did,
           `/get-presentation-request?id=${q.disclosureId}`
         ),
       });
@@ -475,11 +531,11 @@ describe('presentation request', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant,
+            tenant.did,
             '/submit-presentation'
           )}`,
         },
@@ -562,7 +618,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          tenant,
+          tenant.did,
           `/get-presentation-request?id=${q.disclosureId}&format=json`
         ),
       });
@@ -580,11 +636,11 @@ describe('presentation request', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant,
+            tenant.did,
             '/submit-presentation'
           )}`,
         },
@@ -620,7 +676,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          tenant,
+          tenant.did,
           `/get-presentation-request?id=${q.disclosureId}&format=json`
         ),
       });
@@ -647,7 +703,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          tenant,
+          tenant.did,
           `/get-presentation-request?id=${q.disclosureId}`
         ),
       });
@@ -665,11 +721,11 @@ describe('presentation request', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant,
+            tenant.did,
             '/submit-presentation'
           )}`,
         },
@@ -728,7 +784,7 @@ describe('presentation request', () => {
       const response = await fastify.injectJson({
         method: 'GET',
         url: inspectUrl(
-          tenant,
+          tenant.did,
           `/get-presentation-request?id=${q.disclosureId}`
         ),
       });
@@ -746,11 +802,11 @@ describe('presentation request', () => {
           tos_uri: disclosure.termsUrl,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            tenant,
+            { tenantId: tenant.did },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant,
+            tenant.did,
             '/submit-presentation'
           )}`,
           feed: true,
