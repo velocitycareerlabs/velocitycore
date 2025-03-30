@@ -66,9 +66,7 @@ const {
 } = require('@velocitycareerlabs/blockchain-functions');
 const { hashOffer } = require('@velocitycareerlabs/velocity-issuing');
 
-const {
-  openBadgeCredentialExample,
-} = require('@velocitycareerlabs/sample-data');
+const openBadgeCredentialExample = require('../data/open-badge-credential-example.json');
 const {
   nockCredentialTypes,
   credentialTypeMetadata,
@@ -598,7 +596,7 @@ describe('Holder Issuing Test Suite', () => {
         },
       });
       expect(response.json.message).toEqual(
-        'Tenant {"did":"did:value"} not found'
+        'Tenant {"tenantId":"did:value"} not found'
       );
       expect(response.statusCode).toEqual(404);
     });
@@ -2171,7 +2169,7 @@ describe('Holder Issuing Test Suite', () => {
         },
       });
       expect(response.json.message).toEqual(
-        'Tenant {"did":"did:value"} not found'
+        'Tenant {"tenantId":"did:value"} not found'
       );
       expect(response.statusCode).toEqual(404);
     });

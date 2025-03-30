@@ -35,7 +35,7 @@ const buildSearchFilter = ({ tenantId }) => {
     });
   }
   if (startsWith('did:', tenantId)) {
-    return { did: tenantId };
+    return { $or: [{ did: tenantId }, { dids: tenantId }] };
   }
   return { _id: new ObjectId(tenantId) };
 };
@@ -47,7 +47,8 @@ const loadTenant = async (db, params, context) => {
     .findOne(searchFilter, tenantDefaultProjection);
 
   if (isEmpty(tenant)) {
-    throw newError(404, `Tenant ${JSON.stringify(searchFilter)} not found`, {
+    const { tenantId } = params;
+    throw newError(404, `Tenant ${JSON.stringify({ tenantId })} not found`, {
       errorCode: 'tenant_not_found',
     });
   }
