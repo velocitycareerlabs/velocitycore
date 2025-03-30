@@ -39,7 +39,6 @@ describe('Resolve did test suite', () => {
     jest.clearAllMocks();
     nock.cleanAll();
     await mongoDb().collection('organizations').deleteMany({});
-    await mongoDb().collection('organizationServices').deleteMany({});
   });
 
   afterAll(async () => {
