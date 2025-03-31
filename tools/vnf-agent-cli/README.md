@@ -9,7 +9,7 @@ Used for migrating a tenant's did on the agent
 
 ## How to Use
 
-`agentdb-cli migrate-tenant-did [options]`
+`@velocitycareerlabs/vnf-agent-cli migrate-tenant-did [options]`
 
 ### Options
 
@@ -21,5 +21,5 @@ Used for migrating a tenant's did on the agent
 ### Examples
 
 ```
-agentdb-cli  migrate-tenant-did -e "token" -d "did:foo:bar"
+@velocitycareerlabs/vnf-agent-cli  migrate-tenant-did -e "token" -d "did:foo:bar"
 ```
