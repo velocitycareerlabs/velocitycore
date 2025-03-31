@@ -244,11 +244,7 @@ Email: ${organization.profile.signatoryEmail}
     isReminder = false,
   }) => ({
     subject: `${isReminder ? 'Reminder: ' : ''}${
-      caoOrganization ? caoOrganization.profile.name : ''
-    } ${
-      caoOrganization
-        ? ''
-        : `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
+      caoOrganization.profile.name
     } is requesting your approval to register ${
       organization.profile.name
     } on the Velocity Network`,
@@ -259,28 +255,20 @@ Email: ${organization.profile.signatoryEmail}
     },</p>
 <br />
 <br />
-<p>As part of ongoing service enhancements for ${organization.profile.name}, ${
-      caoOrganization ? caoOrganization.profile.name : ''
-    } ${
-      caoOrganization
-        ? ''
-        : `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
-    } has registered your organization to the Velocity Network to enable expanded functionality. To learn more about Velocity Network, please visit 
-    <a href="https://www.velocitynetwork.foundation/" target="_blank">https://www.velocitynetwork.foundation/</a>.
-</p>
+<p>In order to upgrade the functionality of the services you receive, ${
+      caoOrganization.profile.name
+    } has registered ${
+      organization.profile.name
+    } as an entity on the Velocity Network. To learn more about Velocity Network please visit <a href="https://www.velocitynetwork.foundation/" target="_blank">here</a>.</p>
 <br />
 <br />
 <p>${
       organization.profile.name
-    } has been assigned the following role(s) on Velocity Network:</p>
+    } has been registered to take on the following roles on the Velocity Network:</p>
 <br />
-<ul>
-
-</ul>
 ${flow(
   map(
     (service) => `
-<li>
   <span
     style="
       border: none;
@@ -289,30 +277,37 @@ ${flow(
   >
     ${ServiceTypeLabels[service.type]}
   </span>
-</li>`
+  <br />`
   ),
   join('')
 )(organization.services)}
 <br />
-<p>Please confirm your approval of the following:</p>
 <br />
-<ul>
-  <li>You are the authorized signatory for your organization.</li>
-  <li>${organization.profile.adminGivenName} ${
+<p>The identified administer for ${caoOrganization.profile.name} , ${
+      organization.profile.adminGivenName
+    } ${
       organization.profile.adminFamilyName
-    } has been nominated as the administrator of ${
+    } has provided the information needed to complete the registration, has accepted the applicable <a href="https://www.velocitynetwork.foundation/main2/participation-agreements" target="_blank">terms of participation</a> and has identified you as the signatory authority for the organization.</p>
+<br />
+<br />
+<p>In order to complete the application, your approval is required.</p>
+<br />
+<br />
+<p>Do you approve ${organization.profile.adminGivenName} ${
+      organization.profile.adminFamilyName
+    } to representing ${
       organization.profile.name
-    } on the Velocity Network.</li>
-  <li>${organization.profile.adminGivenName} ${
-      organization.profile.adminFamilyName
-    } is authorized to accept the applicable 
-  <a href="https://www.velocitynetwork.foundation/main2/participation-agreements" target="_blank">terms of participation</a> (https://www.velocitynetwork.foundation/main2/participation-agreements).</li>
-</ul>
+    } on the Velocity Network and the service agreements that were registered by him/her?</p>
+<br />
 <div style="display: inline-block">
   <a
     href="${
       config.registrarAppUiUrl
-    }/signatories/approve?authCode=${authCode}&did=${organization.didDoc.id}"
+    }/signatories/approve?authCode=${authCode}&did=${
+      organization.didDoc.id
+    }&name=${encodeURIComponent(
+      `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
+    )}"
     target="_blank"
     style="
       border: none;
@@ -331,7 +326,11 @@ ${flow(
   <a
     href="${
       config.registrarAppUiUrl
-    }/signatories/reject?authCode=${authCode}&did=${organization.didDoc.id}"
+    }/signatories/reject?authCode=${authCode}&did=${
+      organization.didDoc.id
+    }&name=${encodeURIComponent(
+      `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
+    )}"
     target="_blank"
     style="
       border: none;
@@ -347,32 +346,7 @@ ${flow(
     "
   >Reject</a>
 </div>
-<br />
-<p>
-    <strong>If the buttons above do not work, please copy and paste the appropriate link into your browser:</strong>
-</p>
-<p>
-    <strong>Approve:</strong>
-<br />
-<span>${
-      config.registrarAppUiUrl
-    }/signatories/approve?authCode=${authCode}&did=${
-      organization.didDoc.id
-    }</span>
-</p>
-
-<p>
-    <strong>Reject:</strong>
-    <br />
-    <span>
-        ${
-          config.registrarAppUiUrl
-        }/signatories/reject?authCode=${authCode}&did=${organization.didDoc.id}
-    </span>
-</p>
-<br />
-
-`,
+<br />`,
     /* eslint-enable */
     sender: config.registrarSupportEmail,
     recipients: [organization.profile.signatoryEmail],
