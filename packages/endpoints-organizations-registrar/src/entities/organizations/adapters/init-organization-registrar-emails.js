@@ -245,7 +245,7 @@ Email: ${organization.profile.signatoryEmail}
   }) => ({
     subject: `${isReminder ? 'Reminder: ' : ''}${
       caoOrganization ? caoOrganization.profile.name : ''
-    } ${
+    }${
       caoOrganization
         ? ''
         : `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
@@ -261,7 +261,7 @@ Email: ${organization.profile.signatoryEmail}
 <br />
 <p>As part of ongoing service enhancements for ${organization.profile.name}, ${
       caoOrganization ? caoOrganization.profile.name : ''
-    } ${
+    }${
       caoOrganization
         ? ''
         : `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
