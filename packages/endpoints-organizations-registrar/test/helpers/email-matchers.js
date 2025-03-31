@@ -128,7 +128,7 @@ const expectedSignatoryApprovalEmail = (
       Text: { Data: messageMatcher },
     },
     Subject: {
-      Data: `${inviterOrg.profile.name} is requesting your approval to register ${inviteeOrg.profile.name} on the Velocity Network`,
+      Data: `${inviterOrg?.profile?.name} is requesting your approval to register ${inviteeOrg.profile.name} on the Velocity Network`,
     },
   },
 });

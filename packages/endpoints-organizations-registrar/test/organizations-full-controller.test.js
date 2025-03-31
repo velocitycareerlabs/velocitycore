@@ -56,7 +56,6 @@ const {
   isEmpty,
   pick,
   forEach,
-  join,
   without,
 } = require('lodash/fp');
 const { nanoid } = require('nanoid');
@@ -117,7 +116,6 @@ const {
 } = require('./helpers/email-matchers');
 const { mapResponseKeyToDbKey } = require('./helpers/map-response-key-to-db');
 const buildFastify = require('./helpers/build-fastify');
-const { ServiceTypeLabels } = require('../src/entities');
 const organizationKeysRepoPlugin = require('../src/entities/organization-keys/repos/repo');
 const organizationsRepoPlugin = require('../src/entities/organizations/repos/repo');
 const signatoryRemindersPlugin = require('../src/entities/signatories/repos/repo');
@@ -2110,8 +2108,10 @@ describe('Organizations Full Test Suite', () => {
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(false);
 
         // email checks
-        expect(mockSendEmail).toHaveBeenCalledTimes(1);
-        expect(mockSendEmail.mock.calls[0][0]).toEqual(expectedSupportEmail());
+        expect(mockSendEmail.mock.calls).toEqual([
+          [expectedSupportEmail()],
+          [expectedSignatoryApprovalEmail(null, orgFromDb)],
+        ]);
       });
 
       it('Should create org with a did one service', async () => {
@@ -2355,10 +2355,10 @@ describe('Organizations Full Test Suite', () => {
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(true);
 
         // email checks
-        expect(mockSendEmail).toHaveBeenCalledTimes(2);
         expect(mockSendEmail.mock.calls).toEqual(
           expect.arrayContaining([
             [expectedSupportEmail()],
+            [expectedSignatoryApprovalEmail(null, orgFromDb)],
             [sendServicesActivatedEmailMatcher()],
           ])
         );
@@ -2432,108 +2432,7 @@ describe('Organizations Full Test Suite', () => {
           expect.arrayContaining([
             [sendServicesActivatedEmailMatcher()],
             [expectedSupportEmail()],
-            [
-              expectedSignatoryApprovalEmail(
-                caoOrganization,
-                orgFromDb,
-                /* eslint-disable */
-            `
-<p>Dear ${orgFromDb.profile.signatoryGivenName} ${
-              orgFromDb.profile.signatoryFamilyName
-            },</p>
-<br />
-<br />
-<p>In order to upgrade the functionality of the services you receive, ${
-              caoOrganization.profile.name
-            } has registered ${
-              orgFromDb.profile.name
-            } as an entity on the Velocity Network. To learn more about Velocity Network please visit <a href="https://www.velocitynetwork.foundation/" target="_blank">here</a>.</p>
-<br />
-<br />
-<p>${
-              orgFromDb.profile.name
-            } has been registered to take on the following roles on the Velocity Network:</p>
-<br />
-${flow(
-              map(
-                (service) => `
-  <span
-    style="
-      border: none;
-      cursor: pointer;
-    "
-  >
-    ${ServiceTypeLabels[service.type]}
-  </span>
-  <br />`
-              ),
-              join('')
-            )(orgFromDb.didDoc.service)}
-<br />
-<br />
-<p>The identified administer for ${caoOrganization.profile.name} , ${
-              orgFromDb.profile.adminGivenName
-            } ${
-              orgFromDb.profile.adminFamilyName
-            } has provided the information needed to complete the registration, has accepted the applicable <a href="https://www.velocitynetwork.foundation/main2/participation-agreements" target="_blank">terms of participation</a> and has identified you as the signatory authority for the organization.</p>
-<br />
-<br />
-<p>In order to complete the application, your approval is required.</p>
-<br />
-<br />
-<p>Do you approve ${orgFromDb.profile.adminGivenName} ${
-              orgFromDb.profile.adminFamilyName
-            } to representing ${
-              orgFromDb.profile.name
-            } on the Velocity Network and the service agreements that were registered by him/her?</p>
-<br />
-<div style="display: inline-block">
-  <a
-    href="https://ui.example.com/signatories/approve?authCode=1&did=${
-              orgFromDb.didDoc.id
-            }&name=${encodeURIComponent(
-              `${orgFromDb.profile.adminGivenName} ${orgFromDb.profile.adminFamilyName}`
-            )}"
-    target="_blank"
-    style="
-      border: none;
-      color: white;
-      background-color: #0277ff;
-      text-decoration: none;
-      padding: 5px 15px;
-      text-align: center;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-    "
-  >Approve</a>
-  <span>&nbsp;</span>
-  <a
-    href="https://ui.example.com/signatories/reject?authCode=1&did=${
-              orgFromDb.didDoc.id
-            }&name=${encodeURIComponent(
-              `${orgFromDb.profile.adminGivenName} ${orgFromDb.profile.adminFamilyName}`
-            )}"
-    target="_blank"
-    style="
-      border: none;
-      color: white;
-      background-color: #0277ff;
-      text-decoration: none;
-      padding: 5px 15px;
-      text-align: center;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-    "
-  >Reject</a>
-</div>
-<br />`
-                /* eslint-enable */
-              ),
-            ],
+            [expectedSignatoryApprovalEmail(caoOrganization, orgFromDb)],
           ])
         );
       });
@@ -2689,13 +2588,11 @@ ${flow(
 
         expect(mockAuth0ClientGrantCreate).toHaveBeenCalledTimes(0);
 
-        expect(mockSendEmail).toHaveBeenCalledTimes(2);
-        expect(mockSendEmail.mock.calls).toEqual(
-          expect.arrayContaining([
-            [expectedServiceActivationRequiredEmail],
-            [expectedSupportEmail('Super Organization')],
-          ])
-        );
+        expect(mockSendEmail.mock.calls).toEqual([
+          [expectedSupportEmail('Super Organization')],
+          [expectedSignatoryApprovalEmail(null, orgFromDb)],
+          [expectedServiceActivationRequiredEmail],
+        ]);
       });
 
       it('Should create organization that is a Node Operator', async () => {
@@ -3295,7 +3192,10 @@ ${flow(
             },
           });
           expect(groupFromDb).toBeNull();
-          expect(mockSendEmail).toBeCalledTimes(1);
+          expect(mockSendEmail.mock.calls).toEqual([
+            [expectedSupportEmail(orgProfile.name)],
+            [expectedSignatoryApprovalEmail(null, { profile: orgProfile })],
+          ]);
         });
 
         it("Should add organization to user's group when creating an organization and group exists already for user", async () => {
@@ -3672,7 +3572,10 @@ ${flow(
 
           expect(response.statusCode).toEqual(201);
 
-          expect(mockSendEmail.mock.calls).toEqual([[expectedSupportEmail()]]);
+          expect(mockSendEmail.mock.calls).toEqual([
+            [expectedSupportEmail()],
+            [expectedSignatoryApprovalEmail(null, { profile: orgProfile })],
+          ]);
         });
 
         it('Should create organization and ignore expired invitation', async () => {
@@ -3714,7 +3617,10 @@ ${flow(
               createdAt: expect.any(Date),
             })
           );
-          expect(mockSendEmail.mock.calls).toEqual([[expectedSupportEmail()]]);
+          expect(mockSendEmail.mock.calls).toEqual([
+            [expectedSupportEmail()],
+            [expectedSignatoryApprovalEmail(null, { profile: orgProfile })],
+          ]);
         });
 
         it('Should create organization without services and accept invitation', async () => {
@@ -3777,7 +3683,10 @@ ${flow(
             mongoify(invitation).createdAt.getTime()
           );
 
-          expect(mockSendEmail.mock.calls).toEqual([[expectedSupportEmail()]]);
+          expect(mockSendEmail.mock.calls).toEqual([
+            [expectedSupportEmail()],
+            [expectedSignatoryApprovalEmail(null, { profile })],
+          ]);
         });
 
         it('Should create organization with services and accept invitation', async () => {
@@ -5117,8 +5026,10 @@ ${flow(
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(false);
 
         // email checks
-        expect(mockSendEmail).toHaveBeenCalledTimes(1);
-        expect(mockSendEmail.mock.calls[0][0]).toEqual(expectedSupportEmail());
+        expect(mockSendEmail.mock.calls).toEqual([
+          [expectedSupportEmail()],
+          [expectedSignatoryApprovalEmail(null, orgFromDb)],
+        ]);
 
         expect(nockData.isDone()).toEqual(true);
       });
@@ -5313,13 +5224,11 @@ ${flow(
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(true);
 
         // email checks
-        expect(mockSendEmail).toHaveBeenCalledTimes(2);
-        expect(mockSendEmail.mock.calls).toEqual(
-          expect.arrayContaining([
-            [sendServicesActivatedEmailMatcher()],
-            [expectedSupportEmail()],
-          ])
-        );
+        expect(mockSendEmail.mock.calls).toEqual([
+          [expectedSupportEmail()],
+          [expectedSignatoryApprovalEmail(null, orgFromDb)],
+          [sendServicesActivatedEmailMatcher()],
+        ]);
 
         expect(nockData.isDone()).toEqual(true);
       });

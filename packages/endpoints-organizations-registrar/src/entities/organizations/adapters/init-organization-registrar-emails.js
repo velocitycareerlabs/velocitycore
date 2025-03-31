@@ -244,7 +244,7 @@ Email: ${organization.profile.signatoryEmail}
     isReminder = false,
   }) => ({
     subject: `${isReminder ? 'Reminder: ' : ''}${
-      caoOrganization.profile.name
+      caoOrganization?.profile?.name
     } is requesting your approval to register ${
       organization.profile.name
     } on the Velocity Network`,
@@ -256,7 +256,7 @@ Email: ${organization.profile.signatoryEmail}
 <br />
 <br />
 <p>In order to upgrade the functionality of the services you receive, ${
-      caoOrganization.profile.name
+      caoOrganization?.profile?.name
     } has registered ${
       organization.profile.name
     } as an entity on the Velocity Network. To learn more about Velocity Network please visit <a href="https://www.velocitynetwork.foundation/" target="_blank">here</a>.</p>
@@ -283,7 +283,7 @@ ${flow(
 )(organization.services)}
 <br />
 <br />
-<p>The identified administer for ${caoOrganization.profile.name} , ${
+<p>The identified administer for ${caoOrganization?.profile?.name} , ${
       organization.profile.adminGivenName
     } ${
       organization.profile.adminFamilyName
