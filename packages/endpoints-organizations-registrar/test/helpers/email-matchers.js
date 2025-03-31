@@ -63,7 +63,7 @@ const expectedInvitationSentEmail = (
     Body: {
       Text: {
         /* eslint-disable */
-        Data: `
+                Data: `
 You've received an invitation from Test Organization to join Velocity Networkâ„¢.
 <br>
 <br>
@@ -78,7 +78,7 @@ Click the button below to accept the invitation and complete your organizationâ€
 <br>
 <a href="http://localhost.test/invitations/mocknano${signupUrl}" target="_blank">ACCEPT INVITATION</a>
     `,
-        /* eslint-enable */
+                /* eslint-enable */
       },
     },
     Subject: {
@@ -114,24 +114,29 @@ const expectedInvitationAcceptanceEmail = {
 };
 
 const expectedSignatoryApprovalEmail = (
-  inviterOrg,
-  inviteeOrg,
+  caoOrg,
+  orgForApproval,
   messageMatcher = expect.any(String)
-) => ({
-  Destination: {
-    ToAddresses: ['signatory@email.com'],
-  },
-  ReplyToAddresses: ['testvnfregistrar@gmail.com'],
-  Source: 'testvnfregistrar@gmail.com',
-  Message: {
-    Body: {
-      Text: { Data: messageMatcher },
+) => {
+  const requester = caoOrg
+    ? caoOrg.profile.name
+    : `${orgForApproval.profile.adminGivenName} ${orgForApproval.profile.adminFamilyName}`;
+  return {
+    Destination: {
+      ToAddresses: ['signatory@email.com'],
     },
-    Subject: {
-      Data: `${inviterOrg.profile.name} is requesting your approval to register ${inviteeOrg.profile.name} on the Velocity Network`,
+    ReplyToAddresses: ['testvnfregistrar@gmail.com'],
+    Source: 'testvnfregistrar@gmail.com',
+    Message: {
+      Body: {
+        Text: { Data: messageMatcher },
+      },
+      Subject: {
+        Data: `${requester} is requesting your approval to register ${orgForApproval.profile.name} on the Velocity Network`,
+      },
     },
-  },
-});
+  };
+};
 
 const expectedSignatoryApprovedEmail = (organization) => ({
   Destination: {
@@ -228,26 +233,34 @@ const expectedSignatoryReminderEmail = (organization, caoOrganization) => ({
     Body: {
       Text: {
         /* eslint-disable */
-        Data: `
+                Data: `
 <p>Dear ${organization.profile.signatoryGivenName} ${
-  organization.profile.signatoryFamilyName
-  },</p>
+                    organization.profile.signatoryFamilyName
+                },</p>
 <br />
 <br />
-<p>In order to upgrade the functionality of the services you receive, ${
-  caoOrganization.profile.name
-  } has registered ${
-  organization.profile.name
-  } as an entity on the Velocity Network. To learn more about Velocity Network please visit <a href="https://www.velocitynetwork.foundation/" target="_blank">here</a>.</p>
+<p>As part of ongoing service enhancements for ${organization.profile.name}, ${
+                    caoOrganization ? caoOrganization.profile.name : ''
+                }${
+                    caoOrganization
+                        ? ''
+                        : `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
+                } has registered your organization to the Velocity Network to enable expanded functionality. To learn more about Velocity Network, please visit 
+    <a href="https://www.velocitynetwork.foundation/" target="_blank">https://www.velocitynetwork.foundation/</a>.
+</p>
 <br />
 <br />
 <p>${
-  organization.profile.name
-  } has been registered to take on the following roles on the Velocity Network:</p>
+                    organization.profile.name
+                } has been assigned the following role(s) on Velocity Network:</p>
 <br />
+<ul>
+
+</ul>
 ${flow(
-  map(
-  (service) => `
+                    map(
+                        (service) => `
+<li>
   <span
     style="
       border: none;
@@ -256,35 +269,28 @@ ${flow(
   >
     ${ServiceTypeLabels[service.type]}
   </span>
-  <br />`
-),
-join('')
-)(organization.didDoc.service)}
+</li>`
+                    ),
+                    join('')
+                )(organization.services)}
 <br />
+<p>Please confirm your approval of the following:</p>
 <br />
-<p>The identified administer for ${caoOrganization.profile.name} , ${
-  organization.profile.adminGivenName
-} ${
-  organization.profile.adminFamilyName
-} has provided the information needed to complete the registration, has accepted the applicable <a href="https://www.velocitynetwork.foundation/main2/participation-agreements" target="_blank">terms of participation</a> and has identified you as the signatory authority for the organization.</p>
-<br />
-<br />
-<p>In order to complete the application, your approval is required.</p>
-<br />
-<br />
-<p>Do you approve ${organization.profile.adminGivenName} ${
-  organization.profile.adminFamilyName
-} to representing ${
-  organization.profile.name
-} on the Velocity Network and the service agreements that were registered by him/her?</p>
-<br />
+<ul>
+  <li>You are the authorized signatory for your organization.</li>
+  <li>${organization.profile.adminGivenName} ${
+                    organization.profile.adminFamilyName
+                } has been nominated as the administrator of ${
+                    organization.profile.name
+                } on the Velocity Network.</li>
+  <li>${organization.profile.adminGivenName} ${
+                    organization.profile.adminFamilyName
+                } is authorized to accept the applicable 
+  <a href="https://www.velocitynetwork.foundation/main2/participation-agreements" target="_blank">terms of participation</a> (https://www.velocitynetwork.foundation/main2/participation-agreements).</li>
+</ul>
 <div style="display: inline-block">
   <a
-    href="https://ui.example.com/signatories/approve?authCode=1&did=${
-  organization.didDoc.id
-}&name=${encodeURIComponent(
-  `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
-)}"
+    href="https://ui.example.com/signatories/approve?authCode=1&did=${organization.didDoc.id}"
     target="_blank"
     style="
       border: none;
@@ -301,11 +307,7 @@ join('')
   >Approve</a>
   <span>&nbsp;</span>
   <a
-    href="https://ui.example.com/signatories/reject?authCode=1&did=${
-  organization.didDoc.id
-}&name=${encodeURIComponent(
-  `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
-)}"
+    href="https://ui.example.com/signatories/reject?authCode=1&did=${organization.didDoc.id}"
     target="_blank"
     style="
       border: none;
@@ -321,8 +323,29 @@ join('')
     "
   >Reject</a>
 </div>
-<br />`,
-        /* eslint-enable */
+<br />
+<p>
+    <strong>If the buttons above do not work, please copy and paste the appropriate link into your browser:</strong>
+</p>
+<p>
+    <strong>Approve:</strong>
+<br />
+<span>https://ui.example.com/signatories/approve?authCode=1&did=${
+                    organization.didDoc.id
+                }</span>
+</p>
+
+<p>
+    <strong>Reject:</strong>
+    <br />
+    <span>
+        https://ui.example.com/signatories/reject?authCode=1&did=${organization.didDoc.id}
+    </span>
+</p>
+<br />
+
+`,
+                /* eslint-enable */
       },
     },
     Subject: {
