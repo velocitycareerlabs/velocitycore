@@ -833,7 +833,7 @@ describe('presentation request', () => {
             tenant.did,
             '/submit-presentation'
           )}`,
-          feed: true,
+          is_feed: true,
         },
         presentation_definition: {
           id: `${responsePayload.exchange_id}.${disclosure._id}`,

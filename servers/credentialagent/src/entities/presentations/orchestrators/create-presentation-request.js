@@ -101,7 +101,7 @@ const buildMetadata = (
     max_retention_period: disclosure?.duration,
     progress_uri: `${baseUrl}/get-exchange-progress`,
     auth_token_url: `${baseUrl}/oauth/token`,
-    feed: disclosure?.feed,
+    is_feed: disclosure?.feed,
   };
 
   if (exchange.type === ExchangeTypes.ISSUING) {
