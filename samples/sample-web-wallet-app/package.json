@@ -1,7 +1,7 @@
 {
-  "name": "@velocitycareerlabs/vnf-wallet-app-sample",
+  "name": "@velocitycareerlabs/sample-web-wallet-app",
   "version": "0.5.0-build",
-  "description": "VNF Wallet App Sample",
+  "description": "Sample VNF Web Wallet App",
   "repository": "https://github.com/velocitycareerlabs/packages",
   "license": "Apache-2.0",
   "publishConfig": {
@@ -41,12 +41,12 @@
     "@testing-library/user-event": "14.6.1"
   },
   "scripts": {
-    "lint": "eslint . --ext .js,.ts,.tsx",
-    "lint:fix": "eslint --fix --ext .js,.ts,.tsx .",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "jest",
-    "eject": "react-scripts eject"
+    "lint": "node_modules/.bin/eslint . --ext .js,.ts,.tsx",
+    "lint:fix": "node_modules/.bin/eslint --fix --ext .js,.ts,.tsx .",
+    "start": "node_modules/.bin/react-scripts start",
+    "build": "node_modules/.bin/react-scripts build",
+    "test": "node_modules/.bin/jest",
+    "eject": "node_modules/.bin/react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

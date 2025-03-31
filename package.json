@@ -71,7 +71,7 @@
     "servers/*",
     "tools/*",
     "apps/*",
-    "samples/*/*"
+    "samples/*"
   ],
   "husky": {
     "hooks": {
