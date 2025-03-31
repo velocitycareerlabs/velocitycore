@@ -100,7 +100,7 @@ const buildMetadata = (
     tos_uri: disclosure?.termsUrl,
     max_retention_period: disclosure?.duration,
     progress_uri: `${baseUrl}/get-exchange-progress`,
-    token_uri: `${baseUrl}/oauth/token`,
+    auth_token_url: `${baseUrl}/oauth/token`,
     feed: disclosure?.feed,
   };
 
