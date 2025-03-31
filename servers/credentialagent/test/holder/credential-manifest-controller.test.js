@@ -663,6 +663,10 @@ describe('get credential manifests', () => {
           client_name: sampleOrganizationProfile1.name,
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -828,6 +832,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -988,6 +996,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -1131,6 +1143,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: customTenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: customTenant.did },
@@ -1311,6 +1327,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -1494,6 +1514,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -1614,6 +1638,10 @@ describe('get credential manifests', () => {
           client_name: 'fooCommercialEntityName',
           logo_uri: 'fooCommercialEntityLogo',
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -1756,6 +1784,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: customTenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: customTenant.did },
@@ -1882,6 +1914,10 @@ describe('get credential manifests', () => {
           client_name: sampleOrganizationProfile1.name,
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -1994,6 +2030,10 @@ describe('get credential manifests', () => {
           client_name: sampleOrganizationProfile1.name,
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -2154,6 +2194,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -2314,6 +2358,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -2468,6 +2516,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: disclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -2811,6 +2863,10 @@ describe('get credential manifests', () => {
           client_name: sampleOrganizationProfile1.name,
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -3095,6 +3151,10 @@ describe('get credential manifests', () => {
           client_name: orgDidDoc.service[0].name,
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
+          token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
