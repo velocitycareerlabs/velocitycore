@@ -457,7 +457,7 @@ describe('signatoriesController', () => {
         events: [
           {
             state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
+            timestamp: subDays(8)(new Date()),
           },
         ],
       });
@@ -466,7 +466,7 @@ describe('signatoriesController', () => {
         events: [
           {
             state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
+            timestamp: subDays(8)(new Date()),
           },
         ],
       });
@@ -675,7 +675,7 @@ describe('signatoriesController', () => {
         events: [
           {
             state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
+            timestamp: subDays(8)(new Date()),
           },
         ],
       });
@@ -724,7 +724,7 @@ describe('signatoriesController', () => {
         events: [
           {
             state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
+            timestamp: subDays(8)(new Date()),
           },
         ],
       });
