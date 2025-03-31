@@ -58,6 +58,22 @@ export default class VCLPresentationRequest {
         );
     }
 
+    get tokenUrl() {
+        return (
+            (this.jwt.payload[VCLPresentationRequest.KeyMetadata] ?? {})[
+                VCLPresentationRequest.KeyTokenUrl
+            ] ?? ''
+        );
+        // return 'https://stagingagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiC8GZpBYJXt5UhqxZJbixJyMjrGw0yw8yFN6HjaM1ogSw/oauth/token';
+    }
+
+    get isFeed(): boolean {
+        return (
+            (this.jwt.payload[VCLPresentationRequest.KeyIsFeed] as boolean) ||
+            false
+        );
+    }
+
     static readonly KeyId = 'id';
 
     static readonly KeyIss = 'iss';
@@ -73,4 +89,8 @@ export default class VCLPresentationRequest {
     static readonly KeyProgressUri = 'progress_uri';
 
     static readonly KeySubmitPresentationUri = 'submit_presentation_uri';
+
+    static readonly KeyIsFeed = 'is_feed';
+
+    static readonly KeyTokenUrl = 'token_url';
 }

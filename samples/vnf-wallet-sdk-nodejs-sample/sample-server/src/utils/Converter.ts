@@ -9,6 +9,7 @@ import {
   Dictionary,
   issuingTypeFromString,
   Nullish,
+  VCLAuthTokenDescriptor,
   VCLCredentialManifest,
   VCLCredentialManifestDescriptor,
   VCLCredentialManifestDescriptorByDeepLink,
@@ -205,6 +206,12 @@ export const finalizeOffersDescriptorFrom = (
     json.approvedOfferIds,
     json.rejectedOfferIds
   );
+};
+
+export const authTokenDescriptorFrom = (
+  json: Dictionary<any>
+): VCLAuthTokenDescriptor => {
+  return new VCLAuthTokenDescriptor(json.presentationRequest, json.tokenType);
 };
 
 export const credentialTypesUIFormSchemaDescriptorFrom = (
