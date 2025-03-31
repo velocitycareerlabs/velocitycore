@@ -18,10 +18,9 @@ import { useAuth0, Auth0Provider } from '@auth0/auth0-react';
 
 // material
 import OrganizationIcon from '@mui/icons-material/Business';
-import { ThemeProvider } from '@mui/material';
 
 // react-router-dom
-import { Route, Routes, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Route, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 // react admin
 import { Admin, Resource, CustomRoutes, useStore } from 'react-admin';
@@ -60,12 +59,17 @@ import dataProvider from './utils/remoteDataProvider';
 import theme from './theme/theme';
 import ConsentProvider from './components/ConsentProvider';
 
-const publicRoutes = ['/privacy-policy', '/terms-and-conditions'];
+const publicRoutes = ['/privacy-policy', '/terms-and-conditions', /^\/signatories\/[^/]+$/];
+
+const isPublicRoute = (pathname) =>
+  publicRoutes.some((route) =>
+    typeof route === 'string' ? route === pathname : route.test(pathname),
+  );
 
 const App = () => {
   const location = useLocation();
 
-  if (publicRoutes.some((route) => location.pathname.includes(route))) {
+  if (isPublicRoute(location.pathname)) {
     return <AppAuth0Disabled />;
   }
 
@@ -77,14 +81,33 @@ const App = () => {
 };
 
 const AppAuth0Disabled = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
   return (
-    <ThemeProvider theme={theme}>
-      <Routes>
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-      </Routes>
+    <>
+      <Admin
+        theme={theme}
+        dataProvider={dataProvider}
+        queryClient={queryClient}
+        dashboard={Dashboard}
+        requireAuth
+        layout={MainLayout}
+        title=""
+        basename=""
+      >
+        <CustomRoutes noLayout>
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/signatories/:response" element={<SignatoryLanding />} />
+        </CustomRoutes>
+      </Admin>
       <Footer />
-    </ThemeProvider>
+    </>
   );
 };
 
@@ -178,7 +201,6 @@ const AppAuth0Enabled = () => {
         <Resource name="invitations" list={InvitationsList} create={InvitationsList} />
         <CustomRoutes noLayout>
           <Route exact path="/invitations/:code" element={<CreateOrganisationFromInvitation />} />
-          <Route exact path="/signatories/:response" element={<SignatoryLanding />} />
         </CustomRoutes>
       </Admin>
       <Footer />
