@@ -3,7 +3,7 @@ const { printInfo, printError } = require('../helpers/common');
 const { migrateTenantDid } = require('./migrate-tenant-did');
 
 program
-  .name('agentdb-cli migrate-tenant-did')
+  .name('vnf-agent-cli migrate-tenant-did')
   .description("migrate a tenant's did")
   .usage('[options]')
   .requiredOption(

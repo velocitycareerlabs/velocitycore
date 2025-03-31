@@ -20,6 +20,7 @@ const { ObjectId } = require('mongodb');
 const {
   sampleOrganizationVerifiedProfile1,
   sampleOrganizationProfile1,
+  samplePresentationDefinition,
 } = require('@velocitycareerlabs/sample-data');
 const { jwtVerify } = require('@velocitycareerlabs/jwt');
 const { omit } = require('lodash/fp');
@@ -42,7 +43,6 @@ const {
   presentationRequestSchema,
   presentationDefinitionV1Schema,
 } = require('../../src/controllers/holder/inspect/schemas');
-const testPresentationDefinition = require('../data/presentation-definition.json');
 const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
 const { holderConfig } = require('../../src/config');
 
@@ -332,7 +332,7 @@ describe('presentation request', () => {
         tenant,
         purpose: 'fooPurpose from disclosure',
         presentationDefinition: {
-          ...omit(['purpose'], testPresentationDefinition),
+          ...omit(['purpose'], samplePresentationDefinition),
         },
       });
       nockRegistrarGetOrganizationVerifiedProfile(
@@ -444,7 +444,7 @@ describe('presentation request', () => {
         tenant,
         purpose: 'fooPurpose from disclosure',
         presentationDefinition: {
-          ...omit(['purpose'], testPresentationDefinition),
+          ...omit(['purpose'], samplePresentationDefinition),
         },
       });
       nockRegistrarGetOrganizationVerifiedProfile(
@@ -478,7 +478,7 @@ describe('presentation request', () => {
         tenant: customTenant,
         purpose: 'fooPurpose from disclosure',
         presentationDefinition: {
-          ...omit(['purpose'], testPresentationDefinition),
+          ...omit(['purpose'], samplePresentationDefinition),
         },
       });
       nockRegistrarGetOrganizationVerifiedProfile(
@@ -500,7 +500,7 @@ describe('presentation request', () => {
       disclosure = await persistDisclosure({
         tenant,
         presentationDefinition: {
-          ...testPresentationDefinition,
+          ...samplePresentationDefinition,
           purpose: 'fooPurpose',
         },
       });

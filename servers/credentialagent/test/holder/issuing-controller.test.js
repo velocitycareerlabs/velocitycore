@@ -51,6 +51,10 @@ const {
 } = require('lodash/fp');
 const nock = require('nock');
 const {
+  openBadgeCredentialExample,
+} = require('@velocitycareerlabs/sample-data');
+
+const {
   OBJECT_ID_FORMAT,
   ISO_DATETIME_FORMAT,
   BASE64_FORMAT,
@@ -66,7 +70,6 @@ const {
 } = require('@velocitycareerlabs/blockchain-functions');
 const { hashOffer } = require('@velocitycareerlabs/velocity-issuing');
 
-const openBadgeCredentialExample = require('../data/open-badge-credential-example.json');
 const {
   nockCredentialTypes,
   credentialTypeMetadata,
