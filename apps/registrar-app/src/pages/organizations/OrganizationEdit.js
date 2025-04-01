@@ -292,6 +292,7 @@ const OrganizationEdit = () => {
                       label="Short Description of the Organization"
                       source="profile.description"
                       validate={required()}
+                      sx={sx.description}
                     />
                   </Grid>
                   <Grid size={{ xs: 12 }}>
@@ -413,4 +414,5 @@ const sx = {
     width: '100%',
   },
   textArea: { '& textarea': { padding: '0' } },
+  description: { '& textarea': { paddingLeft: '0', paddingRight: '0' } },
 };
