@@ -56,7 +56,7 @@ describe('OrganizationShow', () => {
         <Auth0Provider>
           <AdminContext
             dataProvider={{
-              getOne: () => Promise.resolve({ data: {}, isLoading: true }),
+              getOne: () => new Promise(() => {}),
             }}
           >
             <OrganizationShow />
