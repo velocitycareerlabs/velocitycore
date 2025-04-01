@@ -277,6 +277,10 @@ describe('presentation request', () => {
           client_name: sampleOrganizationProfile1.name,
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
+          auth_token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -360,6 +364,10 @@ describe('presentation request', () => {
           client_name: sampleOrganizationProfile1.name,
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
+          auth_token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -529,6 +537,10 @@ describe('presentation request', () => {
           client_name: sampleOrganizationProfile1.name,
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
+          auth_token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -634,6 +646,10 @@ describe('presentation request', () => {
           client_name: sampleOrganizationProfile1.name,
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
+          auth_token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -719,6 +735,10 @@ describe('presentation request', () => {
           client_name: 'fooCommercialEntityName',
           logo_uri: 'fooCommercialEntityLogo',
           tos_uri: disclosure.termsUrl,
+          auth_token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
@@ -800,6 +820,10 @@ describe('presentation request', () => {
           client_name: 'ACME Corp',
           logo_uri: 'https://example.com/logo.png',
           tos_uri: disclosure.termsUrl,
+          auth_token_uri: `${agentUrl}${tenantUrl(
+            { tenantId: tenant.did },
+            '/oauth/token'
+          )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
             { tenantId: tenant.did },
