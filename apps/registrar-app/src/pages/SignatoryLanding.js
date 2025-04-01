@@ -12,7 +12,6 @@ const SignatoryLanding = () => {
   const [searchParams] = useSearchParams();
   const did = searchParams.get('did');
   const authCode = searchParams.get('authCode');
-  const name = searchParams.get('name');
 
   const { data: profile, isLoading } = useGetOne(dataResources.VERIFIED_PROFILE, { id: did });
 
@@ -59,9 +58,8 @@ const SignatoryLanding = () => {
           Thank you!
         </Typography>
         <Typography variant="pL" textAlign="center" marginBottom={11}>
-          You have {response === 'approve' ? 'approved' : 'not approved'} representing{' '}
-          {profile.credentialSubject.name} on the Velocity Network and the service agreement that
-          was signed by {name}
+          Your {response === 'approve' ? 'approval' : 'rejection'} regarding the addition of{' '}
+          {profile.credentialSubject.name} on the Velocity Network has been acknowledged.
         </Typography>
       </Box>
     </Box>
