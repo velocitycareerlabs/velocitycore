@@ -162,14 +162,6 @@ const initSendEmailNotifications = (initCtx) => {
     const caoServiceIds = extractCaoServiceRefs(organization.services);
     const caos = await context.repos.organizations.findCaos(caoServiceIds);
     const caoOrganization = first(caos);
-
-    if (isEmpty(caoOrganization)) {
-      context.log.info(
-        `Signatory reminder does not send. CAO does not exists. Organization: ${organization.didDoc.id}`
-      );
-      return;
-    }
-
     await initCtx.sendEmail(
       emailToSignatoryForOrganizationApproval({
         organization,
