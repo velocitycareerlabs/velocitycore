@@ -240,11 +240,7 @@ const expectedSignatoryReminderEmail = (organization, caoOrganization) => ({
 <br />
 <br />
 <p>As part of ongoing service enhancements for ${organization.profile.name}, ${
-                    caoOrganization ? caoOrganization.profile.name : ''
-                }${
-                    caoOrganization
-                        ? ''
-                        : `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
+                    caoOrganization?.profile?.name ?? `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
                 } has registered your organization to the Velocity Network to enable expanded functionality. To learn more about Velocity Network, please visit 
     <a href="https://www.velocitynetwork.foundation/" target="_blank">https://www.velocitynetwork.foundation/</a>.
 </p>
