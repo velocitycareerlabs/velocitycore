@@ -58,10 +58,10 @@ export default class VCLPresentationRequest {
         );
     }
 
-    get tokenUrl() {
+    get authTokenUri() {
         return (
             (this.jwt.payload[VCLPresentationRequest.KeyMetadata] ?? {})[
-                VCLPresentationRequest.KeyTokenUrl
+                VCLPresentationRequest.KeyAuthTokenUri
             ] ?? ''
         );
         // return 'https://stagingagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiC8GZpBYJXt5UhqxZJbixJyMjrGw0yw8yFN6HjaM1ogSw/oauth/token';
@@ -92,5 +92,5 @@ export default class VCLPresentationRequest {
 
     static readonly KeyIsFeed = 'is_feed';
 
-    static readonly KeyTokenUrl = 'token_url';
+    static readonly KeyAuthTokenUri = 'auth_token_uri';
 }

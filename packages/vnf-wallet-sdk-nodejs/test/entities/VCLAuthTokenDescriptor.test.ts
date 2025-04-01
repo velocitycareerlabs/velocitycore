@@ -13,7 +13,7 @@ import {
 import { PresentationRequestMocks } from '../infrastructure/resources/valid/PresentationRequestMocks';
 
 describe('VCLAuthTokenDescriptor', () => {
-    const tokenUrl = 'https://example.com/token';
+    const authTokenUri = 'https://example.com/token';
     const walletDid =
         // eslint-disable-next-line max-len
         'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6InI5ZnlhNTJJbG1UbzN5YlMwd19HZWZlUV9SWDJFSF9ISm1TV3FZWU8ySlkiLCJ5IjoicFFUUmE3R2txYzVrajZvZGVNcXBnVjVUNExqYlphNEY1S1R1MkpEclduYyJ9';
@@ -31,7 +31,7 @@ describe('VCLAuthTokenDescriptor', () => {
             );
 
             // TODO: uncomment, when get up to date presentation request
-            // expect((descriptor as any).tokenUrl).toBe(tokenUrl);
+            // expect((descriptor as any).authTokenUri).toBe(authTokenUri);
             expect((descriptor as any).walletDid).toBe(walletDid);
             expect((descriptor as any).relyingPartyDid).toBe(relyingPartyDid);
             expect((descriptor as any).vendorOriginContext).toBe(
@@ -46,7 +46,7 @@ describe('VCLAuthTokenDescriptor', () => {
             );
 
             // TODO: uncomment, when get up to date presentation request
-            // expect((descriptor as any).tokenUrl).toBe(tokenUrl);
+            // expect((descriptor as any).authTokenUri).toBe(authTokenUri);
             expect((descriptor as any).walletDid).toBe(walletDid);
             expect((descriptor as any).relyingPartyDid).toBe(relyingPartyDid);
             expect((descriptor as any).vendorOriginContext).toBeUndefined();
@@ -54,16 +54,16 @@ describe('VCLAuthTokenDescriptor', () => {
         });
 
         // eslint-disable-next-line max-len
-        it('should correctly assign properties when constructed with tokenUrl, walletDid, relyingPartyDid, vendorOriginContext, and refreshToken', () => {
+        it('should correctly assign properties when constructed with authTokenUri, walletDid, relyingPartyDid, vendorOriginContext, and refreshToken', () => {
             const descriptor = new VCLAuthTokenDescriptor(
-                tokenUrl,
+                authTokenUri,
                 walletDid,
                 relyingPartyDid,
                 vendorOriginContext,
                 refreshToken
             );
 
-            expect((descriptor as any).tokenUrl).toBe(tokenUrl);
+            expect((descriptor as any).authTokenUri).toBe(authTokenUri);
             expect((descriptor as any).walletDid).toBe(walletDid);
             expect((descriptor as any).relyingPartyDid).toBe(relyingPartyDid);
             expect((descriptor as any).vendorOriginContext).toBe(
@@ -76,7 +76,7 @@ describe('VCLAuthTokenDescriptor', () => {
     describe('generateRequestBody', () => {
         it('should generate request body for refreshToken flow when refreshToken only is provided', () => {
             const descriptor = new VCLAuthTokenDescriptor(
-                tokenUrl,
+                authTokenUri,
                 walletDid,
                 relyingPartyDid,
                 '',
@@ -97,7 +97,7 @@ describe('VCLAuthTokenDescriptor', () => {
 
         it('should generate request body for vendorOriginContext flow when vendorOriginContext only is provided', () => {
             const descriptor = new VCLAuthTokenDescriptor(
-                tokenUrl,
+                authTokenUri,
                 walletDid,
                 relyingPartyDid,
                 vendorOriginContext
@@ -119,7 +119,7 @@ describe('VCLAuthTokenDescriptor', () => {
 
         it('should generate request body for refreshToken flow when both vendorOriginContext and refreshToken are provided', () => {
             const descriptor = new VCLAuthTokenDescriptor(
-                tokenUrl,
+                authTokenUri,
                 walletDid,
                 relyingPartyDid,
                 vendorOriginContext

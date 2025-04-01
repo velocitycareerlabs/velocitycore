@@ -14,7 +14,7 @@ export enum GrantType {
 }
 
 export class VCLAuthTokenDescriptor {
-    private readonly tokenUrl: string;
+    private readonly authTokenUri: string;
 
     private readonly walletDid: string;
 
@@ -26,7 +26,7 @@ export class VCLAuthTokenDescriptor {
 
     // Overload signatures:
     constructor(
-        tokenUrl: string,
+        authTokenUri: string,
         walletDid: string,
         relyingPartyDid: string,
         vendorOriginContext?: string,
@@ -40,24 +40,24 @@ export class VCLAuthTokenDescriptor {
     );
 
     constructor(
-        tokenUrlOrPresentationRequest: string | VCLPresentationRequest,
+        authTokenUriOrPresentationRequest: string | VCLPresentationRequest,
         walletDidOrVendorOriginContext?: string,
         relyingPartyDidOrRefreshToken?: string,
         vendorOriginContext?: string,
         refreshToken?: string
     ) {
-        if (typeof tokenUrlOrPresentationRequest === 'string') {
+        if (typeof authTokenUriOrPresentationRequest === 'string') {
             // Called with tokenUrl, walletDid, relyingPartyDid, etc.
-            this.tokenUrl = tokenUrlOrPresentationRequest;
+            this.authTokenUri = authTokenUriOrPresentationRequest;
             this.walletDid = walletDidOrVendorOriginContext as string;
             this.relyingPartyDid = relyingPartyDidOrRefreshToken as string;
             this.vendorOriginContext = vendorOriginContext;
             this.refreshToken = refreshToken;
         } else {
             // Called with a VCLPresentationRequest.
-            this.tokenUrl = tokenUrlOrPresentationRequest.tokenUrl;
-            this.walletDid = tokenUrlOrPresentationRequest.didJwk.did;
-            this.relyingPartyDid = tokenUrlOrPresentationRequest.iss;
+            this.authTokenUri = authTokenUriOrPresentationRequest.authTokenUri;
+            this.walletDid = authTokenUriOrPresentationRequest.didJwk.did;
+            this.relyingPartyDid = authTokenUriOrPresentationRequest.iss;
             this.vendorOriginContext = walletDidOrVendorOriginContext;
             this.refreshToken = relyingPartyDidOrRefreshToken;
         }
