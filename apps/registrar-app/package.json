@@ -60,9 +60,8 @@
     "react-router": "6.29"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "env-cmd -f .env.backend.local react-scripts start",
     "build": "craco build",
-    "start:backend": "env-cmd -f .env.backend.local react-scripts start",
     "eject": "react-scripts eject",
     "test": "react-scripts test",
     "lint": "eslint src --format json >> eslint.json",

@@ -16,7 +16,9 @@ const rootRoutes = async (fastify) => {
     async (_res, reply) => {
       reply
         .status(200)
-        .send(`Welcome to Oracle\nVersion: ${fastify.config.version}\n`);
+        .send(
+          `Welcome to VelocityCore Registrar\nVersion: ${fastify.config.version}\n`
+        );
     }
   );
 };

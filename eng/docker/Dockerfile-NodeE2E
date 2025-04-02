@@ -14,7 +14,7 @@ RUN apt-get update \
 USER node
 
 COPY --chown=node:node package*.json yarn.lock lerna.json .npmrc ./
-COPY --chown=node:node packages/ ./packages
+COPY --chown=node:node packages ./packages
 COPY --chown=node:node $SRC_DIR ./servers/$SERVICE
 RUN yarn --pure-lockfile
 
