@@ -56,7 +56,7 @@ services:
     ports:
       - "18082:80"
     volumes:
-      - "../../../apps/sample-libapp:/srv"
+      - "../../../apps/sample-lib-app:/srv"
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
 
   velocity-mongo:
@@ -68,34 +68,17 @@ services:
     volumes:
       - ./mongo-data.vol:/opt/besu/data
 
-  vendor:
-    container_name: e2e-vendor
-    depends_on:
-      - velocity-mongo
-    build:
-      context: ../../..
-      dockerfile: Dockerfile-MockVendor
-      target: builder
-    volumes:
-      - ../../../packages:/app/packages
-      - /app/servers/mockvendor/node_modules
-      - ../../mockvendor:/app/servers/mockvendor
-    command: npx nodemon --exec "cd servers/mockvendor && yarn start"
-    env_file:
-      - ../../mockvendor/.localdev.env
-    ports:
-      - 13004:3000
-
   credentialagent:
     container_name: e2e-credentialagent
     depends_on:
       - certgen
       - velocity-mongo
-      - vendor
     build:
       context: ../../..
-      dockerfile: Dockerfile-CredentialAgent
+      dockerfile: Dockerfile-NodeE2E
       target: builder
+      args:
+        SERVICE: credentialagent
     restart: on-failure
     volumes:
       - ../../../packages:/app/packages
@@ -107,13 +90,35 @@ services:
     environment:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     ports:
-      - 13002:3000
+      - 13012:3000
     healthcheck:
       test: ["CMD", "wget", "http://0.0.0.0:3000/"]
       interval: 10s
       retries: 5
       start_period: 10s
       timeout: 10s
+
+  registrar-migrations:
+    container_name: e2e-registrar-migrations
+    depends_on:
+      velocity-mongo:
+        condition: service_started
+    build:
+      context: ../../..
+      dockerfile: Dockerfile-NodeE2E
+      target: builder
+      args:
+        SERVICE: registrar-migrations
+        NODE_ENV: dev
+        SRC_DIR: samples/sample-registrar-server
+    volumes:
+      - ../../../packages:/app/packages
+      - /app/servers/registrar-migrations/node_modules
+      - ../../../samples/sample-registrar-server:/app/servers/registrar-migrations
+      - ../../../samples/sample-lib-app:/app/samples/sample-lib-app
+    command: "yarn --cwd servers/registrar-migrations migrate:up"
+    env_file:
+      - ../../../samples/sample-registrar-server/.localdev.env
 
   registrar:
     container_name: e2e-registrar
@@ -128,20 +133,22 @@ services:
         condition: service_started
       credentialagent:
         condition: service_healthy
-
     build:
       context: ../../..
-      dockerfile: Dockerfile-Oracle
+      dockerfile: Dockerfile-NodeE2E
       target: builder
+      args:
+        SERVICE: registrar
+        SRC_DIR: samples/sample-registrar-server
     restart: on-failure
     volumes:
       - ../../../packages:/app/packages
-      - /app/servers/oracle/node_modules
-      - ../../oracle:/app/servers/oracle
+      - /app/servers/registrar/node_modules
+      - ../../../samples/sample-registrar-server:/app/servers/registrar
       - httpscert:/certs
-    command: npx nodemon --exec "cd servers/oracle && yarn start"
+    command: npx nodemon --exec "cd servers/registrar && yarn start"
     env_file:
-      - ../../oracle/.localdev.env
+      - ../../../samples/sample-registrar-server/.localdev.env
     environment:
       - SERVER_CERTIFICATE_FILE=/certs/cert.crt
       - SERVER_CERTIFICATE_KEY_FILE=/certs/key.pem
