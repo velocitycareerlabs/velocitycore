@@ -17,6 +17,7 @@
 const tenantDefaultProjection = {
   _id: 1,
   did: 1,
+  dids: 1,
   serviceId: 1, // TODO remove serviceId after 31 March 2021
   serviceIds: 1,
   kid: 1,

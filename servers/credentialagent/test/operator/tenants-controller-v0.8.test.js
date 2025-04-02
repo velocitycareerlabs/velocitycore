@@ -669,6 +669,7 @@ describe('Tenants management Test suite', () => {
         _id: new ObjectId(response.json.id),
         serviceIds: [`${orgDoc.id}#test-service`],
         did: orgDoc.id,
+        dids: [orgDoc.id, ...orgDoc.alsoKnownAs],
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
@@ -767,6 +768,7 @@ describe('Tenants management Test suite', () => {
         _id: new ObjectId(response.json.id),
         serviceIds: [`${orgDoc.id}#test-service`],
         did: orgDoc.id,
+        dids: [orgDoc.id, ...orgDoc.alsoKnownAs],
         primaryAddress,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
@@ -815,6 +817,7 @@ describe('Tenants management Test suite', () => {
         _id: new ObjectId(response.json.id),
         serviceIds: [`${orgDoc.id}#test-service`],
         did: orgDoc.id,
+        dids: [orgDoc.id, ...orgDoc.alsoKnownAs],
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
@@ -1542,6 +1545,7 @@ describe('Tenants management Test suite', () => {
         _id: new ObjectId(response.json.id),
         serviceIds: [`${orgDoc.id}#test-service`],
         did: orgDoc.id,
+        dids: [orgDoc.id],
         primaryAddress,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
@@ -1590,6 +1594,7 @@ describe('Tenants management Test suite', () => {
         _id: new ObjectId(response.json.id),
         serviceIds: [`${orgDoc.id}#test-service`],
         did: orgDoc.id,
+        dids: [orgDoc.id],
         primaryAddress,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
@@ -1638,6 +1643,7 @@ describe('Tenants management Test suite', () => {
         _id: new ObjectId(response.json.id),
         serviceIds: [`${orgDoc.id}#test-service`],
         did: orgDoc.id,
+        dids: [orgDoc.id],
         primaryAddress,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
@@ -1808,7 +1814,7 @@ describe('Tenants management Test suite', () => {
         .collection('tenants')
         .findOne(
           { _id: new ObjectId(tenant1._id) },
-          { projection: { did: 1 } }
+          { projection: { did: 1, aliases: 1 } }
         );
       expect(tenant1FromDb).toEqual({
         _id: new ObjectId(tenant1._id),
@@ -1891,27 +1897,29 @@ describe('Tenants management Test suite', () => {
         .collection('tenants')
         .findOne(
           { _id: new ObjectId(tenant1._id) },
-          { projection: { did: 1 } }
+          { projection: { did: 1, dids: 1 } }
         );
       expect(tenant1FromDb).toEqual({
         _id: new ObjectId(tenant1._id),
         did: newDid1,
+        dids: [oldDid1, newDid1],
       });
       const tenant2FromDb = await mongoDb()
         .collection('tenants')
         .findOne(
           { _id: new ObjectId(tenant2._id) },
-          { projection: { did: 1 } }
+          { projection: { did: 1, dids: 1 } }
         );
       expect(tenant2FromDb).toEqual({
         _id: new ObjectId(tenant2._id),
         did: newDid2,
+        dids: [oldDid2, newDid2],
       });
       const tenant3FromDb = await mongoDb()
         .collection('tenants')
         .findOne(
           { _id: new ObjectId(tenant3._id) },
-          { projection: { did: 1 } }
+          { projection: { did: 1, aliases: 1 } }
         );
       expect(tenant3FromDb).toEqual({
         _id: new ObjectId(tenant3._id),
@@ -1992,17 +2000,18 @@ describe('Tenants management Test suite', () => {
         .collection('tenants')
         .findOne(
           { _id: new ObjectId(tenant1._id) },
-          { projection: { did: 1 } }
+          { projection: { did: 1, dids: 1 } }
         );
       expect(tenant1FromDb).toEqual({
         _id: new ObjectId(tenant1._id),
         did: newDid1,
+        dids: [oldDid1, newDid1],
       });
       const tenant2FromDb = await mongoDb()
         .collection('tenants')
         .findOne(
           { _id: new ObjectId(tenant2._id) },
-          { projection: { did: 1 } }
+          { projection: { did: 1, dids: 1 } }
         );
       expect(tenant2FromDb).toEqual({
         _id: new ObjectId(tenant2._id),

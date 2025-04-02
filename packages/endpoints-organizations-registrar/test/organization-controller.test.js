@@ -68,9 +68,9 @@ const console = require('console');
 const nock = require('nock');
 const { CheckResults } = require('@velocitycareerlabs/vc-checks');
 const buildFastify = require('./helpers/build-fastify');
-const initOrganizationFactory = require('./factories/organizations-factory');
-const initImageFactory = require('./factories/images-factory');
-const initGroupsFactory = require('./factories/groups-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
+const initImageFactory = require('../src/entities/images/factories/images-factory');
+const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
 const organizationsRepoPlugin = require('../src/entities/organizations/repos/repo');
 const imagesRepoPlugin = require('../src/entities/images/repo');
 

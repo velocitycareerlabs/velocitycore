@@ -59,14 +59,11 @@ const dotenv = require('dotenv');
 const path = require('path');
 const { toHexString } = require('@velocitycareerlabs/blockchain-functions');
 const {
-  Authorities,
-} = require('@velocitycareerlabs/endpoints-organizations-registrar');
-const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
-const {
   sampleEducationDegreeGraduation,
-} = require('../test/helpers/sample-education-degree-graduation');
+} = require('@velocitycareerlabs/sample-data');
+const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
 
-const registrarUrl = 'https://localhost:13003';
+const registrarUrl = 'https://localhost:13004';
 const fineractUrl = 'http://localhost:13008';
 const cihUrl = 'http://localhost:13002';
 const rpcUrl = 'http://localhost:18545';
@@ -117,7 +114,7 @@ describe('org registration and issuing e2e', () => {
       website: 'https://www.credentialagent.com',
       registrationNumbers: [
         {
-          authority: Authorities.DunnAndBradstreet,
+          authority: 'DunnAndBradstreet',
           number: '123457779',
           uri: 'https://uri.com',
         },

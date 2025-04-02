@@ -17,6 +17,7 @@
 import { Box, Stack } from '@mui/material';
 import { Form, AutocompleteInput, required } from 'react-admin';
 import PropTypes from 'prop-types';
+import { kebabCase } from 'lodash/string';
 import { useCallback, useMemo } from 'react';
 
 import { serviceTypesForInvitation, credentialTypesByServiceTypes } from '../../utils/serviceTypes';
@@ -33,10 +34,11 @@ const SetInvitationService = ({ children, onSubmit, defaultValues, serviceEndpoi
   const handleSubmit = useCallback(
     (data) => {
       const type = data.type.match(/.+v1/);
+      const kebabType = kebabCase(type[0]);
       onSubmit({
         ...data,
         type: type[0],
-        id: `#${data.serviceEndpoint.split('#')[1]}`,
+        id: `${kebabType}-1`,
         credentialTypes: credentialTypesByServiceTypes[data.type],
       });
     },

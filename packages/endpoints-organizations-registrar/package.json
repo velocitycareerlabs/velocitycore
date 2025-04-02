@@ -17,6 +17,7 @@
     "@fastify/autoload": "5.10.0",
     "@spencejs/spence-mongo-repos": "~0.10.2",
     "@spencejs/spence-events": "~0.10.2",
+    "@spencejs/spence-factories": "0.10.2",
     "@velocitycareerlabs/auth": "0.5.0-build",
     "@velocitycareerlabs/aws-clients": "0.5.0-build",
     "@velocitycareerlabs/base-contract-io": "0.5.0-build",
@@ -39,6 +40,7 @@
     "@velocitycareerlabs/organizations-registry": "0.5.0-build",
     "@velocitycareerlabs/rest-queries": "0.5.0-build",
     "@velocitycareerlabs/spencer-mongo-extensions": "0.5.0-build",
+    "@velocitycareerlabs/tests-helpers": "0.5.0-build",
     "@velocitycareerlabs/validation": "0.5.0-build",
     "@velocitycareerlabs/vc-checks": "0.5.0-build",
     "@velocitycareerlabs/verifiable-credentials": "0.5.0-build",
@@ -55,12 +57,10 @@
     "uuid": "~9.0.1"
   },
   "devDependencies": {
-    "@spencejs/spence-factories": "0.10.2",
     "@velocitycareerlabs/common-functions": "0.5.0-build",
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "@velocitycareerlabs/server-provider": "0.5.0-build",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
-    "@velocitycareerlabs/tests-helpers": "0.5.0-build",
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "8.10.0",

@@ -16,7 +16,7 @@
  */
 
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
-const initOrganizationFactory = require('./factories/organizations-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const buildFastify = require('./helpers/build-fastify');
 
 const baseUrl = '/d';
@@ -34,7 +34,6 @@ describe(':d/website did-doc publishing test suite', () => {
 
   beforeEach(async () => {
     await mongoDb().collection('organizations').deleteMany({});
-    await mongoDb().collection('organizationServices').deleteMany({});
   });
 
   afterAll(async () => {

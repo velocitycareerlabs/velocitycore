@@ -1,7 +1,5 @@
 import VCLEnvironment from '../api/VCLEnvironment';
 import VCLXVnfProtocolVersion from '../api/VCLXVnfProtocolVersion';
-import { VCLLogService } from '../api/entities/initialization/VCLLogService';
-import VCLLog from './utils/VCLLog';
 
 export default class GlobalConfig {
     private static _IsDebugOn = false;
@@ -12,7 +10,6 @@ export default class GlobalConfig {
 
     public static set IsDebugOn(value) {
         this._IsDebugOn = value;
-        VCLLog.IsLoggerOn = this.IsLoggerOn;
     }
 
     private static _CurrentEnvironment = VCLEnvironment.Prod;
@@ -50,19 +47,12 @@ export default class GlobalConfig {
         isDebugOn = false,
         currentEnvironment: VCLEnvironment = VCLEnvironment.Prod,
         xVnfProtocolVersion: VCLXVnfProtocolVersion = VCLXVnfProtocolVersion.XVnfProtocolVersion1,
-        logService: VCLLogService,
         isDirectIssuerOn = true
     ) {
         GlobalConfig.IsDebugOn = isDebugOn;
         GlobalConfig.CurrentEnvironment = currentEnvironment;
         GlobalConfig.XVnfProtocolVersion = xVnfProtocolVersion;
-        GlobalConfig.initLogger(logService);
         GlobalConfig.IsDirectIssuerOn = isDirectIssuerOn;
-    }
-
-    private static initLogger(value: VCLLogService) {
-        VCLLog.LoggerService = value;
-        VCLLog.IsLoggerOn = this.IsLoggerOn;
     }
 
     public static get IsLoggerOn() {

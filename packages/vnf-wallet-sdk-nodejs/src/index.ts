@@ -6,8 +6,10 @@ import VCLCryptoServicesDescriptor from './api/entities/initialization/VCLCrypto
 import type VCLKeyService from './api/keys/VCLKeyService';
 import type VCLJwtSignService from './api/jwt/VCLJwtSignService';
 import type VCLJwtVerifyService from './api/jwt/VCLJwtVerifyService';
-import VCLEnvironment from './api/VCLEnvironment';
-import VCLXVnfProtocolVersion from './api/VCLXVnfProtocolVersion';
+import VCLEnvironment, { environmentFromString } from './api/VCLEnvironment';
+import VCLXVnfProtocolVersion, {
+    vnfProtocolVersionFromString,
+} from './api/VCLXVnfProtocolVersion';
 import VCLCountry from './api/entities/VCLCountry';
 import VCLCountries from './api/entities/VCLCountries';
 import VCLCountryCodes from './api/entities/VCLCountryCodes';
@@ -31,6 +33,7 @@ import VCLFinalizeOffersDescriptor from './api/entities/VCLFinalizeOffersDescrip
 import VCLGenerateOffersDescriptor from './api/entities/VCLGenerateOffersDescriptor';
 import VCLJwt from './api/entities/VCLJwt';
 import VCLJwtVerifiableCredentials from './api/entities/VCLJwtVerifiableCredentials';
+import VCLOffer from './api/entities/VCLOffer';
 import VCLOffers from './api/entities/VCLOffers';
 import VCLOrganization from './api/entities/VCLOrganization';
 import VCLOrganizations from './api/entities/VCLOrganizations';
@@ -116,6 +119,7 @@ export {
     VCLGenerateOffersDescriptor,
     VCLJwt,
     VCLJwtVerifiableCredentials,
+    VCLOffer,
     VCLOffers,
     VCLOrganization,
     VCLOrganizations,
@@ -136,4 +140,6 @@ export {
     VCLJwtDescriptor,
     VCLDidJwkDescriptor,
     VCLDidJwk,
+    vnfProtocolVersionFromString,
+    environmentFromString,
 };

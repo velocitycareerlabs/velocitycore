@@ -58,8 +58,6 @@ jspm_packages/
 web_modules/
 # TypeScript cache
 *.tsbuildinfo
-# Npm Lock file
-package-lock.json
 # Optional npm cache directory
 .npm
 # Optional eslint cache
@@ -85,6 +83,7 @@ package-lock.json
 .pnp.*
 # NPM
 package-lock.json
+.npmrc
 # Docker
 docker-compose.override.yml
 # Verifgen output files
@@ -166,7 +165,6 @@ cover/
 *.pot
 
 # Django stuff:
-*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -281,3 +279,12 @@ eslint.json
 
 # Docker volumes
 *.vol
+
+# Contracts
+.openzeppelin
+test-logs.txt
+_*-permissions-proxy-contract-address.json
+_*-events-mint.json
+_*-events-mint-v2.json
+_*-balances.json
+_*-migrated-balances-v2.json

@@ -112,10 +112,22 @@ const createConfig = (packageJson) => {
       .asString(),
   };
 
+  const healthProbesConfig = {
+    basicAuthUsername: env
+      .get('BASIC_AUTH_USERNAME')
+      .required(!isTest)
+      .asString(),
+    basicAuthPassword: env
+      .get('BASIC_AUTH_PASSWORD')
+      .required(!isTest)
+      .asString(),
+  };
+
   return {
     ...sharedConfig,
     ...registrarConfig,
     ...tokenConfig,
+    ...healthProbesConfig,
   };
 };
 

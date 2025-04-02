@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import { Dictionary } from '../VCLTypes';
 
-export class VCLOffer {
+export default class VCLOffer {
     payload: Dictionary<any>;
 
     constructor(payload: Dictionary<any>) {

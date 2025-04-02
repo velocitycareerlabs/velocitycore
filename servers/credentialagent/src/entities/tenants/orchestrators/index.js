@@ -16,6 +16,7 @@
 
 module.exports = {
   ...require('./add-primary-address-to-tenant'),
+  ...require('./create-tenant'),
   ...require('./refresh-tenant-dids'),
   ...require('./set-tenant-default-issuing-disclosure'),
 };

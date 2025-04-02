@@ -22,7 +22,7 @@ const {
   testRegistrarUser,
 } = require('@velocitycareerlabs/tests-helpers');
 
-const initGroupsFactory = require('./factories/groups-factory');
+const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
 const buildFastify = require('./helpers/build-fastify');
 const { VNF_GROUP_ID_CLAIM } = require('../src/entities');
 const groupsRepoPlugin = require('../src/entities/groups/repo');

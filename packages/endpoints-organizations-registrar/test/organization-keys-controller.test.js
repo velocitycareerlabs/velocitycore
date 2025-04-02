@@ -70,9 +70,9 @@ const console = require('console');
 const nock = require('nock');
 const buildFastify = require('./helpers/build-fastify');
 const { mapResponseKeyToDbKey } = require('./helpers/map-response-key-to-db');
-const initOrganizationFactory = require('./factories/organizations-factory');
-const initOrganizationKeysFactory = require('./factories/organization-keys-factory');
-const initGroupsFactory = require('./factories/groups-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
+const initOrganizationKeysFactory = require('../src/entities/organization-keys/factories/organization-keys-factory');
+const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
 const organizationKeysRepoPlugin = require('../src/entities/organization-keys/repos/repo');
 const organizationsRepoPlugin = require('../src/entities/organizations/repos/repo');
 

@@ -14,4 +14,6 @@
  * limitations under the License.
  */
 
-require('./main');
+module.exports = {
+  ...require('./start-app-server'),
+};

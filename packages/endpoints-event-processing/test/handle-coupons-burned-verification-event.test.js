@@ -60,7 +60,8 @@ const {
   mongoify,
   mongoCloseWrapper,
 } = require('@velocitycareerlabs/tests-helpers');
-const initOrganizationFactory = require('@velocitycareerlabs/endpoints-organizations-registrar/test/factories/organizations-factory');
+// eslint-disable-next-line max-len
+const initOrganizationFactory = require('@velocitycareerlabs/endpoints-organizations-registrar/src/entities/organizations/factories/organizations-factory');
 const organizationsRepoPlugin = require('@velocitycareerlabs/endpoints-organizations-registrar/src/entities/organizations/repos/repo');
 const initPurchaseFactory = require('./factories/purchases-factory');
 const purchaseRepoPlugin = require('../src/entities/purchases/repo');

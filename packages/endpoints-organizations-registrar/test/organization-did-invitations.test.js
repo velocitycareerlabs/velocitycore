@@ -44,9 +44,9 @@ const {
 const console = require('console');
 const buildFastify = require('./helpers/build-fastify');
 const { expectedInvitationSentEmail } = require('./helpers/email-matchers');
-const initGroupsFactory = require('./factories/groups-factory');
-const initOrganizationFactory = require('./factories/organizations-factory');
-const initInvitationsFactory = require('./factories/invitations-factory');
+const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
+const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
+const initInvitationsFactory = require('../src/entities/invitations/factories/invitations-factory');
 const initCredentialSchemaFactory = require('../../endpoints-credential-types-registrar/test/factories/credential-schema-factory');
 const { invitationsRepoPlugin } = require('../src/entities/invitations');
 

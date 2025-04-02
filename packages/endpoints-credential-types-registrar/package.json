@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@spencejs/spence-factories": "0.10.2",
+    "@velocitycareerlabs/sample-data": "0.5.0-build",
     "@velocitycareerlabs/server-provider": "0.5.0-build",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",

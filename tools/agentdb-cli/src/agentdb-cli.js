@@ -15,9 +15,6 @@ program
   .command('metrics', 'get credentials statistic by tenant', {
     executableFile: `${__dirname}/metrics/index.js`,
   })
-  .command('migrate-tenant-did', "migrate a tenant's did", {
-    executableFile: `${__dirname}/migrate-tenant-did/index.js`,
-  })
   .usage('[command] [options]')
   .passThroughOptions()
   .parse(process.argv);

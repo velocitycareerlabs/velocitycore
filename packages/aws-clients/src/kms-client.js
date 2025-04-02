@@ -19,18 +19,15 @@ const {
   EncryptCommand,
   DecryptCommand,
 } = require('@aws-sdk/client-kms');
+const { buildClientConfig } = require('./client-config');
 
 const initKmsClient = ({ awsRegion, awsEndpoint }) => {
-  const kmsClient = new KMSClient({
-    region: awsRegion,
-    credentials: awsEndpoint
-      ? {
-          accessKeyId: 'tests-key-id',
-          secretAccessKey: 'tests-key',
-        }
-      : awsEndpoint,
-    endpoint: awsEndpoint,
-  });
+  const kmsClient = new KMSClient(
+    buildClientConfig({
+      awsRegion,
+      awsEndpoint,
+    })
+  );
 
   const encrypt = async (keyId, plaintext) => {
     const command = new EncryptCommand({

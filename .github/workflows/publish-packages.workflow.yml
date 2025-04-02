@@ -1,0 +1,107 @@
+name: Publish Packages
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'packages/**'
+      - 'servers/**'
+      - 'tools/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Choose environment
+        default: 'dev'
+        options: 
+        - dev
+        - prod
+env:
+  LERNA_VERSION: '6.6.2'
+  NX_VERSION: '17.2.7'
+  DIST_TAG: 'prerelease'
+  NODE_VERSION: '22.x'
+  GLOBAL_ENV: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || format('{0}', 'dev') }}
+jobs:
+  # Publish Packages
+  publish-packages:
+    name: Publish Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      # Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      # Set Slug
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@797d68864753cbceedc271349d402da4590e6302 # v4
+        with:
+          short-length: 8
+      # Set Common Variables
+      - name: Set Common Variables
+        run: bash ./eng/environments/common.sh
+      # Set Env Variables
+      - name: Set Env Variables
+        run: bash ./eng/environments/${{ env.GLOBAL_ENV }}.sh
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
+        with:
+          registry-url: ${{ env.REGISTRY_URL }}
+          scope: ${{ format('@{0}', env.TARGET_ORG) }}
+          node-version: ${{ env.NODE_VERSION }}
+      # Get yarn cache directory path
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+      # Restore yarn cached
+      - name: Restore yarn cached
+        id: cache-yarn-restore
+        uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            node_modules
+          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-yarn-${{ hashFiles('yarn.lock') }}
+      # Set Github Packages Token
+      - name: Set Github Packages Token
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > .npmrc
+      # Install Dependencies
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      # Install Lerna
+      - name: Install Lerna
+        run: yarn global add lerna@${{ env.LERNA_VERSION }}
+      # Install Nx
+      - name: Install Nx
+        run: yarn global add nx@
+      # Set Version
+      - name: Set Version
+        run: lerna version --ignore-changes '**/*.md' '**/test/**' --no-git-tag-version --no-push --exact --yes ${{ env.NPM_VER_NUM }}
+      # Git Set Identity
+      - name: Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      # Set Dist Tag For Prod
+      - name: Set Dist Tag For Prod
+        run: echo 'DIST_TAG=latest' >> $GITHUB_ENV
+        if: env.GLOBAL_ENV == 'prod'
+      # Commit Version Locally for Npmjs
+      - name: Commit Version Locally for Npmjs
+        run: git commit -am "Creating Version ${{ env.VER_NUM }}"
+      # Publish Github Repo
+      - name: Publish Github Repo
+        run: lerna publish --dist-tag ${{ env.DIST_TAG }} from-package --yes --registry ${{ env.REGISTRY_URL }}
+      # Set Github Packages Config
+      # lerna doesn't have --access public key, so required to set publicConfig for all public packages
+      # private: true required for all private packages
+      - name: Set NPM Packages Config
+        run: |
+          echo "@${{ env.TARGET_ORG }}:registry=https://registry.npmjs.org/" > .npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+      # Publish to NpmJS
+      - name: Publish NpmJS
+        run: lerna publish --dist-tag ${{ env.DIST_TAG }} from-package --yes --registry "https://registry.npmjs.org/"

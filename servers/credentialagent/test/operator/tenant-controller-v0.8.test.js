@@ -106,7 +106,7 @@ describe('Tenant management Test Suite', () => {
       });
       expect(response.statusCode).toEqual(404);
       expect(response.json.message).toEqual(
-        `Tenant ${JSON.stringify({ _id: tenant._id })} not found`
+        `Tenant ${JSON.stringify({ tenantId: tenant._id })} not found`
       );
     });
 
@@ -726,7 +726,7 @@ describe('Tenant management Test Suite', () => {
       });
       expect(response.statusCode).toEqual(404);
       expect(response.json.message).toEqual(
-        `Tenant ${JSON.stringify({ _id: tenant._id })} not found`
+        `Tenant ${JSON.stringify({ tenantId: tenant._id })} not found`
       );
     });
   });

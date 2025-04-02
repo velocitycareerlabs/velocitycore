@@ -55,7 +55,6 @@ const refreshTenantDids = async ({ all, did }, context) => {
 const buildTenantWrites = (tenantDocs, didMap) => {
   const tenantWrites = [];
   for (const doc of tenantDocs) {
-    // eslint-disable-next-line no-await-in-loop
     const write = buildTenantWrite(doc, didMap);
     if (write != null) {
       tenantWrites.push(write);
@@ -65,8 +64,8 @@ const buildTenantWrites = (tenantDocs, didMap) => {
 };
 
 const buildTenantWrite = (tenantDoc, didMap) => {
-  const newDid = didMap.get(tenantDoc.did);
-  if (newDid == null) {
+  const { preferredDid, dids } = didMap.get(tenantDoc.did) ?? {};
+  if (preferredDid == null) {
     return undefined;
   }
   return {
@@ -74,7 +73,8 @@ const buildTenantWrite = (tenantDoc, didMap) => {
       filter: { _id: new ObjectId(tenantDoc._id) },
       update: {
         $set: omitBy(isNil)({
-          did: newDid,
+          did: preferredDid,
+          dids,
           updatedAt: new Date(),
         }),
       },
@@ -94,8 +94,8 @@ const buildOfferWrites = async (offersCursor, didMap) => {
 };
 const buildOfferWrite = (offerDoc, didMap) => {
   const oldDid = offerDoc.issuer.id;
-  const newDid = didMap.get(oldDid);
-  if (newDid == null) {
+  const { preferredDid } = didMap.get(oldDid) ?? {};
+  if (preferredDid == null) {
     return undefined;
   }
   return {
@@ -103,10 +103,10 @@ const buildOfferWrite = (offerDoc, didMap) => {
       filter: { _id: new ObjectId(offerDoc._id) },
       update: {
         $set: omitBy(isNil)({
-          'issuer.id': newDid,
+          'issuer.id': preferredDid,
           updatedAt: new Date(),
           credentialSubject: leafMap(
-            (val) => (val === oldDid ? newDid : val),
+            (val) => (val === oldDid ? preferredDid : val),
             offerDoc.credentialSubject
           ),
         }),
@@ -124,7 +124,7 @@ const buildCurrentDidToPreferredDid = async (tenantDocs, context) => {
     const dids = getDidAndAliases(didDoc);
     const preferredDid = find(startsWith('did:web'), dids);
     if (preferredDid != null) {
-      didMap.set(did, preferredDid);
+      didMap.set(did, { preferredDid, dids });
     }
   }
   return didMap;
