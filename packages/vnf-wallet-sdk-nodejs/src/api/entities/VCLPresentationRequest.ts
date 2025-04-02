@@ -7,6 +7,10 @@ import VCLDidJwk from './VCLDidJwk';
 import VCLToken from './VCLToken';
 
 export default class VCLPresentationRequest {
+    public readonly feed: boolean;
+
+    public readonly vendorOriginContext: Nullish<string>;
+
     constructor(
         public readonly jwt: VCLJwt,
         public readonly verifiedProfile: VCLVerifiedProfile,
@@ -14,7 +18,10 @@ export default class VCLPresentationRequest {
         public readonly pushDelegate: Nullish<VCLPushDelegate> = null,
         public readonly didJwk: VCLDidJwk,
         public readonly remoteCryptoServicesToken: Nullish<VCLToken> = null
-    ) {}
+    ) {
+        this.feed = this.getFeed();
+        this.vendorOriginContext = this.getVendorOriginContext();
+    }
 
     get iss() {
         return (
@@ -38,7 +45,7 @@ export default class VCLPresentationRequest {
         );
     }
 
-    get vendorOriginContext() {
+    getVendorOriginContext() {
         return this.deepLink.vendorOriginContext;
     }
 
@@ -67,10 +74,11 @@ export default class VCLPresentationRequest {
         // return 'https://stagingagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiC8GZpBYJXt5UhqxZJbixJyMjrGw0yw8yFN6HjaM1ogSw/oauth/token';
     }
 
-    get isFeed(): boolean {
+    getFeed(): boolean {
         return (
-            (this.jwt.payload[VCLPresentationRequest.KeyIsFeed] as boolean) ||
-            false
+            (this.jwt.payload[VCLPresentationRequest.KeyMetadata] ?? {})[
+                VCLPresentationRequest.KeyFeed
+            ] ?? false
         );
     }
 
@@ -90,7 +98,7 @@ export default class VCLPresentationRequest {
 
     static readonly KeySubmitPresentationUri = 'submit_presentation_uri';
 
-    static readonly KeyIsFeed = 'is_feed';
+    static readonly KeyFeed = 'feed';
 
     static readonly KeyAuthTokenUri = 'auth_token_uri';
 }

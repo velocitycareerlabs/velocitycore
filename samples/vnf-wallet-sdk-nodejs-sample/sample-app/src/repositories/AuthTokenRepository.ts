@@ -9,10 +9,13 @@ import { Dictionary } from '../Types';
 import Urls from '../network/Urls';
 import fetcher from '../network/Fetcher';
 
-export const getAuthToken = async (): Promise<Dictionary<any>> => {
+export const getAuthToken = async (
+  authTokenDescriptor: Dictionary<any>
+): Promise<Dictionary<any>> => {
   const config = {
     url: Urls.getAuthToken,
     method: 'POST',
+    data: { ...authTokenDescriptor },
   };
   return fetcher(config);
 };

@@ -4,7 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Dictionary } from '../VCLTypes';
+import { Dictionary, Nullish } from '../VCLTypes';
 import VCLPresentationRequest from './VCLPresentationRequest';
 
 // eslint-disable-next-line no-shadow
@@ -16,41 +16,40 @@ export enum GrantType {
 export class VCLAuthTokenDescriptor {
     private readonly authTokenUri: string;
 
-    private readonly walletDid: string;
+    private readonly walletDid?: string;
 
-    private readonly relyingPartyDid: string;
+    private readonly relyingPartyDid?: string;
 
-    private readonly vendorOriginContext?: string;
+    private readonly vendorOriginContext?: Nullish<string>;
 
-    private readonly refreshToken?: string;
+    private readonly refreshToken?: Nullish<string>;
 
     // Overload signatures:
     constructor(
         authTokenUri: string,
         walletDid: string,
         relyingPartyDid: string,
-        vendorOriginContext?: string,
-        refreshToken?: string
+        vendorOriginContext: Nullish<string>,
+        refreshToken: Nullish<string>
     );
 
     constructor(
         presentationRequest: VCLPresentationRequest,
-        vendorOriginContext?: string,
-        refreshToken?: string
+        refreshToken?: Nullish<string>
     );
 
     constructor(
         authTokenUriOrPresentationRequest: string | VCLPresentationRequest,
-        walletDidOrVendorOriginContext?: string,
-        relyingPartyDidOrRefreshToken?: string,
-        vendorOriginContext?: string,
-        refreshToken?: string
+        walletDid?: string,
+        relyingPartyDid?: string,
+        vendorOriginContext?: Nullish<string>,
+        refreshToken?: Nullish<string>
     ) {
         if (typeof authTokenUriOrPresentationRequest === 'string') {
             // Called with tokenUrl, walletDid, relyingPartyDid, etc.
             this.authTokenUri = authTokenUriOrPresentationRequest;
-            this.walletDid = walletDidOrVendorOriginContext as string;
-            this.relyingPartyDid = relyingPartyDidOrRefreshToken as string;
+            this.walletDid = walletDid;
+            this.relyingPartyDid = relyingPartyDid;
             this.vendorOriginContext = vendorOriginContext;
             this.refreshToken = refreshToken;
         } else {
@@ -58,8 +57,9 @@ export class VCLAuthTokenDescriptor {
             this.authTokenUri = authTokenUriOrPresentationRequest.authTokenUri;
             this.walletDid = authTokenUriOrPresentationRequest.didJwk.did;
             this.relyingPartyDid = authTokenUriOrPresentationRequest.iss;
-            this.vendorOriginContext = walletDidOrVendorOriginContext;
-            this.refreshToken = relyingPartyDidOrRefreshToken;
+            this.vendorOriginContext =
+                authTokenUriOrPresentationRequest.vendorOriginContext;
+            this.refreshToken = refreshToken;
         }
     }
 
