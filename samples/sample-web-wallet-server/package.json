@@ -1,14 +1,14 @@
 {
-    "name": "@velocitycareerlabs/vnf-wallet-nodejs-server-sample",
+    "name": "@velocitycareerlabs/sample-web-wallet-server",
     "version": "0.5.0-build",
-    "description": "VNF Wallet Nodejs Server Sample",
+    "description": "Sample VNF Wallet Nodejs Server",
     "repository": "https://github.com/velocitycareerlabs/packages",
     "scripts": {
-        "lint": "eslint . --ext .js,.ts,.tsx",
-        "lint:fix": "eslint --fix --ext .js,.ts,.tsx .",
-        "test": "jest",
+        "lint": "node_modules/.bin/eslint . --ext .js,.ts,.tsx",
+        "lint:fix": "node_modules/.bin/eslint --fix --ext .js,.ts,.tsx .",
+        "test": "node_modules/.bin/jest",
         "start": "ts-node --log-error --files src/Server.ts",
-        "start:dev": "ts-node-dev --log-error --files src/Server.ts"
+        "start:dev": "node_modules/.bin/ts-node-dev --log-error --files src/Server.ts"
     },
     "license": "Apache-2.0",
     "publishConfig": {

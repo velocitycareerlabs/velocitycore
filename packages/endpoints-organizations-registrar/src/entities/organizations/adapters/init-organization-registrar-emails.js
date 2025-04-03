@@ -254,23 +254,17 @@ Email: ${organization.profile.signatoryEmail}
 <p>Dear ${organization.profile.signatoryGivenName} ${
       organization.profile.signatoryFamilyName
     },</p>
-<br />
-<br />
 <p>As part of ongoing service enhancements for ${organization.profile.name}, ${
       caoOrganization?.profile?.name ??
       `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
     } has registered your organization to the Velocity Network to enable expanded functionality. To learn more about Velocity Network, please visit 
     <a href="https://www.velocitynetwork.foundation/" target="_blank">https://www.velocitynetwork.foundation/</a>.
 </p>
-<br />
-<br />
 <p>${
       organization.profile.name
     } has been assigned the following role(s) on Velocity Network:</p>
-<br />
 <ul>
 
-</ul>
 ${flow(
   map(
     (service) => `
@@ -287,9 +281,9 @@ ${flow(
   ),
   join('')
 )(organization.services)}
+</ul>
 <br />
 <p>Please confirm your approval of the following:</p>
-<br />
 <ul>
   <li>You are the authorized signatory for your organization.</li>
   <li>${organization.profile.adminGivenName} ${
@@ -300,7 +294,7 @@ ${flow(
   <li>${organization.profile.adminGivenName} ${
       organization.profile.adminFamilyName
     } is authorized to accept the applicable 
-  <a href="https://www.velocitynetwork.foundation/main2/participation-agreements" target="_blank">terms of participation</a> (https://www.velocitynetwork.foundation/main2/participation-agreements).</li>
+  <a href="https://www.velocitynetwork.foundation/main2/participation-agreements" target="_blank">terms of participation</a>.</li>
 </ul>
 <div style="display: inline-block">
   <a

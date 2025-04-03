@@ -1,0 +1,38 @@
+name: credentialagent
+include:
+  - ../../../eng/docker/services/shared-compose.yml
+  - ../../../eng/docker/services/fineract-compose.yml
+  - ../../../samples/sample-registrar-server/docker/compose.yml
+  - ../../../samples/sample-lib-app/docker/compose.yml
+
+services:
+  credentialagent:
+    depends_on:
+      - certgen
+      - velocity-mongo
+      - registrar
+    image: velocitycore/credentialagent:local
+    build:
+      context: ../../..
+      dockerfile: eng/docker/Dockerfile-NodeE2E
+      target: builder
+      args:
+        SERVICE: credentialagent
+    restart: on-failure
+    volumes:
+      - ../../../packages:/app/packages
+      - /app/servers/credentialagent/node_modules
+      - ..:/app/servers/credentialagent
+    command: npx nodemon --exec "cd servers/credentialagent && yarn start"
+    env_file:
+      - ../.localdev.e2e.env
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    ports:
+      - 13012:3000
+    healthcheck:
+      test: ["CMD", "wget", "http://0.0.0.0:3000/"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 10s

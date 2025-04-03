@@ -63,7 +63,7 @@ const {
 } = require('@velocitycareerlabs/sample-data');
 const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
 
-const registrarUrl = 'https://localhost:13003';
+const registrarUrl = 'https://localhost:13004';
 const fineractUrl = 'http://localhost:13008';
 const cihUrl = 'http://localhost:13002';
 const rpcUrl = 'http://localhost:18545';

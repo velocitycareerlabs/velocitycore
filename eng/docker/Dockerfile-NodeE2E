@@ -1,0 +1,27 @@
+FROM node:22.11.0-slim@sha256:4b44c32c9f3118d60977d0dde5f758f63c4f9eac8ddee4275277239ec600950f as builder
+ARG NODE_ENV=production
+ARG SERVICE
+ARG SRC_DIR=servers/$SERVICE
+WORKDIR /app
+RUN chown -R node:node /app
+
+USER root
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends  python3 make g++ \
+  && ln -sf python3 /usr/bin/python
+
+USER node
+
+COPY --chown=node:node package*.json yarn.lock lerna.json .npmrc ./
+COPY --chown=node:node packages ./packages
+COPY --chown=node:node $SRC_DIR ./servers/$SERVICE
+RUN yarn --pure-lockfile
+
+FROM node:22.11.0-slim@sha256:4b44c32c9f3118d60977d0dde5f758f63c4f9eac8ddee4275277239ec600950f
+WORKDIR /app
+COPY --chown=node:node --from=builder /app .
+WORKDIR "/app/servers/$SERVICE"
+
+EXPOSE 3000
+ENTRYPOINT ["yarn", "start"]
