@@ -1,0 +1,96 @@
+/**
+ * Created by Michael Avoyan on 30/03/2025.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+import { Dictionary, Nullish } from '../VCLTypes';
+import VCLPresentationRequest from './VCLPresentationRequest';
+
+// eslint-disable-next-line no-shadow
+export enum GrantType {
+    AuthorizationCode = 'authorization_code',
+    RefreshToken = 'refresh_token',
+}
+
+export class VCLAuthTokenDescriptor {
+    private readonly authTokenUri: string;
+
+    private readonly walletDid?: string;
+
+    private readonly relyingPartyDid?: string;
+
+    private readonly vendorOriginContext?: Nullish<string>;
+
+    private readonly refreshToken?: Nullish<string>;
+
+    // Overload signatures:
+    constructor(
+        authTokenUri: string,
+        walletDid: string,
+        relyingPartyDid: string,
+        vendorOriginContext: Nullish<string>,
+        refreshToken: Nullish<string>
+    );
+
+    constructor(
+        presentationRequest: VCLPresentationRequest,
+        refreshToken?: Nullish<string>
+    );
+
+    constructor(
+        authTokenUriOrPresentationRequest: string | VCLPresentationRequest,
+        walletDid?: string,
+        relyingPartyDid?: string,
+        vendorOriginContext?: Nullish<string>,
+        refreshToken?: Nullish<string>
+    ) {
+        if (typeof authTokenUriOrPresentationRequest === 'string') {
+            // Called with tokenUrl, walletDid, relyingPartyDid, etc.
+            this.authTokenUri = authTokenUriOrPresentationRequest;
+            this.walletDid = walletDid;
+            this.relyingPartyDid = relyingPartyDid;
+            this.vendorOriginContext = vendorOriginContext;
+            this.refreshToken = refreshToken;
+        } else {
+            // Called with a VCLPresentationRequest.
+            this.authTokenUri = authTokenUriOrPresentationRequest.authTokenUri;
+            this.walletDid = authTokenUriOrPresentationRequest.didJwk.did;
+            this.relyingPartyDid = authTokenUriOrPresentationRequest.iss;
+            this.vendorOriginContext =
+                authTokenUriOrPresentationRequest.vendorOriginContext;
+            this.refreshToken = refreshToken;
+        }
+    }
+
+    generateRequestBody(): Dictionary<any> {
+        return this.refreshToken
+            ? {
+                  [VCLAuthTokenDescriptor.KeyGrantType]:
+                      GrantType.RefreshToken.toString(),
+                  [VCLAuthTokenDescriptor.KeyClientId]: this.walletDid,
+                  [GrantType.RefreshToken]: this.refreshToken,
+                  [VCLAuthTokenDescriptor.KeyAudience]: this.relyingPartyDid,
+              }
+            : {
+                  [VCLAuthTokenDescriptor.KeyGrantType]:
+                      GrantType.AuthorizationCode.toString(),
+                  [VCLAuthTokenDescriptor.KeyClientId]: this.walletDid,
+                  [GrantType.AuthorizationCode.toString()]:
+                      this.vendorOriginContext,
+                  [VCLAuthTokenDescriptor.KeyAudience]: this.relyingPartyDid,
+                  [VCLAuthTokenDescriptor.KeyTokenType]:
+                      VCLAuthTokenDescriptor.KeyTokenTypeValue,
+              };
+    }
+
+    static readonly KeyClientId: 'client_id';
+
+    static readonly KeyAudience: 'audience';
+
+    static readonly KeyGrantType: 'grant_type';
+
+    static readonly KeyTokenType: 'token_type';
+
+    static readonly KeyTokenTypeValue: 'Bearer';
+}

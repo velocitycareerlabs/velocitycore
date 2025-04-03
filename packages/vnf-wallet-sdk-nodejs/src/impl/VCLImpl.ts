@@ -1,3 +1,10 @@
+/**
+ * Created by Michael Avoyan on 30/03/2025.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import fs from 'fs';
 import path from 'path';
 import VCL from '../api/VCL';
@@ -50,6 +57,9 @@ import CredentialTypesUIFormSchemaUseCase from './domain/usecases/CredentialType
 import VCLDidJwkDescriptor from '../api/entities/VCLDidJwkDescriptor';
 import KeyServiceUseCase from './domain/usecases/KeyServiceUseCase';
 import { Nullish } from '../api/VCLTypes';
+import { VCLAuthTokenDescriptor } from '../api/entities/VCLAuthTokenDescriptor';
+import { VCLAuthToken } from '../api/entities/VCLAuthToken';
+import AuthTokenUseCase from './domain/usecases/AuthTokenUseCase';
 
 export class VCLImpl implements VCL {
     static readonly ModelsToInitializeAmount = 3;
@@ -83,6 +93,8 @@ export class VCLImpl implements VCL {
     exchangeProgressUseCase!: ExchangeProgressUseCase;
 
     organizationsUseCase!: OrganizationsUseCase;
+
+    authTokenUseCase!: AuthTokenUseCase;
 
     credentialTypesUIFormSchemaUseCase!: CredentialTypesUIFormSchemaUseCase;
 
@@ -215,6 +227,8 @@ export class VCLImpl implements VCL {
 
         this.organizationsUseCase =
             VclBlocksProvider.provideOrganizationsUseCase();
+
+        this.authTokenUseCase = VclBlocksProvider.provideAuthTokenUseCase();
 
         this.credentialTypesUIFormSchemaUseCase =
             VclBlocksProvider.provideCredentialTypesUIFormSchemaUseCase();
@@ -373,6 +387,12 @@ export class VCLImpl implements VCL {
             sessionToken
         );
     }
+
+    getAuthToken = async (
+        authTokenDescriptor: VCLAuthTokenDescriptor
+    ): Promise<VCLAuthToken> => {
+        return this.authTokenUseCase.getAuthToken(authTokenDescriptor);
+    };
 
     finalizeOffers = async (
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,

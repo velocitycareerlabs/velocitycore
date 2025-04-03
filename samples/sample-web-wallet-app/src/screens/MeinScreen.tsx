@@ -30,6 +30,7 @@ import { Dictionary } from '../Types';
 import { getApprovedRejectedOfferIdsMock } from '../utils/Utils';
 import Environment from '../Environment';
 import { CurrentEnvironment } from '../GlobalConfig';
+import { getAuthToken } from '../repositories/AuthTokenRepository';
 
 const environment = CurrentEnvironment;
 
@@ -90,17 +91,26 @@ const onGetPresentationRequest = () => {
   getPresentationRequest({ value: deepLinkValue }, didJwk)
     .then((presentationRequest) => {
       console.log('presentation request: ', presentationRequest);
-      onSubmitPresentation(presentationRequest);
+
+      if (presentationRequest.feed) {
+        onSubmitPresentationUsingAuthToken(presentationRequest);
+      } else {
+        onSubmitPresentation(presentationRequest);
+      }
     })
     .catch((error) => {
       console.log(error);
     });
 };
 
-const onSubmitPresentation = (presentationRequest: Dictionary<any>) => {
+const onSubmitPresentation = (
+  presentationRequest: Dictionary<any>,
+  authToken?: Dictionary<any>
+) => {
   submitPresentation({
     verifiableCredentials: Constants.getIdentificationList(environment),
     presentationRequest,
+    authToken,
   })
     .then((submissionResult) => {
       console.log('submission result: ', submissionResult);
@@ -199,6 +209,23 @@ const onFinalizeOffers = (
   finalizeOffers(finalizeOffersDescriptor, offers.sessionToken)
     .then((credentials) => {
       console.log('credentials: ', credentials);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const onSubmitPresentationUsingAuthToken = (
+  presentationRequest: Dictionary<any>
+) => {
+  const authTokenDescriptor = {
+    presentationRequest,
+    vendorOriginContext: presentationRequest.vendorOriginContext,
+  };
+  getAuthToken(authTokenDescriptor)
+    .then((authToken) => {
+      console.log('auth token: ', authToken);
+      onSubmitPresentation(presentationRequest, authToken);
     })
     .catch((error) => {
       console.log(error);

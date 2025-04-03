@@ -3,11 +3,21 @@ import { Dictionary, Nullish } from '../VCLTypes';
 import VCLLog from '../../impl/utils/VCLLog';
 
 export default class VCLJwt {
-    public encodedJwt: Nullish<string>;
+    public encodedJwt: string;
+
+    public header: Dictionary<any>;
+
+    public payload: Dictionary<any>;
+
+    public signature: string;
 
     constructor(public signedJwt: SignedJWT) {
         this.signedJwt = signedJwt;
         this.encodedJwt = signedJwt.serialize();
+
+        this.header = this.getHeader();
+        this.payload = this.getPayload();
+        this.signature = this.getSignature();
     }
 
     static fromEncodedJwt(encodedJwt: string): VCLJwt {
@@ -35,19 +45,19 @@ export default class VCLJwt {
         return this.header.jwk || {};
     }
 
-    get header(): Dictionary<any> {
+    getHeader(): Dictionary<any> {
         const buff = Buffer.from(this.signedJwt.header, 'base64');
         const text = buff.toString('utf-8');
         return JSON.parse(text || '{}');
     }
 
-    get payload(): Dictionary<any> {
+    getPayload(): Dictionary<any> {
         const buff = Buffer.from(this.signedJwt.payload, 'base64');
         const text = buff.toString('utf-8');
         return JSON.parse(text || '{}');
     }
 
-    get signature(): string {
+    getSignature(): string {
         return this.signedJwt.signature;
     }
 
