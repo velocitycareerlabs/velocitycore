@@ -77,8 +77,8 @@ import {
     LogFn,
 } from './api/entities/initialization/VCLLogService';
 import type { Nullish, Dictionary } from './api/VCLTypes';
-import { VCLAuthToken } from './api/entities/VCLAuthToken';
-import { VCLAuthTokenDescriptor } from './api/entities/VCLAuthTokenDescriptor';
+import VCLAuthToken from './api/entities/VCLAuthToken';
+import VCLAuthTokenDescriptor from './api/entities/VCLAuthTokenDescriptor';
 
 export type {
     VCL,

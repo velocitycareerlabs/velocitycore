@@ -57,8 +57,8 @@ import CredentialTypesUIFormSchemaUseCase from './domain/usecases/CredentialType
 import VCLDidJwkDescriptor from '../api/entities/VCLDidJwkDescriptor';
 import KeyServiceUseCase from './domain/usecases/KeyServiceUseCase';
 import { Nullish } from '../api/VCLTypes';
-import { VCLAuthTokenDescriptor } from '../api/entities/VCLAuthTokenDescriptor';
-import { VCLAuthToken } from '../api/entities/VCLAuthToken';
+import VCLAuthTokenDescriptor from '../api/entities/VCLAuthTokenDescriptor';
+import VCLAuthToken from '../api/entities/VCLAuthToken';
 import AuthTokenUseCase from './domain/usecases/AuthTokenUseCase';
 
 export class VCLImpl implements VCL {

@@ -34,8 +34,8 @@ import VCLDidJwkDescriptor from './entities/VCLDidJwkDescriptor';
 import VCLCountries from './entities/VCLCountries';
 import VCLCredentialTypes from './entities/VCLCredentialTypes';
 import VCLCredentialTypeSchemas from './entities/VCLCredentialTypeSchemas';
-import { VCLAuthTokenDescriptor } from './entities/VCLAuthTokenDescriptor';
-import { VCLAuthToken } from './entities/VCLAuthToken';
+import VCLAuthTokenDescriptor from './entities/VCLAuthTokenDescriptor';
+import VCLAuthToken from './entities/VCLAuthToken';
 
 export default interface VCL {
     initialize(

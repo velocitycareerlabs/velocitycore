@@ -4,7 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Dictionary, Nullish } from '../VCLTypes';
+import { Dictionary } from '../VCLTypes';
 import VCLPresentationRequest from './VCLPresentationRequest';
 
 // eslint-disable-next-line no-shadow
@@ -13,52 +13,40 @@ export enum GrantType {
     RefreshToken = 'refresh_token',
 }
 
-export class VCLAuthTokenDescriptor {
+export default class VCLAuthTokenDescriptor {
     public readonly authTokenUri: string;
 
-    public readonly walletDid?: string;
+    public readonly walletDid: string;
 
-    public readonly relyingPartyDid?: string;
+    public readonly relyingPartyDid: string;
 
-    public readonly vendorOriginContext?: Nullish<string>;
+    public readonly vendorOriginContext: string;
 
-    public readonly refreshToken?: Nullish<string>;
-
-    // Overload signatures:
-    constructor(
-        authTokenUri: string,
-        walletDid: string,
-        relyingPartyDid: string,
-        vendorOriginContext: Nullish<string>,
-        refreshToken: Nullish<string>
-    );
-
-    constructor(
-        presentationRequest: VCLPresentationRequest,
-        refreshToken?: Nullish<string>
-    );
+    public readonly refreshToken: string;
 
     constructor(
         authTokenUriOrPresentationRequest: string | VCLPresentationRequest,
-        walletDid?: string,
-        relyingPartyDid?: string,
-        vendorOriginContext?: Nullish<string>,
-        refreshToken?: Nullish<string>
+        walletDid: string,
+        relyingPartyDid: string,
+        vendorOriginContext: string,
+        refreshToken: string
     ) {
-        if (typeof authTokenUriOrPresentationRequest === 'string') {
-            // Called with tokenUrl, walletDid, relyingPartyDid, etc.
-            this.authTokenUri = authTokenUriOrPresentationRequest;
-            this.walletDid = walletDid;
-            this.relyingPartyDid = relyingPartyDid;
-            this.vendorOriginContext = vendorOriginContext;
-            this.refreshToken = refreshToken;
-        } else {
+        if (
+            authTokenUriOrPresentationRequest instanceof VCLPresentationRequest
+        ) {
             // Called with a VCLPresentationRequest.
             this.authTokenUri = authTokenUriOrPresentationRequest.authTokenUri;
             this.walletDid = authTokenUriOrPresentationRequest.didJwk.did;
             this.relyingPartyDid = authTokenUriOrPresentationRequest.iss;
             this.vendorOriginContext =
-                authTokenUriOrPresentationRequest.vendorOriginContext;
+                authTokenUriOrPresentationRequest.vendorOriginContext || '';
+            this.refreshToken = refreshToken;
+        } else {
+            // Called with tokenUrl, walletDid, relyingPartyDid, etc.
+            this.authTokenUri = authTokenUriOrPresentationRequest;
+            this.walletDid = walletDid;
+            this.relyingPartyDid = relyingPartyDid;
+            this.vendorOriginContext = vendorOriginContext;
             this.refreshToken = refreshToken;
         }
     }
@@ -84,13 +72,13 @@ export class VCLAuthTokenDescriptor {
               };
     }
 
-    static readonly KeyClientId: 'client_id';
+    static readonly KeyClientId = 'client_id';
 
-    static readonly KeyAudience: 'audience';
+    static readonly KeyAudience = 'audience';
 
-    static readonly KeyGrantType: 'grant_type';
+    static readonly KeyGrantType = 'grant_type';
 
-    static readonly KeyTokenType: 'token_type';
+    static readonly KeyTokenType = 'token_type';
 
-    static readonly KeyTokenTypeValue: 'Bearer';
+    static readonly KeyTokenTypeValue = 'Bearer';
 }

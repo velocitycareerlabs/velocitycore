@@ -8,7 +8,7 @@
 import VCLToken from './VCLToken';
 import { Dictionary } from '../VCLTypes';
 
-export class VCLAuthToken {
+export default class VCLAuthToken {
     private accessToken: VCLToken;
 
     private refreshToken: VCLToken;

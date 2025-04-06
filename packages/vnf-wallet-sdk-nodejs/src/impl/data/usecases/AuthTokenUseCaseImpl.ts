@@ -4,8 +4,8 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { VCLAuthToken } from '../../../api/entities/VCLAuthToken';
-import { VCLAuthTokenDescriptor } from '../../../api/entities/VCLAuthTokenDescriptor';
+import VCLAuthToken from '../../../api/entities/VCLAuthToken';
+import VCLAuthTokenDescriptor from '../../../api/entities/VCLAuthTokenDescriptor';
 import AuthTokenUseCase from '../../domain/usecases/AuthTokenUseCase';
 import VCLError from '../../../api/entities/error/VCLError';
 import AuthTokenRepository from '../../domain/repositories/AuthTokenRepository';
