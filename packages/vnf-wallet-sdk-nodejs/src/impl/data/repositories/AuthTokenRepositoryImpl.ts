@@ -4,8 +4,8 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import VCLAuthToken from 'src/api/entities/VCLAuthToken';
-import VCLAuthTokenDescriptor from 'src/api/entities/VCLAuthTokenDescriptor';
+import VCLAuthToken from '../../../api/entities/VCLAuthToken';
+import VCLAuthTokenDescriptor from '../../../api/entities/VCLAuthTokenDescriptor';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import AuthTokenRepository from '../../domain/repositories/AuthTokenRepository';
 import VCLLog from '../../utils/VCLLog';

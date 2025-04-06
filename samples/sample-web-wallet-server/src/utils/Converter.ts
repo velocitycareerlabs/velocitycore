@@ -218,7 +218,8 @@ export const authTokenDescriptorFrom = (
       new VCLDeepLink(json.presentationRequest.deepLink.value),
       null,
       didJwkFrom(json.presentationRequest.didJwk.payload)
-    )
+    ),
+    json.refreshToken
   );
 };
 
