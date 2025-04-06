@@ -5,7 +5,7 @@ export default class NetworkServiceSuccess implements NetworkService {
     constructor(private readonly validResponse: any) {}
 
     async sendRequestRaw(): Promise<Response> {
-        return new Response(this.validResponse, 0);
+        return new Response(this.validResponse, 200);
     }
 
     async sendRequest(): Promise<Response> {
