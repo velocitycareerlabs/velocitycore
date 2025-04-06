@@ -15,9 +15,6 @@
  *
  */
 
-const { flow, map, join } = require('lodash/fp');
-const { ServiceTypeLabels } = require('../../src/entities');
-
 const sendServicesActivatedEmailMatcher = () => ({
   Destination: {
     ToAddresses: ['0@localhost.test', '1@localhost.test'],
