@@ -75,7 +75,7 @@ describe('VCLAuthTokenDescriptor', () => {
                 refreshToken,
                 walletDid,
                 relyingPartyDid,
-                ''
+                null
             );
             const expectedResult = {
                 [VCLAuthTokenDescriptor.KeyGrantType]:
@@ -116,19 +116,17 @@ describe('VCLAuthTokenDescriptor', () => {
         it('should generate request body for refreshToken flow when both vendorOriginContext and refreshToken are provided', () => {
             const descriptor = new VCLAuthTokenDescriptor(
                 authTokenUri,
-                '',
+                refreshToken,
                 walletDid,
                 relyingPartyDid,
                 vendorOriginContext
             );
             const expectedResult = {
                 [VCLAuthTokenDescriptor.KeyGrantType]:
-                    GrantType.AuthorizationCode.toString(),
+                    GrantType.RefreshToken.toString(),
                 [VCLAuthTokenDescriptor.KeyClientId]: walletDid,
-                [GrantType.AuthorizationCode.toString()]: vendorOriginContext,
+                [GrantType.RefreshToken]: refreshToken,
                 [VCLAuthTokenDescriptor.KeyAudience]: relyingPartyDid,
-                [VCLAuthTokenDescriptor.KeyTokenType]:
-                    VCLAuthTokenDescriptor.KeyTokenTypeValue,
             };
 
             const result = descriptor.generateRequestBody();
