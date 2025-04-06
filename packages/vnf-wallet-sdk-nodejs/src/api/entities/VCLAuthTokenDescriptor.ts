@@ -14,15 +14,15 @@ export enum GrantType {
 }
 
 export class VCLAuthTokenDescriptor {
-    private readonly authTokenUri: string;
+    public readonly authTokenUri: string;
 
-    private readonly walletDid?: string;
+    public readonly walletDid?: string;
 
-    private readonly relyingPartyDid?: string;
+    public readonly relyingPartyDid?: string;
 
-    private readonly vendorOriginContext?: Nullish<string>;
+    public readonly vendorOriginContext?: Nullish<string>;
 
-    private readonly refreshToken?: Nullish<string>;
+    public readonly refreshToken?: Nullish<string>;
 
     // Overload signatures:
     constructor(

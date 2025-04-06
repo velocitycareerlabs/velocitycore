@@ -9,6 +9,9 @@ import { VCLAuthTokenDescriptor } from 'src/api/entities/VCLAuthTokenDescriptor'
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import AuthTokenRepository from '../../domain/repositories/AuthTokenRepository';
 import VCLLog from '../../utils/VCLLog';
+import Request, { HttpMethod } from '../infrastructure/network/Request';
+import { HeaderKeys, HeaderValues } from './Urls';
+import VCLError from '../../../api/entities/error/VCLError';
 
 export default class AuthTokenRepositoryImpl implements AuthTokenRepository {
     constructor(private readonly networkService: NetworkService) {}
@@ -16,7 +19,26 @@ export default class AuthTokenRepositoryImpl implements AuthTokenRepository {
     async getAuthToken(
         authTokenDescriptor: VCLAuthTokenDescriptor
     ): Promise<VCLAuthToken> {
-        VCLLog.info('Getting auth token', authTokenDescriptor);
-        throw new Error('Method not implemented.');
+        const { authTokenUri } = authTokenDescriptor;
+        if (!authTokenUri) {
+            throw new VCLError('authTokenDescriptor.authTokenUri = null');
+        }
+        try {
+            const authTokenResponse = await this.networkService.sendRequest({
+                endpoint: authTokenUri,
+                contentType: Request.ContentTypeApplicationJson,
+                method: HttpMethod.POST,
+                headers: {
+                    [HeaderKeys.XVnfProtocolVersion]:
+                        HeaderValues.XVnfProtocolVersion,
+                },
+                useCaches: true,
+                body: authTokenDescriptor.generateRequestBody(),
+            });
+            return new VCLAuthToken(authTokenResponse.payload);
+        } catch (e) {
+            VCLLog.error('AuthTokenRepositoryImpl.getAuthToken', e);
+            throw e;
+        }
     }
 }
