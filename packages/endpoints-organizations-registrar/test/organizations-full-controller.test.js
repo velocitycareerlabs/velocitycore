@@ -3643,6 +3643,7 @@ describe('Organizations Full Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             code: invitationCode,
+            organizationId: new ObjectId(caoOrganization._id),
             inviterDid: caoOrganization.didDoc.id,
           });
 
@@ -3675,6 +3676,7 @@ describe('Organizations Full Test Suite', () => {
               inviterDid: caoOrganization.didDoc.id,
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
+              organizationId: caoOrganization._id,
               updatedAt: expect.any(Date),
               createdAt: expect.any(Date),
             })
@@ -5849,6 +5851,9 @@ const expectedOrganization = (did, profile, services = [], overrides = {}) => {
       signedCredential: expect.any(String),
     },
     verifiableCredentialJwt: expect.any(String),
+    invitationId: overrides.invitation?._id
+      ? new ObjectId(overrides.invitation._id)
+      : undefined,
     updatedAt: expect.any(Date),
     createdAt: expect.any(Date),
     ...omit(['authClients', 'profile', 'invitation'], overrides),

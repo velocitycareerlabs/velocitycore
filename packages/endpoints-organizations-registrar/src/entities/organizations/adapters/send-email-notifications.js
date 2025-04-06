@@ -162,14 +162,10 @@ const initSendEmailNotifications = (initCtx) => {
     const invitingOrganization = invitation?.organizationId
       ? await context.repos.organizations.findById(invitation.organizationId)
       : null;
-    const caoServiceIds = extractCaoServiceRefs(organization.services);
-    const caos = await context.repos.organizations.findCaos(caoServiceIds);
-    const caoOrganization = first(caos);
     await initCtx.sendEmail(
       emailToSignatoryForOrganizationApproval({
         organization,
         invitingOrganization,
-        caoOrganization,
         authCode,
         isReminder,
       })

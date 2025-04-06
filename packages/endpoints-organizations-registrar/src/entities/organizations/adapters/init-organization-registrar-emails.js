@@ -251,19 +251,19 @@ Email: ${organization.profile.signatoryEmail}
     }),
     emailToSignatoryForOrganizationApproval: ({
       organization,
-      caoOrganization,
+      invitingOrganization,
       authCode,
       isReminder = false,
     }) => ({
       subject: `${isReminder ? 'Reminder: ' : ''}${
-        caoOrganization?.profile?.name ??
+        invitingOrganization?.profile?.name ??
         `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
       } is requesting your approval to register ${
         organization.profile.name
       } on the Velocity Network`,
       message: emailTemplateSignatoryApproval({
         organization,
-        caoOrganization,
+        invitingOrganization,
         authCode,
         ServiceTypeLabels,
         config,

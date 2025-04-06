@@ -31,6 +31,7 @@ const { errorResponseMatcher } = require('@velocitycareerlabs/tests-helpers');
 const buildFastify = require('./helpers/build-fastify');
 const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const initSignatoryStatusFactory = require('../src/entities/signatories/factories/signatory-status-factory');
+const initInvitationFactory = require('../src/entities/invitations/factories/invitations-factory');
 const {
   expectedSignatoryApprovedEmail,
   expectedSignatoryRejectedEmail,
@@ -66,6 +67,7 @@ describe('signatoriesController', () => {
   let testContext;
   let fastify;
   let persistOrganization;
+  let persistInvitation;
   let persistSignatoryStatus;
   let signatoryStatusRepo;
   let organizationsRepo;
@@ -76,6 +78,7 @@ describe('signatoriesController', () => {
     await fastify.ready();
     ({ persistOrganization } = initOrganizationFactory(fastify));
     ({ persistSignatoryStatus } = initSignatoryStatusFactory(fastify));
+    ({ persistInvitation } = initInvitationFactory(fastify));
 
     signatoryStatusRepo = signatoryStatusPlugin(fastify)({
       log: fastify.log,
@@ -100,6 +103,7 @@ describe('signatoriesController', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     await mongoDb().collection('organizations').deleteMany({});
+    await mongoDb().collection('invitations').deleteMany({});
     await mongoDb().collection('signatoryStatus').deleteMany({});
   });
 
@@ -433,13 +437,16 @@ describe('signatoriesController', () => {
     });
 
     it('should send emails if there are active signatory reminders', async () => {
-      const caoOrganization = await persistOrganization();
+      const invitingOrganization = await persistOrganization();
+      const invitation = await persistInvitation({
+        organization: invitingOrganization,
+      });
       const organization1 = await persistOrganization({
         service: [
           {
             id: '#iss-1',
             type: ServiceTypes.HolderAppProviderType,
-            serviceEndpoint: `${caoOrganization.didDoc.id}#cao-1`,
+            serviceEndpoint: `${invitingOrganization.didDoc.id}#cao-1`,
           },
         ],
       });
@@ -448,7 +455,7 @@ describe('signatoriesController', () => {
           {
             id: '#iss-1',
             type: ServiceTypes.HolderAppProviderType,
-            serviceEndpoint: `${caoOrganization.didDoc.id}#cao-1`,
+            serviceEndpoint: `${invitingOrganization.didDoc.id}#cao-1`,
           },
         ],
       });
@@ -477,8 +484,8 @@ describe('signatoriesController', () => {
       );
 
       expect(mockSendEmail.mock.calls).toEqual([
-        [expectedSignatoryReminderEmail(organization2, caoOrganization)],
-        [expectedSignatoryReminderEmail(organization1, caoOrganization)],
+        [expectedSignatoryReminderEmail(organization2, invitingOrganization)],
+        [expectedSignatoryReminderEmail(organization1, invitingOrganization)],
       ]);
 
       const signatoryReminderDb = await signatoryStatusRepo.findOne({
