@@ -438,7 +438,7 @@ describe('signatoriesController', () => {
 
     it('should send emails if there are active signatory reminders', async () => {
       const invitingOrganization = await persistOrganization();
-      const invitation = await persistInvitation({
+      await persistInvitation({
         organization: invitingOrganization,
       });
       const organization1 = await persistOrganization({

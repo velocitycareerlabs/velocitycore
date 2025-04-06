@@ -18,7 +18,6 @@
 const { omit } = require('lodash/fp');
 const { register } = require('@spencejs/spence-factories');
 const { addWeeks } = require('date-fns/fp');
-const { ObjectId } = require('mongodb');
 const invitationsRepoPlugin = require('../repo');
 
 module.exports = (app) =>
