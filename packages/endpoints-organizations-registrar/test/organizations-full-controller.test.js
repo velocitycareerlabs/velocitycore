@@ -3625,7 +3625,7 @@ describe('Organizations Full Test Suite', () => {
 
         it('Should create organization without services and accept invitation', async () => {
           const profile = omit(['type'], orgProfile);
-          const caoOrganization = await persistOrganization({
+          const invitingOrganization = await persistOrganization({
             name: 'CAOTEST',
             service: [
               {
@@ -3636,15 +3636,15 @@ describe('Organizations Full Test Suite', () => {
             ],
           });
           await persistGroup({
-            groupId: caoOrganization.didDoc.id,
-            organization: caoOrganization,
+            groupId: invitingOrganization.didDoc.id,
+            organization: invitingOrganization,
             clientAdminIds: [nanoid()],
           });
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             code: invitationCode,
-            organizationId: new ObjectId(caoOrganization._id),
-            inviterDid: caoOrganization.didDoc.id,
+            organizationId: new ObjectId(invitingOrganization._id),
+            inviterDid: invitingOrganization.didDoc.id,
           });
 
           const payload = {
@@ -3673,10 +3673,10 @@ describe('Organizations Full Test Suite', () => {
               expiresAt: expect.any(Date),
               code: invitationCode,
               inviteeEmail: 'foo@example.com',
-              inviterDid: caoOrganization.didDoc.id,
+              inviterDid: invitingOrganization.didDoc.id,
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
-              organizationId: caoOrganization._id,
+              organizationId: invitingOrganization._id,
               updatedAt: expect.any(Date),
               createdAt: expect.any(Date),
             })
@@ -3687,7 +3687,7 @@ describe('Organizations Full Test Suite', () => {
 
           expect(mockSendEmail.mock.calls).toEqual([
             [expectedSupportEmail()],
-            [expectedSignatoryApprovalEmail(null, { profile })],
+            [expectedSignatoryApprovalEmail(invitingOrganization, { profile })],
           ]);
         });
 
@@ -3710,6 +3710,7 @@ describe('Organizations Full Test Suite', () => {
           });
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
+            organizationId: caoOrganization._id,
             code: invitationCode,
             inviterDid: caoOrganization.didDoc.id,
           });
@@ -3753,6 +3754,7 @@ describe('Organizations Full Test Suite', () => {
               code: invitationCode,
               inviteeEmail: 'foo@example.com',
               inviterDid: caoOrganization.didDoc.id,
+              organizationId: caoOrganization._id,
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
               updatedAt: expect.any(Date),
@@ -3785,28 +3787,15 @@ describe('Organizations Full Test Suite', () => {
           expect(mockSendEmail.mock.calls).toEqual(
             expect.arrayContaining([
               [sendServicesActivatedEmailMatcher(orgFromDb)],
-            ])
-          );
-          expect(mockSendEmail.mock.calls).toEqual(
-            expect.arrayContaining([
               [sendServicesActivatedEmailToCAOsMatcher(orgFromDb)],
-            ])
-          );
-
-          expect(mockSendEmail.mock.calls).toEqual(
-            expect.arrayContaining([
               [sendServicesActivatedEmailToCAOsMatcher(orgFromDb)],
+              [expectedInvitationAcceptanceEmail],
+              [expectedSupportEmail()],
+              [expectedSignatoryApprovalEmail(caoOrganization, orgFromDb)],
             ])
           );
 
-          expect(mockSendEmail.mock.calls).toEqual(
-            expect.arrayContaining([[expectedInvitationAcceptanceEmail]])
-          );
-
-          expect(mockSendEmail.mock.calls).toEqual(
-            expect.arrayContaining([[expectedSupportEmail()]])
-          );
-          expect(mockSendEmail.mock.calls[3]).toEqual([
+          expect(mockSendEmail.mock.calls[5]).toEqual([
             expectedSignatoryApprovalEmail(caoOrganization, orgFromDb),
           ]);
         });

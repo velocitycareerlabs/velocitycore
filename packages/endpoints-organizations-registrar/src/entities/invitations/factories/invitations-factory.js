@@ -30,8 +30,8 @@ module.exports = (app) =>
       const inviteeService = overridesResult.organization?.didDoc.service;
       const inviteeProfile = overridesResult.organization?.profile;
       const inviterDid = overridesResult.organization?.didDoc.id;
-      const organizationId = overridesResult.organization
-        ? new ObjectId(overridesResult.organization._id)
+      const organizationId = overridesResult.organizationId
+        ? new ObjectId(overridesResult.organizationId)
         : undefined;
       return {
         inviteeEmail: 'foo@example.com',
@@ -45,7 +45,7 @@ module.exports = (app) =>
         createdAt: new Date(),
         updatedAt: new Date(),
         createdBy: 'sub-123',
-        ...omit(['organization'], overridesResult),
+        ...omit(['organizationId'], overridesResult),
       };
     }
   );
