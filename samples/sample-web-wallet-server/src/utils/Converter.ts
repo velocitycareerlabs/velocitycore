@@ -9,7 +9,6 @@ import {
   Dictionary,
   issuingTypeFromString,
   Nullish,
-  VCLAuthToken,
   VCLAuthTokenDescriptor,
   VCLCredentialManifest,
   VCLCredentialManifestDescriptor,
