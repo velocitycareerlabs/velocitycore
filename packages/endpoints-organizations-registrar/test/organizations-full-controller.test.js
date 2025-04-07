@@ -3785,13 +3785,30 @@ describe('Organizations Full Test Suite', () => {
           expect(mockSendEmail.mock.calls).toEqual(
             expect.arrayContaining([
               [sendServicesActivatedEmailMatcher(orgFromDb)],
-              [sendServicesActivatedEmailToCAOsMatcher(orgFromDb)],
-              [sendServicesActivatedEmailToCAOsMatcher(orgFromDb)],
-              [expectedInvitationAcceptanceEmail],
-              [expectedSupportEmail()],
-              [expectedSignatoryApprovalEmail(caoOrganization, orgFromDb)],
             ])
           );
+          expect(mockSendEmail.mock.calls).toEqual(
+            expect.arrayContaining([
+              [sendServicesActivatedEmailToCAOsMatcher(orgFromDb)],
+            ])
+          );
+
+          expect(mockSendEmail.mock.calls).toEqual(
+            expect.arrayContaining([
+              [sendServicesActivatedEmailToCAOsMatcher(orgFromDb)],
+            ])
+          );
+
+          expect(mockSendEmail.mock.calls).toEqual(
+            expect.arrayContaining([[expectedInvitationAcceptanceEmail]])
+          );
+
+          expect(mockSendEmail.mock.calls).toEqual(
+            expect.arrayContaining([[expectedSupportEmail()]])
+          );
+          expect(mockSendEmail.mock.calls[3]).toEqual([
+            expectedSignatoryApprovalEmail(caoOrganization, orgFromDb),
+          ]);
         });
 
         it('should create organization with services and accept invitation and send email with two services', async () => {
