@@ -162,7 +162,7 @@ const initSendEmailNotifications = (initCtx) => {
     const invitation = organization.invitationId
       ? await context.repos.invitations.findById(organization.invitationId)
       : null;
-    const invitingOrganization = invitation
+    const invitingOrganization = invitation?.organizationId
       ? await context.repos.organizations.findById(invitation.organizationId)
       : null;
     await initCtx.sendEmail(

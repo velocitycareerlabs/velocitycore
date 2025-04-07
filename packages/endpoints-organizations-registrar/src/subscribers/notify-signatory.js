@@ -41,7 +41,6 @@ const notifySignatory = async (fastify) => {
         await sendEmailToSignatoryForOrganizationApproval(
           {
             organization,
-            invitation,
             authCode,
           },
           context
