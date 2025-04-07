@@ -6,18 +6,26 @@
  */
 
 import VCLToken from './VCLToken';
-import { Dictionary } from '../VCLTypes';
+import { Dictionary, Nullish } from '../VCLTypes';
 
 export default class VCLAuthToken {
-    private accessToken: VCLToken;
+    public accessToken: VCLToken;
 
-    private refreshToken: VCLToken;
+    public refreshToken: VCLToken;
 
-    private tokenType: string;
+    public tokenType: string;
 
-    constructor(private readonly payload: Dictionary<any>) {
+    constructor(
+        public readonly payload: Dictionary<any>,
+        public readonly authTokenUri?: string,
+        public readonly walletDid?: Nullish<string>,
+        public readonly relyingPartyDid?: Nullish<string>
+    ) {
         this.accessToken = new VCLToken(payload.access_token);
         this.refreshToken = new VCLToken(payload.refresh_token);
         this.tokenType = payload.token_type;
+        this.authTokenUri = authTokenUri || payload.authTokenUri;
+        this.walletDid = walletDid || payload.walletDid;
+        this.relyingPartyDid = relyingPartyDid || payload.relyingPartyDid;
     }
 }

@@ -7,6 +7,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { HttpStatusCode } from 'axios';
 import VCL from '../api/VCL';
 import VCLCountries from '../api/entities/VCLCountries';
 import VCLCredentialTypes from '../api/entities/VCLCredentialTypes';
@@ -280,13 +281,34 @@ export class VCLImpl implements VCL {
     };
 
     submitPresentation = async (
-        presentationSubmission: VCLPresentationSubmission
+        presentationSubmission: VCLPresentationSubmission,
+        authToken: Nullish<VCLAuthToken>
     ) => {
+        let authTokenRefreshAmount = 0;
         try {
             return await this.presentationSubmissionUseCase.submit(
-                presentationSubmission
+                presentationSubmission,
+                authToken
             );
         } catch (error: any) {
+            if (
+                error.statusCode === HttpStatusCode.Unauthorized &&
+                authTokenRefreshAmount === 0
+            ) {
+                const newAuthToken = await this.getAuthToken(
+                    new VCLAuthTokenDescriptor(
+                        authToken?.authTokenUri || '',
+                        authToken?.refreshToken.value,
+                        authToken?.walletDid,
+                        authToken?.relyingPartyDid
+                    )
+                );
+                authTokenRefreshAmount += 1;
+                return this.presentationSubmissionUseCase.submit(
+                    presentationSubmission,
+                    newAuthToken
+                );
+            }
             logError('submit presentation', error);
             throw error;
         }

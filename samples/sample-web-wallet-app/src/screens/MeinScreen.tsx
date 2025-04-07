@@ -31,6 +31,7 @@ import { getApprovedRejectedOfferIdsMock } from '../utils/Utils';
 import Environment from '../Environment';
 import { CurrentEnvironment } from '../GlobalConfig';
 import { getAuthToken } from '../repositories/AuthTokenRepository';
+import {HttpStatusCode} from "axios";
 
 const environment = CurrentEnvironment;
 
@@ -107,11 +108,13 @@ const onSubmitPresentation = (
   presentationRequest: Dictionary<any>,
   authToken?: Dictionary<any>
 ) => {
-  submitPresentation({
-    verifiableCredentials: Constants.getIdentificationList(environment),
-    presentationRequest,
-    authToken,
-  })
+  submitPresentation(
+    {
+      verifiableCredentials: Constants.getIdentificationList(environment),
+      presentationRequest,
+    },
+    authToken
+  )
     .then((submissionResult) => {
       console.log('submission result: ', submissionResult);
     })

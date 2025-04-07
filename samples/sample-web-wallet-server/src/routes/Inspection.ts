@@ -4,7 +4,10 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { VCLExchangeDescriptor } from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
+import {
+  VCLAuthToken,
+  VCLExchangeDescriptor,
+} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import {
   presentationRequestDescriptorFrom,
   presentationSubmissionFrom,
@@ -21,7 +24,10 @@ export default async function inspectionRoutes(fastify) {
   });
   fastify.post('/submitPresentation', async (req, reply) => {
     reply.send(
-      await req.vclSdk.submitPresentation(presentationSubmissionFrom(req.body))
+      await req.vclSdk.submitPresentation(
+        presentationSubmissionFrom(req.body.presentationSubmission),
+        new VCLAuthToken(req.body.authToken.payload)
+      )
     );
   });
   fastify.post('/getExchangeProgress', async (req, reply) => {
