@@ -31,7 +31,6 @@ import { getApprovedRejectedOfferIdsMock } from '../utils/Utils';
 import Environment from '../Environment';
 import { CurrentEnvironment } from '../GlobalConfig';
 import { getAuthToken } from '../repositories/AuthTokenRepository';
-import {HttpStatusCode} from "axios";
 
 const environment = CurrentEnvironment;
 
