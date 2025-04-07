@@ -29,7 +29,7 @@ const notifySignatory = async (fastify) => {
     .subscribe(
       'organizations',
       'created',
-      async ({ payload: { organization, invitation } }, context) => {
+      async ({ payload: { organization } }, context) => {
         const authCode = nanoid();
 
         await context.repos.signatoryStatus.insertWithState({

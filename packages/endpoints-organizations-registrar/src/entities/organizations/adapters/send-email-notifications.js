@@ -15,10 +15,7 @@
  *
  */
 
-const { isEmpty, omitBy, isNil, map, first } = require('lodash/fp');
-const {
-  extractCaoServiceRefs,
-} = require('../../organization-services/domains');
+const { isEmpty, omitBy, isNil, map } = require('lodash/fp');
 const { initAuth0Provisioner } = require('../../oauth');
 const { parseProfileToCsv } = require('../domains');
 const {
