@@ -1,3 +1,10 @@
+/**
+ * Created by Michael Avoyan on 30/03/2025.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import VCLProvider from './api/VCLProvider';
 import VCLSignatureAlgorithm from './api/VCLSignatureAlgorithm';
 import type VCL from './api/VCL';
@@ -70,6 +77,8 @@ import {
     LogFn,
 } from './api/entities/initialization/VCLLogService';
 import type { Nullish, Dictionary } from './api/VCLTypes';
+import VCLAuthToken from './api/entities/VCLAuthToken';
+import VCLAuthTokenDescriptor from './api/entities/VCLAuthTokenDescriptor';
 
 export type {
     VCL,
@@ -142,4 +151,6 @@ export {
     VCLDidJwk,
     vnfProtocolVersionFromString,
     environmentFromString,
+    VCLAuthToken,
+    VCLAuthTokenDescriptor,
 };

@@ -41,6 +41,9 @@ const Urls = {
   get finalizeOffers(): string {
     return `${BaseUrl}/finalizeOffers`;
   },
+  get getAuthToken(): string {
+    return `${BaseUrl}/getAuthToken`;
+  },
   get getCredentialTypesUIFormSchema(): string {
     return `${BaseUrl}/getCredentialTypesUIFormSchema`;
   },

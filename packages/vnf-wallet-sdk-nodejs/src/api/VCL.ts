@@ -1,3 +1,9 @@
+/**
+ * Created by Michael Avoyan on 30/03/2025.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import VCLCredentialManifest from './entities/VCLCredentialManifest';
 import VCLCredentialManifestDescriptor from './entities/VCLCredentialManifestDescriptor';
 import VCLCredentialTypesUIFormSchema from './entities/VCLCredentialTypesUIFormSchema';
@@ -28,6 +34,8 @@ import VCLDidJwkDescriptor from './entities/VCLDidJwkDescriptor';
 import VCLCountries from './entities/VCLCountries';
 import VCLCredentialTypes from './entities/VCLCredentialTypes';
 import VCLCredentialTypeSchemas from './entities/VCLCredentialTypeSchemas';
+import VCLAuthTokenDescriptor from './entities/VCLAuthTokenDescriptor';
+import VCLAuthToken from './entities/VCLAuthToken';
 
 export default interface VCL {
     initialize(
@@ -73,6 +81,10 @@ export default interface VCL {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken
     ): Promise<VCLJwtVerifiableCredentials>;
+
+    getAuthToken(
+        authTokenDescriptor: VCLAuthTokenDescriptor
+    ): Promise<VCLAuthToken>;
 
     getCredentialTypesUIFormSchema(
         credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor

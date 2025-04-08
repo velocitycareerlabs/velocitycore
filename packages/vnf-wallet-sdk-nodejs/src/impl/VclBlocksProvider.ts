@@ -1,3 +1,10 @@
+/**
+ * Created by Michael Avoyan on 30/03/2025.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import VCLCredentialTypes from '../api/entities/VCLCredentialTypes';
 import VCLCryptoServicesDescriptor from '../api/entities/initialization/VCLCryptoServicesDescriptor';
 import NetworkServiceImpl from './data/infrastructure/network/NetworkServiceImpl';
@@ -59,6 +66,9 @@ import {
     PresentationRequestByDeepLinkVerifierImpl,
 } from './data/verifiers';
 import CredentialIssuerVerifier from './domain/verifiers/CredentialIssuerVerifier';
+import AuthTokenRepositoryImpl from './data/repositories/AuthTokenRepositoryImpl';
+import AuthTokenUseCaseImpl from './data/usecases/AuthTokenUseCaseImpl';
+import AuthTokenUseCase from './domain/usecases/AuthTokenUseCase';
 
 export default class VclBlocksProvider {
     static providePresentationRequestUseCase(
@@ -191,6 +201,12 @@ export default class VclBlocksProvider {
             new CountriesUseCaseImpl(
                 new CountriesRepositoryImpl(new NetworkServiceImpl())
             )
+        );
+    }
+
+    static provideAuthTokenUseCase(): AuthTokenUseCase {
+        return new AuthTokenUseCaseImpl(
+            new AuthTokenRepositoryImpl(new NetworkServiceImpl())
         );
     }
 
