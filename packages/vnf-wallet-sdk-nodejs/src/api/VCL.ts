@@ -54,7 +54,7 @@ export default interface VCL {
 
     submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        authToken: Nullish<VCLAuthToken>
+        authToken?: Nullish<VCLAuthToken>
     ): Promise<VCLSubmissionResult>;
 
     getExchangeProgress(

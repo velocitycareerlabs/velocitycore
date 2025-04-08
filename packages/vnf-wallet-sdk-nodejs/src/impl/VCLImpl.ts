@@ -282,7 +282,7 @@ export class VCLImpl implements VCL {
 
     submitPresentation = async (
         presentationSubmission: VCLPresentationSubmission,
-        authToken: Nullish<VCLAuthToken>
+        authToken?: Nullish<VCLAuthToken>
     ) => {
         let authTokenRefreshAmount = 0;
         try {
