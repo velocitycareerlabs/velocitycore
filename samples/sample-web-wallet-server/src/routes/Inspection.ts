@@ -4,10 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import {
-  VCLAuthToken,
-  VCLExchangeDescriptor,
-} from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
+import { VCLExchangeDescriptor } from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import {
   authTokenFrom,
   presentationRequestDescriptorFrom,
