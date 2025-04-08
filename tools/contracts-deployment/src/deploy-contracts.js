@@ -29,10 +29,10 @@ const freeCredentialTypes = [
 const deployContract = async (
   contractAbi,
   deployerPrivateKey,
-  rpcUrl,
+  deployRpcUrl,
   initializer
 ) => {
-  const provider = new ethers.JsonRpcProvider(rpcUrl);
+  const provider = new ethers.JsonRpcProvider(deployRpcUrl);
   // eslint-disable-next-line better-mutation/no-mutation
   provider.pollingInterval = 100;
   const wallet = new ethers.Wallet(`0x${deployerPrivateKey}`, provider);
