@@ -105,7 +105,7 @@ const CreateOrganisationFromInvitation = () => {
         console.error(e);
       }
     })();
-  }, []);
+  }, [getAccessToken]);
 
   const { save, saving: creatingIsLoading } = useCreateController({
     resource: 'organizations',

@@ -134,7 +134,7 @@ const ServiceCreateForm = ({ onServiceCreated, services }) => {
       selectedServiceType &&
         serviceTypesForInvitation.some((service) => service.id === selectedServiceType.id),
     );
-  }, [selectedServiceType, serviceTypesForInvitation, setIsIssueOrInspection]);
+  }, [selectedServiceType, setIsIssueOrInspection]);
 
   const onCreate = async ({ serviceEndpoint }) => {
     const type = selectedServiceType.id.match(/.+v1/);

@@ -41,11 +41,7 @@ const CustomAppBar = (props) => {
       setIsLoading(true);
       try {
         const token = await getAccessToken();
-        const tokenDecoded = parseJwt(token);
-        const userHasGroup = Boolean(
-          tokenDecoded['http://velocitynetwork.foundation/groupId'] ||
-            tokenDecoded.scope.includes('admin'),
-        );
+        const userHasGroup = Boolean(doesUserHaveGroup(parseJwt(token), chainName));
         setHasOrganisations(userHasGroup);
         if (userHasGroup) {
           return;
@@ -64,7 +60,15 @@ const CustomAppBar = (props) => {
         setIsLoading(false);
       }
     })();
-  }, [getAccessTokenWithPopup, location, redirect, setDid, chainName, setIsLoading]);
+  }, [
+    getAccessToken,
+    getAccessTokenWithPopup,
+    location,
+    redirect,
+    setDid,
+    chainName,
+    setIsLoading,
+  ]);
 
   const isLogoDisabled = isLoading || !hasOrganisations;
 
@@ -86,5 +90,10 @@ const CustomAppBar = (props) => {
     </AppBar>
   );
 };
+
+const doesUserHaveGroup = (decodedToken, chainName) =>
+  decodedToken['http://velocitynetwork.foundation/groupId'] ||
+  decodedToken.scope.includes('admin') ||
+  chainName === chainNames.localnet;
 
 export default CustomAppBar;

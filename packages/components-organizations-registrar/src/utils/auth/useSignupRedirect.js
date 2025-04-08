@@ -45,7 +45,7 @@ const useSignupRedirect = ({ auth, options = {} }) => {
       // eslint-disable-next-line no-undef
       window.location.replace(decodeURIComponent(signupUrl));
     });
-  }, [signupUrl, signupUrlParam, redirectKey, location]);
+  }, [signupUrl, signupUrlParam, redirectKey, location, auth]);
 
   useEffect(() => {
     if (signupUrl || auth.isLoading || auth.isAuthenticated) {

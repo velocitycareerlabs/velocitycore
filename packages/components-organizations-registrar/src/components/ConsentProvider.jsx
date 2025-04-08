@@ -97,7 +97,7 @@ const ConsentProvider = ({ children }) => {
         setIsShouldAgreeWithNewVersion(false); // BE response 404, when `!consents.length`
       }
     })();
-  }, [logout, config.registrarApi, config]);
+  }, [getAccessToken, logout, config.registrarApi, config]);
 
   const onAgreeWithNewVersion = async () => {
     try {
