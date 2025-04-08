@@ -81,5 +81,8 @@
     "vite": "^6.2.0",
     "vite-plugin-externalize-deps": "~0.9.0",
     "vite-plugin-lib-inject-css": "~2.2.1"
+  },
+  "nx": {
+    "tags": ["lib"]
   }
 }
