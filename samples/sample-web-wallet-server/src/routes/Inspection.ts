@@ -9,6 +9,7 @@ import {
   VCLExchangeDescriptor,
 } from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import {
+  authTokenFrom,
   presentationRequestDescriptorFrom,
   presentationSubmissionFrom,
   submissionResultFrom,
@@ -26,7 +27,7 @@ export default async function inspectionRoutes(fastify) {
     reply.send(
       await req.vclSdk.submitPresentation(
         presentationSubmissionFrom(req.body.presentationSubmission),
-        new VCLAuthToken(req.body.authToken.payload)
+        authTokenFrom(req.body.authToken)
       )
     );
   });

@@ -9,6 +9,7 @@ import {
   Dictionary,
   issuingTypeFromString,
   Nullish,
+  VCLAuthToken,
   VCLAuthTokenDescriptor,
   VCLCredentialManifest,
   VCLCredentialManifestDescriptor,
@@ -73,6 +74,15 @@ export const presentationRequestDescriptorFrom = (
     json.remoteCryptoServicesToken
       ? new VCLToken(json.remoteCryptoServicesToken)
       : null
+  );
+};
+
+export const authTokenFrom = (json?: Dictionary<any>): VCLAuthToken => {
+  return new VCLAuthToken(
+    json?.payload,
+    json?.authTokenUri,
+    json?.walletDid,
+    json?.relyingPartyDid
   );
 };
 

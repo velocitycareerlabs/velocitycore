@@ -317,7 +317,7 @@ const onGenerateDidJwk = () => {
     });
 };
 
-const MeinScreen: React.FC = () => {
+const MainScreen: React.FC = () => {
   const menuItems = {
     'Get Countries': onGetCountries,
     'Get Credential Types': onGetCredentialTypes,
@@ -365,4 +365,4 @@ const MeinScreen: React.FC = () => {
   );
 };
 
-export default MeinScreen;
+export default MainScreen;
