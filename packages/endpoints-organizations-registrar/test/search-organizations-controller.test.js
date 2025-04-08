@@ -780,8 +780,15 @@ describe('Organizations Test Suite', () => {
 
       it('Should return a list matching a did and an alsoKnownAs did', async () => {
         const alsoKnownAs = 'did:test:aka1';
+        const service = {
+          id: '#aka-issuer',
+          type: ServiceTypes.CareerIssuerType,
+          credentialTypes: ['EducationDegree'],
+          serviceEndpoint: 'https://agent.samplevendor.com/acme',
+        };
         const organization = await persistOrganization({
           alsoKnownAs,
+          service: [service],
         });
         const response = await fastify.injectJson({
           method: 'GET',
@@ -791,7 +798,17 @@ describe('Organizations Test Suite', () => {
         expect(response.statusCode).toEqual(200);
         expect(response.json).toEqual({
           result: [
-            searchResult(organization),
+            {
+              ...searchResult(organization, [service]),
+              id: alsoKnownAs,
+              alsoKnownAs: [organization.didDoc.id],
+              service: [
+                {
+                  ...service,
+                  serviceEndpoint: `${service.serviceEndpoint}/api/holder/v0.6/org/${alsoKnownAs}/issue/get-credential-manifest`,
+                },
+              ],
+            },
             searchResult(orgs[1], servicesByOrg[orgs[1].didDoc.id]),
           ],
         });

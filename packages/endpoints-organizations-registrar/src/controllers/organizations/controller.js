@@ -1,6 +1,19 @@
-const { flatMap, map, mapKeys, omit } = require('lodash/fp');
+const {
+  first,
+  flatMap,
+  intersection,
+  map,
+  mapKeys,
+  omit,
+  castArray,
+} = require('lodash/fp');
 const newError = require('http-errors');
 const { prepCamelCase } = require('@velocitycareerlabs/common-functions');
+const {
+  buildDidDocWithAlternativeId,
+  getDidAndAliases,
+} = require('@velocitycareerlabs/did-doc');
+
 const {
   verifyUserOrganizationWriteAuthorized,
   verifyUserOrganizationReadAuthorized,
@@ -73,8 +86,13 @@ const organizationController = async (fastify) => {
         const { repos, query } = req;
         const serviceTypes = getServiceTypesFromCategories(query);
 
-        const organizations = await repos.organizations.searchByAggregation(
+        let organizations = await repos.organizations.searchByAggregation(
           query
+        );
+
+        organizations = map(
+          (org) => organizationWithAlternativeDidDoc(org, req),
+          organizations
         );
 
         const caoServiceRefs = query.noServiceEndpointTransform
@@ -271,6 +289,20 @@ const organizationController = async (fastify) => {
         return synchronizeMonitors(req);
       }
     );
+};
+
+const organizationWithAlternativeDidDoc = (org, context) => {
+  const didsFromQuery = castArray(context.query?.filter?.did);
+  const didsFromDidDoc = getDidAndAliases(org.didDoc);
+  const matchingDids = intersection(didsFromQuery, didsFromDidDoc);
+  const firstMatchingDid = first(matchingDids);
+  if (firstMatchingDid == null) {
+    return org;
+  }
+  return {
+    ...org,
+    didDoc: buildDidDocWithAlternativeId(firstMatchingDid, org.didDoc),
+  };
 };
 
 const loadAllOrgCaoServiceRefs = async (organizationDocs, context) => {
