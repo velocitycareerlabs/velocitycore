@@ -39,11 +39,6 @@ module.exports = {
     ],
     complexity: ['error', 6],
     'global-require': 'off',
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      { js: 'never', ts: 'never', jsx: 'always', tsx: 'always' },
-    ],
     'max-depth': ['error', { max: 2 }],
     'max-len': ['error', { code: 150 }],
     'max-nested-callbacks': ['error', 3],
@@ -107,39 +102,36 @@ module.exports = {
           '**/test/**/*.ts',
           '**/test/**/*.jsx',
           '**/test/**/*.tsx',
-          '**/tests/**/*.js',
-          '**/tests/**/*.ts',
-          '**/tests/**/*.jsx',
-          '**/tests/**/*.tsx',
           '**/setupTests.ts',
           '**/setupTests.js',
         ],
       },
     ],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      { js: 'never', ts: 'never', jsx: 'always', tsx: 'always' },
+    ],
   },
-  // overrides: [
-  //   {
-  //     files: [
-  //       '**/*.test.{js,jsx,ts,tsx}',
-  //       '**/test/**/*.{js,jsx,ts,tsx}',
-  //       '**/__tests__/**/*.{js,jsx,ts,tsx}',
-  //     ],
-  //     env: {
-  //       jest: true,
-  //     },
-  //     parserOptions: {
-  //       ecmaVersion: 2020,
-  //       sourceType: 'module',
-  //       ecmaFeatures: {
-  //         jsx: true,
-  //       },
-  //     },
-  //     rules: {
-  //       'better-mutation/no-mutating-functions': 'off',
-  //       'better-mutation/no-mutating-methods': 'off',
-  //       'better-mutation/no-mutation': 'off',
-  //       'max-nested-callbacks': ['error', 8],
-  //     },
-  //   },
-  // ],
+  overrides: [
+    {
+      files: [
+        '**/*.test.js',
+        '**/*.test.jsx',
+        '**/*.test.ts',
+        '**/*.test.tsx',
+        '**/test/**/*.js',
+        '**/test/**/*.ts',
+      ],
+      env: {
+        jest: true,
+      },
+      rules: {
+        'better-mutation/no-mutating-functions': 'off',
+        'better-mutation/no-mutating-methods': 'off',
+        'better-mutation/no-mutation': 'off',
+        'max-nested-callbacks': ['error', 8],
+      },
+    },
+  ],
 };

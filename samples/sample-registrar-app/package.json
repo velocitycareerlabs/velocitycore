@@ -51,7 +51,6 @@
     "start:auth0": "vite dev --mode localdev",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "yarn test",
     "lint": "eslint src --format json >> eslint.json",
     "lint:fix": "eslint src --fix"
   },
