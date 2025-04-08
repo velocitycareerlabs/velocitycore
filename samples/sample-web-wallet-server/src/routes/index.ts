@@ -11,12 +11,14 @@ import issuingRoutes from './Issuing';
 import cryptoServicesRoutes from './CryptoServices';
 import selfReportRoutes from './SelfReport';
 import otherRoutes from './Other';
+import authTokenRoutes from './AuthToken';
 
 export default async function routes(fastify) {
-  initializationRoutes(fastify);
-  inspectionRoutes(fastify);
-  issuingRoutes(fastify);
-  cryptoServicesRoutes(fastify);
-  selfReportRoutes(fastify);
-  otherRoutes(fastify);
+  await initializationRoutes(fastify);
+  await inspectionRoutes(fastify);
+  await issuingRoutes(fastify);
+  await cryptoServicesRoutes(fastify);
+  await selfReportRoutes(fastify);
+  await authTokenRoutes(fastify);
+  await otherRoutes(fastify);
 }
