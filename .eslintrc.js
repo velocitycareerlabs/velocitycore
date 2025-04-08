@@ -102,14 +102,15 @@ module.exports = {
           '**/test/**/*.ts',
           '**/test/**/*.jsx',
           '**/test/**/*.tsx',
-          '**/tests/**/*.js',
-          '**/tests/**/*.ts',
-          '**/tests/**/*.jsx',
-          '**/tests/**/*.tsx',
           '**/setupTests.ts',
           '**/setupTests.js',
         ],
       },
+    ],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      { js: 'never', ts: 'never', jsx: 'always', tsx: 'always' },
     ],
   },
   overrides: [
@@ -121,8 +122,6 @@ module.exports = {
         '**/*.test.tsx',
         '**/test/**/*.js',
         '**/test/**/*.ts',
-        '**/tests/**/*.js',
-        '**/tests/**/*.ts',
       ],
       env: {
         jest: true,
