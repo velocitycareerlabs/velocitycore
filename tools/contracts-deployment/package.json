@@ -17,8 +17,8 @@
     "access": "public"
   },
   "dependencies": {
+    "ethers": "6.13.5",
     "@velocitycareerlabs/crypto": "^0.5.0-build",
-    "@velocitycareerlabs/base-contract-io": "^0.5.0-build",
     "@velocitycareerlabs/contract-permissions": "^0.5.0-build",
     "@velocitycareerlabs/metadata-registration": "^0.5.0-build"
   }
