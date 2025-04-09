@@ -1,8 +1,6 @@
 const console = require('console');
 const { get2BytesHash } = require('@velocitycareerlabs/crypto');
-const {
-  deployContract,
-} = require('@velocitycareerlabs/base-contract-io/test/helpers/deployContract');
+const ethers = require('ethers');
 const permissionsContractAbi = require('@velocitycareerlabs/contract-permissions/src/contracts/permissions.json');
 const verificationCouponContractAbi = require('@velocitycareerlabs/metadata-registration/src/contracts/verification-coupon.json');
 const metadataRegistryContractAbi = require('@velocitycareerlabs/metadata-registration/src/contracts/metadata-registry.json');
@@ -27,6 +25,30 @@ const freeCredentialTypes = [
   'ProofOfAgeV1.0',
   'ResidentPermitV1.0',
 ];
+
+const deployContract = async (
+  contractAbi,
+  deployerPrivateKey,
+  deployRpcUrl,
+  initializer
+) => {
+  const provider = new ethers.JsonRpcProvider(deployRpcUrl);
+  // eslint-disable-next-line better-mutation/no-mutation
+  provider.pollingInterval = 100;
+  const wallet = new ethers.Wallet(`0x${deployerPrivateKey}`, provider);
+  const factory = new ethers.ContractFactory(
+    contractAbi.abi,
+    contractAbi.bytecode,
+    wallet
+  );
+  const contract = await factory.deploy();
+  await contract.waitForDeployment();
+  const transaction = initializer
+    ? await initializer(contract)
+    : await contract.initialize();
+  await transaction.wait();
+  return contract;
+};
 
 const main = async () => {
   console.info(
