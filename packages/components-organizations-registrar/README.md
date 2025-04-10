@@ -1,12 +1,17 @@
-# React + Vite
+# Organization Registrar React Components
+This package contains the main components for creating a registry of organizations. The project is written in pure JS.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Builds
+Vite is used for building the project - primarily involving transpilation of JSX files using SWC
 
-Currently, two official plugins are available:
+## Tests
+Tests are written in Jest
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Style
+Style is maintained in eslint based on the monorepo root styles
 
-## Expanding the ESLint configuration
+## How to develop
+`> vite build:watch`
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## See how to use it
+[Sample Registrar App](../../samples/sample-registrar-app)

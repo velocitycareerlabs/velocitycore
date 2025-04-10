@@ -46,9 +46,9 @@
     "vite": "^6.2.0"
   },
   "scripts": {
-    "start": "vite dev --mode full_localdev",
-    "start:aws": "vite dev --mode dev",
-    "start:auth0": "vite dev --mode localdev",
+    "start": "vite dev --mode dev.local",
+    "start:remote": "vite dev --mode dev.remote",
+    "start:remoteauth": "vite dev --mode dev.remoteauth",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint src --format json >> eslint.json",
