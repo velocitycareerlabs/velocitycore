@@ -1,4 +1,4 @@
-import {Dictionary, Nullish} from '../../VCLTypes';
+import { Dictionary, Nullish } from '../../VCLTypes';
 import VCLErrorCode from './VCLErrorCode';
 
 export default class VCLError extends Error {

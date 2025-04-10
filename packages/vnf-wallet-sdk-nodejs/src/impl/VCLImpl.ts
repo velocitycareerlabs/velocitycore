@@ -7,7 +7,6 @@
 
 import fs from 'fs';
 import path from 'path';
-import { HttpStatusCode } from 'axios';
 import VCL from '../api/VCL';
 import VCLCountries from '../api/entities/VCLCountries';
 import VCLCredentialTypes from '../api/entities/VCLCredentialTypes';
