@@ -54,7 +54,7 @@ services:
       - httpscert:/certs
     command: npx nodemon --exec "cd servers/registrar && yarn start"
     env_file:
-      - ../.localdev.env
+      - ../.localdev.auth0.env
     environment:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     ports:

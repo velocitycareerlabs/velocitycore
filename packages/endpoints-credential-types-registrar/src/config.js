@@ -101,10 +101,6 @@ const createConfig = (packageJson) => {
       .get('OAUTH0_CLIENT_SYSTEM_USER_ROLE_ID')
       .required(!isTest)
       .asString(),
-    registrarClientId: env
-      .get('REGISTRAR_CLIENT_ID')
-      .required(!isTest)
-      .asString(),
     auth0Connection: env.get('AUTH0_CONNECTION').required(!isTest).asString(),
     registrarApiAudience: env
       .get('REGISTRAR_API_AUDIENCE')
