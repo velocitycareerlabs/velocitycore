@@ -15,10 +15,7 @@
  *
  */
 
-const { isEmpty, omitBy, isNil, map, first } = require('lodash/fp');
-const {
-  extractCaoServiceRefs,
-} = require('../../organization-services/domains');
+const { isEmpty, omitBy, isNil, map } = require('lodash/fp');
 const { initAuth0Provisioner } = require('../../oauth');
 const { parseProfileToCsv } = require('../domains');
 const {
@@ -159,13 +156,16 @@ const initSendEmailNotifications = (initCtx) => {
     { organization, authCode, isReminder = false },
     context
   ) => {
-    const caoServiceIds = extractCaoServiceRefs(organization.services);
-    const caos = await context.repos.organizations.findCaos(caoServiceIds);
-    const caoOrganization = first(caos);
+    const invitation = organization.invitationId
+      ? await context.repos.invitations.findById(organization.invitationId)
+      : null;
+    const invitingOrganization = invitation?.organizationId
+      ? await context.repos.organizations.findById(invitation.organizationId)
+      : null;
     await initCtx.sendEmail(
       emailToSignatoryForOrganizationApproval({
         organization,
-        caoOrganization,
+        invitingOrganization,
         authCode,
         isReminder,
       })

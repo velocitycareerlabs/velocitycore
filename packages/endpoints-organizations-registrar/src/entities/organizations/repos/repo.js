@@ -24,6 +24,7 @@ const defaultProjection = {
   adminEmail: 1,
   normalizedProfileName: 1,
   didNotCustodied: 1,
+  invitationId: 1,
   ids: 1,
   updatedAt: 1,
   createdAt: 1,

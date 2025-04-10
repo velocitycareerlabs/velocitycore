@@ -23,6 +23,7 @@ module.exports = (app, options, next = () => {}) => {
         inviteeProfile: 1,
         keyIndividuals: 1,
         inviteeDid: 1,
+        organizationId: 1,
         code: 1,
         expiresAt: 1,
         createdAt: 1,

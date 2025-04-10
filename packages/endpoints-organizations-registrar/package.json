@@ -50,6 +50,7 @@
     "env-var": "^7.0.0",
     "fastify-plugin": "~4.5.1",
     "http-errors": "~2.0.0",
+    "handlebars": "4.7.8",
     "lodash": "~4.17.21",
     "mongodb": "~6.14.0",
     "nanoid": "~3.3.8",
