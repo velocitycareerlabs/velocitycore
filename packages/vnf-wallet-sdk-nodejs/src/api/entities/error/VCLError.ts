@@ -1,6 +1,5 @@
-import { Dictionary, Nullish } from '../../VCLTypes';
+import {Dictionary, Nullish} from '../../VCLTypes';
 import VCLErrorCode from './VCLErrorCode';
-import VCLStatusCode from './VCLStatusCode';
 
 export default class VCLError extends Error {
     payload: Nullish<string> = null;
@@ -11,14 +10,14 @@ export default class VCLError extends Error {
 
     errorCode: string = VCLErrorCode.SdkError.toString();
 
-    statusCode: Nullish<VCLStatusCode> = null;
+    statusCode: Nullish<number> = null;
 
     constructor(
         error: Nullish<string> = null,
         errorCode: string = VCLErrorCode.SdkError.toString(),
         requestId: Nullish<string> = null,
         message: Nullish<string> = null,
-        statusCode: Nullish<VCLStatusCode> = null
+        statusCode: Nullish<number> = null
     ) {
         super(message ?? '');
         this.error = error;
@@ -51,19 +50,16 @@ export default class VCLError extends Error {
         return result;
     }
 
-    static fromError(
-        error: Error | VCLError,
-        statusCode: number | null = null
-    ): VCLError {
+    static fromError(error: any, statusCode: Nullish<number> = null): VCLError {
         if (error instanceof VCLError) {
             return error;
         }
         return new VCLError(
             JSON.stringify(error),
             VCLError.findErrorCode(error),
-            null,
+            error.requestId,
             error.message,
-            statusCode
+            statusCode || error.statusCode
         );
     }
 

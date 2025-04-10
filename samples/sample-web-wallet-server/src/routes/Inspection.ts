@@ -14,28 +14,40 @@ import {
 
 export default async function inspectionRoutes(fastify) {
   fastify.post('/getPresentationRequest', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.getPresentationRequest(
-        presentationRequestDescriptorFrom(req.body)
-      )
-    );
+    try {
+      reply.send(
+        await req.vclSdk.getPresentationRequest(
+          presentationRequestDescriptorFrom(req.body)
+        )
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
   fastify.post('/submitPresentation', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.submitPresentation(
-        presentationSubmissionFrom(req.body.presentationSubmission),
-        authTokenFrom(req.body.authToken)
-      )
-    );
+    try {
+      reply.send(
+        await req.vclSdk.submitPresentation(
+          presentationSubmissionFrom(req.body.presentationSubmission),
+          authTokenFrom(req.body.authToken)
+        )
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
   fastify.post('/getExchangeProgress', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.getExchangeProgress(
-        new VCLExchangeDescriptor(
-          presentationSubmissionFrom(req.body.presentationSubmission),
-          submissionResultFrom(req.body.submissionResult)
+    try {
+      reply.send(
+        await req.vclSdk.getExchangeProgress(
+          new VCLExchangeDescriptor(
+            presentationSubmissionFrom(req.body.presentationSubmission),
+            submissionResultFrom(req.body.submissionResult)
+          )
         )
-      )
-    );
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
 }

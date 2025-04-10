@@ -221,15 +221,25 @@ export const finalizeOffersDescriptorFrom = (
 export const authTokenDescriptorFrom = (
   json: Dictionary<any>
 ): VCLAuthTokenDescriptor => {
+  if (json.presentationRequest) {
+    return new VCLAuthTokenDescriptor(
+      new VCLPresentationRequest(
+        VCLJwt.fromEncodedJwt(json.presentationRequest.jwt.encodedJwt),
+        new VCLVerifiedProfile(
+          json.presentationRequest.verifiedProfile.payload
+        ),
+        new VCLDeepLink(json.presentationRequest.deepLink.value),
+        null,
+        didJwkFrom(json.presentationRequest.didJwk.payload)
+      ),
+      json.refreshToken
+    );
+  }
   return new VCLAuthTokenDescriptor(
-    new VCLPresentationRequest(
-      VCLJwt.fromEncodedJwt(json.presentationRequest.jwt.encodedJwt),
-      new VCLVerifiedProfile(json.presentationRequest.verifiedProfile.payload),
-      new VCLDeepLink(json.presentationRequest.deepLink.value),
-      null,
-      didJwkFrom(json.presentationRequest.didJwk.payload)
-    ),
-    json.refreshToken
+    json.authTokenUri,
+    json.refreshToken,
+    json.walletDid,
+    json.relyingPartyDid
   );
 };
 

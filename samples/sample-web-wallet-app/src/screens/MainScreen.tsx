@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import { HttpStatusCode } from 'axios';
 import {
   getCountries,
   getCredentialTypeSchemas,
@@ -107,6 +108,7 @@ const onSubmitPresentation = (
   presentationRequest: Dictionary<any>,
   authToken?: Dictionary<any>
 ) => {
+  let authTokenRefreshAmount = 0;
   submitPresentation(
     {
       verifiableCredentials: Constants.getIdentificationList(environment),
@@ -117,8 +119,36 @@ const onSubmitPresentation = (
     .then((submissionResult) => {
       console.log('submission result: ', submissionResult);
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((error1) => {
+      console.log(error1);
+      if (
+        error1.status === HttpStatusCode.Unauthorized &&
+        authTokenRefreshAmount === 0
+      ) {
+        authTokenRefreshAmount += 1;
+        const authTokenDescriptor = {
+          authTokenUri: authToken?.authTokenUri || '',
+          refreshToken: authToken?.refreshToken.value,
+          walletDid: authToken?.walletDid,
+          relyingPartyDid: authToken?.relyingPartyDid,
+        };
+        getAuthToken(authTokenDescriptor).then((newAuthToken) => {
+          submitPresentation(
+            {
+              verifiableCredentials:
+                Constants.getIdentificationList(environment),
+              presentationRequest,
+            },
+            newAuthToken
+          )
+            .then((submissionResult) => {
+              console.log('submission result: ', submissionResult);
+            })
+            .catch((error2: any) => {
+              console.log(error2);
+            });
+        });
+      }
     });
 };
 
