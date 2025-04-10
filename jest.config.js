@@ -15,6 +15,7 @@ module.exports = {
     '!**/src/main*.js',
     '!**/coverage/**',
     '!**/test/**',
+    '!**/__tests__/**',
     '!**/node_modules/**',
     '!**/migrations/**',
   ],
