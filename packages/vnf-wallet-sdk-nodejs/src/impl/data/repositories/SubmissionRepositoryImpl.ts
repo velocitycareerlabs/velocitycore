@@ -1,4 +1,4 @@
-import { Dictionary } from '../../../api/VCLTypes';
+import { Dictionary, Nullish } from '../../../api/VCLTypes';
 import VCLExchange from '../../../api/entities/VCLExchange';
 import VCLJwt from '../../../api/entities/VCLJwt';
 import VCLSubmission from '../../../api/entities/VCLSubmission';
@@ -14,16 +14,14 @@ export default class SubmissionRepositoryImpl implements SubmissionRepository {
 
     async submit(
         submission: VCLSubmission,
-        jwt: VCLJwt
+        jwt: VCLJwt,
+        accessToken?: Nullish<VCLToken>
     ): Promise<VCLSubmissionResult> {
         const submissionResponse = await this.networkService.sendRequest({
             endpoint: submission.submitUri,
             body: submission.generateRequestBody(jwt),
             method: HttpMethod.POST,
-            headers: {
-                [HeaderKeys.XVnfProtocolVersion]:
-                    HeaderValues.XVnfProtocolVersion,
-            },
+            headers: this.generateHeader(accessToken),
             contentType: 'application/json',
             useCaches: false,
         });
@@ -33,6 +31,19 @@ export default class SubmissionRepositoryImpl implements SubmissionRepository {
             submission.submissionId
         );
     }
+
+    private generateHeader = (accessToken: Nullish<VCLToken>) => {
+        return accessToken
+            ? {
+                  [HeaderKeys.XVnfProtocolVersion]:
+                      HeaderValues.XVnfProtocolVersion,
+                  [HeaderKeys.HeaderKeyAuthorization]: `${HeaderKeys.HeaderValuePrefixBearer} ${accessToken?.value}`,
+              }
+            : {
+                  [HeaderKeys.XVnfProtocolVersion]:
+                      HeaderValues.XVnfProtocolVersion,
+              };
+    };
 
     private parseExchange(exchangeJsonObj: Dictionary<any>) {
         return new VCLExchange(

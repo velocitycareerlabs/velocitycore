@@ -5,6 +5,8 @@ import JwtServiceRepository from '../../domain/repositories/JwtServiceRepository
 import SubmissionRepository from '../../domain/repositories/SubmissionRepository';
 import SubmissionUseCase from '../../domain/usecases/SubmissionUseCase';
 import VCLError from '../../../api/entities/error/VCLError';
+import VCLAuthToken from '../../../api/entities/VCLAuthToken';
+import { Nullish } from '../../../api/VCLTypes';
 
 export default class SubmissionUseCaseImpl implements SubmissionUseCase {
     constructor(
@@ -12,7 +14,10 @@ export default class SubmissionUseCaseImpl implements SubmissionUseCase {
         private jwtServiceRepository: JwtServiceRepository
     ) {}
 
-    async submit(submission: VCLSubmission): Promise<VCLSubmissionResult> {
+    async submit(
+        submission: VCLSubmission,
+        authToken?: Nullish<VCLAuthToken>
+    ): Promise<VCLSubmissionResult> {
         try {
             const jwt = await this.jwtServiceRepository.generateSignedJwt(
                 new VCLJwtDescriptor(
@@ -24,7 +29,11 @@ export default class SubmissionUseCaseImpl implements SubmissionUseCase {
                 null,
                 submission.remoteCryptoServicesToken
             );
-            return await this.submissionRepository.submit(submission, jwt);
+            return await this.submissionRepository.submit(
+                submission,
+                jwt,
+                authToken?.accessToken
+            );
         } catch (error: any) {
             throw VCLError.fromError(error);
         }

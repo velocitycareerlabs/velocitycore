@@ -35,7 +35,12 @@ export default class AuthTokenRepositoryImpl implements AuthTokenRepository {
                 useCaches: true,
                 body: authTokenDescriptor.generateRequestBody(),
             });
-            return new VCLAuthToken(authTokenResponse.payload);
+            return new VCLAuthToken(
+                authTokenResponse.payload,
+                authTokenUri,
+                authTokenDescriptor.walletDid,
+                authTokenDescriptor.relyingPartyDid
+            );
         } catch (e) {
             VCLLog.error('AuthTokenRepositoryImpl.getAuthToken', e);
             throw e;

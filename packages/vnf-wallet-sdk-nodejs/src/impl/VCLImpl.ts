@@ -280,11 +280,13 @@ export class VCLImpl implements VCL {
     };
 
     submitPresentation = async (
-        presentationSubmission: VCLPresentationSubmission
+        presentationSubmission: VCLPresentationSubmission,
+        authToken?: Nullish<VCLAuthToken>
     ) => {
         try {
             return await this.presentationSubmissionUseCase.submit(
-                presentationSubmission
+                presentationSubmission,
+                authToken
             );
         } catch (error: any) {
             logError('submit presentation', error);

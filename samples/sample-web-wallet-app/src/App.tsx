@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import MeinScreen from './screens/MeinScreen';
+import MainScreen from './screens/MainScreen';
 
 const App = () => (
   <div className="App">
     <header className="App-header">
-      <MeinScreen />
+      <MainScreen />
     </header>
   </div>
 );

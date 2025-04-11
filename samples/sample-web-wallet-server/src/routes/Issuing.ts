@@ -13,31 +13,47 @@ import {
 
 export default async function issuingRoutes(fastify) {
   fastify.post('/getCredentialManifest', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.getCredentialManifest(
-        credentialManifestDescriptorFrom(req.body)
-      )
-    );
+    try {
+      reply.send(
+        await req.vclSdk.getCredentialManifest(
+          credentialManifestDescriptorFrom(req.body)
+        )
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
   fastify.post('/generateOffers', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.generateOffers(generateOffersDescriptorFrom(req.body))
-    );
+    try {
+      reply.send(
+        await req.vclSdk.generateOffers(generateOffersDescriptorFrom(req.body))
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
   fastify.post('/checkOffers', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.checkForOffers(
-        generateOffersDescriptorFrom(req.body),
-        tokenFrom(req.body.sessionToken)
-      )
-    );
+    try {
+      reply.send(
+        await req.vclSdk.checkForOffers(
+          generateOffersDescriptorFrom(req.body),
+          tokenFrom(req.body.sessionToken)
+        )
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
   fastify.post('/finalizeOffers', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.finalizeOffers(
-        finalizeOffersDescriptorFrom(req.body.finalizeOffersDescriptor),
-        tokenFrom(req.body.sessionToken)
-      )
-    );
+    try {
+      reply.send(
+        await req.vclSdk.finalizeOffers(
+          finalizeOffersDescriptorFrom(req.body.finalizeOffersDescriptor),
+          tokenFrom(req.body.sessionToken)
+        )
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
 }

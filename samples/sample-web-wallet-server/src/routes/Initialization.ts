@@ -7,12 +7,24 @@
 
 export default async function initializationRoutes(fastify) {
   fastify.get('/getCountries', (req, reply) => {
-    reply.send(req.vclSdk.countries);
+    try {
+      reply.send(req.vclSdk.countries);
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
   fastify.get('/getCredentialTypes', (req, reply) => {
-    reply.send(req.vclSdk.credentialTypes);
+    try {
+      reply.send(req.vclSdk.credentialTypes);
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
   fastify.get('/getCredentialTypeSchemas', (req, reply) => {
-    reply.send(req.vclSdk.credentialTypeSchemas);
+    try {
+      reply.send(req.vclSdk.credentialTypeSchemas);
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
 }
