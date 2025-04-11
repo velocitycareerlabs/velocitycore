@@ -44,7 +44,7 @@
     "**/react-scripts/**/chokidar/glob-parent": "6.0.2",
     "**/react-scripts/react-dev-utils/browserslist": "4.24.0",
     "**/node-fetch": "~2.7.0",
-    "**/axios/follow-redirects": "1.15.6",
+    "**/axios/follow-redirects": "1.15.9",
     "**/ion-pow-sdk/cross-fetch": "3.2.0",
     "**/lerna/**/parse-path": "5.0.0",
     "**/semver": "~7.7.0",
