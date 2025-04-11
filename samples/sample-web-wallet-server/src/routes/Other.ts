@@ -11,17 +11,25 @@ import {
 
 export default async function otherRoutes(fastify) {
   fastify.post('/searchForOrganizations', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.searchForOrganizations(
-        organizationsSearchDescriptorFrom(req.body)
-      )
-    );
+    try {
+      reply.send(
+        await req.vclSdk.searchForOrganizations(
+          organizationsSearchDescriptorFrom(req.body)
+        )
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
   fastify.post('/getVerifiedProfile', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.getVerifiedProfile(
-        verifiedProfileDescriptorFrom(req.body)
-      )
-    );
+    try {
+      reply.send(
+        await req.vclSdk.getVerifiedProfile(
+          verifiedProfileDescriptorFrom(req.body)
+        )
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
 }

@@ -26,6 +26,7 @@
     "@velocitycareerlabs/common-schemas": "0.5.0-build",
     "@velocitycareerlabs/config": "0.5.0-build",
     "@velocitycareerlabs/contract-permissions": "0.5.0-build",
+    "@velocitycareerlabs/country-data": "0.5.0-build",
     "@velocitycareerlabs/csv-parser": "0.5.0-build",
     "@velocitycareerlabs/crypto": "0.5.0-build",
     "@velocitycareerlabs/did-web": "0.5.0-build",

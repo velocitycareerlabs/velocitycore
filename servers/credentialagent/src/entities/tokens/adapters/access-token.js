@@ -18,14 +18,12 @@
 const { KeyPurposes } = require('@velocitycareerlabs/crypto');
 const { nanoid } = require('nanoid');
 
-const DEFAULT_EXPIRES_IN = 10080;
-
 const generateAccessToken = (
   id,
   subject,
   disclosure,
   exchange,
-  { kms, tenant, tenantKeysByPurpose }
+  { kms, tenant, tenantKeysByPurpose, config }
 ) => {
   const accessTokensSecret = tenantKeysByPurpose[KeyPurposes.EXCHANGES];
   return kms.signJwt({}, accessTokensSecret.keyId, {
@@ -35,7 +33,9 @@ const generateAccessToken = (
     kid: accessTokensSecret.kidFragment,
     subject,
     nbf: new Date(),
-    expiresIn: `${disclosure?.authTokensExpireIn ?? DEFAULT_EXPIRES_IN}m`,
+    expiresIn: disclosure?.authTokensExpireIn
+      ? `${disclosure?.authTokensExpireIn}m`
+      : config.defaultOAuthTokenExpiration,
   });
 };
 

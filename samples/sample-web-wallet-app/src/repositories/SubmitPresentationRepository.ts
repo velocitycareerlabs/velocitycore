@@ -9,12 +9,13 @@ import fetcher from '../network/Fetcher';
 import { Dictionary } from '../Types';
 
 export const submitPresentation = async (
-  presentationSubmission: Dictionary<any>
+  presentationSubmission: Dictionary<any>,
+  authToken?: Dictionary<any>
 ): Promise<Dictionary<any>> => {
   const config = {
     url: Urls.submitPresentation,
     method: 'POST',
-    data: presentationSubmission,
+    data: { presentationSubmission, authToken },
   };
   return fetcher(config);
 };
