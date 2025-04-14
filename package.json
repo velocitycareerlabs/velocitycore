@@ -42,7 +42,7 @@
     "**/node-forge": "1.3.1",
     "**/react-scripts/react-dev-utils/immer": "9.0.21",
     "**/react-scripts/**/chokidar/glob-parent": "6.0.2",
-    "**/react-scripts/react-dev-utils/browserslist": "4.24.0",
+    "**/react-scripts/react-dev-utils/browserslist": "4.24.4",
     "**/node-fetch": "~2.7.0",
     "**/axios/follow-redirects": "1.15.6",
     "**/ion-pow-sdk/cross-fetch": "3.2.0",
