@@ -5,7 +5,6 @@ module.exports = {
     '<rootDir>/servers/*/jest.config.js',
     '<rootDir>/lambdas/*/jest.config.js',
     '<rootDir>/tools/*/jest.config.js',
-    '<rootDir>/apps/*/jest.config.js',
   ],
   coverageDirectory: '<rootDir>/reports/coverage/',
   collectCoverage: false,

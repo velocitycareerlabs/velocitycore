@@ -79,7 +79,7 @@ jobs:
         run: yarn global add nx@
       # Set Version
       - name: Set Version
-        run: lerna version --ignore-changes '**/*.md' '**/test/**' --no-git-tag-version --no-push --exact --yes ${{ env.NPM_VER_NUM }}
+        run: lerna version --ignore-changes '**/*.md' '**/test/**' '**/__tests__/**' --no-git-tag-version --no-push --exact --yes ${{ env.NPM_VER_NUM }}
       # Git Set Identity
       - name: Git Identity
         run: |

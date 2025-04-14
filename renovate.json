@@ -53,24 +53,6 @@
       ]
     },
     {
-      "matchFileNames": [
-        "apps/**"
-      ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
-      "addLabels": [
-        "apps"
-      ],
-      "extends": [
-        "schedule:monthly"
-      ]
-    },
-    {
       "matchUpdateTypes": [
         "major",
         "minor",
