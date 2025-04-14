@@ -17,12 +17,12 @@
     "group:react",
     "group:vite",
     "security:openssf-scorecard",
-    "schedule:weekly"
   ],
   "prHourlyLimit": 10,
   "addLabels": [
     "dependencies"
   ],
+  "schedule": ["0 0-2 * * 7,2,4"],
   "packageRules": [
     {
       "groupName": "fastify packages",
@@ -33,9 +33,7 @@
         "fast-json{/,}**",
         "pino{/,}**"
       ]
-      "schedule": [
-        "0 0-2 1,15 * *"
-      ]
+      "schedule": ["0 0-2 1,15 * *"]
     },
     {
       "matchFileNames": [
@@ -47,9 +45,7 @@
       "matchUpdateTypes": [
         "major",
       ],
-      "schedule": [
-        "0 0-2 1,15 * *"
-      ]
+      "schedule": ["0 0-2 1,15 * *"]
     },
     {
       "matchFileNames": [
