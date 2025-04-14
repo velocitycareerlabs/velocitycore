@@ -32,6 +32,7 @@ import { getApprovedRejectedOfferIdsMock } from '../utils/Utils';
 import Environment from '../Environment';
 import { CurrentEnvironment } from '../GlobalConfig';
 import { getAuthToken } from '../repositories/AuthTokenRepository';
+import { getExchangeProgress } from '../repositories/GetExchangeProgressRepository';
 
 const environment = CurrentEnvironment;
 
@@ -118,11 +119,12 @@ const onSubmitPresentation = (
   )
     .then((submissionResult) => {
       console.log('submission result: ', submissionResult);
+      onGetExchangeProgress(presentationRequest, submissionResult, authToken);
     })
-    .catch((error1) => {
-      console.log(error1);
+    .catch((submissionError1) => {
+      console.log(submissionError1);
       if (
-        error1.status === HttpStatusCode.Unauthorized &&
+        submissionError1.status === HttpStatusCode.Unauthorized &&
         authTokenRefreshAmount === 0
       ) {
         authTokenRefreshAmount += 1;
@@ -143,12 +145,40 @@ const onSubmitPresentation = (
           )
             .then((submissionResult) => {
               console.log('submission result: ', submissionResult);
+              onGetExchangeProgress(
+                presentationRequest,
+                submissionResult,
+                newAuthToken
+              );
             })
-            .catch((error2: any) => {
-              console.log(error2);
+            .catch((submissionError2: any) => {
+              console.log(submissionError2);
             });
         });
       }
+    });
+};
+
+const onGetExchangeProgress = (
+  presentationRequest: Dictionary<any>,
+  submissionResult: Dictionary<any>,
+  authToken?: Dictionary<any>
+) => {
+  getExchangeProgress(
+    {
+      verifiableCredentials: Constants.getIdentificationList(environment),
+      presentationRequest,
+    },
+    submissionResult,
+    authToken
+  )
+    // eslint-disable-next-line max-nested-callbacks
+    .then((exchangeProgress) => {
+      console.log('exchange progress: ', exchangeProgress);
+    })
+    // eslint-disable-next-line max-nested-callbacks
+    .catch((exchangeError) => {
+      console.log(exchangeError);
     });
 };
 
