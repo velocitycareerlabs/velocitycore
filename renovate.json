@@ -17,7 +17,7 @@
     "group:react",
     "group:vite",
     "security:openssf-scorecard",
-    "schedule:daily"
+    "schedule:weekly"
   ],
   "prHourlyLimit": 10,
   "addLabels": [
@@ -32,6 +32,23 @@
         "avvio{/,}**",
         "fast-json{/,}**",
         "pino{/,}**"
+      ]
+      "schedule": [
+        "0 0-2 1,15 * *"
+      ]
+    },
+    {
+      "matchFileNames": [
+        "packages/**",
+        "servers/**",
+        "samples/**",
+        "tools/**"
+      ],
+      "matchUpdateTypes": [
+        "major",
+      ],
+      "schedule": [
+        "0 0-2 1,15 * *"
       ]
     },
     {
@@ -54,6 +71,7 @@
     },
     {
       "matchUpdateTypes": [    
+        "major",
         "minor",
         "patch",
         "pin",
@@ -67,9 +85,6 @@
       ],
       "addLabels": [
         "eng"
-      ],
-      "extends": [
-        "schedule:weekly"
       ]
     },
     {
@@ -85,9 +100,6 @@
       ],
       "addLabels": [
         "contracts"
-      ],
-      "extends": [
-        "schedule:weekly"
       ]
     },
     {
