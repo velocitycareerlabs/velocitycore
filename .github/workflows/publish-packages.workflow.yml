@@ -47,7 +47,7 @@ jobs:
         run: bash ./eng/environments/${{ env.GLOBAL_ENV }}.sh
       # Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           registry-url: ${{ env.REGISTRY_URL }}
           scope: ${{ format('@{0}', env.TARGET_ORG) }}
