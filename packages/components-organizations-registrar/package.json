@@ -69,6 +69,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:watch": "vite build --watch",
+    "prepublish": "vite build",
     "test": "jest --coverage",
     "lint": "NODE_OPTIONS=--experimental-specifier-resolution=node eslint src",
     "lint:fix": "NODE_OPTIONS=--experimental-specifier-resolution=node eslint src --fix"
