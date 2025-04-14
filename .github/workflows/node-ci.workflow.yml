@@ -108,7 +108,7 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.prepare.outputs.lint-packages) }}
         node-version: ${{ fromJson(needs.prepare.outputs.node-versions) }}
-        mongodb-version: ['6.0']
+        mongodb-version: ['8.0']
     steps:
     - name: Checkout repo
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -173,7 +173,7 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.prepare.outputs.test-packages) }}
         node-version: ${{ fromJson(needs.prepare.outputs.node-versions) }}
-        mongodb-version: ['6.0']
+        mongodb-version: ['8.0']
     steps:
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@5a87bd81f88e2a8b195f8b7b656f5cda1350815a # 1.11.0
