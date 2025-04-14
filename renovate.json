@@ -15,14 +15,14 @@
     "group:jsTest",
     "group:postcss",
     "group:react",
-    "security:openssf-scorecard",
-    "schedule:weekly"
+    "group:vite",
+    "security:openssf-scorecard"
   ],
   "prHourlyLimit": 10,
   "addLabels": [
     "dependencies"
   ],
-  "draftPR": true,
+  "schedule": ["* 0-2 * * 7,2,4"],
   "packageRules": [
     {
       "groupName": "fastify packages",
@@ -32,16 +32,29 @@
         "avvio{/,}**",
         "fast-json{/,}**",
         "pino{/,}**"
-      ]
+      ],
+      "schedule": ["* 0-2 1,15 * *"]
     },
     {
       "matchFileNames": [
         "packages/**",
         "servers/**",
+        "samples/**",
         "tools/**"
       ],
       "matchUpdateTypes": [
-        "major",
+        "major"
+      ],
+      "schedule": ["* 0-2 1,15 * *"]
+    },
+    {
+      "matchFileNames": [
+        "packages/**",
+        "servers/**",
+        "samples/**",
+        "tools/**"
+      ],
+      "matchUpdateTypes": [
         "minor",
         "patch",
         "pin",
@@ -49,11 +62,11 @@
       ],
       "automerge": true,
       "extends": [
-        "schedule:weekly"
+        "schedule:daily"
       ]
     },
     {
-      "matchUpdateTypes": [
+      "matchUpdateTypes": [    
         "major",
         "minor",
         "patch",
@@ -68,9 +81,6 @@
       ],
       "addLabels": [
         "eng"
-      ],
-      "extends": [
-        "schedule:monthly"
       ]
     },
     {
@@ -86,9 +96,6 @@
       ],
       "addLabels": [
         "contracts"
-      ],
-      "extends": [
-        "schedule:monthly"
       ]
     },
     {
