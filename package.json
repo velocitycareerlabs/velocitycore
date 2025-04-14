@@ -63,7 +63,7 @@
     "jest-junit": "16.0.0",
     "lerna": "6.6.2",
     "nx": "19.5.3",
-    "typescript": "5.8.2"
+    "typescript": "5.8.3"
   },
   "workspaces": [
     "contracts/*",

@@ -48,7 +48,7 @@
         "rollup": "4.39.0",
         "ts-jest": "29.2.6",
         "ts-node-dev": "2.0.0",
-        "typescript": "5.8.2",
+        "typescript": "5.8.3",
         "chokidar": "4.0.3",
         "json-schema-to-ts": "3.1.1",
         "pino": "9.6.0",
