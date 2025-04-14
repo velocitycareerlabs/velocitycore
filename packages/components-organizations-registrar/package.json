@@ -100,13 +100,13 @@
   },
   "devDependencies": {
     "@eslint/js": "8.57.1",
-    "@swc/core": "^1.11.18",
-    "@swc/jest": "^0.2.37",
+    "@swc/core": "1.11.18",
+    "@swc/jest": "0.2.37",
     "@testing-library/react": "~16.3.0",
     "@testing-library/jest-dom": "~6.6.3",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react-swc": "^3.8.0",
+    "@vitejs/plugin-react-swc": "3.8.1",
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "8.10.0",
@@ -117,13 +117,13 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "4.6.2",
-    "globals": "^15.15.0",
-    "identity-obj-proxy": "~3.0.0",
+    "globals": "15.15.0",
+    "identity-obj-proxy": "3.0.0",
     "jest-environment-jsdom": "~29.7.0",
     "jest-fetch-mock": "~3.0.3",
     "vite": "^6.2.0",
-    "vite-plugin-externalize-deps": "~0.9.0",
-    "vite-plugin-lib-inject-css": "~2.2.1"
+    "vite-plugin-externalize-deps": "0.9.0",
+    "vite-plugin-lib-inject-css": "2.2.1"
   },
   "nx": {
     "tags": ["lib"]
