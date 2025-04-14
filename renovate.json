@@ -16,13 +16,13 @@
     "group:postcss",
     "group:react",
     "group:vite",
-    "security:openssf-scorecard",
+    "security:openssf-scorecard"
   ],
   "prHourlyLimit": 10,
   "addLabels": [
     "dependencies"
   ],
-  "schedule": ["0 0-2 * * 7,2,4"],
+  "schedule": ["* 0-2 * * 7,2,4"],
   "packageRules": [
     {
       "groupName": "fastify packages",
@@ -32,8 +32,8 @@
         "avvio{/,}**",
         "fast-json{/,}**",
         "pino{/,}**"
-      ]
-      "schedule": ["0 0-2 1,15 * *"]
+      ],
+      "schedule": ["* 0-2 1,15 * *"]
     },
     {
       "matchFileNames": [
@@ -43,9 +43,9 @@
         "tools/**"
       ],
       "matchUpdateTypes": [
-        "major",
+        "major"
       ],
-      "schedule": ["0 0-2 1,15 * *"]
+      "schedule": ["* 0-2 1,15 * *"]
     },
     {
       "matchFileNames": [
