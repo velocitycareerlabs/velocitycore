@@ -34,8 +34,8 @@
     "ts-jest": "29.3.1",
     "ts-node-dev": "2.0.0",
     "typescript": "5.8.3",
-    "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5",
+    "@types/react": "18.3.20",
+    "@types/react-dom": "18.3.6",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "15.0.7",
     "@testing-library/user-event": "14.6.1"
