@@ -72,7 +72,7 @@ jobs:
       run: echo "fragment=${BRANCH##*/}" >> $GITHUB_OUTPUT
       if : github.event_name == 'merge_group'
     - name: Derive SHAs `nx affected` commands~
-      uses: nrwl/nx-set-shas@e2e6dc8bce4b0387a05eb687735c39c41580b792 # v4
+      uses: nrwl/nx-set-shas@dbe0650947e5f2c81f59190a38512cf49126fe6b # v4
       with:
         main-branch-name: ${{ github.base_ref || steps.split-branch-name.outputs.fragment }}
       if: github.event_name == 'pull_request' || github.event_name == 'merge_group'
