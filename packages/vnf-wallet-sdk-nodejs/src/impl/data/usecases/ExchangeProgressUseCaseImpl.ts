@@ -3,8 +3,6 @@ import VCLExchangeDescriptor from '../../../api/entities/VCLExchangeDescriptor';
 import ExchangeProgressRepository from '../../domain/repositories/ExchangeProgressRepository';
 import ExchangeProgressUseCase from '../../domain/usecases/ExchangeProgressUseCase';
 import VCLError from '../../../api/entities/error/VCLError';
-import { Nullish } from '../../../api/VCLTypes';
-import VCLAuthToken from '../../../api/entities/VCLAuthToken';
 
 export default class ExchangeProgressUseCaseImpl
     implements ExchangeProgressUseCase
@@ -14,13 +12,11 @@ export default class ExchangeProgressUseCaseImpl
     ) {}
 
     async getExchangeProgress(
-        exchangeDescriptor: VCLExchangeDescriptor,
-        authToken?: Nullish<VCLAuthToken>
+        exchangeDescriptor: VCLExchangeDescriptor
     ): Promise<VCLExchange> {
         try {
             return await this.exchangeProgressRepository.getExchangeProgress(
-                exchangeDescriptor,
-                authToken
+                exchangeDescriptor
             );
         } catch (error: any) {
             throw VCLError.fromError(error);

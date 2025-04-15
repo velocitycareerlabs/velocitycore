@@ -119,7 +119,7 @@ const onSubmitPresentation = (
   )
     .then((submissionResult) => {
       console.log('submission result: ', submissionResult);
-      onGetExchangeProgress(presentationRequest, submissionResult, authToken);
+      onGetExchangeProgress(presentationRequest, submissionResult);
     })
     .catch((submissionError1) => {
       console.log(submissionError1);
@@ -145,11 +145,7 @@ const onSubmitPresentation = (
           )
             .then((submissionResult) => {
               console.log('submission result: ', submissionResult);
-              onGetExchangeProgress(
-                presentationRequest,
-                submissionResult,
-                newAuthToken
-              );
+              onGetExchangeProgress(presentationRequest, submissionResult);
             })
             .catch((submissionError2: any) => {
               console.log(submissionError2);
@@ -161,16 +157,14 @@ const onSubmitPresentation = (
 
 const onGetExchangeProgress = (
   presentationRequest: Dictionary<any>,
-  submissionResult: Dictionary<any>,
-  authToken?: Dictionary<any>
+  submissionResult: Dictionary<any>
 ) => {
   getExchangeProgress(
     {
       verifiableCredentials: Constants.getIdentificationList(environment),
       presentationRequest,
     },
-    submissionResult,
-    authToken
+    submissionResult
   )
     // eslint-disable-next-line max-nested-callbacks
     .then((exchangeProgress) => {

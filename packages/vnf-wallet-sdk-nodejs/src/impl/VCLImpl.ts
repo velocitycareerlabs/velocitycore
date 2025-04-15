@@ -294,14 +294,10 @@ export class VCLImpl implements VCL {
         }
     };
 
-    getExchangeProgress = async (
-        exchangeDescriptor: VCLExchangeDescriptor,
-        authToken?: Nullish<VCLAuthToken>
-    ) => {
+    getExchangeProgress = async (exchangeDescriptor: VCLExchangeDescriptor) => {
         try {
             return await this.exchangeProgressUseCase.getExchangeProgress(
-                exchangeDescriptor,
-                authToken
+                exchangeDescriptor
             );
         } catch (error: any) {
             logError('getExchangeProgress', error);

@@ -58,8 +58,7 @@ export default interface VCL {
     ): Promise<VCLSubmissionResult>;
 
     getExchangeProgress(
-        exchangeDescriptor: VCLExchangeDescriptor,
-        authToken?: Nullish<VCLAuthToken>
+        exchangeDescriptor: VCLExchangeDescriptor
     ): Promise<VCLExchange>;
 
     searchForOrganizations(

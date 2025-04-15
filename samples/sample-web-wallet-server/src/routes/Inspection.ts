@@ -43,8 +43,7 @@ export default async function inspectionRoutes(fastify) {
           new VCLExchangeDescriptor(
             presentationSubmissionFrom(req.body.presentationSubmission),
             submissionResultFrom(req.body.submissionResult)
-          ),
-          authTokenFrom(req.body.authToken)
+          )
         )
       );
     } catch (error: any) {

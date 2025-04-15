@@ -10,13 +10,12 @@ import Urls from '../network/Urls';
 
 export const getExchangeProgress = async (
   presentationSubmission: Dictionary<any>,
-  submissionResult: Dictionary<any>,
-  authToken?: Dictionary<any>
+  submissionResult: Dictionary<any>
 ): Promise<any> => {
   const config = {
     url: Urls.getExchangeProgress,
     method: 'POST',
-    data: { presentationSubmission, submissionResult, authToken },
+    data: { presentationSubmission, submissionResult },
   };
   return fetcher(config);
 };
