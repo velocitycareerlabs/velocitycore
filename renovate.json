@@ -22,7 +22,7 @@
   "prHourlyLimit": 5,
   "addLabels": ["dependencies"],
   "automerge": true,
-  "schedule": ["schedule:daily"],
+  "schedule": ["* 0-2 * * 1,3"],
   "packageRules": [    
     {
       "matchUpdateTypes": ["major"],
