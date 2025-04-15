@@ -68,7 +68,7 @@
     },
     {
       "matchPackageNames": [
-        "twilio",
+        "twilio{/,}**",
         "ethers{/,}**",
         "@sentry/{/,}**"
       ],
