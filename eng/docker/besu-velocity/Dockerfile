@@ -1,4 +1,4 @@
-FROM hyperledger/besu:24.8.0@sha256:ff205723041323251f78db8a18580117a5e728b994860b03a40e4e8d16c0e0b5
+FROM hyperledger/besu:24.12.2@sha256:8cc791730aec85dabbe347427267048651cc20b72d4a9acd02d79dd8366be730
 
 COPY entrypoint.sh /opt/besu/entrypoint.sh
 COPY genesis.tpl /opt/besu/genesis.tpl
