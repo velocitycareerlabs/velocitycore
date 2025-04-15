@@ -19,7 +19,7 @@
     "group:vite",
     "security:openssf-scorecard"
   ],
-  "prHourlyLimit": 5,
+  "prHourlyLimit": 10,
   "addLabels": ["dependencies"],
   "automerge": true,
   "schedule": ["* 0-2 * * 1,3"],
