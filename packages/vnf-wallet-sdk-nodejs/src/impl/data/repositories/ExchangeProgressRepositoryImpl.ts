@@ -20,20 +20,17 @@ export default class ExchangeProgressRepositoryImpl
             endpoint: `${exchangeDescriptor.processUri}?${
                 VCLExchangeDescriptor.KeyExchangeId
             }=${encodeURIComponent(exchangeDescriptor.exchangeId)}`,
-            headers: this.generateHeader(exchangeDescriptor),
+            headers: {
+                [HeaderKeys.HeaderKeyAuthorization]: `${HeaderKeys.HeaderValuePrefixBearer} ${exchangeDescriptor.sessionToken.value}`,
+                [HeaderKeys.XVnfProtocolVersion]:
+                    HeaderValues.XVnfProtocolVersion,
+            },
             body: null,
             contentType: null,
         });
 
         return this.parseExchange(exchangeProgressResponse.payload);
     }
-
-    private generateHeader = (exchangeDescriptor: VCLExchangeDescriptor) => {
-        return {
-            [HeaderKeys.HeaderKeyAuthorization]: `${HeaderKeys.HeaderValuePrefixBearer} ${exchangeDescriptor.sessionToken.value}`,
-            [HeaderKeys.XVnfProtocolVersion]: HeaderValues.XVnfProtocolVersion,
-        };
-    };
 
     private parseExchange(exchangeJsonObj: Dictionary<any>) {
         return new VCLExchange(
