@@ -46,7 +46,7 @@
     "@velocitycareerlabs/db-kms": "0.5.0-build",
     "@velocitycareerlabs/organizations-registry": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
-    "@aws-sdk/client-s3": "3.782.0",
+    "@aws-sdk/client-s3": "3.787.0",
     "dotenv": "16.4.7",
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
