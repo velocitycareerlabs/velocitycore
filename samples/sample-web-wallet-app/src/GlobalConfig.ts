@@ -6,4 +6,4 @@
  */
 import Environment from './Environment';
 
-export const CurrentEnvironment = Environment.Dev;
+export const CurrentEnvironment = Environment.Staging;
