@@ -17,7 +17,7 @@
     "group:postcss",
     "group:react",
     "group:vite",
-    "security:openssf-scorecard",
+    "security:openssf-scorecard"
   ],
   "prHourlyLimit": 5,
   "addLabels": ["dependencies"],
