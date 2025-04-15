@@ -166,11 +166,9 @@ const onGetExchangeProgress = (
     },
     submissionResult
   )
-    // eslint-disable-next-line max-nested-callbacks
     .then((exchangeProgress) => {
       console.log('exchange progress: ', exchangeProgress);
     })
-    // eslint-disable-next-line max-nested-callbacks
     .catch((exchangeError) => {
       console.log(exchangeError);
     });
