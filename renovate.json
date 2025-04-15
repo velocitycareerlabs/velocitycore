@@ -17,7 +17,8 @@
     "group:postcss",
     "group:react",
     "group:vite",
-    "security:openssf-scorecard"
+    "security:openssf-scorecard",
+    ":enableVulnerabilityAlertsWithLabel(security)"
   ],
   "prHourlyLimit": 10,
   "addLabels": ["dependencies"],
@@ -26,6 +27,7 @@
   "packageRules": [    
     {
       "matchUpdateTypes": ["major"],
+      "addLabels": ["major"],
       "automerge": false,
       "schedule": ["* 0-2 1,15 * *"]
     },
