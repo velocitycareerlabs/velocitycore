@@ -59,10 +59,27 @@
       "schedule": ["* 0-2 1,15 * *"]
     },
     {
+      "groupName": "group: auth0 packages",
+      "matchPackageNames": [
+        "@auth0/{/,}**",
+        "auth0{/,}**"
+      ],
+      "automerge": false
+    },
+    {
+      "matchPackageNames": [
+        "twilio",
+        "ethers{/,}**",
+        "@sentry/{/,}**"
+      ],
+      "automerge": false
+    },
+    {
       "matchPackageNames": [
         "aws-sdk"
       ],
-      "extends": ["schedule:monthly"]
+      "extends": ["schedule:monthly"],
+      "automerge": false
     },
     {
       "matchPackageNames": [
