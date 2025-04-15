@@ -11,96 +11,56 @@
   "extends": [
     "config:best-practices",  
     "npm:unpublishSafe",
+    "group:allDigest",
     "group:linters",
     "group:jsTest",
     "group:postcss",
     "group:react",
     "group:vite",
-    "security:openssf-scorecard"
+    "security:openssf-scorecard",
   ],
-  "prHourlyLimit": 10,
-  "addLabels": [
-    "dependencies"
-  ],
-  "schedule": ["* 0-2 * * 1,3"],
+  "prHourlyLimit": 5,
+  "addLabels": ["dependencies"],
   "automerge": true,
-  "packageRules": [
+  "schedule": ["schedule:daily"],
+  "packageRules": [    
     {
-      "matchUpdateTypes": [
-        "major"
-      ],
+      "matchUpdateTypes": ["major"],
       "automerge": false,
       "schedule": ["* 0-2 1,15 * *"]
     },
     {
-      "groupName": "fastify packages",
+      "groupName": "group: fastify packages",
       "matchPackageNames": [
         "@fastify/{/,}**",
         "fastify{/,}**",
         "avvio{/,}**",
         "fast-json{/,}**",
         "pino{/,}**"
-      ],
-      "schedule": ["* 0-2 1,15 * *"]
-    },
-    {
-      "matchFileNames": [
-        "packages/**",
-        "servers/**",
-        "samples/**",
-        "tools/**"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
-      "extends": [
-        "schedule:daily"
       ]
     },
     {
-      "matchUpdateTypes": [    
-        "major",
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
       "matchFileNames": [
         "eng/**",
         ".github/**",
         "docker*.yml",
         "Dockerfile*"
       ],
-      "addLabels": [
-        "eng"
-      ]
+      "addLabels": ["eng"]
     },
     {
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
       "matchFileNames": [
         "contracts/**"
       ],
-      "addLabels": [
-        "contracts"
-      ],
+      "addLabels": ["contracts"],
       "automerge": false,
+      "schedule": ["* 0-2 1,15 * *"]
     },
     {
       "matchPackageNames": [
         "aws-sdk"
       ],
-      "extends": [
-        "schedule:monthly"
-      ]
+      "extends": ["schedule:monthly"]
     },
     {
       "matchPackageNames": [
