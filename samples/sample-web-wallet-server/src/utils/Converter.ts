@@ -79,7 +79,7 @@ export const presentationRequestDescriptorFrom = (
 
 export const authTokenFrom = (json?: Dictionary<any>): VCLAuthToken => {
   return new VCLAuthToken(
-    json?.payload,
+    json?.payload || {},
     json?.authTokenUri,
     json?.walletDid,
     json?.relyingPartyDid
