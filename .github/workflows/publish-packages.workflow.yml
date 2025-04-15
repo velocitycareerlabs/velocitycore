@@ -47,7 +47,7 @@ jobs:
         run: bash ./eng/environments/${{ env.GLOBAL_ENV }}.sh
       # Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           registry-url: ${{ env.REGISTRY_URL }}
           scope: ${{ format('@{0}', env.TARGET_ORG) }}
@@ -59,7 +59,7 @@ jobs:
       # Restore yarn cached
       - name: Restore yarn cached
         id: cache-yarn-restore
-        uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
