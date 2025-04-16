@@ -3,9 +3,7 @@ module.exports = {
   projects: [
     '<rootDir>/packages/*/jest.config.js',
     '<rootDir>/servers/*/jest.config.js',
-    '<rootDir>/lambdas/*/jest.config.js',
     '<rootDir>/tools/*/jest.config.js',
-    '<rootDir>/apps/*/jest.config.js',
   ],
   coverageDirectory: '<rootDir>/reports/coverage/',
   collectCoverage: false,
@@ -15,6 +13,7 @@ module.exports = {
     '!**/src/main*.js',
     '!**/coverage/**',
     '!**/test/**',
+    '!**/__tests__/**',
     '!**/node_modules/**',
     '!**/migrations/**',
   ],

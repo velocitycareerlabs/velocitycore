@@ -153,7 +153,9 @@ describe('Tenant keys test suite', () => {
         errorResponseMatcher({
           error: 'Not Found',
           errorCode: 'tenant_not_found',
-          message: `Tenant ${JSON.stringify({ _id: fooTenant._id })} not found`,
+          message: `Tenant ${JSON.stringify({
+            tenantId: fooTenant._id,
+          })} not found`,
           statusCode: 404,
         })
       );
@@ -179,7 +181,9 @@ describe('Tenant keys test suite', () => {
         errorResponseMatcher({
           error: 'Not Found',
           errorCode: 'tenant_not_found',
-          message: `Tenant ${JSON.stringify({ _id: fooTenant._id })} not found`,
+          message: `Tenant ${JSON.stringify({
+            tenantId: fooTenant._id,
+          })} not found`,
           statusCode: 404,
         })
       );
@@ -651,7 +655,9 @@ describe('Tenant keys test suite', () => {
       expect(response.json).toEqual(
         errorResponseMatcher({
           error: 'Not Found',
-          message: `Tenant ${JSON.stringify({ _id: fooTenant._id })} not found`,
+          message: `Tenant ${JSON.stringify({
+            tenantId: fooTenant._id,
+          })} not found`,
           errorCode: 'tenant_not_found',
           statusCode: 404,
         })
@@ -915,7 +921,9 @@ describe('Tenant keys test suite', () => {
         errorResponseMatcher({
           error: 'Not Found',
           errorCode: 'tenant_not_found',
-          message: `Tenant ${JSON.stringify({ _id: fooTenant._id })} not found`,
+          message: `Tenant ${JSON.stringify({
+            tenantId: fooTenant._id,
+          })} not found`,
           statusCode: 404,
         })
       );

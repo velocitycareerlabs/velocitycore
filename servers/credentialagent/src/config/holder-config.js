@@ -95,6 +95,10 @@ const holderConfig = {
     .get('ERROR_ON_INVALID_WEBHOOK_OFFERS')
     .default('false')
     .asBool(),
+  defaultOAuthTokenExpiration: env
+    .get('DEFAULT_OAUTH_TOKEN_EXPIRATION')
+    .default('10080m')
+    .asString(),
 };
 
 module.exports = { holderConfig };

@@ -1,3 +1,10 @@
+/**
+ * Created by Michael Avoyan on 30/03/2025.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import fs from 'fs';
 import path from 'path';
 import VCL from '../api/VCL';
@@ -50,6 +57,9 @@ import CredentialTypesUIFormSchemaUseCase from './domain/usecases/CredentialType
 import VCLDidJwkDescriptor from '../api/entities/VCLDidJwkDescriptor';
 import KeyServiceUseCase from './domain/usecases/KeyServiceUseCase';
 import { Nullish } from '../api/VCLTypes';
+import VCLAuthTokenDescriptor from '../api/entities/VCLAuthTokenDescriptor';
+import VCLAuthToken from '../api/entities/VCLAuthToken';
+import AuthTokenUseCase from './domain/usecases/AuthTokenUseCase';
 
 export class VCLImpl implements VCL {
     static readonly ModelsToInitializeAmount = 3;
@@ -84,6 +94,8 @@ export class VCLImpl implements VCL {
 
     organizationsUseCase!: OrganizationsUseCase;
 
+    authTokenUseCase!: AuthTokenUseCase;
+
     credentialTypesUIFormSchemaUseCase!: CredentialTypesUIFormSchemaUseCase;
 
     keyServiceUseCase!: KeyServiceUseCase;
@@ -101,7 +113,7 @@ export class VCLImpl implements VCL {
             VCLImpl.ModelsToInitializeAmount
         );
 
-        this.initGlobalConfigurations();
+        this.initGlobalConfigurations(initializationDescriptor);
 
         this.printVersion();
 
@@ -160,14 +172,16 @@ export class VCLImpl implements VCL {
         }
     }
 
-    private initGlobalConfigurations() {
+    public initGlobalConfigurations(
+        initializationDescriptor: VCLInitializationDescriptor
+    ) {
         GlobalConfig.init(
-            false,
-            this.initializationDescriptor.environment,
-            this.initializationDescriptor.xVnfProtocolVersion,
-            this.initializationDescriptor.logService,
+            initializationDescriptor.isDebugOn,
+            initializationDescriptor.environment,
+            initializationDescriptor.xVnfProtocolVersion,
             true
         );
+        VCLLog.LoggerService = initializationDescriptor.logService;
     }
 
     private initializeUseCases() {
@@ -213,6 +227,8 @@ export class VCLImpl implements VCL {
 
         this.organizationsUseCase =
             VclBlocksProvider.provideOrganizationsUseCase();
+
+        this.authTokenUseCase = VclBlocksProvider.provideAuthTokenUseCase();
 
         this.credentialTypesUIFormSchemaUseCase =
             VclBlocksProvider.provideCredentialTypesUIFormSchemaUseCase();
@@ -264,11 +280,13 @@ export class VCLImpl implements VCL {
     };
 
     submitPresentation = async (
-        presentationSubmission: VCLPresentationSubmission
+        presentationSubmission: VCLPresentationSubmission,
+        authToken?: Nullish<VCLAuthToken>
     ) => {
         try {
             return await this.presentationSubmissionUseCase.submit(
-                presentationSubmission
+                presentationSubmission,
+                authToken
             );
         } catch (error: any) {
             logError('submit presentation', error);
@@ -371,6 +389,12 @@ export class VCLImpl implements VCL {
             sessionToken
         );
     }
+
+    getAuthToken = async (
+        authTokenDescriptor: VCLAuthTokenDescriptor
+    ): Promise<VCLAuthToken> => {
+        return this.authTokenUseCase.getAuthToken(authTokenDescriptor);
+    };
 
     finalizeOffers = async (
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,

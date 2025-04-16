@@ -1,8 +1,5 @@
 module.exports = (packageName, options = {}) => ({
   roots: ['src', 'test'],
-  // transform: {
-  //   "^.+\\.ts$": "ts-jest",
-  // },
   coverageDirectory: 'coverage/',
   testRegex: '(.*.(test|spec)).(jsx?|tsx?)$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
@@ -14,6 +11,7 @@ module.exports = (packageName, options = {}) => ({
     '!**/coverage/**',
     '!**/test/**',
     '!**/e2e/**',
+    '!**/__tests__/**',
     '!**/node_modules/**',
     '!**/migrations/**',
   ],

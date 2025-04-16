@@ -34,7 +34,6 @@ describe(':d/website did-doc publishing test suite', () => {
 
   beforeEach(async () => {
     await mongoDb().collection('organizations').deleteMany({});
-    await mongoDb().collection('organizationServices').deleteMany({});
   });
 
   afterAll(async () => {

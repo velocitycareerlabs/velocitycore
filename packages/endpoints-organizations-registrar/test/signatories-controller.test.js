@@ -457,7 +457,7 @@ describe('signatoriesController', () => {
         events: [
           {
             state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
+            timestamp: subDays(8)(new Date()),
           },
         ],
       });
@@ -466,7 +466,7 @@ describe('signatoriesController', () => {
         events: [
           {
             state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
+            timestamp: subDays(8)(new Date()),
           },
         ],
       });
@@ -476,13 +476,10 @@ describe('signatoriesController', () => {
         testContext
       );
 
-      expect(mockSendEmail).toHaveBeenCalledTimes(2);
-      expect(mockSendEmail.mock.calls).toEqual(
-        expect.arrayContaining([
-          [expectedSignatoryReminderEmail(organization2, caoOrganization)],
-          [expectedSignatoryReminderEmail(organization1, caoOrganization)],
-        ])
-      );
+      expect(mockSendEmail.mock.calls).toEqual([
+        [expectedSignatoryReminderEmail(organization2, caoOrganization)],
+        [expectedSignatoryReminderEmail(organization1, caoOrganization)],
+      ]);
 
       const signatoryReminderDb = await signatoryStatusRepo.findOne({
         filter: {
@@ -675,7 +672,7 @@ describe('signatoriesController', () => {
         events: [
           {
             state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
+            timestamp: subDays(8)(new Date()),
           },
         ],
       });
@@ -724,7 +721,7 @@ describe('signatoriesController', () => {
         events: [
           {
             state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
+            timestamp: subDays(8)(new Date()),
           },
         ],
       });

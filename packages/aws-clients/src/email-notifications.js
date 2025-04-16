@@ -23,26 +23,27 @@ const {
   SESv2Client,
   SendEmailCommand: SESv2SendEmailCommand,
 } = require('@aws-sdk/client-sesv2');
+const { buildClientConfig } = require('./client-config');
 
 // 2020-10-20: At the moment free Localstack doesn't support SESv2,
 // so SES is used for testing when a value is passed for endpoint (local address)
 
 const createSesClient = ({ awsRegion, awsEndpoint }) =>
-  new SESClient({
-    apiVersion: '2010-12-01',
-    region: awsRegion,
-    credentials: {
-      accessKeyId: 'tests-key-id',
-      secretAccessKey: 'tests-key',
-    },
-    endpoint: awsEndpoint,
-  });
+  new SESClient(
+    buildClientConfig({
+      apiVersion: '2010-12-01',
+      awsRegion,
+      awsEndpoint,
+    })
+  );
 
 const createSesV2Client = ({ awsRegion }) =>
-  new SESv2Client({
-    apiVersion: '2019-09-27',
-    region: awsRegion,
-  });
+  new SESv2Client(
+    buildClientConfig({
+      apiVersion: '2019-09-27',
+      awsRegion,
+    })
+  );
 
 const initSendEmailNotification =
   ({ awsRegion, awsEndpoint }) =>

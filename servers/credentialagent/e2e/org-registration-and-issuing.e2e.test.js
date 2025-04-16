@@ -66,7 +66,7 @@ const {
   sampleEducationDegreeGraduation,
 } = require('../test/helpers/sample-education-degree-graduation');
 
-const registrarUrl = 'https://localhost:13003';
+const registrarUrl = 'https://localhost:13004';
 const fineractUrl = 'http://localhost:13008';
 const caUrl = 'http://localhost:13002';
 const rpcUrl = 'http://localhost:18545';

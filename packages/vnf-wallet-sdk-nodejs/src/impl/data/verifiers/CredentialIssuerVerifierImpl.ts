@@ -11,6 +11,7 @@ import CredentialIssuerVerifier from '../../domain/verifiers/CredentialIssuerVer
 import { loadJsonldContext } from '../../utils/LoadJsonldContext';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import CredentialTypesModel from '../../domain/models/CredentialTypesModel';
+import { getCredentialTypeMetadataByVc } from './VerificationUtils';
 
 export default class CredentialIssuerVerifierImpl
     implements CredentialIssuerVerifier
@@ -29,6 +30,10 @@ export default class CredentialIssuerVerifierImpl
                 jwtCredential.payload.vc,
                 this.networkService
             );
+            const credentialTypeMetadata = getCredentialTypeMetadataByVc(
+                this.credentialTypesModel.data,
+                jwtCredential
+            );
             return verifyIssuerForCredentialType(
                 jwtCredential.payload.vc,
                 finalizeOffersDescriptor.credentialManifest.issuerId,
@@ -36,8 +41,7 @@ export default class CredentialIssuerVerifierImpl
                     issuerAccreditation:
                         finalizeOffersDescriptor.credentialManifest
                             .verifiedProfile.credentialSubject,
-                    credentialTypeMetadata:
-                        this.credentialTypesModel.data?.payload,
+                    credentialTypeMetadata,
                     jsonLdContext,
                 },
                 {

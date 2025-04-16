@@ -5,27 +5,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { VCLEnvironment, VCLLogService, VCLXVnfProtocolVersion } from '../src';
+import { VCLEnvironment, VCLXVnfProtocolVersion } from '../src';
 import GlobalConfig from '../src/impl/GlobalConfig';
-import VCLLog from '../src/impl/utils/VCLLog';
 
 describe('GlobalConfig', () => {
-    let mockLogService: VCLLogService;
-
-    beforeEach(() => {
-        mockLogService = {
-            info: jest.fn(),
-            warn: jest.fn(),
-            error: jest.fn(),
-        };
-    });
-
     test('should initialize with default values', () => {
         GlobalConfig.init(
             false,
             VCLEnvironment.Prod,
             VCLXVnfProtocolVersion.XVnfProtocolVersion1,
-            mockLogService,
             true
         );
 
@@ -42,16 +30,16 @@ describe('GlobalConfig', () => {
             true,
             VCLEnvironment.Staging,
             VCLXVnfProtocolVersion.XVnfProtocolVersion2,
-            mockLogService,
             false
         );
 
-        expect(GlobalConfig.IsDebugOn).toBe(true);
         expect(GlobalConfig.CurrentEnvironment).toBe(VCLEnvironment.Staging);
         expect(GlobalConfig.XVnfProtocolVersion).toBe(
             VCLXVnfProtocolVersion.XVnfProtocolVersion2
         );
         expect(GlobalConfig.IsDirectIssuerOn).toBe(false);
+        expect(GlobalConfig.IsDebugOn).toBe(true);
+        expect(GlobalConfig.IsLoggerOn).toBe(true);
     });
 
     test('should correctly determine if logger is on', () => {
@@ -59,18 +47,15 @@ describe('GlobalConfig', () => {
             false,
             VCLEnvironment.Prod,
             VCLXVnfProtocolVersion.XVnfProtocolVersion1,
-            mockLogService,
             true
         );
-        expect(GlobalConfig.IsLoggerOn).toBe(false);
-
         GlobalConfig.init(
             true,
             VCLEnvironment.Dev,
             VCLXVnfProtocolVersion.XVnfProtocolVersion1,
-            mockLogService,
             true
         );
+        expect(GlobalConfig.IsDebugOn).toBe(true);
         expect(GlobalConfig.IsLoggerOn).toBe(true);
     });
 
@@ -79,11 +64,58 @@ describe('GlobalConfig', () => {
             true,
             VCLEnvironment.Prod,
             VCLXVnfProtocolVersion.XVnfProtocolVersion1,
-            mockLogService,
             true
         );
 
-        expect(VCLLog.LoggerService).toBe(mockLogService);
-        expect(VCLLog.IsLoggerOn).toBe(true);
+        expect(GlobalConfig.IsDebugOn).toBe(true);
+        expect(GlobalConfig.IsLoggerOn).toBe(true);
+    });
+
+    test('test debug & logger for Prod', () => {
+        GlobalConfig.init(
+            false,
+            VCLEnvironment.Prod,
+            VCLXVnfProtocolVersion.XVnfProtocolVersion1,
+            true
+        );
+
+        expect(GlobalConfig.IsDebugOn).toBe(false);
+        expect(GlobalConfig.IsLoggerOn).toBe(false);
+    });
+
+    test('test debug & logger for Staging', () => {
+        GlobalConfig.init(
+            false,
+            VCLEnvironment.Staging,
+            VCLXVnfProtocolVersion.XVnfProtocolVersion1,
+            true
+        );
+
+        expect(GlobalConfig.IsDebugOn).toBe(false);
+        expect(GlobalConfig.IsLoggerOn).toBe(false);
+    });
+
+    test('test debug & logger for Qa', () => {
+        GlobalConfig.init(
+            false,
+            VCLEnvironment.Qa,
+            VCLXVnfProtocolVersion.XVnfProtocolVersion1,
+            true
+        );
+
+        expect(GlobalConfig.IsDebugOn).toBe(false);
+        expect(GlobalConfig.IsLoggerOn).toBe(true);
+    });
+
+    test('test debug & logger for Dev', () => {
+        GlobalConfig.init(
+            false,
+            VCLEnvironment.Dev,
+            VCLXVnfProtocolVersion.XVnfProtocolVersion1,
+            true
+        );
+
+        expect(GlobalConfig.IsDebugOn).toBe(false);
+        expect(GlobalConfig.IsLoggerOn).toBe(true);
     });
 });
