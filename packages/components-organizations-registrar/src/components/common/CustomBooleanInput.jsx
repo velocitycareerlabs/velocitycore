@@ -38,7 +38,6 @@ const CustomBooleanInput = (props) => {
     defaultValue = false,
     format,
     label,
-    fullWidth,
     helperText,
     onBlur,
     onChange,

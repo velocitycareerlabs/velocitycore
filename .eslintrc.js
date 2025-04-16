@@ -64,6 +64,7 @@ module.exports = {
       },
     ],
     'no-underscore-dangle': ['error', { allowAfterThis: true, allow: ['_id'] }],
+    'no-unused-vars': ['error', { varsIgnorePattern: '^React$' }],
     'no-use-before-define': 0, // override airbnb
     'prefer-destructuring': [
       'error',
@@ -86,6 +87,7 @@ module.exports = {
       },
     ],
     quotes: [2, 'single', { avoidEscape: true }],
+    'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': [
       'error',
       {
@@ -104,6 +106,9 @@ module.exports = {
           '**/test/**/*.tsx',
           '**/setupTests.ts',
           '**/setupTests.js',
+          '**/jest.config.js',
+          '**/vite.config.js',
+          '**/.eslintrc.js',
         ],
       },
     ],
@@ -114,6 +119,9 @@ module.exports = {
     ],
   },
   overrides: [
+    {
+      files: ['**/*.{js,jsx}'],
+    },
     {
       files: [
         '**/*.test.js',
@@ -131,6 +139,34 @@ module.exports = {
         'better-mutation/no-mutating-methods': 'off',
         'better-mutation/no-mutation': 'off',
         'max-nested-callbacks': ['error', 8],
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      settings: {
+        'import/parsers': {
+          '@typescript-eslint/parser': ['.ts', '.tsx'],
+        },
+        'import/resolver': {
+          node: {
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
+            paths: ['./'],
+          },
+          typescript: {
+            project: ['./tsconfig.json'],
+          },
+        },
+      },
+      extends: [
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        'class-methods-use-this': 'off',
       },
     },
   ],
