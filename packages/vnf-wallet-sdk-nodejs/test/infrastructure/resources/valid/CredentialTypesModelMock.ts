@@ -22,7 +22,7 @@ export class CredentialTypesModelMock implements CredentialTypesModel {
         throw new Error('Method not implemented.');
     }
 
-    // eslint-disable-next-line unused-imports/no-unused-vars,no-unused-vars
+    // eslint-disable-next-line unused-imports/no-unused-vars
     credentialTypeByTypeName = (type: string): VCLCredentialType => {
         return new VCLCredentialType({}, this.issuerCategory);
     };

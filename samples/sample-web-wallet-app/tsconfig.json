@@ -1,25 +1,31 @@
 {
   "compilerOptions": {
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "declaration": true,
+    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "module": "Node16",
     "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "esnext", "ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "outDir": "dist",
     "preserveConstEnums": true,
     "removeComments": true,
     "rootDir": "src",
-    "outDir": "dist",
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
     "resolveJsonModule": true,
-    "noImplicitAny": false,
+    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "lib": ["ES6", "ES2022"],
     "target": "ES6",
-    "moduleResolution": "node16",
-    "downlevelIteration": true,
-    "declaration": true,
-    "jsx": "react"
+    "types": ["vite/client", "vite-plugin-svgr/client"]
   },
   "include": [
     "./src/**/*"
@@ -31,5 +37,5 @@
   "parserOptions":  {
     "ecmaVersion":  "2022",  // Allows for the parsing of modern ECMAScript features
     "sourceType":  "module"  // Allows for the use of imports
-  }
+  },
 }

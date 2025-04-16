@@ -33,11 +33,13 @@ const vclSdkPlugin = async (fastify: any) => {
 
   try {
     await vclSdk.initialize(initializationDescriptor);
-    // eslint-disable-next-line
+    // eslint-disable-next-line no-console
     console.log('VCL SDK initialized successfully');
     fastify.decorate('vclSdk', vclSdk);
     const addHooks = async (req, reply) => {
+      // eslint-disable-next-line better-mutation/no-mutation
       req.vclSdk = vclSdk;
+      // eslint-disable-next-line better-mutation/no-mutation
       reply.vclSdk = vclSdk;
     };
     fastify.addHook('preHandler', addHooks);

@@ -22,7 +22,6 @@ const initialize = () => {
   app.register(vclSdkPlugin);
   app.register(cors);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.listen(
     { port: GlobalConfig.port, host: GlobalConfig.host },
     (err: any, address: any) => {
@@ -31,6 +30,8 @@ const initialize = () => {
         console.error(address);
         process.exit(1);
       }
+
+      // eslint-disable-next-line no-console
       console.log(`Server listening at ${address}`);
     }
   );

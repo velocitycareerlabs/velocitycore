@@ -1,39 +1,21 @@
+const { createDefaultPreset } = require('ts-jest');
+const pack = require('./package.json');
+const jestConfig = require('../../jest.config.base');
+
 module.exports = {
-  // Use ts-jest to handle TypeScript files
-  preset: 'ts-jest',
+  ...createDefaultPreset(),
+  ...jestConfig(pack.name),
+  testEnvironment: 'jsdom',
+  transform: { '^.+\\.[jt]sx?$': '@swc/jest' },
+  transformIgnorePatterns: ['node_modules/', '\\.(css|scss|sass)$'],
 
-  // Use Node.js as the test environment
-  testEnvironment: 'node',
-
-  // Enable support for ECMAScript Modules (ESM)
-  extensionsToTreatAsEsm: ['.ts', '.tsx'],
-
-  // Transform TypeScript files using ts-jest
-  transform: {
-    '^.+\\.tsx?$': 'ts-jest',
-  },
-
-  // Allow transforming specific node_modules if they use ESM
-  transformIgnorePatterns: [
-    '/node_modules/(?!(your-esm-package|@velocitycareerlabs/vnf-nodejs-wallet-sdk)/)',
-  ],
-
-  // Fix for Jest failing to resolve ESM imports with file extensions
+  // Recognized file extensions for modules
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  // moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
+    '^@/(.*)$': '<rootDir>/src/$1', // Maps @/ to src/
+    '^@shared/(.*)$': '<rootDir>/src/shared/$1', // Maps @shared/ to src/shared/
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/__mocks__/fileMock.js',
   },
-
-  // Jest will look for test files in these locations
-  testMatch: ['**/__tests__/**/*.test.ts', '**/?(*.)+(spec|test).ts'],
-
-  // Clear mocks before each test
-  clearMocks: true,
-
-  // Set a timeout for tests
-  testTimeout: 30000, // 30 seconds
-
-  // Enable coverage collection
-  // collectCoverage: true,
-  // collectCoverageFrom: ['src/**/*.{ts,tsx}'],
-  // coverageDirectory: 'coverage',
 };

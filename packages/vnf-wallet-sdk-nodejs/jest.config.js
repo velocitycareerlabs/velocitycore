@@ -1,12 +1,8 @@
+const { createDefaultPreset } = require('ts-jest');
+const jestConfig = require('../../jest.config.base');
+const pack = require('./package.json');
+
 module.exports = {
-    preset: 'ts-jest',
-    testEnvironment: 'node',
-    testPathIgnorePatterns: ['node_modules', 'dist'],
-    moduleNameMapper: {
-        '^src/(.*)$': '<rootDir>/src/$1',
-    },
-    moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
-    transform: {
-        '^.+\\.(ts|tsx)$': 'ts-jest',
-    },
+    ...createDefaultPreset(),
+    ...jestConfig(pack.name),
 };

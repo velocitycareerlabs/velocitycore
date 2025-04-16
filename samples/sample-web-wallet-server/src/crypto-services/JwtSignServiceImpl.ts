@@ -11,7 +11,6 @@ import {
   VCLJwtSignService,
   VCLDidJwk,
   VCLJwtDescriptor,
-  VCLToken,
 } from '@velocitycareerlabs/vnf-nodejs-wallet-sdk';
 import { generateSignedJwtFetcher } from './fetchers';
 
@@ -19,9 +18,7 @@ export class JwtSignServiceImpl implements VCLJwtSignService {
   async sign(
     jwtDescriptor: VCLJwtDescriptor,
     didJwk: VCLDidJwk,
-    nonce: Nullish<string>,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    remoteCryptoServicesToken: Nullish<VCLToken>
+    nonce: Nullish<string>
   ): Promise<VCLJwt> {
     const jwtJson = await generateSignedJwtFetcher(
       jwtDescriptor,

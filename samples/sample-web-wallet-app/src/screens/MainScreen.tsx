@@ -4,6 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
+/* eslint-disable no-console */
 
 import React from 'react';
 import { HttpStatusCode } from 'axios';
@@ -39,6 +40,7 @@ const environment = CurrentEnvironment;
 let didJwk: Dictionary<any>;
 const initialization = async () => {
   if (!didJwk) {
+    // eslint-disable-next-line better-mutation/no-mutation
     didJwk = await generateDidJwk({
       signatureAlgorithm: 'P-256',
       remoteCryptoServicesToken: null,
@@ -127,6 +129,7 @@ const onSubmitPresentation = (
         submissionError1.status === HttpStatusCode.Unauthorized &&
         authTokenRefreshAmount === 0
       ) {
+        // eslint-disable-next-line better-mutation/no-mutation
         authTokenRefreshAmount += 1;
         const authTokenDescriptor = {
           authTokenUri: authToken?.authTokenUri || '',
@@ -362,6 +365,7 @@ const onGenerateDidJwk = () => {
   })
     .then((newDidJwk) => {
       console.log('new didJwk: ', newDidJwk);
+      // eslint-disable-next-line better-mutation/no-mutation
       didJwk = newDidJwk;
     })
     .catch((error) => {
@@ -418,3 +422,4 @@ const MainScreen: React.FC = () => {
 };
 
 export default MainScreen;
+/* eslint-enable */

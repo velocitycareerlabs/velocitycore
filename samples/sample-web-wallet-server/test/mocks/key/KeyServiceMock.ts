@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   VCLDidJwk,
   VCLDidJwkDescriptor,
@@ -8,6 +7,7 @@ import { DidJwkMocks } from '../DidJwkMocks';
 
 export class KeyServiceMock implements VCLKeyService {
   async generateDidJwk(
+    // eslint-disable-next-line no-unused-vars
     didJwkDescriptor: VCLDidJwkDescriptor
   ): Promise<VCLDidJwk> {
     return DidJwkMocks.DidJwk;
