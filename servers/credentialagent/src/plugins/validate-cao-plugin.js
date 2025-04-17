@@ -25,42 +25,49 @@ const {
 
 async function validateCao() {
   const context = this;
-  const registrarFetch = context.baseRegistrarFetch(context);
-  const caoErrorMessage =
-    // eslint-disable-next-line max-len
-    'The provided CAO is not permitted to operator on the network. Make sure the organization exists on the registrar and is approved for Credential Agent Operation';
-  let profile;
-  context.log.info('Validating CAO');
-  context.log.info({ caoDid: context.config.caoDid });
-  try {
-    profile = await getOrganizationVerifiedProfile(context.config.caoDid, {
-      registrarFetch,
-    });
-  } catch (error) {
-    context.log.info({ error });
-    const { response } = error;
-    const { statusCode } = response || {};
+  if (context.config.validateCaoDid) {
+    const registrarFetch = context.baseRegistrarFetch(context);
+    const caoErrorMessage =
+      // eslint-disable-next-line max-len
+      'The provided CAO is not permitted to operator on the network. Make sure the organization exists on the registrar and is approved for Credential Agent Operation';
+    let profile;
+    context.log.info('Validating CAO');
+    context.log.info({ caoDid: context.config.caoDid });
+    try {
+      profile = await getOrganizationVerifiedProfile(context.config.caoDid, {
+        registrarFetch,
+      });
+    } catch (error) {
+      context.log.info({ error });
+      const { response } = error;
+      const { statusCode } = response || {};
 
-    switch (true) {
-      case statusCode >= 400 && statusCode < 500:
-        throw new Error(caoErrorMessage);
-      default:
-        context.log.warn(
-          'The registrar was not available for the request. Please check your firewall settings.'
-        );
-        break;
+      switch (true) {
+        case statusCode >= 400 && statusCode < 500:
+          throw new Error(caoErrorMessage);
+        default:
+          context.log.warn(
+            'The registrar was not available for the request. Please check your firewall settings.'
+          );
+          break;
+      }
+
+      return;
     }
 
-    return;
+    if (
+      !includes(
+        ServiceCategories.CredentialAgentOperator,
+        profile?.credentialSubject?.permittedVelocityServiceCategory
+      )
+    ) {
+      throw new Error(caoErrorMessage);
+    }
   }
-
-  if (
-    !includes(
-      ServiceCategories.CredentialAgentOperator,
-      profile?.credentialSubject?.permittedVelocityServiceCategory
-    )
-  ) {
-    throw new Error(caoErrorMessage);
+  else {
+    context.log.warn(
+      'CAO DID validation is turned off.'
+    );
   }
 }
 
