@@ -102,9 +102,7 @@ describe('validate cao plugin test suite', () => {
       },
     });
     expect(warnSpy).toHaveBeenCalledTimes(1);
-    expect(warnSpy).toHaveBeenCalledWith(
-      'CAO DID validation is turned off.'
-    );
+    expect(warnSpy).toHaveBeenCalledWith('CAO DID validation is turned off.');
   });
 
   it('should not warn for valid cao', async () => {
