@@ -38,7 +38,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-watch": "7.0.0",
     "nock": "13.5.6",
-    "fastify": "4.29.0",
+    "fastify": "5.3.2",
     "jest": "29.7.0",
     "prettier": "2.8.8"
   },
