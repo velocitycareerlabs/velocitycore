@@ -3536,7 +3536,7 @@ describe('Organizations Full Test Suite', () => {
             organizationDid: response.json.didDoc.id,
             events: [
               {
-                state: SignatoryEventStatus.EMAIL_SENT,
+                state: SignatoryEventStatus.LINK_SENT,
                 timestamp: expect.any(Date),
               },
             ],

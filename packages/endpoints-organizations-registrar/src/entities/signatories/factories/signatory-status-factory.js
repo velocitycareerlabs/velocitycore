@@ -33,9 +33,10 @@ module.exports = (app) =>
 
       return {
         organizationDid: organization.didDoc.id,
+        organizationId: organization._id,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: new Date(),
           },
         ],

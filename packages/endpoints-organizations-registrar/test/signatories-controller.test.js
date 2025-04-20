@@ -39,6 +39,7 @@ const {
 } = require('./helpers/email-matchers');
 const signatoryStatusPlugin = require('../src/entities/signatories/repos/repo');
 const organizationsPlugin = require('../src/entities/organizations/repos/repo');
+const invitationsPlugin = require('../src/entities/invitations/repo');
 const {
   sendReminders,
   initSendEmailNotifications,
@@ -71,6 +72,7 @@ describe('signatoriesController', () => {
   let persistSignatoryStatus;
   let signatoryStatusRepo;
   let organizationsRepo;
+  let invitationsRepo;
   let sendEmailToSignatoryForOrganizationApproval;
 
   beforeAll(async () => {
@@ -88,6 +90,10 @@ describe('signatoriesController', () => {
       log: fastify.log,
       config: fastify.config,
     });
+    invitationsRepo = invitationsPlugin(fastify)({
+      log: fastify.log,
+      config: fastify.config,
+    });
 
     ({ sendEmailToSignatoryForOrganizationApproval } =
       initSendEmailNotifications(fastify));
@@ -96,6 +102,7 @@ describe('signatoriesController', () => {
       repos: {
         signatoryStatus: signatoryStatusRepo,
         organizations: organizationsRepo,
+        invitations: invitationsRepo,
       },
     };
   });
@@ -148,7 +155,7 @@ describe('signatoriesController', () => {
         organizationDid: organization.didDoc.id,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
@@ -332,7 +339,7 @@ describe('signatoriesController', () => {
         organizationDid: organization.didDoc.id,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
@@ -501,10 +508,11 @@ describe('signatoriesController', () => {
 
     it('should send emails if there are active signatory reminders', async () => {
       const invitingOrganization = await persistOrganization();
-      await persistInvitation({
-        organization: invitingOrganization,
+      const invitation1 = await persistInvitation({
+        organizationId: invitingOrganization._id,
       });
       const organization1 = await persistOrganization({
+        invitationId: new ObjectId(invitation1._id),
         service: [
           {
             id: '#iss-1',
@@ -512,8 +520,12 @@ describe('signatoriesController', () => {
             serviceEndpoint: `${invitingOrganization.didDoc.id}#cao-1`,
           },
         ],
+      });
+      const invitation2 = await persistInvitation({
+        organizationId: invitingOrganization._id,
       });
       const organization2 = await persistOrganization({
+        invitationId: new ObjectId(invitation2._id),
         service: [
           {
             id: '#iss-1',
@@ -522,25 +534,26 @@ describe('signatoriesController', () => {
           },
         ],
       });
-      const signatoryReminder1 = await persistSignatoryStatus({
+
+      const signatoryStatus1 = await persistSignatoryStatus({
         organization: organization1,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(8)(new Date()),
           },
         ],
       });
-      const signatoryReminder2 = await persistSignatoryStatus({
+      const signatoryStatus2 = await persistSignatoryStatus({
         organization: organization2,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(8)(new Date()),
           },
         ],
       });
-      const signatoryReminder3 = await persistSignatoryStatus({});
+      const signatoryStatus3 = await persistSignatoryStatus({});
       await sendReminders(
         sendEmailToSignatoryForOrganizationApproval,
         testContext
@@ -551,17 +564,18 @@ describe('signatoriesController', () => {
         [expectedSignatoryReminderEmail(organization1, invitingOrganization)],
       ]);
 
-      const signatoryReminderDb = await signatoryStatusRepo.findOne({
+      const signatoryStatus3Db = await signatoryStatusRepo.findOne({
         filter: {
-          _id: new ObjectId(signatoryReminder3._id),
+          _id: new ObjectId(signatoryStatus3._id),
         },
       });
-      expect(signatoryReminderDb).toEqual({
+      expect(signatoryStatus3Db).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: expect.any(String),
+        organizationId: expect.any(String),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
         ],
@@ -577,19 +591,20 @@ describe('signatoriesController', () => {
 
       const signatoryReminderDb1 = await signatoryStatusRepo.findOne({
         filter: {
-          _id: new ObjectId(signatoryReminder1._id),
+          _id: new ObjectId(signatoryStatus1._id),
         },
       });
       expect(signatoryReminderDb1).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization1.didDoc.id,
+        organizationId: new ObjectId(organization1._id),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
-            state: SignatoryEventStatus.REMINDER_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
         ],
@@ -609,7 +624,7 @@ describe('signatoriesController', () => {
 
       const signatoryReminderDb2 = await signatoryStatusRepo.findOne({
         filter: {
-          _id: new ObjectId(signatoryReminder2._id),
+          _id: new ObjectId(signatoryStatus2._id),
         },
       });
       expect(signatoryReminderDb2).toEqual({
@@ -617,11 +632,11 @@ describe('signatoriesController', () => {
         organizationDid: organization2.didDoc.id,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
-            state: SignatoryEventStatus.REMINDER_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
         ],
@@ -646,11 +661,11 @@ describe('signatoriesController', () => {
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(7)(new Date()),
           },
           {
-            state: SignatoryEventStatus.REMINDER_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: new Date(),
           },
         ],
@@ -668,7 +683,7 @@ describe('signatoriesController', () => {
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(7)(new Date()),
           },
           {
@@ -691,7 +706,7 @@ describe('signatoriesController', () => {
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(7)(new Date()),
           },
           {
@@ -714,7 +729,7 @@ describe('signatoriesController', () => {
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(6)(new Date()),
           },
         ],
@@ -741,7 +756,7 @@ describe('signatoriesController', () => {
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(8)(new Date()),
           },
         ],
@@ -762,7 +777,7 @@ describe('signatoriesController', () => {
         organizationDid: organization.didDoc.id,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
@@ -790,7 +805,7 @@ describe('signatoriesController', () => {
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(8)(new Date()),
           },
         ],
@@ -810,7 +825,7 @@ describe('signatoriesController', () => {
         organizationDid: organization.didDoc.id,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {

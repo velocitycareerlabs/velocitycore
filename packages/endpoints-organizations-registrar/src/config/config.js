@@ -178,8 +178,8 @@ const createConfig = (packageJson) => {
     libS3Bucket: env.get('LIB_S3_BUCKET').required(!isTest).asString(),
     libUrl: env.get('LIB_URL').required(!isTest).asString(),
     custodiedDidWebHost: env.get('CUSTODIED_DID_WEB_HOST').asString(),
-    reminderDelayInMinutes: env
-      .get('REMINDER_DELAY_IN_MINUTES')
+    signatoryLinkResend: env
+      .get('SIGNATORY_LINK_RESEND')
       .default(10080)
       .asIntPositive(),
     signatoryLinkExpiration: env
