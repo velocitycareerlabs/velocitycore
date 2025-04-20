@@ -203,10 +203,11 @@ const CreateOrganization = ({
                       <Stack flexDirection="row">
                         <Box sx={sxStyles.fullWidth}>
                           <OrganizationRegistrationNumbers
-                            formData={formData}
+                            formData={{ ...defaultValues, ...formData }}
                             authority={authority}
                             type="uri"
                             label="Local Country Registration Authority Website"
+                            source="registrationNumbers"
                           />
                         </Box>
                       </Stack>
@@ -216,9 +217,10 @@ const CreateOrganization = ({
                     <Stack flexDirection="row">
                       <Box sx={sxStyles.fullWidth}>
                         <OrganizationRegistrationNumbers
-                          formData={formData}
+                          formData={{ ...defaultValues, ...formData }}
                           authority={authority}
                           type="number"
+                          source="registrationNumbers"
                         />
                       </Box>
                     </Stack>
