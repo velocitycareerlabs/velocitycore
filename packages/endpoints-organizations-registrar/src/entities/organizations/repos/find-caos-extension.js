@@ -25,9 +25,20 @@ const findCaosExtension = (parent) => ({
     const caoDids = flow(map(stripFragmentFromDidUrl), uniq)(caoServiceIds);
     return parent.find({
       filter: {
-        'didDoc.id': {
-          $in: caoDids,
-        },
+        $or: [
+          {
+            'didDoc.id': {
+              $in: caoDids,
+            },
+          },
+          {
+            'didDoc.alsoKnownAs': {
+              $elemMatch: {
+                $in: caoDids,
+              },
+            },
+          },
+        ],
         '@ignoreScope': true,
       },
       projection,
