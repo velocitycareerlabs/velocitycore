@@ -879,7 +879,7 @@ describe('Organizations Test Suite', () => {
         });
         const response = await fastify.injectJson({
           method: 'GET',
-          url: `${baseUrl}/search-profiles?sort[0]=createdAt,DESC&page.size=1`,
+          url: `${baseUrl}/search-profiles?sort[0]=createdAt,DESC&page.size=1&filter.serviceTypes=Issuer,NotaryIssuer`,
         });
 
         expect(response.statusCode).toEqual(200);
