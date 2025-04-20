@@ -38,8 +38,9 @@ import { Authorities, authorityOptions } from '../../constants/messageCodes';
 import { dataResources } from '../../utils/remoteDataProvider';
 
 const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, defaultValues }) => {
-  const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
   const dataProvider = useDataProvider();
+
+  const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
   const handleAuthoryChange = (event) => {
     setAuthority(event.target.value);
   };
@@ -190,6 +191,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                       type="uri"
                       label="Local Country Registration Authority Website"
                       isRequired={false}
+                      source="registrationNumbers"
                     />
                   </Box>
                 </Stack>
@@ -202,6 +204,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                     type="number"
                     label={authorityOptions[authority]}
                     isRequired={false}
+                    source="registrationNumbers"
                   />
                 </Box>
               </Stack>
