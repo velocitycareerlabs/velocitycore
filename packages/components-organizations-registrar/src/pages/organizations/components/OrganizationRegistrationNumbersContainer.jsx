@@ -12,12 +12,17 @@ export const OrganizationRegistrationNumbers = ({
   record = {},
   authority,
   type,
+  source = 'profile.registrationNumbers',
   label,
   isRequired = true,
 }) => {
   const { getFieldState } = useFormContext();
-  const validationMsg = getFieldState('profile.registrationNumbers').isTouched
-    ? registrationNumbersValidation(formData?.profile?.registrationNumbers || [], authority, type)
+  const validationMsg = getFieldState(source).isTouched
+    ? registrationNumbersValidation(
+        formData?.registrationNumbers || formData?.profile?.registrationNumbers || [],
+        authority,
+        type,
+      )
     : '';
   return (
     <>
@@ -28,6 +33,7 @@ export const OrganizationRegistrationNumbers = ({
         type={type}
         hasError={!!validationMsg}
         isRequired={isRequired}
+        source={source}
       />
       <Typography sx={sx.errorMessage}>{validationMsg}</Typography>
     </>
