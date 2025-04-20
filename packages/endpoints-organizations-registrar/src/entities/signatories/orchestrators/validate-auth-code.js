@@ -41,22 +41,16 @@ const validateAuthCode = async (did, authCode, context) => {
     last
   )(signatoryStatus.authCodes);
 
-  const isTimestampExpired = isBefore(
-    subMonths(3)(new Date()),
-    new Date(latestAuthCode.timestamp)
-  );
-
   if (latestAuthCode.code !== authCode) {
     throw newError(400, 'Please use the latest email sent.', {
       errorCode: 'auth_code_must_be_most_recent',
     });
   }
 
-  if (isTimestampExpired) {
-    throw newError(400, 'Auth code has expired.', {
-      errorCode: 'auth_code_expired',
-    });
-  }
+  const isTimestampExpired = isBefore(
+    subMonths(3)(new Date()),
+    new Date(latestAuthCode.timestamp)
+  );
 
   if (isTimestampExpired) {
     throw newError(400, 'Auth code has expired.', {
