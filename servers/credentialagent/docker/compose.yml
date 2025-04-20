@@ -30,9 +30,3 @@ services:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     ports:
       - 13012:3000
-    healthcheck:
-      test: ["CMD", "wget", "http://0.0.0.0:3000/"]
-      interval: 10s
-      retries: 5
-      start_period: 10s
-      timeout: 10s
