@@ -5,8 +5,7 @@
     "packages/*",
     "servers/*",
     "tools/*",
-    "apps/*",
-    "samples/*"
+    "!samples/*"
   ],
   "tagVersionPrefix": "",
   "version": "independent",
@@ -20,7 +19,6 @@
         "!servers/**",
         "!packages/**",
         "!tools/**",
-        "!apps/*",
         "!samples/*"
       ]
     }

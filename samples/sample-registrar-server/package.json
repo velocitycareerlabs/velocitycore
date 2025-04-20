@@ -46,7 +46,7 @@
     "@velocitycareerlabs/db-kms": "0.5.0-build",
     "@velocitycareerlabs/organizations-registry": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
-    "@aws-sdk/client-s3": "^3.731.1",
+    "@aws-sdk/client-s3": "3.787.0",
     "dotenv": "16.4.7",
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
@@ -58,7 +58,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-watch": "7.0.0",
     "jest": "29.7.0",
-    "migrate-mongo": "~11.0.0",
+    "migrate-mongo": "11.0.0",
     "nock": "13.5.6",
     "prettier": "2.8.8"
   }

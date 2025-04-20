@@ -9,6 +9,7 @@ import {
   Dictionary,
   issuingTypeFromString,
   Nullish,
+  VCLAuthToken,
   VCLAuthTokenDescriptor,
   VCLCredentialManifest,
   VCLCredentialManifestDescriptor,
@@ -73,6 +74,15 @@ export const presentationRequestDescriptorFrom = (
     json.remoteCryptoServicesToken
       ? new VCLToken(json.remoteCryptoServicesToken)
       : null
+  );
+};
+
+export const authTokenFrom = (json?: Dictionary<any>): VCLAuthToken => {
+  return new VCLAuthToken(
+    json?.payload || {},
+    json?.authTokenUri,
+    json?.walletDid,
+    json?.relyingPartyDid
   );
 };
 
@@ -211,15 +221,25 @@ export const finalizeOffersDescriptorFrom = (
 export const authTokenDescriptorFrom = (
   json: Dictionary<any>
 ): VCLAuthTokenDescriptor => {
+  if (json.presentationRequest) {
+    return new VCLAuthTokenDescriptor(
+      new VCLPresentationRequest(
+        VCLJwt.fromEncodedJwt(json.presentationRequest.jwt.encodedJwt),
+        new VCLVerifiedProfile(
+          json.presentationRequest.verifiedProfile.payload
+        ),
+        new VCLDeepLink(json.presentationRequest.deepLink.value),
+        null,
+        didJwkFrom(json.presentationRequest.didJwk.payload)
+      ),
+      json.refreshToken
+    );
+  }
   return new VCLAuthTokenDescriptor(
-    new VCLPresentationRequest(
-      VCLJwt.fromEncodedJwt(json.presentationRequest.jwt.encodedJwt),
-      new VCLVerifiedProfile(json.presentationRequest.verifiedProfile.payload),
-      new VCLDeepLink(json.presentationRequest.deepLink.value),
-      null,
-      didJwkFrom(json.presentationRequest.didJwk.payload)
-    ),
-    json.refreshToken
+    json.authTokenUri,
+    json.refreshToken,
+    json.walletDid,
+    json.relyingPartyDid
   );
 };
 

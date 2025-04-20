@@ -8,10 +8,14 @@ import { credentialTypesUIFormSchemaDescriptorFrom } from '../utils/Converter';
 
 export default async function selfReportRoutes(fastify) {
   fastify.post('/getCredentialTypesUIFormSchema', async (req, reply) => {
-    reply.send(
-      await req.vclSdk.getCredentialTypesUIFormSchema(
-        credentialTypesUIFormSchemaDescriptorFrom(req.body)
-      )
-    );
+    try {
+      reply.send(
+        await req.vclSdk.getCredentialTypesUIFormSchema(
+          credentialTypesUIFormSchemaDescriptorFrom(req.body)
+        )
+      );
+    } catch (error: any) {
+      reply.status(error.statusCode).send(error);
+    }
   });
 }

@@ -15,7 +15,7 @@
  *
  */
 
-const { isEmpty, flow, map, find, fromPairs } = require('lodash/fp');
+const { isEmpty, flow, includes, map, find, fromPairs } = require('lodash/fp');
 const { splitDidUrlWithFragment } = require('@velocitycareerlabs/did-doc');
 const { extractCaoServiceRefs } = require('../domains');
 
@@ -35,10 +35,11 @@ const buildReferenceCaoServices = ({ caoServiceIds, caoOrganizations }) => {
   return flow(
     map((caoServiceId) => {
       const [caoDid, serviceFragment] = splitDidUrlWithFragment(caoServiceId);
-      const caoOrganization = find(
-        (org) => org.didDoc.id === caoDid,
-        caoOrganizations
-      );
+      const caoOrganization = find((org) => {
+        return (
+          org.didDoc.id === caoDid || includes(org.didDoc.alsoKnownAs, caoDid)
+        );
+      }, caoOrganizations);
       const caoService = find(
         { id: serviceFragment },
         caoOrganization?.services

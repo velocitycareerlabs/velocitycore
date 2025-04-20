@@ -95,7 +95,7 @@
     "jose": "5.10.0",
     "nodemon": "3.1.9",
     "nanoid-dictionary": "4.3.0",
-    "migrate-mongo": "~11.0.0",
+    "migrate-mongo": "11.0.0",
     "prettier": "2.8.8",
     "qs": "6.13.1"
   }
