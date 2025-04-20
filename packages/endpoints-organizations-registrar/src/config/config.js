@@ -182,6 +182,10 @@ const createConfig = (packageJson) => {
       .get('REMINDER_DELAY_IN_MINUTES')
       .default(10080)
       .asIntPositive(),
+    signatoryLinkExpiration: env
+      .get('SIGNATORY_LINK_EXPIRATION')
+      .default(1440)
+      .asIntPositive(),
     kmsPluginModule: env
       .get('KMS_PLUGIN_MODULE')
       .default('@velocitycareerlabs/db-kms')
