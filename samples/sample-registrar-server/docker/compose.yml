@@ -34,8 +34,8 @@ services:
         condition: service_started
       velocity-mongo:
         condition: service_started
-      fineract-server:
-        condition: service_started
+      fineract-probe:
+        condition: service_healthy
       auth0:
         condition: service_started
     image: velocitycore/sample-registrar-server:local
@@ -63,6 +63,9 @@ services:
   registrar-proxy:
     image: nginx:alpine@sha256:4ff102c5d78d254a6f0da062b3cf39eaf07f01eec0927fd21e219d0af8bc0591
     restart: on-failure
+    depends_on:
+      - registrar
+      - certfix
     ports:
       - "13003:80"
       - "13004:443"

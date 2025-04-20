@@ -64,11 +64,11 @@ const {
 const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
 const {
   sampleEducationDegreeGraduation,
-} = require('../test/helpers/sample-education-degree-graduation');
+} = require('@velocitycareerlabs/sample-data');
 
 const registrarUrl = 'https://localhost:13004';
 const fineractUrl = 'http://localhost:13008';
-const caUrl = 'http://localhost:13002';
+const caUrl = 'http://localhost:13012';
 const rpcUrl = 'http://localhost:18545';
 
 const authenticate = () => 'TOKEN';
