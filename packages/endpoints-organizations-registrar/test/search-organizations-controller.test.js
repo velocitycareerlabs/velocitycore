@@ -474,7 +474,7 @@ describe('Organizations Test Suite', () => {
         });
       });
 
-      it('should retorn a list without technical and contact email in profile', async () => {
+      it('should return a list without technical and contact email in profile', async () => {
         await clearDb();
         await persistOrganization({
           service: [
@@ -599,7 +599,6 @@ describe('Organizations Test Suite', () => {
           method: 'GET',
           url: `${baseUrl}/search-profiles?q=IssuingToCAO`,
         });
-
         expect(response.statusCode).toEqual(200);
         expect(response.json).toEqual({
           result: map(
@@ -619,6 +618,56 @@ describe('Organizations Test Suite', () => {
           ),
         });
       });
+
+      it('Should return a list with org services fully resolved via alias', async () => {
+        const caoAlsoKnownAs = 'did:test:caoaka';
+        const serviceCao = {
+          id: '#cao-service',
+          type: ServiceTypes.CredentialAgentOperatorType,
+          serviceEndpoint: 'https://agent.samplecao.com/cao',
+        };
+        await persistOrganization({
+          service: [serviceCao],
+          alsoKnownAs: caoAlsoKnownAs,
+          name: 'CAO Organization',
+        });
+
+        const issuingService = {
+          type: ServiceTypes.CareerIssuerType,
+          credentialTypes: ['EducationDegree'],
+          serviceEndpoint: `${caoAlsoKnownAs}#cao-service`,
+          id: '#issuing-service',
+        };
+
+        const issuingOrg = await persistOrganization({
+          service: [issuingService],
+          name: 'IssuingToCAO',
+        });
+
+        const response = await fastify.injectJson({
+          method: 'GET',
+          url: `${baseUrl}/search-profiles?q=IssuingToCAO`,
+        });
+        expect(response.statusCode).toEqual(200);
+        expect(response.json).toEqual({
+          result: map(
+            (org) =>
+              searchResult(
+                org,
+                [
+                  {
+                    ...issuingService,
+                    ...issuingService.didDocumentService,
+                    serviceEndpoint: 'https://agent.samplecao.com/cao',
+                  },
+                ],
+                true
+              ),
+            [issuingOrg]
+          ),
+        });
+      });
+
       it('Should return a list with org services pointing to unresolved did filtered out', async () => {
         const issuingService = {
           type: ServiceTypes.CareerIssuerType,
@@ -810,6 +859,43 @@ describe('Organizations Test Suite', () => {
               ],
             },
             searchResult(orgs[1], servicesByOrg[orgs[1].didDoc.id]),
+          ],
+        });
+      });
+
+      it('Should return an org and default to did alias when alias is present and query does not specify a did:web', async () => {
+        const alsoKnownAs = 'did:test:aka1';
+        const did = 'did:web:foo';
+        const service = {
+          id: '#aka-issuer',
+          type: ServiceTypes.CareerIssuerType,
+          credentialTypes: ['EducationDegree'],
+          serviceEndpoint: 'https://agent.samplevendor.com/acme',
+        };
+        const organization = await persistOrganization({
+          alsoKnownAs,
+          did,
+          service: [service],
+        });
+        const response = await fastify.injectJson({
+          method: 'GET',
+          url: `${baseUrl}/search-profiles?sort[0]=createdAt,DESC&page.size=1`,
+        });
+
+        expect(response.statusCode).toEqual(200);
+        expect(response.json).toEqual({
+          result: [
+            {
+              ...searchResult(organization, [service]),
+              id: alsoKnownAs,
+              alsoKnownAs: [did],
+              service: [
+                {
+                  ...service,
+                  serviceEndpoint: `${service.serviceEndpoint}/api/holder/v0.6/org/${alsoKnownAs}/issue/get-credential-manifest`,
+                },
+              ],
+            },
           ],
         });
       });

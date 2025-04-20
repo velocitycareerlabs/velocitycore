@@ -1,4 +1,5 @@
 const {
+  find,
   first,
   flatMap,
   intersection,
@@ -6,6 +7,7 @@ const {
   mapKeys,
   omit,
   castArray,
+  without,
 } = require('lodash/fp');
 const newError = require('http-errors');
 const { prepCamelCase } = require('@velocitycareerlabs/common-functions');
@@ -13,7 +15,7 @@ const {
   buildDidDocWithAlternativeId,
   getDidAndAliases,
 } = require('@velocitycareerlabs/did-doc');
-
+const { isWebDid } = require('@velocitycareerlabs/did-web');
 const {
   verifyUserOrganizationWriteAuthorized,
   verifyUserOrganizationReadAuthorized,
@@ -292,17 +294,24 @@ const organizationController = async (fastify) => {
 };
 
 const organizationWithAlternativeDidDoc = (org, context) => {
-  const didsFromQuery = castArray(context.query?.filter?.did);
-  const didsFromDidDoc = getDidAndAliases(org.didDoc);
-  const matchingDids = intersection(didsFromQuery, didsFromDidDoc);
-  const firstMatchingDid = first(matchingDids);
-  if (firstMatchingDid == null) {
-    return org;
-  }
+  const did = selectDid(context.query?.filter?.did, org.didDoc);
   return {
     ...org,
-    didDoc: buildDidDocWithAlternativeId(firstMatchingDid, org.didDoc),
+    didDoc: buildDidDocWithAlternativeId(did, org.didDoc),
   };
+};
+
+const selectDid = (didFromQuery, didDoc) => {
+  const didsFromQuery = castArray(didFromQuery);
+  const didsFromDidDoc = getDidAndAliases(didDoc);
+  const matchingDids = intersection(didsFromQuery, didsFromDidDoc);
+  const matchingDidWeb = find(isWebDid, matchingDids);
+  if (matchingDidWeb != null) {
+    return matchingDidWeb;
+  }
+  const aliases = without([didDoc.id], didsFromDidDoc);
+  const firstAlias = first(aliases);
+  return firstAlias ?? didDoc.id;
 };
 
 const loadAllOrgCaoServiceRefs = async (organizationDocs, context) => {
