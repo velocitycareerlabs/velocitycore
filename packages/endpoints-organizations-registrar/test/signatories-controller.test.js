@@ -215,6 +215,42 @@ describe('signatoriesController', () => {
       );
     });
 
+    it('should return 400 if signatory has already approved', async () => {
+      const organization = await persistOrganization();
+      await persistSignatoryStatus({
+        organization,
+        authCodes: [
+          {
+            code: '1',
+            timestamp: subDays(4)(new Date()),
+          },
+          {
+            code: '2',
+            timestamp: subDays(1)(new Date()),
+          },
+        ],
+        events: [
+          {
+            state: SignatoryEventStatus.APPROVED,
+            timestamp: new Date(),
+          },
+        ],
+      });
+      const response = await fastify.injectJson({
+        method: 'GET',
+        url: `/api/v0.6/organizations/${organization.didDoc.id}/signatories/response/approve?authCode=1`,
+      });
+      expect(response.statusCode).toEqual(400);
+      expect(response.json).toEqual(
+        errorResponseMatcher({
+          error: 'Bad Request',
+          errorCode: 'already_signed',
+          message: 'Already Signed',
+          statusCode: 400,
+        })
+      );
+    });
+
     it('should return 400 if authCode expired', async () => {
       const organization = await persistOrganization();
       await persistSignatoryStatus({
@@ -361,6 +397,33 @@ describe('signatoriesController', () => {
           statusCode: 400,
         })
       );
+    });
+
+    it('should 400 if signatory has already rejected', async () => {
+      const organization = await persistOrganization();
+      const signatoryStatus = await persistSignatoryStatus({
+        organization,
+        events: [
+          {
+            state: SignatoryEventStatus.REJECTED,
+            timestamp: new Date(),
+          },
+        ],
+      });
+      const response = await fastify.injectJson({
+        method: 'GET',
+        url: `/api/v0.6/organizations/${organization.didDoc.id}/signatories/response/reject?authCode=${signatoryStatus.authCodes[0].code}`,
+      });
+      expect(response.statusCode).toEqual(400);
+      expect(response.json).toEqual(
+        errorResponseMatcher({
+          error: 'Bad Request',
+          errorCode: 'already_signed',
+          message: 'Already Signed',
+          statusCode: 400,
+        })
+      );
+      expect(mockSendEmail).toHaveBeenCalledTimes(0);
     });
 
     it('should return 400 if authCode expired', async () => {

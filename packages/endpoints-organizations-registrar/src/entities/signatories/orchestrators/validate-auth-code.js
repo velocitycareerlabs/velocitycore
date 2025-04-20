@@ -1,6 +1,7 @@
 const { isBefore, subMonths } = require('date-fns/fp');
 const newError = require('http-errors');
-const { isEmpty, flow, sortBy, last } = require('lodash/fp');
+const { isEmpty, find, flow, sortBy, last } = require('lodash/fp');
+const { SignatoryEventStatus } = require('../domain/constants');
 
 const validateAuthCode = async (did, authCode, context) => {
   const { repos } = context;
@@ -22,6 +23,19 @@ const validateAuthCode = async (did, authCode, context) => {
     });
   }
 
+  if (
+    find(
+      (evt) =>
+        evt.state === SignatoryEventStatus.APPROVED ||
+        evt.state === SignatoryEventStatus.REJECTED,
+      signatoryStatus.events
+    )
+  ) {
+    throw newError(400, 'Already Signed', {
+      errorCode: 'already_signed',
+    });
+  }
+
   const latestAuthCode = flow(
     sortBy(['timestamp']),
     last
@@ -35,6 +49,12 @@ const validateAuthCode = async (did, authCode, context) => {
   if (latestAuthCode.code !== authCode) {
     throw newError(400, 'Please use the latest email sent.', {
       errorCode: 'auth_code_must_be_most_recent',
+    });
+  }
+
+  if (isTimestampExpired) {
+    throw newError(400, 'Auth code has expired.', {
+      errorCode: 'auth_code_expired',
     });
   }
 
