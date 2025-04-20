@@ -32,7 +32,7 @@
     "@velocitycareerlabs/server-credentialagent": "0.5.0-build",
     "@velocitycareerlabs/server-provider": "0.5.0-build",
     "date-fns": "~3.6.0",
-    "dotenv": "16.4.7",
+    "dotenv": "16.5.0",
     "env-var": "~7.5.0",
     "http-errors": "^2.0.0",
     "lodash": "^4.17.21",
