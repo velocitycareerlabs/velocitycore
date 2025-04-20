@@ -1,6 +1,21 @@
-const { flatMap, map, mapKeys, omit } = require('lodash/fp');
+const {
+  find,
+  first,
+  flatMap,
+  intersection,
+  map,
+  mapKeys,
+  omit,
+  castArray,
+  without,
+} = require('lodash/fp');
 const newError = require('http-errors');
 const { prepCamelCase } = require('@velocitycareerlabs/common-functions');
+const {
+  buildDidDocWithAlternativeId,
+  getDidAndAliases,
+} = require('@velocitycareerlabs/did-doc');
+const { isWebDid } = require('@velocitycareerlabs/did-web');
 const {
   verifyUserOrganizationWriteAuthorized,
   verifyUserOrganizationReadAuthorized,
@@ -73,8 +88,13 @@ const organizationController = async (fastify) => {
         const { repos, query } = req;
         const serviceTypes = getServiceTypesFromCategories(query);
 
-        const organizations = await repos.organizations.searchByAggregation(
+        let organizations = await repos.organizations.searchByAggregation(
           query
+        );
+
+        organizations = map(
+          (org) => organizationWithAlternativeDidDoc(org, req),
+          organizations
         );
 
         const caoServiceRefs = query.noServiceEndpointTransform
@@ -271,6 +291,27 @@ const organizationController = async (fastify) => {
         return synchronizeMonitors(req);
       }
     );
+};
+
+const organizationWithAlternativeDidDoc = (org, context) => {
+  const did = selectDid(context.query?.filter?.did, org.didDoc);
+  return {
+    ...org,
+    didDoc: buildDidDocWithAlternativeId(did, org.didDoc),
+  };
+};
+
+const selectDid = (didFromQuery, didDoc) => {
+  const didsFromQuery = castArray(didFromQuery);
+  const didsFromDidDoc = getDidAndAliases(didDoc);
+  const matchingDids = intersection(didsFromQuery, didsFromDidDoc);
+  const matchingDidWeb = find(isWebDid, matchingDids);
+  if (matchingDidWeb != null) {
+    return matchingDidWeb;
+  }
+  const aliases = without([didDoc.id], didsFromDidDoc);
+  const firstAlias = first(aliases);
+  return firstAlias ?? didDoc.id;
 };
 
 const loadAllOrgCaoServiceRefs = async (organizationDocs, context) => {
