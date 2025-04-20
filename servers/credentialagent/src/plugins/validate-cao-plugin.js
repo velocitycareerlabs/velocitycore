@@ -25,6 +25,13 @@ const {
 
 async function validateCao() {
   const context = this;
+
+  if (!context.config.validateCaoDid) {
+    context.log.warn('CAO DID validation is turned off.');
+
+    return;
+  }
+
   const registrarFetch = context.baseRegistrarFetch(context);
   const caoErrorMessage =
     // eslint-disable-next-line max-len
@@ -54,6 +61,10 @@ async function validateCao() {
     return;
   }
 
+  checkServiceCategories(profile, caoErrorMessage);
+}
+
+const checkServiceCategories = (profile, caoErrorMessage) => {
   if (
     !includes(
       ServiceCategories.CredentialAgentOperator,
@@ -62,7 +73,7 @@ async function validateCao() {
   ) {
     throw new Error(caoErrorMessage);
   }
-}
+};
 
 const validateCaoPlugin = (fastify, options, next) => {
   if (!fastify.config.isTest) {
