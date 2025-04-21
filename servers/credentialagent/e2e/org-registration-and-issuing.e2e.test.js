@@ -75,7 +75,7 @@ const authenticate = () => 'TOKEN';
 const rpcProvider = initProvider(rpcUrl, authenticate);
 const e2eEnv = {};
 dotenv.config({
-  path: path.resolve(__dirname, '..', '..', 'oracle', '.localdev.env'),
+  path: path.resolve(__dirname, '..', '..', '..', 'samples', 'sample-registrar-server', '.localdev.env'),
   processEnv: e2eEnv,
 });
 console.dir(e2eEnv);
