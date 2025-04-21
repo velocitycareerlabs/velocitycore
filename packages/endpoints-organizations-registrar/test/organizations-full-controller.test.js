@@ -118,7 +118,7 @@ const { mapResponseKeyToDbKey } = require('./helpers/map-response-key-to-db');
 const buildFastify = require('./helpers/build-fastify');
 const organizationKeysRepoPlugin = require('../src/entities/organization-keys/repos/repo');
 const organizationsRepoPlugin = require('../src/entities/organizations/repos/repo');
-const signatoryRemindersPlugin = require('../src/entities/signatories/repos/repo');
+const signatoryStatusesPlugin = require('../src/entities/signatories/repos/repo');
 const groupsRepoPlugin = require('../src/entities/groups/repo');
 const imagesRepoPlugin = require('../src/entities/images/repo');
 
@@ -456,7 +456,7 @@ describe('Organizations Full Test Suite', () => {
   let fastify;
   let organizationsRepo;
   let organizationKeysRepo;
-  let signatoryRemindersRepo;
+  let signatoryStatusesRepo;
   let persistOrganization;
   let newOrganization;
   let persistGroup;
@@ -581,7 +581,7 @@ describe('Organizations Full Test Suite', () => {
       log: fastify.log,
       config: fastify.config,
     });
-    signatoryRemindersRepo = signatoryRemindersPlugin(fastify)({
+    signatoryStatusesRepo = signatoryStatusesPlugin(fastify)({
       log: fastify.log,
       config: fastify.config,
     });
@@ -2114,7 +2114,7 @@ describe('Organizations Full Test Suite', () => {
         ]);
       });
 
-      it('Should create org with a did one service', async () => {
+      it('Should create org with a did service', async () => {
         const monitorNockScope = setMonitorEventsNock();
 
         const inviterOrganization = await persistOrganization({
@@ -2126,6 +2126,10 @@ describe('Organizations Full Test Suite', () => {
               serviceEndpoint: 'https://www.cao.com',
             },
           ],
+        });
+
+        const invitation = await persistInvitation({
+          organizationId: inviterOrganization._id,
         });
 
         const service1 = {
@@ -2197,9 +2201,11 @@ describe('Organizations Full Test Suite', () => {
         // email checks
         expect(mockSendEmail).toHaveBeenCalledTimes(3);
         expect(mockSendEmail.mock.calls).toEqual(
+          expect.arrayContaining([[expectedSupportEmail()]])
+        );
+        expect(mockSendEmail.mock.calls).toEqual(
           expect.arrayContaining([
-            [expectedSupportEmail()],
-            [expectedSignatoryApprovalEmail(inviterOrganization, orgFromDb)],
+            [expectedSignatoryApprovalEmail(null, orgFromDb)],
           ])
         );
       });
@@ -2432,7 +2438,7 @@ describe('Organizations Full Test Suite', () => {
           expect.arrayContaining([
             [sendServicesActivatedEmailMatcher()],
             [expectedSupportEmail()],
-            [expectedSignatoryApprovalEmail(caoOrganization, orgFromDb)],
+            [expectedSignatoryApprovalEmail(null, orgFromDb)],
           ])
         );
       });
@@ -3426,7 +3432,7 @@ describe('Organizations Full Test Suite', () => {
         }, 8000);
       });
 
-      describe('cao invitation', () => {
+      describe('Create organizations via invitations', () => {
         beforeEach(async () => {
           await persistGroup({ skipOrganization: true });
         });
@@ -3526,14 +3532,14 @@ describe('Organizations Full Test Suite', () => {
             expectedConsents(orgFromDb, services, testNoGroupRegistrarUser)
           );
 
-          const signatoryReminder = await signatoryRemindersRepo.findOne({
+          const signatoryReminder = await signatoryStatusesRepo.findOne({
             filter: {
-              organizationDid: response.json.didDoc.id,
+              organizationId: orgFromDb._id,
             },
           });
           expect(signatoryReminder).toEqual({
             _id: expect.any(ObjectId),
-            organizationDid: response.json.didDoc.id,
+            organizationId: orgFromDb._id,
             events: [
               {
                 state: SignatoryEventStatus.LINK_SENT,

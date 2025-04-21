@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-const { map } = require('lodash/fp');
+const { map, isPlainObject } = require('lodash/fp');
+const { ObjectId } = require('mongodb');
 
 const signatoryStatusStateRepoExtension = (parent) => ({
   insertWithState: ({ states, authCode, ...val }, ...args) => {
@@ -29,7 +30,7 @@ const signatoryStatusStateRepoExtension = (parent) => ({
     );
   },
   addState: async (
-    did,
+    _idOrFilter,
     state,
     $set,
     projection = parent.defaultColumnsSelection
@@ -43,28 +44,28 @@ const signatoryStatusStateRepoExtension = (parent) => ({
         $set: parent.prepModification($set),
       };
     }
+    const filter = isPlainObject(_idOrFilter)
+      ? _idOrFilter
+      : { _id: new ObjectId(_idOrFilter) };
+
     const result = await parent
       .collection()
-      .findOneAndUpdate(
-        parent.prepFilter({ organizationDid: did }),
-        updateStatement,
-        {
-          returnDocument: 'after',
-          includeResultMetadata: true,
-          projection,
-        }
-      );
+      .findOneAndUpdate(parent.prepFilter(filter), updateStatement, {
+        returnDocument: 'after',
+        includeResultMetadata: true,
+        projection,
+      });
     return result.value;
   },
   addStateAndCode: async (
-    did,
+    _id,
     state,
     authCode,
     projection = parent.defaultColumnsSelection
   ) => {
     const timestamp = new Date();
     const result = await parent.collection().findOneAndUpdate(
-      parent.prepFilter({ organizationDid: did }),
+      parent.prepFilter({ _id: new ObjectId(_id) }),
       {
         $push: {
           events: { state, timestamp },

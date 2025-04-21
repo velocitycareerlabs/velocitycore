@@ -153,6 +153,7 @@ describe('signatoriesController', () => {
       expect(signatoryReminderDb).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
         events: [
           {
             state: SignatoryEventStatus.LINK_SENT,
@@ -337,6 +338,7 @@ describe('signatoriesController', () => {
       expect(signatoryReminderDb).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
         events: [
           {
             state: SignatoryEventStatus.LINK_SENT,
@@ -572,7 +574,7 @@ describe('signatoriesController', () => {
       expect(signatoryStatus3Db).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: expect.any(String),
-        organizationId: expect.any(String),
+        organizationId: expect.any(ObjectId),
         events: [
           {
             state: SignatoryEventStatus.LINK_SENT,
@@ -589,12 +591,12 @@ describe('signatoriesController', () => {
         updatedAt: expect.any(Date),
       });
 
-      const signatoryReminderDb1 = await signatoryStatusRepo.findOne({
+      const signatoryStatusDb1 = await signatoryStatusRepo.findOne({
         filter: {
           _id: new ObjectId(signatoryStatus1._id),
         },
       });
-      expect(signatoryReminderDb1).toEqual({
+      expect(signatoryStatusDb1).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization1.didDoc.id,
         organizationId: new ObjectId(organization1._id),
@@ -630,6 +632,7 @@ describe('signatoriesController', () => {
       expect(signatoryReminderDb2).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization2.didDoc.id,
+        organizationId: new ObjectId(organization2._id),
         events: [
           {
             state: SignatoryEventStatus.LINK_SENT,
@@ -775,6 +778,7 @@ describe('signatoriesController', () => {
       expect(signatoryReminderDb).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
         events: [
           {
             state: SignatoryEventStatus.LINK_SENT,
@@ -823,6 +827,7 @@ describe('signatoriesController', () => {
       expect(signatoryReminderDb).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
         events: [
           {
             state: SignatoryEventStatus.LINK_SENT,
