@@ -180,7 +180,7 @@ const createConfig = (packageJson) => {
     custodiedDidWebHost: env.get('CUSTODIED_DID_WEB_HOST').asString(),
     signatoryLinkResend: env
       .get('SIGNATORY_LINK_RESEND')
-      .default(10080)
+      .default(1440)
       .asIntPositive(),
     signatoryLinkExpiration: env
       .get('SIGNATORY_LINK_EXPIRATION')

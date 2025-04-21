@@ -57,6 +57,46 @@ const signatoryStatusStateRepoExtension = (parent) => ({
       });
     return result.value;
   },
+  findByEvent: async (eventState, eventTimestamp) => {
+    const aggregationPipeline = [
+      {
+        $match: {
+          'events.state': { $nin: ['APPROVED', 'REJECTED'] },
+        },
+      },
+      {
+        $unwind: {
+          path: '$events',
+        },
+      },
+      {
+        $project: {
+          event: '$events',
+          organizationId: 1,
+        },
+      },
+      {
+        $match: {
+          'event.state': eventState,
+          'event.timestamp': {
+            $lte: eventTimestamp,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          events: {
+            $push: '$event',
+          },
+          organizationId: {
+            $first: '$organizationId',
+          },
+        },
+      },
+    ];
+    return parent.collection().aggregate(aggregationPipeline);
+  },
   addStateAndCode: async (
     _id,
     state,

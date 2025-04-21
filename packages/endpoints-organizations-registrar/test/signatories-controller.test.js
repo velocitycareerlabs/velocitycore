@@ -25,7 +25,7 @@ jest.mock('@aws-sdk/client-ses', () => ({
 
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { ObjectId } = require('mongodb');
-const { subDays, subMonths } = require('date-fns/fp');
+const { subDays, subMonths, subHours } = require('date-fns/fp');
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
 const { errorResponseMatcher } = require('@velocitycareerlabs/tests-helpers');
 const buildFastify = require('./helpers/build-fastify');
@@ -658,7 +658,7 @@ describe('signatoriesController', () => {
       });
     });
 
-    it('should not send emails if there are reminder with reminder sent state', async () => {
+    it('should resend emails if enough time has passed since previous email', async () => {
       const organization = await persistOrganization();
       await persistSignatoryStatus({
         organization,
@@ -669,7 +669,7 @@ describe('signatoriesController', () => {
           },
           {
             state: SignatoryEventStatus.LINK_SENT,
-            timestamp: new Date(),
+            timestamp: subDays(1)(new Date()),
           },
         ],
       });
@@ -677,7 +677,7 @@ describe('signatoriesController', () => {
         sendEmailToSignatoryForOrganizationApproval,
         testContext
       );
-      expect(mockSendEmail).toHaveBeenCalledTimes(0);
+      expect(mockSendEmail).toHaveBeenCalledTimes(1);
     });
 
     it('should not send emails if there are signatory reminders with approved state', async () => {
@@ -726,14 +726,14 @@ describe('signatoriesController', () => {
       expect(mockSendEmail).toHaveBeenCalledTimes(0);
     });
 
-    it('should not send emails if there are signatory reminders but email sent less than 7 days ago', async () => {
+    it('should not send emails if there are signatory reminders but email was sent within delay period from config', async () => {
       const organization = await persistOrganization();
       await persistSignatoryStatus({
         organization,
         events: [
           {
             state: SignatoryEventStatus.LINK_SENT,
-            timestamp: subDays(6)(new Date()),
+            timestamp: subHours(10)(new Date()),
           },
         ],
       });

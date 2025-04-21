@@ -12,19 +12,10 @@ const sendReminders = async (
   const currentTime = new Date();
   const { repos, config, log } = req;
   const { signatoryLinkResend } = config;
-  const signatoryStatuses = await repos.signatoryStatus.find({
-    filter: {
-      events: {
-        $elemMatch: {
-          state: SignatoryEventStatus.LINK_SENT,
-          timestamp: {
-            $lte: subMinutes(signatoryLinkResend)(currentTime),
-          },
-        },
-        $size: 1,
-      },
-    },
-  });
+  const signatoryStatuses = await repos.signatoryStatus.findByEvent(
+    SignatoryEventStatus.LINK_SENT,
+    subMinutes(signatoryLinkResend)(currentTime)
+  );
   if (isEmpty(signatoryStatuses)) {
     log.info({ task, message: 'No signatory reminders to send' });
     return;
