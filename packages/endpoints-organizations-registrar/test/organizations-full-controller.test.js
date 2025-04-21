@@ -2128,10 +2128,6 @@ describe('Organizations Full Test Suite', () => {
           ],
         });
 
-        const invitation = await persistInvitation({
-          organizationId: inviterOrganization._id,
-        });
-
         const service1 = {
           id: '#issuer1',
           type: ServiceTypes.CareerIssuerType,
