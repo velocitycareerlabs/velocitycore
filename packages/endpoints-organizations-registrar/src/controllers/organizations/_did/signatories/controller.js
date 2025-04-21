@@ -42,7 +42,7 @@ const signatoriesController = async (fastify) => {
       const { did, response } = params;
       const { authCode } = query;
       const organization = await repos.organizations.findOneByDid(did);
-      await validateAuthCode(did, authCode, req);
+      await validateAuthCode(organization, authCode, req);
       await sendEmail(
         signatoryApproveOrganizationEmail({ organization, response }, req)
       );

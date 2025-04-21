@@ -3,12 +3,12 @@ const newError = require('http-errors');
 const { isEmpty, find, flow, sortBy, last } = require('lodash/fp');
 const { SignatoryEventStatus } = require('../domain/constants');
 
-const validateAuthCode = async (did, authCode, context) => {
+const validateAuthCode = async (organization, authCode, context) => {
   const { repos } = context;
 
   const signatoryStatus = await repos.signatoryStatus.findOne({
     filter: {
-      organizationDid: did,
+      organizationId: organization._id,
       authCodes: {
         $elemMatch: {
           code: authCode,
