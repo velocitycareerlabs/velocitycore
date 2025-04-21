@@ -30,6 +30,7 @@ const registrarConsentRepoExtension = (parent) => ({
         version,
         type,
         createdAt: new Date(),
+        ...val,
       },
       ...args
     );
