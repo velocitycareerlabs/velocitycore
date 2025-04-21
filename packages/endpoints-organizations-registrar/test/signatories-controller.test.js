@@ -112,6 +112,7 @@ describe('signatoriesController', () => {
     await mongoDb().collection('organizations').deleteMany({});
     await mongoDb().collection('invitations').deleteMany({});
     await mongoDb().collection('signatoryStatus').deleteMany({});
+    await mongoDb().collection('registrarConsents').deleteMany({});
   });
 
   afterAll(async () => {
@@ -135,7 +136,7 @@ describe('signatoriesController', () => {
       );
     });
 
-    it('should send email and mark signatory reminder as approved', async () => {
+    it('should send email, mark signatory reminder approved, and register a consent', async () => {
       const organization = await persistOrganization();
       const signatory = await persistSignatoryStatus({
         organization,
@@ -173,6 +174,18 @@ describe('signatoriesController', () => {
         approvedAt: expect.any(Date),
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
+      });
+      const dbRegistrarConsent = await mongoDb()
+        .collection('registrarConsents')
+        .findOne();
+      expect(dbRegistrarConsent).toEqual({
+        _id: expect.any(ObjectId),
+        consentId: '1',
+        createdAt: expect.any(Date),
+        organizationId: new ObjectId(organization._id),
+        type: 'Signatory',
+        userId: organization.profile.signatoryEmail,
+        version: 1,
       });
     });
 

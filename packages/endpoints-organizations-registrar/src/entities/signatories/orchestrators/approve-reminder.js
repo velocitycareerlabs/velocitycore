@@ -1,4 +1,5 @@
 const { SignatoryEventStatus } = require('../domain');
+const { ConsentTypes } = require('../../registrar-consents');
 
 const approveReminder = async (organization, req) => {
   const { repos } = req;
@@ -10,6 +11,12 @@ const approveReminder = async (organization, req) => {
       approvedAt: currentTime,
     }
   );
+  await repos.registrarConsents.registerConsent({
+    userId: organization.profile.signatoryEmail,
+    organization,
+    type: ConsentTypes.Signatory,
+    version: 1,
+  });
 };
 
 module.exports = {

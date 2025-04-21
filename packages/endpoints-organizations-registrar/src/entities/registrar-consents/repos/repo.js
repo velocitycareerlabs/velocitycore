@@ -2,6 +2,9 @@ const {
   repoFactory,
   autoboxIdsExtension,
 } = require('@spencejs/spence-mongo-repos');
+const {
+  registrarConsentRepoExtension,
+} = require('./registrar-consent-repo-extension');
 
 module.exports = (app, options, next = () => {}) => {
   next();
@@ -21,7 +24,7 @@ module.exports = (app, options, next = () => {}) => {
       },
       timestampKeys: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
       mutable: false,
-      extensions: [autoboxIdsExtension],
+      extensions: [autoboxIdsExtension, registrarConsentRepoExtension],
     },
     app
   );
