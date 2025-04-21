@@ -1,10 +1,10 @@
-const { isBefore, subMonths } = require('date-fns/fp');
+const { isBefore, subMinutes } = require('date-fns/fp');
 const newError = require('http-errors');
 const { isEmpty, find, flow, sortBy, last } = require('lodash/fp');
 const { SignatoryEventStatus } = require('../domain/constants');
 
 const validateAuthCode = async (organization, authCode, context) => {
-  const { repos } = context;
+  const { repos, config } = context;
 
   const signatoryStatus = await repos.signatoryStatus.findOne({
     filter: {
@@ -48,11 +48,10 @@ const validateAuthCode = async (organization, authCode, context) => {
   }
 
   const isTimestampExpired = isBefore(
-    subMonths(3)(new Date()),
-    new Date(latestAuthCode.timestamp)
+    subMinutes(config.signatoryLinkExpiration)(new Date())
   );
 
-  if (isTimestampExpired) {
+  if (isTimestampExpired(new Date(latestAuthCode.timestamp))) {
     throw newError(400, 'Auth code has expired.', {
       errorCode: 'auth_code_expired',
     });

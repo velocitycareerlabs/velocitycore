@@ -279,7 +279,7 @@ describe('signatoriesController', () => {
         authCodes: [
           {
             code: '1',
-            timestamp: subMonths(4)(new Date()),
+            timestamp: subHours(48)(new Date()),
           },
         ],
       });
