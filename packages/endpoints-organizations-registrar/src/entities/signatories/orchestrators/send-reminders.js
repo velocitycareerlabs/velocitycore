@@ -14,7 +14,7 @@ const sendReminders = async (
   const { signatoryLinkResend } = config;
   const signatoryStatuses = await repos.signatoryStatus.findByEvent(
     SignatoryEventStatus.LINK_SENT,
-    subMinutes(signatoryLinkResend)(currentTime)
+    subMinutes(signatoryLinkResend, currentTime)
   );
   if (isEmpty(signatoryStatuses)) {
     log.info({ task, message: 'No signatory reminders to send' });
