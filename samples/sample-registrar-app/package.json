@@ -40,7 +40,7 @@
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "4.6.2",
     "postcss-normalize": "10.0.1",
-    "vite": "6.3.1"
+    "vite": "6.3.2"
   },
   "scripts": {
     "start": "vite dev --mode dev.local",
