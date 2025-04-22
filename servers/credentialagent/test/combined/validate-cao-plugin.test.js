@@ -93,6 +93,18 @@ describe('validate cao plugin test suite', () => {
     );
   });
 
+  it('should warn if CAO DID validation turned off', async () => {
+    await validateCao.call({
+      ...fastify,
+      config: {
+        ...fastify.config,
+        validateCaoDid: false,
+      },
+    });
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith('CAO DID validation is turned off.');
+  });
+
   it('should not warn for valid cao', async () => {
     nock('http://oracle.localhost.test')
       .get('/api/v0.6/organizations/didtest/verified-profile')

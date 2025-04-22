@@ -72,7 +72,7 @@ const buildServiceAggregationStage = (serviceTypes) => {
 
   const projectStage = {
     $project: {
-      'didDoc.id': 1,
+      didDoc: 1,
       profile: 1,
       activatedServiceIds: 1,
       verifiableCredentialJwt: 1,
