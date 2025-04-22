@@ -156,7 +156,7 @@ describe('Organization invitations test suites', () => {
   let persistInvitation;
   let persistCredentialSchema;
   let persistGroup;
-  let caoOrganization;
+  let inviterOrganization;
 
   const clearDb = async () => {
     await mongoDb().collection('organizations').deleteMany({});
@@ -182,7 +182,7 @@ describe('Organization invitations test suites', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     await clearDb();
-    caoOrganization = await persistOrganization({
+    inviterOrganization = await persistOrganization({
       service: [
         {
           id: '#caoid',
@@ -194,7 +194,7 @@ describe('Organization invitations test suites', () => {
     await persistGroup({
       groupId: DEFAULT_GROUP_ID,
       clientAdminIds: [testRegistrarUser.sub],
-      dids: [caoOrganization.didDoc.id],
+      dids: [inviterOrganization.didDoc.id],
     });
   });
 
@@ -254,7 +254,7 @@ describe('Organization invitations test suites', () => {
     it('should return 400 if keyIndividuals is missing', async () => {
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           inviteeProfile,
@@ -276,7 +276,7 @@ describe('Organization invitations test suites', () => {
     it('should return 400 if keyIndividuals.adminGivenName is missing', async () => {
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           inviteeProfile,
@@ -300,7 +300,7 @@ describe('Organization invitations test suites', () => {
     it('should return 400 if keyIndividuals.adminEmail is badly formatted', async () => {
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           inviteeProfile,
@@ -323,7 +323,7 @@ describe('Organization invitations test suites', () => {
     it('should return 400 if name is missing', async () => {
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           inviteeService: [],
@@ -351,7 +351,7 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           inviteeService: [service],
@@ -380,7 +380,7 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           inviteeService: [service],
@@ -409,7 +409,7 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           inviteeService: [service],
@@ -444,12 +444,12 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: { ...payload, inviteeEmail: '?@gmail.com' },
       });
       const response1 = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload,
       });
 
@@ -480,7 +480,7 @@ describe('Organization invitations test suites', () => {
       await persistCredentialSchema();
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           inviteeService: [
@@ -530,7 +530,7 @@ describe('Organization invitations test suites', () => {
         };
         const response = await fastify.injectJson({
           method: 'POST',
-          url: invitationUrl(caoOrganization.didDoc.id),
+          url: invitationUrl(inviterOrganization.didDoc.id),
           payload,
         });
 
@@ -540,7 +540,7 @@ describe('Organization invitations test suites', () => {
             id: expect.any(String),
             ...payload,
             code: 'mocknano',
-            inviterDid: caoOrganization.didDoc.id,
+            inviterDid: inviterOrganization.didDoc.id,
             invitationUrl: 'http://localhost.test/invitations/mocknano',
             expiresAt: expect.any(String),
             createdAt: expect.any(String),
@@ -569,7 +569,7 @@ describe('Organization invitations test suites', () => {
         };
         const response = await fastify.injectJson({
           method: 'POST',
-          url: invitationUrl(caoOrganization.didDoc.id),
+          url: invitationUrl(inviterOrganization.didDoc.id),
           payload,
         });
 
@@ -579,7 +579,7 @@ describe('Organization invitations test suites', () => {
             id: expect.any(String),
             ...payload,
             code: 'mocknano',
-            inviterDid: caoOrganization.didDoc.id,
+            inviterDid: inviterOrganization.didDoc.id,
             invitationUrl: 'http://localhost.test/invitations/mocknano',
             expiresAt: expect.any(String),
             createdAt: expect.any(String),
@@ -600,7 +600,7 @@ describe('Organization invitations test suites', () => {
           {
             id: 'issuer-1',
             type: ServiceTypes.CareerIssuerType,
-            serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+            serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             credentialTypes: [credentialType.credentialType],
           },
         ],
@@ -612,7 +612,7 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload,
       });
 
@@ -622,7 +622,7 @@ describe('Organization invitations test suites', () => {
           id: expect.any(String),
           ...payload,
           code: 'mocknano',
-          inviterDid: caoOrganization.didDoc.id,
+          inviterDid: inviterOrganization.didDoc.id,
           invitationUrl: 'http://localhost.test/invitations/mocknano',
           expiresAt: expect.any(String),
           createdAt: expect.any(String),
@@ -641,7 +641,7 @@ describe('Organization invitations test suites', () => {
           {
             id: '#holder-1',
             type: ServiceTypes.CareerIssuerType,
-            serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+            serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
           },
         ],
         inviteeProfile: {
@@ -652,7 +652,7 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload,
       });
 
@@ -662,7 +662,7 @@ describe('Organization invitations test suites', () => {
           id: expect.any(String),
           ...payload,
           code: 'mocknano',
-          inviterDid: caoOrganization.didDoc.id,
+          inviterDid: inviterOrganization.didDoc.id,
           invitationUrl: 'http://localhost.test/invitations/mocknano',
           expiresAt: expect.any(String),
           createdAt: expect.any(String),
@@ -679,7 +679,7 @@ describe('Organization invitations test suites', () => {
       const service = {
         id: 'issuer-1',
         type: 'VlcCareerIssuer_v1',
-        serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+        serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
       };
       const payload = {
         inviteeEmail: 'test@email.com',
@@ -692,13 +692,13 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload,
       });
 
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
-        invitation: mapPayloadToInvitation(payload, caoOrganization),
+        invitation: mapPayloadToInvitation(payload, inviterOrganization),
         messageCode: 'invitation_not_sent',
       });
 
@@ -712,7 +712,8 @@ describe('Organization invitations test suites', () => {
           expiresAt: expect.any(Date),
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
           ...payload,
-          inviterDid: caoOrganization.didDoc.id,
+          inviterDid: inviterOrganization.didDoc.id,
+          inviterId: new ObjectId(inviterOrganization._id),
           updatedAt: expect.any(Date),
           updatedBy: expect.stringMatching(/auth0|[A-Za-z0-9_-]+/),
         },
@@ -755,7 +756,7 @@ describe('Organization invitations test suites', () => {
       const service = {
         id: 'issuer-1',
         type: 'VlcCareerIssuer_v1',
-        serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+        serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
       };
       const payload = {
         inviteeEmail: 'test@email.com',
@@ -768,13 +769,13 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload,
       });
 
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
-        invitation: mapPayloadToInvitation(payload, caoOrganization),
+        invitation: mapPayloadToInvitation(payload, inviterOrganization),
         messageCode: 'invitation_sent',
       });
 
@@ -788,7 +789,8 @@ describe('Organization invitations test suites', () => {
           expiresAt: expect.any(Date),
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
           ...payload,
-          inviterDid: caoOrganization.didDoc.id,
+          inviterDid: inviterOrganization.didDoc.id,
+          inviterId: new ObjectId(inviterOrganization._id),
           updatedAt: expect.any(Date),
           updatedBy: expect.stringMatching(/auth0|[A-Za-z0-9_-]+/),
         },
@@ -828,7 +830,7 @@ describe('Organization invitations test suites', () => {
       const service = {
         id: 'issuer-1',
         type: 'VlcCareerIssuer_v1',
-        serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+        serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
       };
       const payload = {
         inviteeEmail: 'test@email.com',
@@ -841,13 +843,13 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload,
       });
 
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
-        invitation: mapPayloadToInvitation(payload, caoOrganization),
+        invitation: mapPayloadToInvitation(payload, inviterOrganization),
         messageCode: 'invitation_sent',
       });
 
@@ -860,7 +862,8 @@ describe('Organization invitations test suites', () => {
           createdBy: expect.stringMatching(/auth0|[A-Za-z0-9_-]+/),
           expiresAt: expect.any(Date),
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
-          inviterDid: caoOrganization.didDoc.id,
+          inviterDid: inviterOrganization.didDoc.id,
+          inviterId: new ObjectId(inviterOrganization._id),
           ...payload,
           updatedAt: expect.any(Date),
           updatedBy: expect.stringMatching(/auth0|[A-Za-z0-9_-]+/),
@@ -901,7 +904,7 @@ describe('Organization invitations test suites', () => {
     it('should create invitation with correct service types', async () => {
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           keyIndividuals: minKeyIndvidiuals,
@@ -909,22 +912,22 @@ describe('Organization invitations test suites', () => {
             {
               id: 'issuer-1',
               type: ServiceTypes.CareerIssuerType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
             {
               id: 'issuer-1',
               type: ServiceTypes.IdDocumentIssuerType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
             {
               id: 'issuer-1',
               type: ServiceTypes.NotaryIssuerType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
             {
               id: 'issuer-1',
               type: ServiceTypes.InspectionType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
           ],
           inviteeProfile: {
@@ -940,29 +943,29 @@ describe('Organization invitations test suites', () => {
     it('should create invitation with key individuals', async () => {
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: {
           inviteeEmail: 'test@email.com',
           inviteeService: [
             {
               id: 'issuer-1',
               type: ServiceTypes.CareerIssuerType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
             {
               id: 'issuer-1',
               type: ServiceTypes.IdDocumentIssuerType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
             {
               id: 'issuer-1',
               type: ServiceTypes.NotaryIssuerType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
             {
               id: 'issuer-1',
               type: ServiceTypes.InspectionType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
           ],
           inviteeProfile: {
@@ -985,7 +988,7 @@ describe('Organization invitations test suites', () => {
           {
             id: 'issuer-1',
             type: 'VlcCareerIssuer_v1',
-            serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+            serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
           },
         ],
         inviteeProfile: {
@@ -996,7 +999,7 @@ describe('Organization invitations test suites', () => {
       };
       const response = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload,
         headers: {
           'x-override-oauth-user': JSON.stringify(testRegistrarUser),
@@ -1005,7 +1008,7 @@ describe('Organization invitations test suites', () => {
 
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
-        invitation: mapPayloadToInvitation(payload, caoOrganization),
+        invitation: mapPayloadToInvitation(payload, inviterOrganization),
         messageCode: 'invitation_sent',
       });
       const invitesFromDb = await invitationsRepo.find();
@@ -1013,7 +1016,8 @@ describe('Organization invitations test suites', () => {
         {
           ...payload,
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
-          inviterDid: caoOrganization.didDoc.id,
+          inviterDid: inviterOrganization.didDoc.id,
+          inviterId: new ObjectId(inviterOrganization._id),
           _id: expect.anything(),
           code: expect.any(String),
           createdAt: expect.any(Date),
@@ -1052,7 +1056,7 @@ describe('Organization invitations test suites', () => {
           {
             id: 'issuer-1',
             type: 'VlcCareerIssuer_v1',
-            serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+            serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
           },
         ],
         inviteeProfile: {
@@ -1067,7 +1071,7 @@ describe('Organization invitations test suites', () => {
           {
             id: 'issuer-2',
             type: 'VlcCareerIssuer_v1',
-            serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+            serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
           },
         ],
         inviteeProfile: {
@@ -1078,24 +1082,24 @@ describe('Organization invitations test suites', () => {
       };
       const response1 = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: payload1,
       });
 
       const response2 = await fastify.injectJson({
         method: 'POST',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
         payload: payload2,
       });
 
       expect(response1.statusCode).toEqual(200);
       expect(response1.json).toEqual({
-        invitation: mapPayloadToInvitation(payload1, caoOrganization),
+        invitation: mapPayloadToInvitation(payload1, inviterOrganization),
         messageCode: 'invitation_sent',
       });
       expect(response2.statusCode).toEqual(200);
       expect(response2.json).toEqual({
-        invitation: mapPayloadToInvitation(payload2, caoOrganization),
+        invitation: mapPayloadToInvitation(payload2, inviterOrganization),
         messageCode: 'invitation_sent',
       });
 
@@ -1104,7 +1108,8 @@ describe('Organization invitations test suites', () => {
         {
           ...payload2,
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
-          inviterDid: caoOrganization.didDoc.id,
+          inviterDid: inviterOrganization.didDoc.id,
+          inviterId: new ObjectId(inviterOrganization._id),
           _id: expect.anything(),
           code: expect.any(String),
           createdAt: expect.any(Date),
@@ -1116,7 +1121,8 @@ describe('Organization invitations test suites', () => {
         {
           ...payload1,
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[1].code}`,
-          inviterDid: caoOrganization.didDoc.id,
+          inviterDid: inviterOrganization.didDoc.id,
+          inviterId: new ObjectId(inviterOrganization._id),
           _id: expect.anything(),
           code: expect.any(String),
           createdAt: expect.any(Date),
@@ -1191,7 +1197,7 @@ describe('Organization invitations test suites', () => {
     it('should return empty array if no invitations', async () => {
       const response = await fastify.injectJson({
         method: 'GET',
-        url: invitationUrl(caoOrganization.didDoc.id),
+        url: invitationUrl(inviterOrganization.didDoc.id),
       });
 
       expect(response.statusCode).toEqual(200);
@@ -1201,19 +1207,8 @@ describe('Organization invitations test suites', () => {
     });
 
     it('should return paginated array of invitations', async () => {
-      const inviterDid = caoOrganization.didDoc.id;
-      const omitOrgProfile = omit([
-        'permittedVelocityServiceCategory',
-        'adminGivenName',
-        'adminFamilyName',
-        'adminTitle',
-        'adminEmail',
-        'signatoryGivenName',
-        'signatoryFamilyName',
-        'signatoryTitle',
-        'signatoryEmail',
-      ]);
-      const organization = await newOrganization({
+      const inviterDid = inviterOrganization.didDoc.id;
+      const inviteeOrganization = await newOrganization({
         service: [
           {
             id: '#foo',
@@ -1225,26 +1220,26 @@ describe('Organization invitations test suites', () => {
       const [invitation5, invitation6, invitation1, invitation4] =
         await Promise.all([
           persistInvitation({
-            inviterDid,
-            organization,
+            inviterOrganization,
+            inviteeOrganization,
             inviteeEmail: 'em-5@email.com',
             keyIndividuals: minKeyIndvidiuals,
           }),
           persistInvitation({
-            inviterDid,
-            organization,
+            inviterOrganization,
+            inviteeOrganization,
             inviteeEmail: 'em-6@email.com',
             keyIndividuals: minKeyIndvidiuals,
           }),
           persistInvitation({
-            inviterDid,
-            organization,
+            inviterOrganization,
+            inviteeOrganization,
             inviteeEmail: 'em-1@email.com',
             keyIndividuals,
           }),
           persistInvitation({
-            inviterDid,
-            organization,
+            inviterOrganization,
+            inviteeOrganization,
             inviteeEmail: 'em-4@email.com',
             keyIndividuals: minKeyIndvidiuals,
             inviteeService: [
@@ -1269,26 +1264,15 @@ describe('Organization invitations test suites', () => {
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
         invitations: [
-          {
-            ...omit(['_id'], invitation6),
-            id: invitation6._id.toString(),
-            inviteeProfile: omitOrgProfile(invitation6.inviteeProfile),
-          },
-          {
-            ...omit(['_id'], invitation5),
-            id: invitation5._id.toString(),
-            inviteeProfile: omitOrgProfile(invitation5.inviteeProfile),
-          },
+          invitationResponseExpectation(invitation6),
+          invitationResponseExpectation(invitation5),
         ],
       });
 
       expect(response1.statusCode).toEqual(200);
       expect(response1.json).toEqual({
         invitations: [
-          {
-            ...omit(['_id'], invitation4),
-            id: invitation4._id.toString(),
-            inviteeProfile: omitOrgProfile(invitation4.inviteeProfile),
+          invitationResponseExpectation(invitation4, {
             inviteeService: [
               {
                 id: '#foo',
@@ -1296,27 +1280,23 @@ describe('Organization invitations test suites', () => {
                 serviceEndpoint: 'https://foo#bar',
               },
             ],
-          },
-          {
-            ...omit(['_id'], invitation1),
-            id: invitation1._id.toString(),
+          }),
+          invitationResponseExpectation(invitation1, {
             keyIndividuals,
-            inviteeProfile: omitOrgProfile(invitation1.inviteeProfile),
-          },
+          }),
         ],
       });
     });
   });
 
   describe('Delete Invitation Test Suite', () => {
-    let inviterOrganization;
     beforeEach(async () => {
       inviterOrganization = await persistOrganization();
     });
 
     it('should delete an invitation', async () => {
       const invitation = await persistInvitation({
-        inviterDid: inviterOrganization.didDoc.id,
+        inviterOrganization,
       });
 
       const response = await fastify.inject({
@@ -1371,7 +1351,6 @@ describe('Organization invitations test suites', () => {
   });
 
   describe('Get Invitation Test Suite', () => {
-    let inviterOrganization;
     beforeEach(async () => {
       inviterOrganization = await persistOrganization();
     });
@@ -1395,7 +1374,7 @@ describe('Organization invitations test suites', () => {
 
     it('should return 404 if invitation has deletedAt', async () => {
       const invitation = await persistInvitation({
-        inviterDid: inviterOrganization.didDoc.id,
+        inviterOrganization,
         code: 'fooCode',
         inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
@@ -1442,6 +1421,7 @@ describe('Organization invitations test suites', () => {
         {
           _id: new ObjectId(invitation._id),
           inviterDid: inviterOrganization.didDoc.id,
+          inviterId: new ObjectId(inviterOrganization._id),
           inviteeDid: 'fooInviteeDid',
           inviteeEmail: 'foo@example.com',
           inviteeProfile: {
@@ -1471,7 +1451,7 @@ describe('Organization invitations test suites', () => {
 
     it('should return an invitation', async () => {
       const invitation = await persistInvitation({
-        inviterDid: inviterOrganization.didDoc.id,
+        inviterOrganization,
         code: 'fooCode',
         inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
@@ -1543,10 +1523,11 @@ describe('Organization invitations test suites', () => {
 
     it('should return an invitation from did in alsoKnownAs', async () => {
       const alsoKnownAs = 'did:aka:foo';
-      await persistOrganization({
+      inviterOrganization = await persistOrganization({
         alsoKnownAs,
       });
       const invitation = await persistInvitation({
+        inviterOrganization,
         inviterDid: alsoKnownAs,
         code: 'fooCode',
         inviteeDid: 'fooInviteeDid',
@@ -1617,7 +1598,6 @@ describe('Organization invitations test suites', () => {
   });
 
   describe('Resend Invitation Test Suite', () => {
-    let inviterOrganization;
     beforeEach(async () => {
       inviterOrganization = await persistOrganization();
     });
@@ -1646,7 +1626,7 @@ describe('Organization invitations test suites', () => {
 
     it('should return 404 if did not matched with inviterId', async () => {
       const invitation = await persistInvitation({
-        inviterDid: inviterOrganization.didDoc.id,
+        inviterOrganization,
         code: 'fooCode',
         inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
@@ -1711,7 +1691,7 @@ describe('Organization invitations test suites', () => {
 
     it('should return 404 if invitation has deletedAt', async () => {
       const invitation = await persistInvitation({
-        inviterDid: inviterOrganization.didDoc.id,
+        inviterOrganization,
         code: 'fooCode',
         inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
@@ -1761,6 +1741,7 @@ describe('Organization invitations test suites', () => {
         {
           _id: new ObjectId(invitation._id),
           inviterDid: inviterOrganization.didDoc.id,
+          inviterId: new ObjectId(inviterOrganization._id),
           inviteeDid: 'fooInviteeDid',
           inviteeEmail: 'foo@example.com',
           inviteeProfile: {
@@ -1799,7 +1780,7 @@ describe('Organization invitations test suites', () => {
         };
       });
       const invitation = await persistInvitation({
-        inviterDid: inviterOrganization.didDoc.id,
+        inviterOrganization,
         code: 'fooCode',
         inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
@@ -1859,10 +1840,11 @@ describe('Organization invitations test suites', () => {
         messageCode: 'invitation_sent',
       });
 
-      const invitesFromDb = await invitationsRepo.findOne(invitation._id);
-      expect(invitesFromDb).toEqual({
+      const dbInvitation = await invitationsRepo.findOne(invitation._id);
+      expect(dbInvitation).toEqual({
         _id: expect.anything(),
         inviterDid: inviterOrganization.didDoc.id,
+        inviterId: new ObjectId(inviterOrganization._id),
         inviteeDid: 'fooInviteeDid',
         inviteeEmail: 'email123@email.com',
         inviteeProfile: {
@@ -1885,7 +1867,7 @@ describe('Organization invitations test suites', () => {
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
-      expect(invitesFromDb.expiresAt.getTime()).toBeGreaterThan(
+      expect(dbInvitation.expiresAt.getTime()).toBeGreaterThan(
         mongoify(invitation).updatedAt.getTime()
       );
 
@@ -1925,7 +1907,7 @@ describe('Organization invitations test suites', () => {
         };
       });
       const invitation = await persistInvitation({
-        inviterDid: inviterOrganization.didDoc.id,
+        inviterOrganization,
         code: 'fooCode',
         inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
@@ -1985,10 +1967,11 @@ describe('Organization invitations test suites', () => {
         messageCode: 'invitation_sent',
       });
 
-      const invitesFromDb = await invitationsRepo.findOne(invitation._id);
-      expect(invitesFromDb).toEqual({
+      const dbInvitation = await invitationsRepo.findOne(invitation._id);
+      expect(dbInvitation).toEqual({
         _id: expect.anything(),
         inviterDid: inviterOrganization.didDoc.id,
+        inviterId: new ObjectId(inviterOrganization._id),
         inviteeDid: 'fooInviteeDid',
         inviteeEmail: 'email123@email.com',
         inviteeProfile: {
@@ -2011,7 +1994,7 @@ describe('Organization invitations test suites', () => {
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
-      expect(invitesFromDb.expiresAt.getTime()).toBeGreaterThan(
+      expect(dbInvitation.expiresAt.getTime()).toBeGreaterThan(
         mongoify(invitation).updatedAt.getTime()
       );
 
@@ -2032,3 +2015,24 @@ describe('Organization invitations test suites', () => {
     });
   });
 });
+
+const invitationResponseExpectation = (invitation, overrides) => {
+  return {
+    ...omit(['_id', 'inviterId'], invitation),
+    id: invitation._id.toString(),
+    inviteeProfile: omitOrgProfile(invitation.inviteeProfile),
+    ...overrides,
+  };
+};
+
+const omitOrgProfile = omit([
+  'permittedVelocityServiceCategory',
+  'adminGivenName',
+  'adminFamilyName',
+  'adminTitle',
+  'adminEmail',
+  'signatoryGivenName',
+  'signatoryFamilyName',
+  'signatoryTitle',
+  'signatoryEmail',
+]);

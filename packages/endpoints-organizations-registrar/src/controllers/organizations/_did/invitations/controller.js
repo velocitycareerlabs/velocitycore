@@ -4,6 +4,7 @@ const newError = require('http-errors');
 const { nanoid } = require('nanoid/non-secure');
 const { initTransformToFinder } = require('@velocitycareerlabs/rest-queries');
 const { tableRegistry } = require('@spencejs/spence-mongo-repos');
+const { ObjectId } = require('mongodb');
 const {
   verifyUserOrganizationWriteAuthorized,
 } = require('../../../../plugins/authorization');
@@ -75,8 +76,8 @@ const invitationsController = async (fastify) => {
         body;
 
       // validate inviter
-      const caoOrganization = await repos.organizations.findOneByDid(did);
-      const caoService = find(isCaoService, caoOrganization.services);
+      const inviterOrganization = await repos.organizations.findOneByDid(did);
+      const caoService = find(isCaoService, inviterOrganization.services);
       if (isEmpty(caoService)) {
         throw newError(400, 'CAO service does not exist', {
           errorCode: 'invitations_not_supported',
@@ -88,7 +89,7 @@ const invitationsController = async (fastify) => {
 
       const caoServiceRefs = await buildReferenceCaoServices({
         caoServiceIds: extractCaoServiceRefs(inviteeService),
-        caoOrganizations: [caoOrganization],
+        caoOrganizations: [inviterOrganization],
       });
 
       forEach(
@@ -110,6 +111,7 @@ const invitationsController = async (fastify) => {
       const invitation = await repos.invitations.insert({
         invitationUrl: buildInvitationUrl({ code }, req),
         inviterDid: did,
+        inviterId: inviterOrganization._id,
         inviteeEmail,
         inviteeService,
         inviteeProfile,
@@ -122,7 +124,7 @@ const invitationsController = async (fastify) => {
 
       const messageCode = await sendEmailToInvitee({
         inviteeEmail,
-        caoOrganization,
+        inviterOrganization,
         ticket,
         code,
       });
@@ -177,9 +179,11 @@ const invitationsController = async (fastify) => {
         query: { page, sort = [] },
         repos,
       } = req;
-      await repos.organizations.findOneByDid(did, { _id: 1 });
+      const organization = await repos.organizations.findOneByDid(did, {
+        _id: 1,
+      });
       const filter = transformToFinder({
-        filter: { inviterDid: did },
+        filter: { inviterId: new ObjectId(organization._id) },
         page,
         sort,
       });

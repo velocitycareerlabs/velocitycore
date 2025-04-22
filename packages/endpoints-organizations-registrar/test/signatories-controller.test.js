@@ -266,7 +266,7 @@ describe('signatoriesController', () => {
         errorResponseMatcher({
           error: 'Bad Request',
           errorCode: 'signatory_status_already_complete',
-          message: 'Already Signed',
+          message: 'Signatory has already signed',
           statusCode: 400,
         })
       );
@@ -441,7 +441,7 @@ describe('signatoriesController', () => {
         errorResponseMatcher({
           error: 'Bad Request',
           errorCode: 'signatory_status_already_complete',
-          message: 'Already Signed',
+          message: 'Signatory has already signed',
           statusCode: 400,
         })
       );
@@ -522,9 +522,9 @@ describe('signatoriesController', () => {
     });
 
     it('should send emails if there are active signatory reminders', async () => {
-      const invitingOrganization = await persistOrganization();
+      const inviterOrganization = await persistOrganization();
       const invitation1 = await persistInvitation({
-        organizationId: invitingOrganization._id,
+        inviterOrganization,
       });
       const organization1 = await persistOrganization({
         invitationId: new ObjectId(invitation1._id),
@@ -532,12 +532,12 @@ describe('signatoriesController', () => {
           {
             id: '#iss-1',
             type: ServiceTypes.HolderAppProviderType,
-            serviceEndpoint: `${invitingOrganization.didDoc.id}#cao-1`,
+            serviceEndpoint: `${inviterOrganization.didDoc.id}#cao-1`,
           },
         ],
       });
       const invitation2 = await persistInvitation({
-        organizationId: invitingOrganization._id,
+        inviterOrganization,
       });
       const organization2 = await persistOrganization({
         invitationId: new ObjectId(invitation2._id),
@@ -545,7 +545,7 @@ describe('signatoriesController', () => {
           {
             id: '#iss-1',
             type: ServiceTypes.HolderAppProviderType,
-            serviceEndpoint: `${invitingOrganization.didDoc.id}#cao-1`,
+            serviceEndpoint: `${inviterOrganization.didDoc.id}#cao-1`,
           },
         ],
       });
@@ -575,8 +575,8 @@ describe('signatoriesController', () => {
       );
 
       expect(mockSendEmail.mock.calls).toEqual([
-        [expectedSignatoryReminderEmail(organization2, invitingOrganization)],
-        [expectedSignatoryReminderEmail(organization1, invitingOrganization)],
+        [expectedSignatoryReminderEmail(organization2, inviterOrganization)],
+        [expectedSignatoryReminderEmail(organization1, inviterOrganization)],
       ]);
 
       const signatoryStatus3Db = await signatoryStatusRepo.findOne({

@@ -2,6 +2,7 @@ const { isEmpty } = require('lodash/fp');
 const newError = require('http-errors');
 const { nanoid } = require('nanoid/non-secure');
 const { addSeconds } = require('date-fns/fp');
+const { ObjectId } = require('mongodb');
 const {
   verifyUserOrganizationWriteAuthorized,
 } = require('../../../../../plugins/authorization');
@@ -46,11 +47,13 @@ const invitationController = async (fastify) => {
         params: { did, invitationId },
         repos,
       } = req;
-      await repos.organizations.findOneByDid(did, { _id: 1 });
+      const inviterOrganization = await repos.organizations.findOneByDid(did, {
+        _id: 1,
+      });
       const invitation = await repos.invitations.findOne({
         filter: {
           _id: invitationId,
-          inviterDid: did,
+          inviterId: new ObjectId(inviterOrganization._id),
         },
       });
 
@@ -104,7 +107,7 @@ const invitationController = async (fastify) => {
         config: { registrarResendInvitationTtl },
         repos,
       } = req;
-      await repos.organizations.findOneByDid(did, { _id: 1 });
+      const inviterOrganization = await repos.organizations.findOneByDid(did);
       validateInviteeEmail(inviteeEmail);
 
       const code = nanoid(16);
@@ -114,7 +117,7 @@ const invitationController = async (fastify) => {
       const invitation = await repos.invitations.findOne({
         filter: {
           _id: invitationId,
-          inviterDid: did,
+          inviterId: new ObjectId(inviterOrganization._id),
         },
       });
 
@@ -123,8 +126,6 @@ const invitationController = async (fastify) => {
           errorCode: 'invitation_not_found',
         });
       }
-
-      const caoOrganization = await repos.organizations.findOneByDid(did);
 
       const { ticket } = await getOrCreateAuth0User(
         inviteeEmail,
@@ -142,7 +143,7 @@ const invitationController = async (fastify) => {
 
       const messageCode = await sendEmailToInvitee({
         inviteeEmail,
-        caoOrganization,
+        inviterOrganization,
         ticket,
         code,
       });
@@ -187,12 +188,14 @@ const invitationController = async (fastify) => {
         repos,
         user,
       } = req;
-      await repos.organizations.findOneByDid(did, { _id: 1 });
+      const inviterOrganization = await repos.organizations.findOneByDid(did, {
+        _id: 1,
+      });
       const deletedAt = new Date();
       const invitation = await repos.invitations.findOne({
         filter: {
           _id: invitationId,
-          inviterDid: did,
+          inviterId: new ObjectId(inviterOrganization._id),
         },
       });
 

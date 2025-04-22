@@ -118,13 +118,11 @@ const { mapResponseKeyToDbKey } = require('./helpers/map-response-key-to-db');
 const buildFastify = require('./helpers/build-fastify');
 const organizationKeysRepoPlugin = require('../src/entities/organization-keys/repos/repo');
 const organizationsRepoPlugin = require('../src/entities/organizations/repos/repo');
-const signatoryStatusesPlugin = require('../src/entities/signatories/repos/repo');
 const groupsRepoPlugin = require('../src/entities/groups/repo');
 const imagesRepoPlugin = require('../src/entities/images/repo');
 
 const {
   ImageState,
-  SignatoryEventStatus,
   findKeyByPurpose,
   buildPublicServices,
   buildFullOrganizationResponse,
@@ -456,7 +454,6 @@ describe('Organizations Full Test Suite', () => {
   let fastify;
   let organizationsRepo;
   let organizationKeysRepo;
-  let signatoryStatusesRepo;
   let persistOrganization;
   let newOrganization;
   let persistGroup;
@@ -578,10 +575,6 @@ describe('Organizations Full Test Suite', () => {
       config: fastify.config,
     });
     imagesRepo = imagesRepoPlugin(fastify)({
-      log: fastify.log,
-      config: fastify.config,
-    });
-    signatoryStatusesRepo = signatoryStatusesPlugin(fastify)({
       log: fastify.log,
       config: fastify.config,
     });
@@ -3501,7 +3494,7 @@ describe('Organizations Full Test Suite', () => {
 
         it('Should create organization without services and accept invitation', async () => {
           const profile = omit(['type'], orgProfile);
-          const invitingOrganization = await persistOrganization({
+          const inviterOrganization = await persistOrganization({
             name: 'CAOTEST',
             service: [
               {
@@ -3512,15 +3505,14 @@ describe('Organizations Full Test Suite', () => {
             ],
           });
           await persistGroup({
-            groupId: invitingOrganization.didDoc.id,
-            organization: invitingOrganization,
+            groupId: inviterOrganization.didDoc.id,
+            organization: inviterOrganization,
             clientAdminIds: [nanoid()],
           });
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             code: invitationCode,
-            organizationId: new ObjectId(invitingOrganization._id),
-            inviterDid: invitingOrganization.didDoc.id,
+            inviterOrganization,
           });
 
           const payload = {
@@ -3549,10 +3541,10 @@ describe('Organizations Full Test Suite', () => {
               expiresAt: expect.any(Date),
               code: invitationCode,
               inviteeEmail: 'foo@example.com',
-              inviterDid: invitingOrganization.didDoc.id,
+              inviterDid: inviterOrganization.didDoc.id,
+              inviterId: inviterOrganization._id,
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
-              organizationId: invitingOrganization._id,
               updatedAt: expect.any(Date),
               createdAt: expect.any(Date),
             })
@@ -3563,13 +3555,13 @@ describe('Organizations Full Test Suite', () => {
 
           expect(mockSendEmail.mock.calls).toEqual([
             [expectedSupportEmail()],
-            [expectedSignatoryApprovalEmail(invitingOrganization, { profile })],
+            [expectedSignatoryApprovalEmail(inviterOrganization, { profile })],
           ]);
         });
 
         it('Should create organization with services and accept invitation', async () => {
           const profile = omit(['type'], orgProfile);
-          const caoOrganization = await persistOrganization({
+          const inviterOrganization = await persistOrganization({
             name: 'CAOTEST',
             service: [
               {
@@ -3580,26 +3572,25 @@ describe('Organizations Full Test Suite', () => {
             ],
           });
           await persistGroup({
-            groupId: caoOrganization.didDoc.id,
-            organization: caoOrganization,
+            groupId: inviterOrganization.didDoc.id,
+            organization: inviterOrganization,
             clientAdminIds: [nanoid()],
           });
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
-            organizationId: caoOrganization._id,
             code: invitationCode,
-            inviterDid: caoOrganization.didDoc.id,
+            inviterOrganization,
           });
           const services = [
             {
               id: '#test-service-1',
               type: ServiceTypes.InspectionType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
             {
               id: '#test-service-2',
               type: ServiceTypes.InspectionType,
-              serviceEndpoint: `${caoOrganization.didDoc.id}#caoid`,
+              serviceEndpoint: `${inviterOrganization.didDoc.id}#caoid`,
             },
           ];
 
@@ -3629,8 +3620,8 @@ describe('Organizations Full Test Suite', () => {
               expiresAt: expect.any(Date),
               code: invitationCode,
               inviteeEmail: 'foo@example.com',
-              inviterDid: caoOrganization.didDoc.id,
-              organizationId: caoOrganization._id,
+              inviterDid: inviterOrganization.didDoc.id,
+              inviterId: inviterOrganization._id,
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
               updatedAt: expect.any(Date),
@@ -3667,12 +3658,12 @@ describe('Organizations Full Test Suite', () => {
               [sendServicesActivatedEmailToCAOsMatcher(orgFromDb)],
               [expectedInvitationAcceptanceEmail],
               [expectedSupportEmail()],
-              [expectedSignatoryApprovalEmail(caoOrganization, orgFromDb)],
+              [expectedSignatoryApprovalEmail(inviterOrganization, orgFromDb)],
             ])
           );
 
           expect(mockSendEmail.mock.calls[5]).toEqual([
-            expectedSignatoryApprovalEmail(caoOrganization, orgFromDb),
+            expectedSignatoryApprovalEmail(inviterOrganization, orgFromDb),
           ]);
         });
 
@@ -3700,8 +3691,7 @@ describe('Organizations Full Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             invitationCode,
-            organizationId: inviterOrganization._id,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const services = [
             {
@@ -3745,7 +3735,7 @@ describe('Organizations Full Test Suite', () => {
               invitationCode,
               inviteeEmail: 'foo@example.com',
               inviterDid: inviterOrganization.didDoc.id,
-              organizationId: inviterOrganization._id,
+              inviterId: inviterOrganization._id,
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
               updatedAt: expect.any(Date),
@@ -3804,7 +3794,7 @@ describe('Organizations Full Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             code: invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const services = [
             {
@@ -3842,6 +3832,7 @@ describe('Organizations Full Test Suite', () => {
               code: invitationCode,
               inviteeEmail: 'foo@example.com',
               inviterDid: inviterOrganization.didDoc.id,
+              inviterId: inviterOrganization._id,
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
               updatedAt: expect.any(Date),
@@ -3906,8 +3897,7 @@ describe('Organizations Full Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             code: invitationCode,
-            organizationId: inviterOrganization2._id,
-            inviterDid: inviterOrganization1.didDoc.id,
+            inviterOrganization: inviterOrganization1,
           });
           const services = [
             {
@@ -3950,7 +3940,7 @@ describe('Organizations Full Test Suite', () => {
               code: invitationCode,
               inviteeEmail: 'foo@example.com',
               inviterDid: inviterOrganization1.didDoc.id,
-              organizationId: inviterOrganization2._id,
+              inviterId: inviterOrganization1._id,
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
               updatedAt: expect.any(Date),
@@ -3985,7 +3975,7 @@ describe('Organizations Full Test Suite', () => {
             expect.arrayContaining([
               [sendServicesActivatedEmailMatcher(orgFromDb)],
               [expectedSupportEmail()],
-              [expectedSignatoryApprovalEmail(inviterOrganization2, orgFromDb)],
+              [expectedSignatoryApprovalEmail(inviterOrganization1, orgFromDb)],
             ])
           );
         });
@@ -4937,9 +4927,8 @@ describe('Organizations Full Test Suite', () => {
         });
         const invitationCode = '1234567812345678';
         const invitation = await persistInvitation({
-          organizationId: inviterOrganization._id,
           code: invitationCode,
-          inviterDid: inviterOrganization.didDoc.id,
+          inviterOrganization,
         });
 
         const services = [

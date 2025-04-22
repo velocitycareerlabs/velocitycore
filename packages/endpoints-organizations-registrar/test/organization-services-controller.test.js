@@ -3538,7 +3538,7 @@ describe('Organization Services Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const organization = await setupOrganizationWithGroup();
           const did = organization.didDoc.id;
@@ -3575,6 +3575,7 @@ describe('Organization Services Test Suite', () => {
               expiresAt: expect.any(Date),
               invitationCode,
               inviterDid: inviterOrganization.didDoc.id,
+              inviterId: inviterOrganization._id,
               inviteeEmail: 'foo@example.com',
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
@@ -3621,7 +3622,7 @@ describe('Organization Services Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const organization = await setupOrganizationWithGroup();
           const dltKey = extractVerificationMethod(
@@ -3667,6 +3668,7 @@ describe('Organization Services Test Suite', () => {
               expiresAt: expect.any(Date),
               invitationCode,
               inviterDid: inviterOrganization.didDoc.id,
+              inviterId: inviterOrganization._id,
               inviteeEmail: 'foo@example.com',
               createdBy: 'sub-123',
               invitationUrl: 'https://someurl.com',
@@ -3720,7 +3722,7 @@ describe('Organization Services Test Suite', () => {
           const invitationCode = '1234567812345678';
           await persistInvitation({
             invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const organization = await persistOrganization({
             keys: [

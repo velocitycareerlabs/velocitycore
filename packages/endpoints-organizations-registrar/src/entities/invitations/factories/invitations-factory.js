@@ -27,11 +27,12 @@ module.exports = (app) =>
     invitationsRepoPlugin(app)({ config: app.config }),
     async (overrides) => {
       const overridesResult = overrides();
-      const inviteeService = overridesResult.organization?.didDoc.service;
-      const inviteeProfile = overridesResult.organization?.profile;
-      const inviterDid = overridesResult.organization?.didDoc.id;
-      const organizationId = overridesResult.organizationId
-        ? new ObjectId(overridesResult.organizationId)
+      const inviteeService =
+        overridesResult.inviteeOrganization?.didDoc.service;
+      const inviteeProfile = overridesResult.inviteeOrganization?.profile;
+      const inviterDid = overridesResult.inviterOrganization?.didDoc.id;
+      const inviterId = overridesResult.inviterOrganization
+        ? new ObjectId(overridesResult.inviterOrganization._id)
         : undefined;
       return {
         inviteeEmail: 'foo@example.com',
@@ -39,13 +40,16 @@ module.exports = (app) =>
         inviteeService,
         inviteeProfile,
         inviterDid,
-        organizationId,
+        inviterId,
         code: '1234567812345678',
         expiresAt: addWeeks(1, new Date()),
         createdAt: new Date(),
         updatedAt: new Date(),
         createdBy: 'sub-123',
-        ...omit(['organizationId'], overridesResult),
+        ...omit(
+          ['inviterOrganization', 'inviteeOrganization'],
+          overridesResult
+        ),
       };
     }
   );
