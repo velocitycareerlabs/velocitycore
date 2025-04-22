@@ -14,7 +14,6 @@
     "lint:fix": "eslint --fix --ext .js ."
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.731.1",
     "@fastify/autoload": "5.10.0",
     "@fastify/multipart": "~8.3.1",
     "@spencejs/spence-mongo-repos": "~0.10.2",
@@ -33,12 +32,12 @@
     "nanoid": "~3.3.8"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.731.1",
     "@spencejs/spence-factories": "0.10.2",
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "@velocitycareerlabs/server-provider": "0.5.0-build",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
-    "aws-sdk": "2.1692.0",
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "8.10.0",

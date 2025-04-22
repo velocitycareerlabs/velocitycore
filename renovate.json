@@ -76,7 +76,7 @@
     },
     {
       "matchPackageNames": [
-        "aws-sdk"
+        "@aws-sdk/{/,}**"
       ],
       "extends": ["schedule:monthly"],
       "automerge": false
