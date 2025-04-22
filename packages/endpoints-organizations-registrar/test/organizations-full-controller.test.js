@@ -3428,132 +3428,6 @@ describe('Organizations Full Test Suite', () => {
         }, 8000);
       });
 
-      describe('Create organizations via invitations', () => {
-        beforeEach(async () => {
-          await persistGroup({ skipOrganization: true });
-        });
-
-        it('should add organization with service send signatory reminder', async () => {
-          const caoOrg1 = await persistOrganization({
-            name: 'CAO name',
-            service: [
-              {
-                id: '#caoid',
-                type: ServiceTypes.CredentialAgentOperatorType,
-                serviceEndpoint: 'https://www.acme.com',
-              },
-            ],
-          });
-          const caoOrg2 = await persistOrganization({
-            name: 'CAO Other',
-            service: [
-              {
-                id: '#caoother1',
-                type: ServiceTypes.CredentialAgentOperatorType,
-                serviceEndpoint: 'https://www.acme.com',
-              },
-              {
-                id: '#caoother2',
-                type: ServiceTypes.CredentialAgentOperatorType,
-                serviceEndpoint: 'https://www.acme.com',
-              },
-            ],
-          });
-          const services = [
-            {
-              id: '#test-service-1',
-              type: ServiceTypes.InspectionType,
-              credentialTypes: ['DriversLicenseV1.0'],
-              serviceEndpoint: `${caoOrg1.didDoc.id}#caoid`,
-            },
-            {
-              id: '#test-service-2',
-              type: ServiceTypes.InspectionType,
-              credentialTypes: ['DriversLicenseV1.0'],
-              serviceEndpoint: `${caoOrg2.didDoc.id}#caoother1`,
-            },
-            {
-              id: '#test-service-3',
-              type: ServiceTypes.InspectionType,
-              credentialTypes: ['DriversLicenseV1.0'],
-              serviceEndpoint: `${caoOrg2.didDoc.id}#caoother2`,
-            },
-            {
-              id: '#test-service-4',
-              type: ServiceTypes.InspectionType,
-              credentialTypes: ['DriversLicenseV1.0'],
-              serviceEndpoint: `${caoOrg2.didDoc.id}#caoother2`,
-            },
-          ];
-
-          const payload = {
-            profile: orgProfile,
-            serviceEndpoints: services,
-          };
-
-          const response = await fastify.injectJson({
-            method: 'POST',
-            url: fullUrl,
-            payload,
-            headers: {
-              'x-auto-activate': '0',
-              'x-override-oauth-user': JSON.stringify(
-                testWriteOrganizationsUser
-              ),
-            },
-          });
-
-          expect(response.statusCode).toEqual(201);
-          const did = response.json?.id;
-
-          // json response checks
-          expect(did).toMatch(DID_FORMAT);
-          expect(response.json).toEqual(
-            expectedCreateFullOrganizationResponse(did, orgProfile, services, {
-              profile: { permittedVelocityServiceCategory: [] },
-              activatedServiceIds: [],
-            })
-          );
-
-          // organization entity checks
-          const orgFromDb = await getOrganizationFromDb(did);
-          expect(orgFromDb).toEqual(
-            expectedOrganization(did, orgProfile, services, {
-              profile: { permittedVelocityServiceCategory: [] },
-              activatedServiceIds: [],
-            })
-          );
-          // consent entity checks
-          expect(await getConsentsFromDb(orgFromDb)).toEqual(
-            expectedConsents(orgFromDb, services, testNoGroupRegistrarUser)
-          );
-
-          const signatoryReminder = await signatoryStatusesRepo.findOne({
-            filter: {
-              organizationId: orgFromDb._id,
-            },
-          });
-          expect(signatoryReminder).toEqual({
-            _id: expect.any(ObjectId),
-            organizationId: orgFromDb._id,
-            events: [
-              {
-                state: SignatoryEventStatus.LINK_SENT,
-                timestamp: expect.any(Date),
-              },
-            ],
-            authCodes: [
-              {
-                code: expect.any(String),
-                timestamp: expect.any(Date),
-              },
-            ],
-            createdAt: expect.any(Date),
-            updatedAt: expect.any(Date),
-          });
-        });
-      });
-
       describe('Organization Creation with invitations Test Suite', () => {
         it('Should create organization and ignore missing invitationCode', async () => {
           const profile = omit(['type'], orgProfile);
@@ -3779,7 +3653,7 @@ describe('Organizations Full Test Suite', () => {
           const orgFromDb = await getOrganizationFromDb(did);
           expect(orgFromDb).toEqual(
             expectedOrganization(did, orgProfile, services, {
-              invitation,
+              invitationId: new ObjectId(invitation._id),
             })
           );
           // consent entity checks
@@ -3894,7 +3768,7 @@ describe('Organizations Full Test Suite', () => {
           const orgFromDb = await getOrganizationFromDb(did);
           expect(orgFromDb).toEqual(
             expectedOrganization(did, orgProfile, services, {
-              invitation,
+              invitationId: new ObjectId(invitation._id),
             })
           );
           // consent entity checks
@@ -3989,7 +3863,9 @@ describe('Organizations Full Test Suite', () => {
           // organization entity checks
           const orgFromDb = await getOrganizationFromDb(did);
           expect(orgFromDb).toEqual(
-            expectedOrganization(did, orgProfile, services, { invitation })
+            expectedOrganization(did, orgProfile, services, {
+              invitationId: new ObjectId(invitation._id),
+            })
           );
           // consent entity checks
           expect(await getConsentsFromDb(orgFromDb)).toEqual(
@@ -4097,7 +3973,7 @@ describe('Organizations Full Test Suite', () => {
           const orgFromDb = await getOrganizationFromDb(did);
           expect(orgFromDb).toEqual(
             expectedOrganization(did, orgProfile, services, {
-              invitation,
+              invitationId: new ObjectId(invitation._id),
             })
           );
           // consent entity checks
@@ -5048,7 +4924,24 @@ describe('Organizations Full Test Suite', () => {
         expect(nockData.isDone()).toEqual(true);
       });
 
-      it('Should create organizations with service', async () => {
+      it('Should create organizations with service and invitation', async () => {
+        const inviterOrganization = await persistOrganization({
+          name: 'CAOTEST1',
+          service: [
+            {
+              id: '#caoid1',
+              type: ServiceTypes.CredentialAgentOperatorType,
+              serviceEndpoint: 'https://www.cao.com',
+            },
+          ],
+        });
+        const invitationCode = '1234567812345678';
+        const invitation = await persistInvitation({
+          organizationId: inviterOrganization._id,
+          code: invitationCode,
+          inviterDid: inviterOrganization.didDoc.id,
+        });
+
         const services = [
           {
             id: '#acme-1',
@@ -5082,6 +4975,7 @@ describe('Organizations Full Test Suite', () => {
             },
           ],
           byoDid: expectedDidWebDoc.id,
+          invitationCode,
           keys: [
             {
               kidFragment: toRelativeKeyId(
@@ -5155,6 +5049,7 @@ describe('Organizations Full Test Suite', () => {
               ],
             },
             didNotCustodied: true,
+            invitationId: new ObjectId(invitation._id),
           })
         );
         const credentialPayload = decodeCredentialJwt(
@@ -5240,8 +5135,8 @@ describe('Organizations Full Test Suite', () => {
         // email checks
         expect(mockSendEmail.mock.calls).toEqual([
           [expectedSupportEmail()],
-          [expectedSignatoryApprovalEmail(null, orgFromDb)],
           [sendServicesActivatedEmailMatcher()],
+          [expectedSignatoryApprovalEmail(inviterOrganization, orgFromDb)],
         ]);
 
         expect(nockData.isDone()).toEqual(true);
@@ -5815,7 +5710,7 @@ describe('Organizations Full Test Suite', () => {
   };
 });
 
-const expectedServices = (services, invitation) => {
+const expectedServices = (services, overrides) => {
   return flow(
     castArray,
     compact,
@@ -5825,10 +5720,10 @@ const expectedServices = (services, invitation) => {
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       };
-      if (invitation != null) {
-        result.invitationId = new ObjectId(invitation._id);
-      }
-      return result;
+      return {
+        ...result,
+        ...pick(['invitationId'], overrides),
+      };
     })
   )(services);
 };
@@ -5849,7 +5744,7 @@ const expectedOrganization = (did, profile, services = [], overrides = {}) => {
     didNotCustodied,
     ids: idsMatcher({ did, services, includeMongoId: true }),
     normalizedProfileName: expect.any(String),
-    services: expectedServices(services, overrides.invitation),
+    services: expectedServices(services, overrides),
     activatedServiceIds: map('id', services),
     authClients: map((obj) => {
       const authClient = omit(['clientSecret'], obj);
@@ -5863,9 +5758,6 @@ const expectedOrganization = (did, profile, services = [], overrides = {}) => {
       signedCredential: expect.any(String),
     },
     verifiableCredentialJwt: expect.any(String),
-    invitationId: overrides.invitation?._id
-      ? new ObjectId(overrides.invitation._id)
-      : undefined,
     updatedAt: expect.any(Date),
     createdAt: expect.any(Date),
     ...omit(['authClients', 'profile', 'invitation'], overrides),

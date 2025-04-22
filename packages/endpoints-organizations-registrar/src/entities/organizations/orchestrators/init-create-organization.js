@@ -66,8 +66,6 @@ const initCreateOrganization = (fastify) => {
         },
         context
       );
-    // eslint-disable-next-line better-mutation/no-mutation
-    newOrganization.invitationId = invitation?._id ?? undefined;
     const organization = await repos.organizations.insert(newOrganization);
     await provisionGroup(organization, context);
 

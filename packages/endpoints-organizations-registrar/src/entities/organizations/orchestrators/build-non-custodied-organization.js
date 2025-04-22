@@ -70,6 +70,7 @@ const buildNonCustodiedOrganization = async (
       normalizedProfileName: normalizeProfileName(profile.name),
       didNotCustodied: true,
       services: newServices,
+      invitationId: invitation?._id ?? undefined,
     },
     newKeys,
     newKeyPairs: map(() => null, newKeys),
