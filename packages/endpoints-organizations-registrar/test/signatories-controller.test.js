@@ -265,7 +265,7 @@ describe('signatoriesController', () => {
       expect(response.json).toEqual(
         errorResponseMatcher({
           error: 'Bad Request',
-          errorCode: 'already_signed',
+          errorCode: 'signatory_status_already_complete',
           message: 'Already Signed',
           statusCode: 400,
         })
@@ -440,7 +440,7 @@ describe('signatoriesController', () => {
       expect(response.json).toEqual(
         errorResponseMatcher({
           error: 'Bad Request',
-          errorCode: 'already_signed',
+          errorCode: 'signatory_status_already_complete',
           message: 'Already Signed',
           statusCode: 400,
         })

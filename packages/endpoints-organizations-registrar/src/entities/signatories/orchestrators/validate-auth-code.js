@@ -31,8 +31,8 @@ const validateAuthCode = async (organization, authCode, context) => {
       signatoryStatus.events
     )
   ) {
-    throw newError(400, 'Already Signed', {
-      errorCode: 'already_signed',
+    throw newError(400, 'Signatory has already signed', {
+      errorCode: 'signatory_status_already_complete',
     });
   }
 
