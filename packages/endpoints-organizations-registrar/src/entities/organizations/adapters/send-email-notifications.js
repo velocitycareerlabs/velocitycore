@@ -159,13 +159,13 @@ const initSendEmailNotifications = (initCtx) => {
     const invitation = organization.invitationId
       ? await context.repos.invitations.findById(organization.invitationId)
       : null;
-    const invitingOrganization = invitation?.inviterId
+    const inviterOrganization = invitation?.inviterId
       ? await context.repos.organizations.findById(invitation.inviterId)
       : null;
     await initCtx.sendEmail(
       emailToSignatoryForOrganizationApproval({
         organization,
-        invitingOrganization,
+        inviterOrganization,
         authCode,
         isReminder,
       })

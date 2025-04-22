@@ -111,12 +111,12 @@ const expectedInvitationAcceptanceEmail = {
 };
 
 const expectedSignatoryApprovalEmail = (
-  invitingOrg,
+  inviterOrg,
   orgForApproval,
   messageMatcher = expect.any(String)
 ) => {
-  const requester = invitingOrg
-    ? invitingOrg.profile.name
+  const requester = inviterOrg
+    ? inviterOrg.profile.name
     : `${orgForApproval.profile.adminGivenName} ${orgForApproval.profile.adminFamilyName}`;
   return {
     Destination: {
