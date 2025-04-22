@@ -13,7 +13,9 @@ export default class CredentialIssuerVerifierEmptyImpl
     implements CredentialIssuerVerifier
 {
     async verifyCredentials(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         jwtCredentials: VCLJwt[],
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor
     ): Promise<boolean> {
         return true;
