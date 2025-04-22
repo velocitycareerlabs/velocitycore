@@ -48,7 +48,7 @@ const validateAuthCode = async (organization, authCode, context) => {
   }
 
   const isTimestampExpired = isBefore(
-    subMinutes(config.signatoryLinkExpiration)(new Date())
+    subMinutes(config.signatoryLinkExpiration, new Date())
   );
 
   if (isTimestampExpired(new Date(latestAuthCode.timestamp))) {
