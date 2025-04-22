@@ -1,7 +1,6 @@
 const { isEmpty } = require('lodash/fp');
 const { nanoid } = require('nanoid');
 const { subMinutes } = require('date-fns/fp');
-const { ObjectId } = require('mongodb');
 const { SignatoryEventStatus } = require('../domain');
 
 const task = 'send-reminders';
@@ -37,7 +36,7 @@ const sendReminder = async (
 ) => {
   const { repos, log } = context;
   try {
-    const filter = { _id: new ObjectId(signatoryStatus.organizationId) };
+    const filter = { _id: signatoryStatus.organizationId };
     const organization = await repos.organizations.findOne({ filter });
 
     if (isEmpty(organization)) {
