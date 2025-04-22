@@ -7,7 +7,11 @@
         "lint": "eslint --ext .js,.ts,.tsx src",
         "lint:fix": "eslint --fix --ext .js,.ts,.tsx src",
         "test": "jest --config ./jest.config.js --runInBand --coverage",
+        "build": "tsc",
+        "prepublishOnly": "tsc",
+        "start": "node ./dist/Server.js",
         "start:dev": "ts-node --log-error --files src/Server.ts"
+
     },
     "license": "Apache-2.0",
     "publishConfig": {
