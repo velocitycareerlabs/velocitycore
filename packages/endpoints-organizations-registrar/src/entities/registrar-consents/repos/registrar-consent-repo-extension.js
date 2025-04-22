@@ -19,7 +19,7 @@ const { nanoid } = require('nanoid');
 
 const registrarConsentRepoExtension = (parent) => ({
   registerConsent: (
-    { userId, organization, type, version, ...val },
+    { userId, organization, type, version, ...rest },
     ...args
   ) => {
     return parent.insert(
@@ -30,7 +30,7 @@ const registrarConsentRepoExtension = (parent) => ({
         version,
         type,
         createdAt: new Date(),
-        ...val,
+        ...rest,
       },
       ...args
     );
