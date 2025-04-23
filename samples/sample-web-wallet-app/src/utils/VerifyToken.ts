@@ -6,5 +6,5 @@
  */
 
 export const verifyToken = (token) => {
-  return token?.accessToken?.jwtValue?.payload?.exp <= Date.now() / 1000;
+  return token?.accessToken?.jwtValue?.payload?.exp >= Date.now() / 1000;
 };

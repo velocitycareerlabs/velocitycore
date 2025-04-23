@@ -136,6 +136,7 @@ const onSubmitPresentation = async (
     };
     try {
       verifiedAuthToken = await getAuthToken(authTokenDescriptor);
+      console.log('Refreshed token: ', verifiedAuthToken);
     } catch (error) {
       console.log('Error refreshing token: ', error);
       throw error;
