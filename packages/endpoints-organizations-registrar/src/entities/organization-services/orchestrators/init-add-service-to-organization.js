@@ -28,8 +28,8 @@ const {
 } = require('../adapters');
 const {
   activateServices,
-  buildServiceConsent,
   isNewNodeOperatorService,
+  getServiceConsentType,
 } = require('../domains');
 
 const initAddServiceToOrganization = (fastify) => {
@@ -40,7 +40,7 @@ const initAddServiceToOrganization = (fastify) => {
     initBuildOrganizationModificationsOnServiceChange(fastify);
 
   return async ({ organization, newService }, context) => {
-    const { repos } = context;
+    const { repos, user } = context;
 
     const createdService = await repos.organizations.addService(
       organization._id,
@@ -57,9 +57,13 @@ const initAddServiceToOrganization = (fastify) => {
     }
 
     // add consent
-    await repos.registrarConsents.insert(
-      buildServiceConsent(organization, createdService, context)
-    );
+    await repos.registrarConsents.registerConsent({
+      userId: user.sub,
+      organization,
+      type: getServiceConsentType(createdService),
+      version: 1,
+      serviceId: createdService.id,
+    });
 
     // add stakes account
     if (isNewNodeOperatorService(organization, createdService)) {

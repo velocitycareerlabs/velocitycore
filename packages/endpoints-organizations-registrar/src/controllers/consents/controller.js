@@ -16,7 +16,6 @@
  */
 
 const { values } = require('lodash/fp');
-const { nanoid } = require('nanoid');
 const { ConsentTypes } = require('../../entities');
 const { consentResponseSchema } = require('./schemas/consent-response.schema');
 
@@ -57,23 +56,20 @@ const consentsController = async (fastify) => {
           user,
         } = req;
 
-        const newConsent = {
-          userId: user.sub,
-          version,
-          consentId: nanoid(),
-          type,
-        };
+        const organization =
+          did != null
+            ? await repos.organizations.findOneByDid(did, {
+                _id: 1,
+              })
+            : null;
 
-        if (did != null) {
-          const organization = await repos.organizations.findOneByDid(did, {
-            _id: 1,
+        const { consentId, ...consent } =
+          await repos.registrarConsents.registerConsent({
+            userId: user.sub,
+            organization,
+            type,
+            version,
           });
-          newConsent.organizationId = organization._id;
-        }
-
-        const { consentId, ...consent } = await repos.registrarConsents.insert(
-          newConsent
-        );
         return {
           consent: {
             id: consentId,
