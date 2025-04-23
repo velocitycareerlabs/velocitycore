@@ -18,7 +18,7 @@ on:
     - cron: '0 0 * * *'
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
