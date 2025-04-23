@@ -7,7 +7,6 @@
 /* eslint-disable no-console */
 
 import React from 'react';
-import { HttpStatusCode } from 'axios';
 import {
   getCountries,
   getCredentialTypeSchemas,
@@ -34,6 +33,7 @@ import Environment from '../Environment';
 import { CurrentEnvironment } from '../GlobalConfig';
 import { getAuthToken } from '../repositories/AuthTokenRepository';
 import { getExchangeProgress } from '../repositories/GetExchangeProgressRepository';
+import { verifyToken } from '../utils/VerifyToken';
 
 const environment = CurrentEnvironment;
 
@@ -97,9 +97,23 @@ const onGetPresentationRequest = () => {
       console.log('presentation request: ', presentationRequest);
 
       if (presentationRequest.feed) {
-        onSubmitPresentationUsingAuthToken(presentationRequest);
+        onSubmitPresentationUsingAuthToken(presentationRequest)
+          .then((submissionResult) => {
+            console.log('submission result: ', submissionResult);
+            onGetExchangeProgress(presentationRequest, submissionResult);
+          })
+          .catch((error) => {
+            console.log('Error submitting presentation: ', error);
+          });
       } else {
-        onSubmitPresentation(presentationRequest);
+        onSubmitPresentation(presentationRequest)
+          .then((submissionResult) => {
+            console.log('submission result: ', submissionResult);
+            onGetExchangeProgress(presentationRequest, submissionResult);
+          })
+          .catch((error) => {
+            console.log('Error submitting presentation: ', error);
+          });
       }
     })
     .catch((error) => {
@@ -107,55 +121,38 @@ const onGetPresentationRequest = () => {
     });
 };
 
-const onSubmitPresentation = (
+const onSubmitPresentation = async (
   presentationRequest: Dictionary<any>,
   authToken?: Dictionary<any>
 ) => {
-  let authTokenRefreshAmount = 0;
-  submitPresentation(
-    {
-      verifiableCredentials: Constants.getIdentificationList(environment),
-      presentationRequest,
-    },
-    authToken
-  )
-    .then((submissionResult) => {
-      console.log('submission result: ', submissionResult);
-      onGetExchangeProgress(presentationRequest, submissionResult);
-    })
-    .catch((submissionError1) => {
-      console.log(submissionError1);
-      if (
-        submissionError1.status === HttpStatusCode.Unauthorized &&
-        authTokenRefreshAmount === 0
-      ) {
-        // eslint-disable-next-line better-mutation/no-mutation
-        authTokenRefreshAmount += 1;
-        const authTokenDescriptor = {
-          authTokenUri: authToken?.authTokenUri || '',
-          refreshToken: authToken?.refreshToken.value,
-          walletDid: authToken?.walletDid,
-          relyingPartyDid: authToken?.relyingPartyDid,
-        };
-        getAuthToken(authTokenDescriptor).then((newAuthToken) => {
-          submitPresentation(
-            {
-              verifiableCredentials:
-                Constants.getIdentificationList(environment),
-              presentationRequest,
-            },
-            newAuthToken
-          )
-            .then((submissionResult) => {
-              console.log('submission result: ', submissionResult);
-              onGetExchangeProgress(presentationRequest, submissionResult);
-            })
-            .catch((submissionError2: any) => {
-              console.log(submissionError2);
-            });
-        });
-      }
-    });
+  let verifiedAuthToken = authToken;
+  if (authToken != null && !verifyToken(authToken)) {
+    console.log('Token is expired');
+    const authTokenDescriptor = {
+      authTokenUri: authToken?.authTokenUri || '',
+      refreshToken: authToken?.refreshToken.value,
+      walletDid: authToken?.walletDid,
+      relyingPartyDid: authToken?.relyingPartyDid,
+    };
+    try {
+      verifiedAuthToken = await getAuthToken(authTokenDescriptor);
+    } catch (error) {
+      console.log('Error refreshing token: ', error);
+      throw error;
+    }
+  }
+  try {
+    return await submitPresentation(
+      {
+        verifiableCredentials: Constants.getIdentificationList(environment),
+        presentationRequest,
+      },
+      verifiedAuthToken
+    );
+  } catch (error) {
+    console.log('Error submitting presentation: ', error);
+    throw error;
+  }
 };
 
 const onGetExchangeProgress = (
@@ -272,21 +269,15 @@ const onFinalizeOffers = (
     });
 };
 
-const onSubmitPresentationUsingAuthToken = (
+const onSubmitPresentationUsingAuthToken = async (
   presentationRequest: Dictionary<any>
 ) => {
   const authTokenDescriptor = {
     presentationRequest,
     vendorOriginContext: presentationRequest.vendorOriginContext,
   };
-  getAuthToken(authTokenDescriptor)
-    .then((authToken) => {
-      console.log('auth token: ', authToken);
-      onSubmitPresentation(presentationRequest, authToken);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const authToken = await getAuthToken(authTokenDescriptor);
+  return onSubmitPresentation(presentationRequest, authToken);
 };
 
 const onGetCredentialTypesUIFormSchema = () => {
