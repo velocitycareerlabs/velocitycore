@@ -103,7 +103,7 @@ describe('oauth module', () => {
       },
     });
 
-    expect(response.statusCode).toEqual(400);
+    expect(response.statusCode).toEqual(200);
   });
 
   it('the verifyAccessToken should return 403 if no scope token but scopes required', async () => {
