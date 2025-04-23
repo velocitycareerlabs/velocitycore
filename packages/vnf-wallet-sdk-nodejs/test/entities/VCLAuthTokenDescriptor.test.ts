@@ -18,7 +18,7 @@ const walletDid =
     'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6InI5ZnlhNTJJbG1UbzN5YlMwd19HZWZlUV9SWDJFSF9ISm1TV3FZWU8ySlkiLCJ5IjoicFFUUmE3R2txYzVrajZvZGVNcXBnVjVUNExqYlphNEY1S1R1MkpEclduYyJ9';
 const relyingPartyDid =
     'did:web:devregistrar.velocitynetwork.foundation:d:example-21.com-8b82ce9a';
-const vendorOriginContext = 'vendor-context';
+const authorizationCode = 'vendor-context';
 const refreshToken = 'refresh-token-789';
 
 describe('VCLAuthTokenDescriptor', () => {
@@ -49,20 +49,20 @@ describe('VCLAuthTokenDescriptor', () => {
         });
 
         // eslint-disable-next-line max-len
-        it('should correctly assign properties when constructed with authTokenUri, walletDid, relyingPartyDid, vendorOriginContext, and refreshToken', () => {
+        it('should correctly assign properties when constructed with authTokenUri, walletDid, relyingPartyDid, authorizationCode, and refreshToken', () => {
             const descriptor = new VCLAuthTokenDescriptor(
                 authTokenUri,
                 refreshToken,
                 walletDid,
                 relyingPartyDid,
-                vendorOriginContext
+                authorizationCode
             );
 
             expect((descriptor as any).authTokenUri).toBe(authTokenUri);
             expect((descriptor as any).walletDid).toBe(walletDid);
             expect((descriptor as any).relyingPartyDid).toBe(relyingPartyDid);
-            expect((descriptor as any).vendorOriginContext).toBe(
-                vendorOriginContext
+            expect((descriptor as any).authorizationCode).toBe(
+                authorizationCode
             );
             expect((descriptor as any).refreshToken).toBe(refreshToken);
         });
@@ -90,19 +90,19 @@ describe('VCLAuthTokenDescriptor', () => {
             expect(result).toEqual(expectedResult);
         });
 
-        it('should generate request body for vendorOriginContext flow when vendorOriginContext only is provided', () => {
+        it('should generate request body for authorizationCode flow when authorizationCode only is provided', () => {
             const descriptor = new VCLAuthTokenDescriptor(
                 authTokenUri,
                 null,
                 walletDid,
                 relyingPartyDid,
-                vendorOriginContext
+                authorizationCode
             );
             const expectedResult = {
                 [VCLAuthTokenDescriptor.KeyGrantType]:
                     GrantType.AuthorizationCode.toString(),
                 [VCLAuthTokenDescriptor.KeyClientId]: walletDid,
-                [GrantType.AuthorizationCode.toString()]: vendorOriginContext,
+                [GrantType.AuthorizationCode.toString()]: authorizationCode,
                 [VCLAuthTokenDescriptor.KeyAudience]: relyingPartyDid,
                 [VCLAuthTokenDescriptor.KeyTokenType]:
                     VCLAuthTokenDescriptor.KeyTokenTypeValue,
@@ -113,13 +113,13 @@ describe('VCLAuthTokenDescriptor', () => {
             expect(result).toEqual(expectedResult);
         });
 
-        it('should generate request body for refreshToken flow when both vendorOriginContext and refreshToken are provided', () => {
+        it('should generate request body for refreshToken flow when both authorizationCode and refreshToken are provided', () => {
             const descriptor = new VCLAuthTokenDescriptor(
                 authTokenUri,
                 refreshToken,
                 walletDid,
                 relyingPartyDid,
-                vendorOriginContext
+                authorizationCode
             );
             const expectedResult = {
                 [VCLAuthTokenDescriptor.KeyGrantType]:
