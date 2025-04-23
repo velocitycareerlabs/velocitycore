@@ -223,7 +223,9 @@ const expectedServiceActivationRequiredEmail = {
 const expectedSignatoryReminderEmail = (
   organization,
   caoOrganization,
-  messageMatcher = expect.any(String)
+  messageMatcher = expect.stringMatching(
+    /You are the authorized signatory for your organization\.[^]*<a href="\S+\/signatories\/approve[^]*<a href="\S+\/signatories\/reject/
+  )
 ) => ({
   Destination: {
     ToAddresses: ['signatory@email.com'],
