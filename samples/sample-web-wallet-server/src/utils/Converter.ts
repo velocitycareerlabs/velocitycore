@@ -168,11 +168,13 @@ const credentialManifestDescriptorRefreshFrom = (
 export const credentialManifestDescriptorFrom = (
   json: Dictionary<any>
 ): VCLCredentialManifestDescriptor => {
-  return json.credentialIds
-    ? credentialManifestDescriptorRefreshFrom(json)
-    : json.service
-    ? credentialManifestDescriptorByServiceFrom(json)
-    : credentialManifestDescriptorByDeepLinkFrom(json);
+  if (json.credentialIds) {
+    return credentialManifestDescriptorRefreshFrom(json);
+  }
+  if (json.service) {
+    return credentialManifestDescriptorByServiceFrom(json);
+  }
+  return credentialManifestDescriptorByDeepLinkFrom(json);
 };
 
 export const credentialManifestFrom = (

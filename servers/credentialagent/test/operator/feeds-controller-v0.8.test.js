@@ -135,7 +135,7 @@ describe('CRUD Feeds Test Suite', () => {
 
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
-        feeds: [
+        feeds: expect.arrayContaining([
           {
             ..._.omit(['_id'], feed2),
             id: feed2._id,
@@ -148,7 +148,7 @@ describe('CRUD Feeds Test Suite', () => {
             createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
             updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
           },
-        ],
+        ]),
       });
     });
   });

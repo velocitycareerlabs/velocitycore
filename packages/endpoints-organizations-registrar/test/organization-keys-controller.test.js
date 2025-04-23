@@ -138,12 +138,6 @@ jest.mock('@velocitycareerlabs/contract-permissions', () => {
   };
 });
 
-const mockSendEmail = jest.fn().mockReturnValue({ promise: jest.fn() });
-jest.mock('aws-sdk', () => ({
-  SES: jest.fn().mockImplementation(() => ({ sendEmail: mockSendEmail })),
-  Credentials: jest.fn().mockImplementation(() => ({})),
-  S3: jest.fn().mockImplementation(() => ({})),
-}));
 jest.mock('@velocitycareerlabs/fineract-client', () => {
   const originalModule = jest.requireActual(
     '@velocitycareerlabs/fineract-client'
