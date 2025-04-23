@@ -280,7 +280,7 @@ const organizationController = async (fastify) => {
               RegistrarOAuth2: [RegistrarScopes.AdminOrganizations],
             },
           ],
-          body: { type: 'null' },
+          body: { type: 'object' },
           response: {
             204: { type: 'null' },
           },
