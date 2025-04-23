@@ -16,7 +16,11 @@ on:
       - ready_for_review
   schedule:
     - cron: '0 0 * * *'
-    
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   DOCKER_REG: 'ghcr.io'
 jobs:
@@ -138,18 +142,21 @@ jobs:
     - name: Create Artifact Name
       run: |
         echo ARTIFACT_NAME=$(echo ${{ matrix.package }} | sed -e 's+@+-+g; s+/+-+g') >> $GITHUB_ENV
+      if: '!cancelled()'
     - name: Upload Lint Report
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
         name: lint${{ env.ARTIFACT_NAME }}
         path: |
           **/eslint.json
+      if: '!cancelled()'
 
   # Post Lint
   post-lint:
     name: Post Lint
     needs: lint
     runs-on: ubuntu-latest
+    if: needs.prepare.outputs.lint-packages != '[]' && !cancelled()
     steps:
     - name: Download All Reports
       uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
@@ -231,6 +238,7 @@ jobs:
     - name: Create Artifact Name
       run: |
         echo ARTIFACT_NAME=$(echo ${{ matrix.package }} | sed -e 's+@+-+g; s+/+-+g') >> $GITHUB_ENV
+      if: '!cancelled()'
     - name: Upload Test Report
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
@@ -239,6 +247,7 @@ jobs:
           test-results/**/*.xml
           test-results/**/*.trx
           test-results/**/*.json
+      if: '!cancelled()'
     - name: Upload Codecov Report
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
@@ -255,6 +264,7 @@ jobs:
       checks: write
       pull-requests: write
     runs-on: ubuntu-latest
+    if: needs.prepare.outputs.test-packages != '[]' && !cancelled()
     steps:
     - name: Download All Test Reports
       uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
