@@ -68,6 +68,7 @@ const initCreateOrganization = (fastify) => {
         },
         context
       );
+
     const organization = await repos.organizations.insert(newOrganization);
     await provisionGroup(organization, context);
 
