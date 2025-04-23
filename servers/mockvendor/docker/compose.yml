@@ -21,7 +21,5 @@ services:
     command: npx nodemon --exec "cd servers/mockvendor && yarn start"
     env_file:
       - ../.localdev.env
-    environment:
-      - NODE_TLS_REJECT_UNAUTHORIZED=0
     ports:
       - 13013:3000
