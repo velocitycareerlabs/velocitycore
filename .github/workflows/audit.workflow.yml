@@ -2,6 +2,9 @@ name: Vulnerability Audit
 on:
   pull_request:
     branches: [ master, staging, qa, dev ]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 env:
   NODE_VERSION: '22'
 jobs:
