@@ -8,17 +8,20 @@ module.exports = async (fastify) => {
       onRequest: fastify.verifyAdmin,
       schema: {
         query: {
-          dateFrom: {
-            type: 'string',
-            format: 'date',
-            description:
-              '(optional) only get submissions for dates on or after this date',
-          },
-          dateUntil: {
-            type: 'string',
-            format: 'date',
-            description:
-              '(optional) only get submissions for dates on or before this date',
+          type: 'object',
+          properties: {
+            dateFrom: {
+              type: 'string',
+              format: 'date',
+              description:
+                '(optional) only get submissions for dates on or after this date',
+            },
+            dateUntil: {
+              type: 'string',
+              format: 'date',
+              description:
+                '(optional) only get submissions for dates on or before this date',
+            },
           },
         },
         response: {

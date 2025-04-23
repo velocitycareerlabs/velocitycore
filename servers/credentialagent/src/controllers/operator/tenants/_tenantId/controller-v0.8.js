@@ -109,7 +109,10 @@ const tenantController = async (fastify) => {
     {
       schema: fastify.autoSchema({
         query: {
-          fullProfile: { type: 'boolean' },
+          type: 'object',
+          properties: {
+            fullProfile: { type: 'boolean' },
+          },
         },
         response: {
           200: {

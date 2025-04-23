@@ -14,7 +14,11 @@
     "lint:fix": "eslint --fix --ext .js ."
   },
   "dependencies": {
-    "@fastify/autoload": "5.10.0",
+    "@fastify/autoload": "^5.10.0",
+    "@fastify/helmet": "^11.1.1",
+    "@fastify/sensible": "^5.6.0",
+    "@fastify/swagger": "^8.15.0",
+    "@fastify/swagger-ui": "^4.2.0",
     "@spencejs/spence-mongo-repos": "~0.10.2",
     "@spencejs/spence-events": "~0.10.2",
     "@spencejs/spence-factories": "0.10.2",
@@ -49,7 +53,8 @@
     "bs58": "~6.0.0",
     "date-fns": "~3.6.0",
     "env-var": "^7.0.0",
-    "fastify-plugin": "~4.5.1",
+    "fastify": "^4.29.0",
+    "fastify-plugin": "^4.5.1",
     "http-errors": "~2.0.0",
     "lodash": "~4.17.21",
     "mongodb": "~6.15.0",

@@ -47,4 +47,9 @@ module.exports = async (fastify) =>
     .addHook('preValidation', async (req) => {
       req.libFetch = fastify.baseLibFetch(req);
     })
-    .autoSchemaPreset({ params: { organizationDID: { type: 'string' } } });
+    .autoSchemaPreset({
+      params: {
+        type: 'object',
+        properties: { organizationDID: { type: 'string' } },
+      },
+    });

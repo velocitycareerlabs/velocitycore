@@ -43,9 +43,12 @@ const credentialTypesController = async (fastify) => {
       {
         schema: fastify.autoSchema({
           querystring: {
-            credentialType: {
-              type: ['string', 'array'],
-              items: { type: 'string' },
+            type: 'object',
+            properties: {
+              credentialType: {
+                type: ['string', 'array'],
+                items: { type: 'string' },
+              },
             },
           },
           response: {
