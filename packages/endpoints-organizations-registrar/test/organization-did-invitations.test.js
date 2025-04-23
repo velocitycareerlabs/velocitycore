@@ -712,7 +712,6 @@ describe('Organization invitations test suites', () => {
           expiresAt: expect.any(Date),
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
           ...payload,
-          inviterDid: inviterOrganization.didDoc.id,
           inviterId: new ObjectId(inviterOrganization._id),
           updatedAt: expect.any(Date),
           updatedBy: expect.stringMatching(/auth0|[A-Za-z0-9_-]+/),
@@ -789,7 +788,6 @@ describe('Organization invitations test suites', () => {
           expiresAt: expect.any(Date),
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
           ...payload,
-          inviterDid: inviterOrganization.didDoc.id,
           inviterId: new ObjectId(inviterOrganization._id),
           updatedAt: expect.any(Date),
           updatedBy: expect.stringMatching(/auth0|[A-Za-z0-9_-]+/),
@@ -862,7 +860,6 @@ describe('Organization invitations test suites', () => {
           createdBy: expect.stringMatching(/auth0|[A-Za-z0-9_-]+/),
           expiresAt: expect.any(Date),
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
-          inviterDid: inviterOrganization.didDoc.id,
           inviterId: new ObjectId(inviterOrganization._id),
           ...payload,
           updatedAt: expect.any(Date),
@@ -1016,7 +1013,6 @@ describe('Organization invitations test suites', () => {
         {
           ...payload,
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
-          inviterDid: inviterOrganization.didDoc.id,
           inviterId: new ObjectId(inviterOrganization._id),
           _id: expect.anything(),
           code: expect.any(String),
@@ -1108,7 +1104,6 @@ describe('Organization invitations test suites', () => {
         {
           ...payload2,
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[0].code}`,
-          inviterDid: inviterOrganization.didDoc.id,
           inviterId: new ObjectId(inviterOrganization._id),
           _id: expect.anything(),
           code: expect.any(String),
@@ -1121,7 +1116,6 @@ describe('Organization invitations test suites', () => {
         {
           ...payload1,
           invitationUrl: `http://localhost.test/invitations/${invitesFromDb[1].code}`,
-          inviterDid: inviterOrganization.didDoc.id,
           inviterId: new ObjectId(inviterOrganization._id),
           _id: expect.anything(),
           code: expect.any(String),
@@ -1420,7 +1414,6 @@ describe('Organization invitations test suites', () => {
       expect(invitationFromDb).toEqual([
         {
           _id: new ObjectId(invitation._id),
-          inviterDid: inviterOrganization.didDoc.id,
           inviterId: new ObjectId(inviterOrganization._id),
           inviteeDid: 'fooInviteeDid',
           inviteeEmail: 'foo@example.com',
@@ -1740,7 +1733,6 @@ describe('Organization invitations test suites', () => {
       expect(invitationFromDb).toEqual([
         {
           _id: new ObjectId(invitation._id),
-          inviterDid: inviterOrganization.didDoc.id,
           inviterId: new ObjectId(inviterOrganization._id),
           inviteeDid: 'fooInviteeDid',
           inviteeEmail: 'foo@example.com',
@@ -1843,7 +1835,6 @@ describe('Organization invitations test suites', () => {
       const dbInvitation = await invitationsRepo.findOne(invitation._id);
       expect(dbInvitation).toEqual({
         _id: expect.anything(),
-        inviterDid: inviterOrganization.didDoc.id,
         inviterId: new ObjectId(inviterOrganization._id),
         inviteeDid: 'fooInviteeDid',
         inviteeEmail: 'email123@email.com',
@@ -1970,7 +1961,6 @@ describe('Organization invitations test suites', () => {
       const dbInvitation = await invitationsRepo.findOne(invitation._id);
       expect(dbInvitation).toEqual({
         _id: expect.anything(),
-        inviterDid: inviterOrganization.didDoc.id,
         inviterId: new ObjectId(inviterOrganization._id),
         inviteeDid: 'fooInviteeDid',
         inviteeEmail: 'email123@email.com',

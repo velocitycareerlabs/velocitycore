@@ -22,7 +22,6 @@ module.exports = (app, options, next = () => {}) => {
         inviteeProfile: 1,
         keyIndividuals: 1,
         inviteeDid: 1,
-        inviterDid: 1,
         inviterId: 1,
         code: 1,
         expiresAt: 1,

@@ -64,7 +64,10 @@ const invitationController = async (fastify) => {
       }
 
       return {
-        invitation,
+        invitation: {
+          ...invitation,
+          inviterDid: did,
+        },
       };
     }
   );
@@ -153,6 +156,7 @@ const invitationController = async (fastify) => {
           code,
           expiresAt,
           invitationUrl,
+          inviterDid: did,
           inviteeEmail,
         },
         messageCode,

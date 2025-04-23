@@ -110,7 +110,6 @@ const invitationsController = async (fastify) => {
       const expiresAt = addSeconds(registrarInvitationTtl, new Date());
       const invitation = await repos.invitations.insert({
         invitationUrl: buildInvitationUrl({ code }, req),
-        inviterDid: did,
         inviterId: inviterOrganization._id,
         inviteeEmail,
         inviteeService,
@@ -129,7 +128,7 @@ const invitationsController = async (fastify) => {
         code,
       });
       return {
-        invitation,
+        invitation: { ...invitation, inviterDid: did },
         messageCode,
       };
     }

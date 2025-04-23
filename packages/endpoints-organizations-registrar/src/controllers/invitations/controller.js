@@ -74,7 +74,15 @@ const invitationsController = async (fastify) => {
             errorCode: 'invitation_expired',
           });
         }
-        return { invitation };
+        const inviterOrganization = await repos.organizations.findById(
+          invitation.inviterId
+        );
+        return {
+          invitation: {
+            ...invitation,
+            inviterDid: inviterOrganization.didDoc.id,
+          },
+        };
       }
     );
 };
