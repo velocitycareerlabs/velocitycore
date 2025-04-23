@@ -43,7 +43,7 @@ const verifyAccessToken = async (token, { kms, tenant, tenantKeysByPurpose }) =>
   kms.verifyJwt(token, tenantKeysByPurpose[KeyPurposes.EXCHANGES].keyId, {
     issuer: tenant.did,
     audience: tenant.did,
-    requiredClaims: ['sub', 'aud', 'iss'],
+    requiredClaims: ['aud', 'iss'],
   });
 
 module.exports = { generateAccessToken, verifyAccessToken };

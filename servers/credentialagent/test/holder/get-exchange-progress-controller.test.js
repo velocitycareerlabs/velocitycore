@@ -55,7 +55,7 @@ describe('Get exchange progress test suite', () => {
     generateTestAccessToken(
       exchange._id.toString(),
       tenant.did,
-      user._id,
+      user?._id,
       null,
       null,
       '30d',
@@ -463,11 +463,13 @@ describe('Get exchange progress test suite', () => {
     const searchParams = new URLSearchParams();
     searchParams.set('exchange_id', disclosureExchange._id);
 
+    user = null;
+    const authToken = await genAuthToken(disclosureExchange);
     const response = await fastify.injectJson({
       method: 'GET',
       url: buildGetExchangeProgressUrl({ tenant }, searchParams),
       headers: {
-        authorization: `Bearer ${await genAuthToken(disclosureExchange)}`,
+        authorization: `Bearer ${authToken}`,
       },
     });
 
