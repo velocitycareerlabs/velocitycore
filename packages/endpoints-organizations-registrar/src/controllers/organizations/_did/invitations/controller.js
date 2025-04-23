@@ -4,7 +4,6 @@ const newError = require('http-errors');
 const { nanoid } = require('nanoid/non-secure');
 const { initTransformToFinder } = require('@velocitycareerlabs/rest-queries');
 const { tableRegistry } = require('@spencejs/spence-mongo-repos');
-const { ObjectId } = require('mongodb');
 const {
   verifyUserOrganizationWriteAuthorized,
 } = require('../../../../plugins/authorization');
@@ -182,7 +181,7 @@ const invitationsController = async (fastify) => {
         _id: 1,
       });
       const filter = transformToFinder({
-        filter: { inviterId: new ObjectId(organization._id) },
+        filter: { inviterId: organization._id },
         page,
         sort,
       });
