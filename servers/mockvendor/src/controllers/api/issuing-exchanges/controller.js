@@ -69,15 +69,18 @@ const controller = async (fastify) => {
           required: ['tenantDID'],
         },
         query: {
-          exchangeId: { type: 'string' },
-          issuer: { type: 'string' },
-          vendorUserId: { type: 'string' },
-          date: { type: 'string', format: 'date-time' },
-          credentialTypes: {
-            oneOf: [
-              { type: 'string' },
-              { type: 'array', items: { type: 'string' } },
-            ],
+          type: 'object',
+          properties: {
+            exchangeId: { type: 'string' },
+            issuer: { type: 'string' },
+            vendorUserId: { type: 'string' },
+            date: { type: 'string', format: 'date-time' },
+            credentialTypes: {
+              oneOf: [
+                { type: 'string' },
+                { type: 'array', items: { type: 'string' } },
+              ],
+            },
           },
         },
       },

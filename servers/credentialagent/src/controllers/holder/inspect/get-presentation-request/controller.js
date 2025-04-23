@@ -46,8 +46,11 @@ const controller = async (fastify) => {
           required: ['id'],
         },
         params: {
-          'push_delegate.push_token': { type: 'string' },
-          'push_delegate.push_url': { type: 'string' },
+          type: 'object',
+          properties: {
+            'push_delegate.push_token': { type: 'string' },
+            'push_delegate.push_url': { type: 'string' },
+          },
         },
         response: {
           200: buildRequestResponseSchema('presentation', fastify.config),

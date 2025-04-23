@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import MainScreen from './screens/MainScreen';
+import MainScreen from './screens/MainScreen.tsx';
 
 const App = () => (
   <div className="App">

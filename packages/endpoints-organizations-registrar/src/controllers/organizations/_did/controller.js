@@ -418,20 +418,23 @@ const organizationController = async (fastify) => {
           },
           response: {
             200: {
-              profile: { $ref: 'organization-profile#' },
-              activatedServiceIds: {
-                type: 'array',
-                items: {
-                  type: 'string',
+              type: 'object',
+              properties: {
+                profile: { $ref: 'organization-profile#' },
+                activatedServiceIds: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                  },
                 },
-              },
-              updatedAt: {
-                type: 'string',
-                format: 'date-time',
-              },
-              createdAt: {
-                type: 'string',
-                format: 'date-time',
+                updatedAt: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                createdAt: {
+                  type: 'string',
+                  format: 'date-time',
+                },
               },
             },
           },

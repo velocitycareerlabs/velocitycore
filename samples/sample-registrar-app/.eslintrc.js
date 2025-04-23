@@ -15,16 +15,9 @@ module.exports = {
   },
   rules: {
     ...eslintConfig.rules,
-    'import/prefer-default-export': 0,
-    'no-unused-vars': ['warn', { varsIgnorePattern: '^React$' }],
     'import/no-unresolved': [
       'error',
       { ignore: ['@velocitycareerlabs/components-organizations-registrar.*'] },
     ],
   },
-  overrides: [
-    {
-      files: ['**/*.{js,jsx}'],
-    },
-  ],
 };

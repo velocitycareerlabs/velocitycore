@@ -22,7 +22,7 @@ const offerDataController = async (fastify) => {
           required: ['StartDate', 'EndDate'],
         },
         response: {
-          200: {},
+          200: { content: { 'text/csv': { schema: { type: 'null' } } } },
         },
       }),
     },

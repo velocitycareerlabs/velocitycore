@@ -9,8 +9,11 @@ const сontroller = async (fastify) => {
       schema: fastify.autoSchema({
         tags: ['registrar_credential_types'],
         query: {
-          credentialType: { type: 'string' },
-          locale: { type: 'string' },
+          type: 'object',
+          properties: {
+            credentialType: { type: 'string' },
+            locale: { type: 'string' },
+          },
         },
         response: {
           200: {
