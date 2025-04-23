@@ -18,7 +18,7 @@ const walletDid =
     'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6InI5ZnlhNTJJbG1UbzN5YlMwd19HZWZlUV9SWDJFSF9ISm1TV3FZWU8ySlkiLCJ5IjoicFFUUmE3R2txYzVrajZvZGVNcXBnVjVUNExqYlphNEY1S1R1MkpEclduYyJ9';
 const relyingPartyDid =
     'did:web:devregistrar.velocitynetwork.foundation:d:example-21.com-8b82ce9a';
-const authorizationCode = 'vendor-context';
+const authorizationCode = 'authorization code';
 const refreshToken = 'refresh-token-789';
 
 describe('VCLAuthTokenDescriptor', () => {
