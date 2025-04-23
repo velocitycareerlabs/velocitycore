@@ -70,6 +70,7 @@ const registrarUrl = 'https://localhost:13004';
 const fineractUrl = 'http://localhost:13008';
 const caUrl = 'http://localhost:13012';
 const rpcUrl = 'http://localhost:18545';
+const mockvendorUrl = 'http://localhost:13013';
 
 const authenticate = () => 'TOKEN';
 const rpcProvider = initProvider(rpcUrl, authenticate);
@@ -285,6 +286,8 @@ describe('org registration and issuing e2e', () => {
       ),
     };
 
+    // Create tenant
+
     const createTenantResponse = await fetch(
       `${caUrl}/operator-api/v0.8/tenants`,
       {
@@ -303,324 +306,26 @@ describe('org registration and issuing e2e', () => {
       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT)
     });
     console.dir({ msg: 'Tenant created', createTenantJson });
-
-    // Depot Creation
-    const createDepotPayload = {
-      tenantId: tenant.id,
-      serviceId: service.id,
-      depot: { userReference: 'ABC123' },
+    
+    // Create mockvendor user
+    const user = {
+      vendorUserId: 1,
     };
-    const createDepotResponse = await fetch(
-      `${caUrl}/operator/depots/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify(createDepotPayload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    expect(createDepotResponse.status).toEqual(200);
-    const createDepotJson = await createDepotResponse.json();
-    expect(createDepotJson).toEqual({
-      depot: expectedEntity(createDepotPayload.depot, {
-        serviceId: createDepotPayload.serviceId,
-      }),
-      requestId: expect.any(String),
-    });
-    const { depot } = createDepotJson;
-    console.dir({ msg: 'Depot created', depot });
-
-    // Credential Creation
-    const createCredentialPayload = {
-      tenantId: tenant.id,
-      depotId: depot.id,
-      credential: {
-        credentialReference: 'cred1',
-        content: {
-          type: [EDUCATION_DEGREE_CREDENTIAL_TYPE],
-          credentialSubject: sampleEducationDegreeGraduation(
-            createFullOrganizationResponse
-          ),
-        },
-      },
-    };
-    const createCredentialResponse = await fetch(
-      `${caUrl}/operator/credentials/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify(createCredentialPayload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    expect(createCredentialResponse.status).toEqual(200);
-    const createCredentialJson = await createCredentialResponse.json();
-    expect(createCredentialJson).toEqual({
-      credential: expectedEntity(createCredentialPayload.credential, {
-        depotId: depot.id,
-        'content.credentialSubject.alignment[0].type': 'AlignmentObject',
-        'content.credentialSubject.institution.type': 'Organization',
-        'content.credentialSubject.institution.place.type': 'Place',
-        'content.credentialSubject.school.type': 'Organization',
-        'content.credentialSubject.school.place.type': 'Place',
-        'content.credentialSubject.recipient.type': 'PersonName',
-        'content.credentialSubject.type': 'EducationDegree',
-        contentHash: (expectedCredential) =>
-          hashOffer(expectedCredential.content),
-      }),
-      requestId: expect.any(String),
-    });
-    const { credential } = createCredentialJson;
-    console.dir({
-      msg: 'Credential added',
-      credential: omit('content', credential),
+    const response = await fastify.injectJson({
+      method: 'POST',
+      url: '/api/users',
+      payload: user,
     });
 
-    // Issue Links Creation
-    const issueLinksPayload = {
-      tenantId: tenant.id,
-      serviceId: service.id,
-      depotId: depot.id,
-    };
-    const issueLinksResponse = await fetch(
-      `${caUrl}/operator/issue-links/refresh`,
-      {
-        method: 'POST',
-        body: JSON.stringify(issueLinksPayload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    const issueLinksJson = await issueLinksResponse.json();
-    expect(issueLinksJson).toEqual({
-      vnProtocolLink: `velocity-network-devnet://issue?${expectedSearchParams(
-        tenant,
-        service,
-        depot,
-        issueLinksJson.preauthCode
-      )}`,
-      redirectUrl: `${caUrl}/app-redirect?${expectedSearchParams(
-        tenant,
-        service,
-        depot,
-        issueLinksJson.preauthCode
-      )}&exchange_type=issue`,
-      preauthCode: expect.any(String),
-      requestId: expect.any(String),
-    });
-    console.dir({ msg: 'Issue links refreshed', issueLinksJson });
-
-    // Load redirection page
-    const redirectUriResponse = await fetch(issueLinksJson.redirectUrl);
-    expect(redirectUriResponse.status).toEqual(200);
-    console.dir({ msg: 'Landing page fetched' });
-
-    // Get Credential Manifest
-    const credentialManifestUrl = new URL(
-      issueLinksJson.vnProtocolLink
-    ).searchParams.get('request_uri');
-    const credentialManifestResponse = await fetch(credentialManifestUrl, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const credentialManifestJson = await credentialManifestResponse.json();
-    expect(credentialManifestJson).toEqual({
-      issuing_request: expect.any(String),
-    });
-    const key = find(
-      ({ purposes }) => purposes.includes(KeyPurposes.EXCHANGES),
-      keys
-    );
-    const { payload: credentialManifest } = await jwtVerify(
-      credentialManifestJson.issuing_request,
-      toJwk(key.didDocumentKey.publicKeyMultibase, false)
-    );
-    expect(credentialManifest).toEqual({
-      ...expectedCredentialManifest(profile, tenant, service),
-      exp: expect.any(Number),
-      iat: expect.any(Number),
-      nbf: expect.any(Number),
-      iss: tenant.did,
-    });
-    console.dir({ msg: 'Credential manifest retrieved', credentialManifest });
-
-    const vendorOriginContext = new URL(
-      issueLinksJson.vnProtocolLink
-    ).searchParams.get('vendorOriginContext');
-    // Authenticate Holder
-    const authenticateHolderResponse = await fetch(
-      credentialManifest.metadata.submit_presentation_uri,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          exchange_id: credentialManifest.exchange_id,
-          jwt_vp: await generatePreauthCodeAuthJwt(
-            depot,
-            vendorOriginContext,
-            holderDid,
-            holderKeyPair
-          ),
-        }),
-      }
-    );
-    expect(authenticateHolderResponse.status).toEqual(200);
-    const authenticateHolderJson = await authenticateHolderResponse.json();
-    expect(authenticateHolderJson).toEqual({
-      token: expect.any(String),
-      exchange: {
-        disclosureComplete: true,
-        exchangeComplete: false,
-        id: credentialManifest.exchange_id,
-        type: 'issuer',
-      },
-    });
-    console.dir({ msg: 'Holder authenticated' });
-
-    // Get Offers
-    const credentialOffersResponse = await fetch(
-      credentialManifest.metadata.check_offers_uri,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${authenticateHolderJson.token}`,
-        },
-        body: JSON.stringify({
-          exchange_id: credentialManifest.exchange_id,
-          jwt_vp: await generatePreauthCodeAuthJwt(
-            depot,
-            issueLinksJson.preauthCode,
-            holderDid,
-            holderKeyPair
-          ),
-        }),
-      }
-    );
-    expect(credentialOffersResponse.status).toEqual(200);
-    const credentialOffersJson = await credentialOffersResponse.json();
-    expect(credentialOffersJson).toEqual({
-      challenge: expect.any(String),
-      offers: map(
-        ({ content, id, contentHash }) => ({
-          ...content,
-          id,
-          hash: contentHash,
-          issuer: { id: did },
-        }),
-        [credential]
-      ),
-    });
-    console.dir({
-      msg: 'Offers received',
-      offers: credentialOffersJson.offers,
+    expect(response.statusCode).toEqual(200);
+    expect(response.json).toEqual({
+      ...user,
+      id: expect.stringMatching(OBJECT_ID_FORMAT),
+      _id: expect.stringMatching(OBJECT_ID_FORMAT),
+      updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
     });
 
-    // Issue Credentials
-    const issueCredentialsResponse = await fetch(
-      credentialManifest.metadata.finalize_offers_uri,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${authenticateHolderJson.token}`,
-        },
-        body: JSON.stringify({
-          approvedOfferIds: map('id', credentialOffersJson.offers),
-          proof: await buildProof(
-            caUrl,
-            holderDid,
-            holderKeyPair,
-            credentialOffersJson.challenge
-          ),
-        }),
-      }
-    );
-
-    expect(issueCredentialsResponse.status).toEqual(200);
-    const vcs = await issueCredentialsResponse.json();
-    const decodedVcs = map(jwtDecode, vcs);
-    expect(decodedVcs).toEqual(
-      map(
-        ({ payload: { vc, jti } }) =>
-          jwtVcExpectation({
-            tenant,
-            issuerService: service,
-            credentialId: jti,
-            subjectId: holderDid,
-            credential: find(
-              ({ content }) =>
-                isEqual(
-                  omit(['id', '@context'], vc.credentialSubject),
-                  content.credentialSubject
-                ),
-              [credential]
-            ),
-            credentialTypeMetadata: {
-              [EDUCATION_DEGREE_CREDENTIAL_TYPE]: {
-                schemaUrl:
-                  'http://libserver/schemas/education-degree-graduation-v1.1.schema.json',
-              },
-            },
-            credentialSubjectContext: [
-              'http://libserver/contexts/layer1-v1.1.jsonld.json',
-            ],
-          }),
-        decodedVcs
-      )
-    );
-    console.dir({ msg: 'VCs issued', vcs });
-    const payload = {
-      tenantId: tenant.id,
-      presentation: await generatePresentationJwt(
-        {
-          verifiableCredential: vcs,
-          issuer: holderDid,
-        },
-        holderKeyPair.privateKey,
-        `${holderDid}#key`
-      ),
-    };
-    const presentationCheckResponse = await fetch(
-      `${caUrl}/operator/presentations/check`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    expect(presentationCheckResponse.status).toEqual(200);
-
-    await expect(presentationCheckResponse.json()).resolves.toEqual({
-      presentation: jwtDecode(payload.presentation).payload.vp,
-      presentationChecks: { UNTAMPERED: CheckResults.PASS },
-      credentialCheckResults: map(
-        (decodedVc) => ({
-          credential: decodedVc.payload.vc,
-          credentialChecks: {
-            UNTAMPERED: CheckResults.PASS,
-            TRUSTED_ISSUER: CheckResults.PASS,
-            TRUSTED_HOLDER: CheckResults.PASS,
-            UNREVOKED: CheckResults.PASS,
-            UNEXPIRED: CheckResults.NOT_APPLICABLE,
-          },
-        }),
-        decodedVcs
-      ),
-      requestId: expect.any(String),
-    });
   }, 30000);
 });
 

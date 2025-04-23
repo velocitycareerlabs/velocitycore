@@ -4,6 +4,7 @@ include:
   - ../../../eng/docker/services/fineract-compose.yml
   - ../../../samples/sample-registrar-server/docker/compose.yml
   - ../../../samples/sample-lib-app/docker/compose.yml
+  - ../../mockvendor/docker/compose.yml
 
 services:
   credentialagent:
