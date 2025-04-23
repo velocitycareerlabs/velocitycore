@@ -182,6 +182,10 @@ const createConfig = (packageJson) => {
       .get('KMS_PLUGIN_MODULE')
       .default('@velocitycareerlabs/db-kms')
       .asString(),
+    serviceConsentVersion: env
+      .get('SERVICE_CONSENT_VERSION')
+      .default('1')
+      .asIntPositive(),
     kmsPlugin: env.get('KMS_PLUGIN').default('dbKmsPlugin').asString(),
   };
 

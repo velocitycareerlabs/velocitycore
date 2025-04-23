@@ -40,7 +40,7 @@ const initAddServiceToOrganization = (fastify) => {
     initBuildOrganizationModificationsOnServiceChange(fastify);
 
   return async ({ organization, newService }, context) => {
-    const { repos, user } = context;
+    const { repos, user, config } = context;
 
     const createdService = await repos.organizations.addService(
       organization._id,
@@ -61,7 +61,7 @@ const initAddServiceToOrganization = (fastify) => {
       userId: user.sub,
       organization,
       type: getServiceConsentType(createdService),
-      version: 1,
+      version: config.serviceConsentVersion,
       serviceId: createdService.id,
     });
 
