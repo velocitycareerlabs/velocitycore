@@ -16,7 +16,11 @@ on:
       - ready_for_review
   schedule:
     - cron: '0 0 * * *'
-    
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   DOCKER_REG: 'ghcr.io'
 jobs:
@@ -138,18 +142,21 @@ jobs:
     - name: Create Artifact Name
       run: |
         echo ARTIFACT_NAME=$(echo ${{ matrix.package }} | sed -e 's+@+-+g; s+/+-+g') >> $GITHUB_ENV
+      if: '!cancelled()'
     - name: Upload Lint Report
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
         name: lint${{ env.ARTIFACT_NAME }}
         path: |
           **/eslint.json
+      if: '!cancelled()'
 
   # Post Lint
   post-lint:
     name: Post Lint
     needs: lint
     runs-on: ubuntu-latest
+    if: '!cancelled()'
     steps:
     - name: Download All Reports
       uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
@@ -157,6 +164,8 @@ jobs:
         path: reports
         pattern: lint-*
         merge-multiple: true
+    - name: Display structure of lint reports
+      run: ls -R reports
     - name: Publish Lint Report
       uses: ataylorme/eslint-annotate-action@v3
       with:
@@ -231,6 +240,7 @@ jobs:
     - name: Create Artifact Name
       run: |
         echo ARTIFACT_NAME=$(echo ${{ matrix.package }} | sed -e 's+@+-+g; s+/+-+g') >> $GITHUB_ENV
+      if: '!cancelled()'
     - name: Upload Test Report
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
@@ -239,6 +249,7 @@ jobs:
           test-results/**/*.xml
           test-results/**/*.trx
           test-results/**/*.json
+      if: '!cancelled()'
     - name: Upload Codecov Report
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
@@ -249,6 +260,7 @@ jobs:
 
   # Post Test
   post-test:
+    if: '!cancelled()'
     name: Post Test
     needs: test
     permissions:
@@ -262,6 +274,8 @@ jobs:
         path: test-results
         pattern: test-*
         merge-multiple: true
+    - name: Display structure of test results
+      run: ls -R test-results
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@afb2984f4d89672b2f9d9c13ae23d53779671984 # v2
       with:
@@ -278,6 +292,8 @@ jobs:
         path: codecov-reports
         pattern: codecov-*
         merge-multiple: true
+    - name: Display structure of codecov reports
+      run: ls -R codecov-reports
     - name: Upload coverage for PR
       uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238 # v4
       with:
