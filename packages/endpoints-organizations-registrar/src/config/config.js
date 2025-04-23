@@ -229,15 +229,15 @@ const createConfig = (packageJson) => {
   const signatoryConfig = {
     signatoryLinkResend: env
       .get('SIGNATORY_LINK_RESEND')
-      .default(1440)
+      .default('1440')
       .asIntPositive(),
     signatoryLinkExpiration: env
       .get('SIGNATORY_LINK_EXPIRATION')
-      .default(1440)
+      .default('1440')
       .asIntPositive(),
     signatoryConsentVersion: env
       .get('SIGNATORY_CONSENT_VERSION')
-      .default(1)
+      .default('1')
       .asIntPositive(),
   };
 
