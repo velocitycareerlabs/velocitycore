@@ -28,7 +28,7 @@ import {
 } from '../repositories';
 import { Constants } from '../Constants';
 import { Dictionary } from '../Types';
-import {getApprovedRejectedOfferIdsMock, verifyToken} from '../utils/Utils';
+import { getApprovedRejectedOfferIdsMock, verifyToken } from '../utils/Utils';
 import Environment from '../Environment';
 import { CurrentEnvironment } from '../GlobalConfig';
 import { getAuthToken } from '../repositories/AuthTokenRepository';
