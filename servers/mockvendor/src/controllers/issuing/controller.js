@@ -61,10 +61,13 @@ module.exports = async (fastify) => {
         },
         response: {
           200: {
-            offers: {
-              type: 'array',
-              items: {
-                $ref: 'https://velocitycareerlabs.io/generate-offers.schema.json#',
+            type: 'object',
+            properties: {
+              offers: {
+                type: 'array',
+                items: {
+                  $ref: 'https://velocitycareerlabs.io/generate-offers.schema.json#',
+                },
               },
             },
           },

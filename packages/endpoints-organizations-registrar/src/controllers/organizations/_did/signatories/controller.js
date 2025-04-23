@@ -34,7 +34,11 @@ const signatoriesController = async (fastify) => {
           },
           required: ['authCode'],
         },
-        response: { 200: {}, 401: { $ref: 'error#' }, 400: { $ref: 'error#' } },
+        response: {
+          200: { type: 'null' },
+          401: { $ref: 'error#' },
+          400: { $ref: 'error#' },
+        },
       }),
     },
     async (req) => {

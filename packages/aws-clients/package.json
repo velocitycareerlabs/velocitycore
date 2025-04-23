@@ -23,7 +23,7 @@
     "@aws-sdk/client-sns": "^3.731.1",
     "@aws-sdk/lib-dynamodb": "^3.731.1",
     "@aws-sdk/s3-request-presigner": "^3.731.1",
-    "fastify-plugin": "~4.5.1",
+    "fastify-plugin": "^4.5.1",
     "lodash": "^4.17.21",
     "twilio": "^5.0.0"
   },

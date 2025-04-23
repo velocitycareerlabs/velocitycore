@@ -47,11 +47,11 @@ const autoSchemaPlugin = async (fastify, opts) => {
   }
 
   fastify.decorate('currentAutoSchemaPreset', null);
-  fastify.decorate('autoSchemaPreset', authSchemaPreset);
+  fastify.decorate('autoSchemaPreset', autoSchemaPreset);
   fastify.decorate('autoSchema', autoSchema);
 
   // autoSchemaPreset is not an arrow function to enable usage of `this`, which is bound to the calling fastify plugin's enacapsulated context
-  function authSchemaPreset(preset) {
+  function autoSchemaPreset(preset) {
     const updatedAutoSchemaPreset = {
       ...this.currentAutoSchemaPreset,
       ...preset,
