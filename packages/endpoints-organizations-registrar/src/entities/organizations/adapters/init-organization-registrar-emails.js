@@ -16,10 +16,7 @@
  */
 
 const { map } = require('lodash/fp');
-const { compile } = require('handlebars');
-const { readFileSync } = require('fs');
 const { buildPublicServices } = require('../../organization-services/domains');
-const { ServiceTypeLabels } = require('../domains');
 
 const whichNet = ({ nodeEnv }) => {
   switch (nodeEnv) {
@@ -37,11 +34,6 @@ const whichNet = ({ nodeEnv }) => {
   }
 };
 const initOrganizationRegistrarEmails = (config) => {
-  const emailTemplateSignatoryApproval = compile(
-    readFileSync(`${__dirname}/email-template-signatory-approval.hbs`, {
-      encoding: 'utf8',
-    })
-  );
   return {
     emailToNewOrgForServicesActivated: ({
       organization,
@@ -248,31 +240,6 @@ Email: ${organization.profile.signatoryEmail}
       attachment,
       attachmentName,
       contentType,
-    }),
-    emailToSignatoryForOrganizationApproval: ({
-      organization,
-      inviterOrganization,
-      authCode,
-      isReminder = false,
-    }) => ({
-      subject: `${isReminder ? 'Reminder: ' : ''}${
-        inviterOrganization?.profile?.name ??
-        `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
-      } is requesting your approval to register ${
-        organization.profile.name
-      } on the Velocity Network`,
-      message: emailTemplateSignatoryApproval({
-        organization,
-        inviterOrganization,
-        authCode,
-        ServiceTypeLabels,
-        config,
-      }),
-      sender: config.registrarSupportEmail,
-      recipients: [organization.profile.signatoryEmail],
-      bccs: [config.registrarSupportEmail],
-      replyTo: config.registrarSupportEmail,
-      html: true,
     }),
   };
 };

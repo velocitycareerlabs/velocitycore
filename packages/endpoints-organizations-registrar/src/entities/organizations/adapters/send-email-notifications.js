@@ -16,8 +16,10 @@
  */
 
 const { isEmpty, omitBy, isNil, map } = require('lodash/fp');
+const { compile } = require('handlebars');
+const { readFileSync } = require('fs');
 const { initAuth0Provisioner } = require('../../oauth');
-const { parseProfileToCsv } = require('../domains');
+const { parseProfileToCsv, ServiceTypeLabels } = require('../domains');
 const {
   initOrganizationRegistrarEmails,
 } = require('./init-organization-registrar-emails');
@@ -30,7 +32,6 @@ const initSendEmailNotifications = (initCtx) => {
     emailToSupportForServicesAddedAndNeedActivation,
     emailToRegisteredOrgForServicesActivated,
     emailOrganizationCreated,
-    emailToSignatoryForOrganizationApproval,
   } = initOrganizationRegistrarEmails(config);
   const { getUsersByIds } = initAuth0Provisioner(config);
 
@@ -162,14 +163,31 @@ const initSendEmailNotifications = (initCtx) => {
     const inviterOrganization = invitation?.inviterId
       ? await context.repos.organizations.findById(invitation.inviterId)
       : null;
-    await initCtx.sendEmail(
-      emailToSignatoryForOrganizationApproval({
+    const emailTemplateSignatoryApproval = compile(
+      readFileSync(`${__dirname}/email-template-signatory-approval.hbs`, {
+        encoding: 'utf8',
+      })
+    );
+    await initCtx.sendEmail({
+      subject: `${isReminder ? 'Reminder: ' : ''}${
+        inviterOrganization?.profile?.name ??
+        `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
+      } is requesting your approval to register ${
+        organization.profile.name
+      } on the Velocity Network`,
+      message: emailTemplateSignatoryApproval({
         organization,
         inviterOrganization,
         authCode,
-        isReminder,
-      })
-    );
+        ServiceTypeLabels,
+        config,
+      }),
+      sender: config.registrarSupportEmail,
+      recipients: [organization.profile.signatoryEmail],
+      bccs: [config.registrarSupportEmail],
+      replyTo: config.registrarSupportEmail,
+      html: true,
+    });
   };
 
   return {
