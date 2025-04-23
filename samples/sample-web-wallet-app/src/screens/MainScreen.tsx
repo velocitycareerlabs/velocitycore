@@ -28,12 +28,11 @@ import {
 } from '../repositories';
 import { Constants } from '../Constants';
 import { Dictionary } from '../Types';
-import { getApprovedRejectedOfferIdsMock } from '../utils/Utils';
+import {getApprovedRejectedOfferIdsMock, verifyToken} from '../utils/Utils';
 import Environment from '../Environment';
 import { CurrentEnvironment } from '../GlobalConfig';
 import { getAuthToken } from '../repositories/AuthTokenRepository';
 import { getExchangeProgress } from '../repositories/GetExchangeProgressRepository';
-import { verifyToken } from '../utils/VerifyToken';
 
 const environment = CurrentEnvironment;
 
@@ -126,7 +125,7 @@ const onSubmitPresentation = async (
   authToken?: Dictionary<any>
 ) => {
   let verifiedAuthToken = authToken;
-  if (authToken != null && !verifyToken(authToken)) {
+  if (authToken != null && !verifyToken(authToken.accessToken)) {
     console.log('Token is expired');
     const authTokenDescriptor = {
       authTokenUri: authToken?.authTokenUri || '',
