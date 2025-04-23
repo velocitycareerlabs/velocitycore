@@ -38,5 +38,5 @@ export const getApprovedRejectedOfferIdsMock = (
 };
 
 export const verifyToken = (token) => {
-  return token?.jwtValue?.payload?.exp >= Date.now() / 1000;
+  return token?.expiresIn >= Date.now() / 1000;
 };
