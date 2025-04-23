@@ -3642,7 +3642,7 @@ describe('Organizations Full Test Suite', () => {
           const orgFromDb = await getOrganizationFromDb(did);
           expect(orgFromDb).toEqual(
             expectedOrganization(did, orgProfile, services, {
-              invitationId: new ObjectId(invitation._id),
+              invitation,
             })
           );
           // consent entity checks
@@ -3755,7 +3755,7 @@ describe('Organizations Full Test Suite', () => {
           const orgFromDb = await getOrganizationFromDb(did);
           expect(orgFromDb).toEqual(
             expectedOrganization(did, orgProfile, services, {
-              invitationId: new ObjectId(invitation._id),
+              invitation,
             })
           );
           // consent entity checks
@@ -3851,7 +3851,7 @@ describe('Organizations Full Test Suite', () => {
           const orgFromDb = await getOrganizationFromDb(did);
           expect(orgFromDb).toEqual(
             expectedOrganization(did, orgProfile, services, {
-              invitationId: new ObjectId(invitation._id),
+              invitation,
             })
           );
           // consent entity checks
@@ -3958,7 +3958,7 @@ describe('Organizations Full Test Suite', () => {
           const orgFromDb = await getOrganizationFromDb(did);
           expect(orgFromDb).toEqual(
             expectedOrganization(did, orgProfile, services, {
-              invitationId: new ObjectId(invitation._id),
+              invitation,
             })
           );
           // consent entity checks
@@ -5033,7 +5033,7 @@ describe('Organizations Full Test Suite', () => {
               ],
             },
             didNotCustodied: true,
-            invitationId: new ObjectId(invitation._id),
+            invitation,
           })
         );
         const credentialPayload = decodeCredentialJwt(
@@ -5694,7 +5694,7 @@ describe('Organizations Full Test Suite', () => {
   };
 });
 
-const expectedServices = (services, overrides) => {
+const expectedServices = (services, invitation) => {
   return flow(
     castArray,
     compact,
@@ -5704,10 +5704,10 @@ const expectedServices = (services, overrides) => {
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       };
-      return {
-        ...result,
-        ...pick(['invitationId'], overrides),
-      };
+      if (invitation != null) {
+        result.invitationId = new ObjectId(invitation._id);
+      }
+      return result;
     })
   )(services);
 };
@@ -5728,7 +5728,7 @@ const expectedOrganization = (did, profile, services = [], overrides = {}) => {
     didNotCustodied,
     ids: idsMatcher({ did, services, includeMongoId: true }),
     normalizedProfileName: expect.any(String),
-    services: expectedServices(services, overrides),
+    services: expectedServices(services, overrides.invitation),
     activatedServiceIds: map('id', services),
     authClients: map((obj) => {
       const authClient = omit(['clientSecret'], obj);
@@ -5742,6 +5742,9 @@ const expectedOrganization = (did, profile, services = [], overrides = {}) => {
       signedCredential: expect.any(String),
     },
     verifiableCredentialJwt: expect.any(String),
+    invitationId: overrides.invitation?._id
+      ? new ObjectId(overrides.invitation._id)
+      : undefined,
     updatedAt: expect.any(Date),
     createdAt: expect.any(Date),
     ...omit(['authClients', 'profile', 'invitation'], overrides),
