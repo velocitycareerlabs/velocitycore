@@ -50,9 +50,12 @@ const schemasController = async (fastify) => {
         deprecated: true,
         schema: fastify.autoSchema({
           query: {
-            credentialTypes: {
-              type: 'array',
-              items: { type: 'string' },
+            type: 'object',
+            properties: {
+              credentialTypes: {
+                type: 'array',
+                items: { type: 'string' },
+              },
             },
           },
           response: {
@@ -104,7 +107,10 @@ const schemasController = async (fastify) => {
       '/:schemaName/validate',
       {
         schema: fastify.autoSchema({
-          params: { schemaName: { type: 'string' } },
+          params: {
+            type: 'object',
+            properties: { schemaName: { type: 'string' } },
+          },
           response: {
             200: {
               type: 'object',

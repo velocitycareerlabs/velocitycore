@@ -280,14 +280,14 @@ const organizationController = async (fastify) => {
               RegistrarOAuth2: [RegistrarScopes.AdminOrganizations],
             },
           ],
-          body: {},
+          body: { type: 'null' },
           response: {
-            201: {},
+            204: { type: 'null' },
           },
         }),
       },
       async (req, reply) => {
-        reply.code(201);
+        reply.code(204);
         return synchronizeMonitors(req);
       }
     );

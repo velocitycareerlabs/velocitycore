@@ -13,11 +13,6 @@ const controller = async (fastify) => {
     '/',
     {
       schema: fastify.autoSchema({
-        params: {
-          type: 'object',
-          properties: { id: { type: 'string', minLength: 1 } },
-          required: ['id'],
-        },
         response: {
           200: {
             type: 'object',
@@ -40,13 +35,8 @@ const controller = async (fastify) => {
     '/',
     {
       schema: fastify.autoSchema({
-        params: {
-          type: 'object',
-          properties: { id: { type: 'string', minLength: 1 } },
-          required: ['id'],
-        },
         response: {
-          204: {},
+          204: { type: 'null' },
           400: { $ref: 'error#' },
         },
       }),
@@ -69,11 +59,6 @@ const controller = async (fastify) => {
     '/',
     {
       schema: fastify.autoSchema({
-        params: {
-          type: 'object',
-          properties: { id: { type: 'string', minLength: 1 } },
-          required: ['id'],
-        },
         body: {
           type: 'object',
           additionalProperties: false,
@@ -107,11 +92,6 @@ const controller = async (fastify) => {
     '/add-did',
     {
       schema: fastify.autoSchema({
-        params: {
-          type: 'object',
-          properties: { id: { type: 'string', minLength: 1 } },
-          required: ['id'],
-        },
         body: {
           type: 'object',
           additionalProperties: false,
@@ -121,7 +101,7 @@ const controller = async (fastify) => {
           required: ['did'],
         },
         response: {
-          204: {},
+          204: { type: 'null' },
         },
       }),
     },

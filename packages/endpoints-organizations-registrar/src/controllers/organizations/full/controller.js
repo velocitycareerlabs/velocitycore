@@ -107,8 +107,11 @@ const fullOrganizationController = async (fastify) => {
             },
           ],
           params: {
-            did: {
-              type: 'string',
+            type: 'object',
+            properties: {
+              did: {
+                type: 'string',
+              },
             },
           },
           response: {
