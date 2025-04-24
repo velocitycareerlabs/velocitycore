@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/contract-permissions",
   "version": "0.5.0-build",
   "description": "Package allows interacting with the permissions smart contracts, based on ethers.js",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "author": "Viktar Pashchanka",
   "license": "Apache-2.0",

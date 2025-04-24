@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/common-schemas",
   "version": "0.5.0-build",
   "description": "Set of validation schemas",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "author": "Yuaheni Pozdnyakov",
   "license": "Apache-2.0",

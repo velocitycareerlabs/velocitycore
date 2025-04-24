@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/verifgen",
   "version": "0.5.0-build",
   "description": "A tool for creating verifiable credentials and verifiable presentations.",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "bin": {
     "verifgen": "index.js"

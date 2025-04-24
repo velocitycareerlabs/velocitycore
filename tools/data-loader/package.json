@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/data-loader",
   "version": "0.5.0-build",
   "description": "A tool for uploading data to the different target systems.",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "src/index.js",
   "bin": {
     "data-loader": "src/index.js"

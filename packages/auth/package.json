@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/auth",
   "version": "0.5.0-build",
   "description": "Authorization package",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "scripts": {
     "test": "jest --config ./jest.config.js --runInBand --coverage",

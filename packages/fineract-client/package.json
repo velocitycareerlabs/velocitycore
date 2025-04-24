@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/fineract-client",
   "version": "0.5.0-build",
   "description": "Package containing the functions that interact with the fineract system",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "license": "Apache-2.0",
   "publishConfig": {
