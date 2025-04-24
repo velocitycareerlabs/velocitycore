@@ -222,7 +222,7 @@ const onGenerateOffers = async (credentialManifest: Dictionary<any>) => {
   try {
     const offers = await generateOffers(generateOffersDescriptor);
     console.log('generate offers: ', offers);
-    onCheckOffers(generateOffersDescriptor, offers.sessionToken);
+    await onCheckOffers(generateOffersDescriptor, offers.sessionToken);
   } catch (error) {
     console.log('Error generating offers: ', error);
   }
@@ -235,7 +235,7 @@ const onCheckOffers = async (
   try {
     const offers = await checkOffers(generateOffersDescriptor, sessionToken);
     console.log('check offers: ', offers);
-    onFinalizeOffers(generateOffersDescriptor.credentialManifest, offers);
+    await onFinalizeOffers(generateOffersDescriptor.credentialManifest, offers);
   } catch (error) {
     console.log('Error checking offers: ', error);
   }
@@ -330,6 +330,7 @@ const onGenerateSignedJwt = async () => {
       },
       didJwk
     );
+    console.log('signed jwt: ', signedJwt);
   } catch (error) {
     console.log('Error generating signed JWT: ', error);
   }
@@ -341,6 +342,7 @@ const onGenerateDidJwk = async () => {
       signatureAlgorithm: 'P-256',
       remoteCryptoServicesToken: null,
     });
+    console.log('new didJwk: ', newDidJwk);
   } catch (error) {
     console.log('Error generating didJwk: ', error);
   }
