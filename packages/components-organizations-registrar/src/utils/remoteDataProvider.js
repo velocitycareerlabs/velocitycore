@@ -332,7 +332,7 @@ const remoteDataProvider = (config, auth) => {
 };
 
 const extendedDataProvider = (config, auth, customDataProvider) => {
-  const { apiOrigin, apiUrl, client, baseDataProvider } = remoteDataProvider(config, auth);
+  const { apiUrl, client, baseDataProvider } = remoteDataProvider(config, auth);
 
   return {
     ...baseDataProvider,
