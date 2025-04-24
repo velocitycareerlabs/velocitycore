@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/logger",
   "version": "0.5.0-build",
   "description": "Logger for velocity foundation network",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "publishConfig": {
     "access": "public"

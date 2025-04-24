@@ -3,7 +3,7 @@
   "version": "0.5.0-build",
   "description": "Credential Agent application",
   "main": "src/index.js",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "engines": {
     "node": ">=22.11.0"
   },

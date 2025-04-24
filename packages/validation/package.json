@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/validation",
   "version": "0.5.0-build",
   "description": "Validation package for Velocity Projects, based on ajv and fastify validation",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "license": "Apache-2.0",
   "publishConfig": {

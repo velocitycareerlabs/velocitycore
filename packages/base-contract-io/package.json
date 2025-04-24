@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/base-contract-io",
   "version": "0.5.0-build",
   "description": "Package contains functions needed across all contract io packages",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "author": "Velocity Career Labs",
   "license": "Apache-2.0",
