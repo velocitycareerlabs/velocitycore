@@ -16,32 +16,27 @@
 
 import { Box, Typography, Button, useTheme } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import PropTypes from 'prop-types';
 import InfoIcon from '@mui/icons-material/Info';
+import PropTypes from 'prop-types';
 
-import Popup from './Popup.jsx';
-import { objectToString } from '../../utils/index.jsx';
-import downloadTxtAsFile from '../../utils/downloadTxtAsFile';
-import Loading from '../Loading.jsx';
+import Popup from '@/components/common/Popup.jsx';
+import Loading from '@/components/Loading.jsx';
 
 const titleDefault =
   'Wait! Before you close this window, please make sure you have saved a copy of your keys';
 const subTitleDefault =
   // eslint-disable-next-line max-len
-  'Your organization’s unique keys are critical for managing your organization’s data onVelocity Network™. This information will not be available once you close this window.';
+  'Your organization’s unique keys are critical for managing your organization’s data on Velocity Network™. This information will not be available once you close this window.';
 const buttonLabelDefault = 'Download keys';
 
 const WarningSecretKeysPopup = ({
   isModalOpened,
-  secretKeys,
   onClose,
   title = titleDefault,
   subTitle = subTitleDefault,
   buttonLabel = buttonLabelDefault,
   isLoading = false,
-  onLoading,
   onClick,
-  onError,
 }) => {
   const theme = useTheme();
 
@@ -67,9 +62,7 @@ const WarningSecretKeysPopup = ({
           }
           disabled={isLoading}
           sx={styles.button}
-          onClick={() => {
-            downloadTxtAsFile('keys.json', objectToString(secretKeys), onLoading, onError, onClick);
-          }}
+          onClick={onClick}
         >
           {buttonLabel}
         </Button>
@@ -105,15 +98,12 @@ const styles = {
 WarningSecretKeysPopup.propTypes = {
   isModalOpened: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
-  secretKeys: PropTypes.object,
   onClose: PropTypes.func,
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string.isRequired,
   buttonLabel: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
-  onLoading: PropTypes.func,
   onClick: PropTypes.func,
-  onError: PropTypes.func,
 };
 
 export default WarningSecretKeysPopup;

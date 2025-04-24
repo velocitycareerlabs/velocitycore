@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import InfoIcon from '@mui/icons-material/Info';
+import { useState, useEffect, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   AutocompleteInput,
   Button,
-  email,
   Form,
   maxLength,
   required,
@@ -32,13 +32,19 @@ import {
   useNotify,
   useGetList,
 } from 'react-admin';
-import { useFormContext } from 'react-hook-form';
-import { kebabCase } from 'lodash/string';
+
 import { Box, Stack, Tooltip, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { validateWebsite } from '../../components/organizations/CreateOrganization.utils';
+import InfoIcon from '@mui/icons-material/Info';
+import { kebabCase } from 'lodash/string';
+import PropTypes from 'prop-types';
+
+import useSelectedOrganization from '@/state/selectedOrganizationState';
+import Loading from '@/components/Loading.jsx';
+import { validateWebsite } from '@/components/organizations/CreateOrganization.utils';
+import CustomImageInput from '@/components/common/CustomImageInput/index.jsx';
+import PlusButtonBlock from '@/components/common/PlusButtonBlock.jsx';
+import { authorityOptions, Authorities } from '@/constants/messageCodes';
 import {
   LINKEDIN_ORGANIZATION_ID,
   formatWebSiteUrl,
@@ -49,89 +55,64 @@ import {
   SIGNATORY_DETAILS_HINT,
   parseJwt,
   ERRORS,
-} from '../../utils/index.jsx';
-import useCountryCodes from '../../utils/countryCodes';
-import useSelectedOrganization from '../../state/selectedOrganizationState';
-import Loading from '../../components/Loading.jsx';
-import ServiceCreateFormContainer from './OrganizationAddService.jsx';
-import { credentialTypesByServiceTypes } from '../../utils/serviceTypes';
-import { dataResources } from '../../utils/remoteDataProvider';
-import { authorityOptions, Authorities } from '../../constants/messageCodes';
-import CustomImageInput from '../../components/common/CustomImageInput/index.jsx';
+} from '@/utils/index.jsx';
+import useCountryCodes from '@/utils/countryCodes';
+import { useAuth } from '@/utils/auth/AuthContext';
+import { dataResources } from '@/utils/remoteDataProvider';
+import { credentialTypesByServiceTypes } from '@/utils/serviceTypes';
+
 import OrganizationRegistrationNumbersField from './components/OrganizationRegistrationNumbersField.jsx';
-import PlusButtonBlock from '../../components/common/PlusButtonBlock.jsx';
 import OrganizationAuthorityRadioGroup from './components/OrganizationAuthorityRadioGroup.jsx';
 import { OrganizationRegistrationNumbers } from './components/OrganizationRegistrationNumbersContainer.jsx';
 import { OrganizationBrand } from './components/OrganizationBrand.jsx';
-import { useAuth } from '../../utils/auth/AuthContext';
-import { useConfig } from '../../utils/ConfigContext';
+import { OrganizationSubmitButton } from './components/OrganizationSubmitButton.jsx';
+import { OrganizationCreateTitle } from './components/OrganizationCreateTitle.jsx';
+import { MockOrganization } from './components/MockOrganization.jsx';
+import ServiceCreateFormContainer from './OrganizationAddService.jsx';
+import {
+  requestOptions,
+  organizationPlaceholder,
+  validateName,
+  validateEmail,
+  getSellSizeIfLocalAuthority,
+  initialRecordMock,
+} from './utils';
 
-const validateName = [required(), maxLength(100)];
-const validateEmail = [required(), email()];
-const initialRecord = { profile: { name: '' } };
 export const defaultBrandValue = [
   {
     name: '',
   },
 ];
-const getSellSizeIfLocalAuthority = (authority) => {
-  if (authorityOptions[authority] === authorityOptions.NationalAuthority) {
-    return 6;
-  }
-  return 12;
-};
-
-const OrganizationSubmitButton = () => {
-  const form = useFormContext();
-
-  return (
-    <Button
-      disabled={!form.formState.isValid}
-      variant="outlined"
-      color="primary"
-      type="submit"
-      size="large"
-      sx={sx.submit}
-    >
-      Add Service
-    </Button>
-  );
-};
-
-const requestOptions = {
-  retryOnMount: false,
-  refetchOnWindowFocus: false,
-  refetchOnReconnect: false,
-  refetchOnMount: false,
-};
 
 export const allBrandsFilled = (values) => values?.every((brand) => !!brand.name && brand.logo);
 export const isAddBrandDisabled = (values) => {
   return values && !allBrandsFilled(values) && (values.length % 2 === 0 || values.length !== 1);
 };
 
-const organizationPlaceholder =
-  'Add a few words describing your organization (boilerplate text) so that other Network participants can learn about it.';
-
-const OrganizationCreate = () => {
-  const { refetch } = useGetList('organizations', undefined, {
-    enabled: false,
-  });
+const OrganizationCreate = ({ CreateServiceComponent = ServiceCreateFormContainer }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const notify = useNotify();
   const redirect = useRedirect();
+
+  const { logout, user, getAccessToken } = useAuth();
+
   const { data: countryCodes, isLoading } = useCountryCodes();
   const [did, setDid] = useSelectedOrganization();
+
   const [organizationData, setOrganizationData] = useState(null);
   const [isServiceCreated, setServiceCreated] = useState(false);
   const [secretKeys, setSecretKeys] = useState(null);
   const [isCreateRequestLoading, setCreateRequestLoading] = useState(false);
   const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
   const [hasOrganisations, setHasOrganisations] = useState(false);
-  const notify = useNotify();
+  const [serviceType, setServiceType] = useState('');
+  const [selectedCAO, setSelectedCAO] = useState('');
+  const [initialRecord, setInitialRecord] = useState({ profile: { name: '' } }, initialRecordMock);
 
-  const config = useConfig();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { logout, user, getAccessToken } = useAuth();
+  const { refetch } = useGetList('organizations', undefined, {
+    enabled: false,
+  });
   const { data: userData, isLoading: isUserDataLoading } = useGetOne(
     dataResources.USERS,
     {
@@ -189,10 +170,6 @@ const OrganizationCreate = () => {
     },
   });
 
-  if (isLoading || isUserDataLoading) {
-    return <Loading sx={{ pt: '60px' }} />;
-  }
-
   const goToCreateServiceStep = (data) => {
     setOrganizationData(data);
     navigate('service');
@@ -242,18 +219,16 @@ const OrganizationCreate = () => {
     });
   };
 
-  const pageTitle = `Let’s get your organization registered on The Velocity Network™ ${config.chainName}.`;
-  const pageSubtitle =
-    'To start, fill in the form below to allow other Network participants to identify your organization.';
+  if (isLoading || isUserDataLoading) {
+    return <Loading sx={{ pt: '60px' }} />;
+  }
   return (
     <Box sx={sx.root}>
       <Stack sx={sx.content}>
-        <Typography variant="h1" mb={2} textAlign="center">
-          {pageTitle}
-        </Typography>
-        <Typography variant="pl" mb={6.5} textAlign="center">
-          {pageSubtitle}
-        </Typography>
+        <MockOrganization setInitialRecord={setInitialRecord} />
+
+        <OrganizationCreateTitle />
+
         <Form record={initialRecord} onSubmit={goToCreateServiceStep} noValidate mode="onTouched">
           <FormDataConsumer>
             {({ formData }) => (
@@ -543,13 +518,18 @@ const OrganizationCreate = () => {
                   </Button>
                   <OrganizationSubmitButton />
                 </Box>
-                <ServiceCreateFormContainer
+                <CreateServiceComponent
                   isModalOpened={/create\/service/.test(location.pathname) || isServiceCreated}
                   isSending={isCreateRequestLoading}
                   onClose={onClose}
                   onCreate={onCreate}
                   isCreated={isServiceCreated}
                   secretKeys={secretKeys}
+                  did={did}
+                  selectedServiceType={serviceType}
+                  setSelectedServiceType={setServiceType}
+                  selectedCAO={selectedCAO}
+                  setSelectedCAO={setSelectedCAO}
                 />
               </>
             )}
@@ -558,6 +538,11 @@ const OrganizationCreate = () => {
       </Stack>
     </Box>
   );
+};
+
+// eslint-disable-next-line better-mutation/no-mutation
+OrganizationCreate.propTypes = {
+  CreateServiceComponent: PropTypes.elementType,
 };
 
 export default OrganizationCreate;
@@ -575,12 +560,12 @@ const sx = {
     maxWidth: 886,
     alignItems: 'center',
   },
-  submit: {
-    minWidth: 196,
-  },
   cancelButton: {
     minWidth: 160,
     mr: 2,
+  },
+  mockButton: {
+    color: 'primary.main',
   },
   formValidationCustomMessage: { color: 'primary.main' },
   brandList: {

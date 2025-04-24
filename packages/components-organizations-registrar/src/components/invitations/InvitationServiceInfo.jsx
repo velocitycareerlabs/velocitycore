@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { Stack, Box, Typography, Link } from '@mui/material';
-import { serviceTypesForInvitation, CREDENTIAL_TYPES_IDS } from '../../utils/serviceTypes';
-import chainNames from '../../utils/chainNames';
-import { useConfig } from '../../utils/ConfigContext';
+import { serviceTypesIssuingOrInspection, CREDENTIAL_TYPES_IDS } from '@/utils/serviceTypes';
+import chainNames from '@/utils/chainNames';
+import { useConfig } from '@/utils/ConfigContext';
 
 const getServiceKey = (key) => {
   switch (key) {
@@ -30,7 +30,7 @@ const getServiceTitle = (value, credentialTypes) => {
   } else {
     serviceType = value;
   }
-  return serviceTypesForInvitation.find((item) => item.id === serviceType).title;
+  return serviceTypesIssuingOrInspection.find((item) => item.id === serviceType).title;
 };
 
 const InvitationServiceInfo = ({ inviteeService, agreementStyles }) => {

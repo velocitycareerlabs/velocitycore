@@ -16,10 +16,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
-import { useGetOne, useCreateController, useRedirect } from 'react-admin';
+import { useGetOne, useCreateController, useRedirect, useRefresh } from 'react-admin';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { useQueryClient } from '@tanstack/react-query';
 
 import { useLocation } from 'react-router-dom';
 import Popup from '../../components/common/Popup.jsx';
@@ -55,7 +53,7 @@ const InvitationCreateForm = () => {
   const { pathname } = useLocation();
   const redirect = useRedirect();
   const [did] = useSelectedOrganization();
-  const queryClient = useQueryClient();
+  const refresh = useRefresh();
   const isModalOpened = /\/invitations\/create/.test(pathname);
   const isStep1 = /\/invitations\/create\/step-1/.test(pathname);
   const isStep2 = /\/invitations\/create\/step-2/.test(pathname);
@@ -156,8 +154,7 @@ const InvitationCreateForm = () => {
     mutationOptions: {
       meta: { id: did },
       onSuccess: async (resp) => {
-        await queryClient.invalidateQueries(['invitations', 'getList']);
-
+        refresh();
         if (resp.invitation.code && organizationProfileData?.org?.id) {
           redirect(`/invitations?code=${resp.invitation.code}`);
 

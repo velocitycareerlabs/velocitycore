@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-import { useUpdate, useRedirect } from 'react-admin';
 import { useState, useCallback } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { useQueryClient } from '@tanstack/react-query';
+import { useUpdate, useRedirect, useRefresh } from 'react-admin';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Typography, Button } from '@mui/material';
@@ -32,7 +30,7 @@ const DEFAULT_STATUS_STATE = { error: null, title: '' };
 
 const InvitationResend = ({ selectedInvitation, inviteeEmail }) => {
   const [did] = useSelectedOrganization();
-  const queryClient = useQueryClient();
+  const refresh = useRefresh();
   const [statusPopup, setStatusPopup] = useState(DEFAULT_STATUS_STATE);
   const [isStatusPopupOpen, setStatusPopupOpen] = useState(false);
   const redirect = useRedirect();
@@ -69,7 +67,7 @@ const InvitationResend = ({ selectedInvitation, inviteeEmail }) => {
 
   const [update] = useUpdate(undefined, undefined, {
     onSuccess: async (resp) => {
-      await queryClient.invalidateQueries(['invitations', 'getList']);
+      refresh();
       setStatusPopup({
         error: resp.messageCode === MESSAGE_CODES.INVITATION_SENT ? null : resp.messageCode,
         title: getStatusByCode(resp.messageCode),

@@ -22,13 +22,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormGroup from '@mui/material/FormGroup';
 
-import {
-  FieldTitle,
-  InputPropTypes,
-  sanitizeInputRestProps,
-  InputHelperText,
-  useInput,
-} from 'react-admin';
+import { FieldTitle, sanitizeInputRestProps, InputHelperText, useInput } from 'react-admin';
 import { Checkbox } from '@mui/material';
 
 const CustomBooleanInput = (props) => {
@@ -113,9 +107,22 @@ const CustomBooleanInput = (props) => {
 
 // eslint-disable-next-line better-mutation/no-mutation
 CustomBooleanInput.propTypes = {
-  ...InputPropTypes,
-  options: PropTypes.shape(Checkbox.propTypes),
-  disabled: PropTypes.bool,
+  className: PropTypes.string,
+  row: PropTypes.bool,
+  defaultValue: PropTypes.bool,
+  format: PropTypes.func,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  helperText: PropTypes.node,
+  options: {},
+  disabled: false,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  onChange: PropTypes.func,
+  parse: PropTypes.func,
+  resource: PropTypes.string,
+  source: PropTypes.string,
+  validate: PropTypes.oneOfType([PropTypes.func, PropTypes.array]),
+  sx: PropTypes.object,
 };
 
 // eslint-disable-next-line better-mutation/no-mutation
