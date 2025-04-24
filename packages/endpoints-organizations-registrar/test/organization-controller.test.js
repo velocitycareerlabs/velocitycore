@@ -277,7 +277,7 @@ describe('Organization Registrar Test Suite', () => {
         const response = await fastify.injectJson({
           method: 'PUT',
           url: `${baseUrl}/profile/did:test:doesnt-matter`,
-          payload: 'MALFORMED',
+          payload: {},
         });
 
         expect(response.statusCode).toEqual(400);
