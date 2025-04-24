@@ -94,67 +94,57 @@ const onGetPresentationRequest = async () => {
       { value: deepLinkValue },
       didJwk
     );
-    console.log('presentation request: ', presentationRequest);
-    if (presentationRequest.feed) {
-      // eslint-disable-next-line max-depth
-      try {
-        const submissionResult = await onSubmitPresentationUsingAuthToken(
-          presentationRequest
-        );
-        console.log('submission result: ', submissionResult);
-        await onGetExchangeProgress(presentationRequest, submissionResult);
-      } catch (error) {
-        console.log('Error submitting presentation: ', error);
-      }
-    } else {
-      // eslint-disable-next-line max-depth
-      try {
-        const submissionResult = await onSubmitPresentation(
-          presentationRequest
-        );
-        console.log('submission result: ', submissionResult);
-        await onGetExchangeProgress(presentationRequest, submissionResult);
-      } catch (error) {
-        console.log('Error submitting presentation: ', error);
-      }
-    }
-  } catch (error) {
-    console.log('Error getting presentation request: ', error);
+    await onSubmitPresentation(presentationRequest);
+  } catch (error: any) {
+    console.log('VCL Presentation Request failed:', JSON.stringify(error));
   }
 };
 
-const onSubmitPresentation = async (
-  presentationRequest: Dictionary<any>,
-  authToken?: Dictionary<any>
-) => {
-  let verifiedAuthToken = authToken;
-  if (authToken != null && !verifyToken(authToken.accessToken)) {
-    console.log('Token is expired');
-    const authTokenDescriptor = {
-      authTokenUri: authToken?.authTokenUri ?? '',
-      refreshToken: authToken?.refreshToken.value,
-      walletDid: authToken?.walletDid,
-      relyingPartyDid: authToken?.relyingPartyDid,
-    };
+const onSubmitPresentation = async (presentationRequest: Dictionary<any>) => {
+  const presentationSubmission = {
+    presentationRequest,
+    verifiableCredentials: Constants.getIdentificationList(environment),
+  };
+  let authToken: Dictionary<any> | undefined;
+  if (presentationRequest.feed) {
     try {
-      verifiedAuthToken = await getAuthToken(authTokenDescriptor);
-      console.log('Refreshed token: ', verifiedAuthToken);
-    } catch (error) {
-      console.log('Error refreshing token: ', error);
-      throw error;
+      authToken = await getAuthToken({ presentationRequest });
+      console.log('VCL Auth Token received:', JSON.stringify(authToken));
+    } catch (error: any) {
+      console.log('VCL getAuthToken Error:', JSON.stringify(error));
+    }
+
+    if (!verifyToken(authToken?.accessToken)) {
+      console.log('VCL Auth Token is expired');
+      // eslint-disable-next-line max-depth
+      try {
+        authToken = await getAuthToken({ presentationRequest });
+        console.log('VCL Auth Token received:', JSON.stringify(authToken));
+      } catch (error: any) {
+        console.log('VCL getAuthToken Error:', JSON.stringify(error));
+      }
     }
   }
   try {
-    return await submitPresentation(
-      {
-        verifiableCredentials: Constants.getIdentificationList(environment),
-        presentationRequest,
-      },
-      verifiedAuthToken
+    const presentationSubmissionResult = await submitPresentation(
+      presentationSubmission,
+      authToken
     );
-  } catch (error) {
-    console.log('Error submitting presentation: ', error);
-    throw error;
+    console.log(
+      'VCL Presentation submission result:',
+      JSON.stringify(presentationSubmissionResult)
+    );
+
+    const exchangeDescriptor = {
+      presentationSubmission,
+      submissionResult: presentationSubmissionResult,
+    };
+    await onGetExchangeProgress(
+      exchangeDescriptor,
+      presentationSubmissionResult
+    );
+  } catch (error: any) {
+    console.log('VCL Exchange progress error:', JSON.stringify(error));
   }
 };
 
@@ -271,17 +261,6 @@ const onFinalizeOffers = async (
   } catch (error) {
     console.log('Error finalizing offers: ', error);
   }
-};
-
-const onSubmitPresentationUsingAuthToken = async (
-  presentationRequest: Dictionary<any>
-) => {
-  const authTokenDescriptor = {
-    presentationRequest,
-    vendorOriginContext: presentationRequest.vendorOriginContext,
-  };
-  const authToken = await getAuthToken(authTokenDescriptor);
-  return onSubmitPresentation(presentationRequest, authToken);
 };
 
 const onGetCredentialTypesUIFormSchema = async () => {
