@@ -56,68 +56,71 @@ initialization()
     console.log('Initialization failed with error: ', JSON.stringify(error));
   });
 
-const onGetCountries = () => {
-  getCountries()
-    .then((countries) => {
-      console.log('countries: ', countries);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const onGetCountries = async () => {
+  try {
+    const countries = await getCountries();
+    console.log('countries: ', countries);
+  } catch (error) {
+    console.log('Error getting countries: ', error);
+  }
 };
 
-const onGetCredentialTypes = () => {
-  getCredentialTypes()
-    .then((credentialTypes) => {
-      console.log('credential types: ', credentialTypes);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const onGetCredentialTypes = async () => {
+  try {
+    const credentialTypes = await getCredentialTypes();
+    console.log('credential types: ', credentialTypes);
+  } catch (error) {
+    console.log('Error getting credential types: ', error);
+  }
 };
 
-const onGetCredentialTypeSchemas = () => {
-  getCredentialTypeSchemas()
-    .then((credentialTypeSchemas) => {
-      console.log('credential typeSchemas: ', credentialTypeSchemas);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const onGetCredentialTypeSchemas = async () => {
+  try {
+    const credentialTypeSchemas = await getCredentialTypeSchemas();
+    console.log('credential typeSchemas: ', credentialTypeSchemas);
+  } catch (error) {
+    console.log('Error getting credential type schemas: ', error);
+  }
 };
 
-const onGetPresentationRequest = () => {
+const onGetPresentationRequest = async () => {
   const deepLinkValue =
     environment === Environment.Dev.valueOf()
       ? Constants.PresentationRequestDeepLinkStrDev
       : Constants.PresentationRequestDeepLinkStrStaging;
-  getPresentationRequest({ value: deepLinkValue }, didJwk)
-    .then((presentationRequest) => {
-      console.log('presentation request: ', presentationRequest);
 
-      if (presentationRequest.feed) {
-        onSubmitPresentationUsingAuthToken(presentationRequest)
-          .then((submissionResult) => {
-            console.log('submission result: ', submissionResult);
-            onGetExchangeProgress(presentationRequest, submissionResult);
-          })
-          .catch((error) => {
-            console.log('Error submitting presentation: ', error);
-          });
-      } else {
-        onSubmitPresentation(presentationRequest)
-          .then((submissionResult) => {
-            console.log('submission result: ', submissionResult);
-            onGetExchangeProgress(presentationRequest, submissionResult);
-          })
-          .catch((error) => {
-            console.log('Error submitting presentation: ', error);
-          });
+  try {
+    const presentationRequest = await getPresentationRequest(
+      { value: deepLinkValue },
+      didJwk
+    );
+    console.log('presentation request: ', presentationRequest);
+    if (presentationRequest.feed) {
+      // eslint-disable-next-line max-depth
+      try {
+        const submissionResult = await onSubmitPresentationUsingAuthToken(
+          presentationRequest
+        );
+        console.log('submission result: ', submissionResult);
+        await onGetExchangeProgress(presentationRequest, submissionResult);
+      } catch (error) {
+        console.log('Error submitting presentation: ', error);
       }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    } else {
+      // eslint-disable-next-line max-depth
+      try {
+        const submissionResult = await onSubmitPresentation(
+          presentationRequest
+        );
+        console.log('submission result: ', submissionResult);
+        await onGetExchangeProgress(presentationRequest, submissionResult);
+      } catch (error) {
+        console.log('Error submitting presentation: ', error);
+      }
+    }
+  } catch (error) {
+    console.log('Error getting presentation request: ', error);
+  }
 };
 
 const onSubmitPresentation = async (
@@ -128,7 +131,7 @@ const onSubmitPresentation = async (
   if (authToken != null && !verifyToken(authToken.accessToken)) {
     console.log('Token is expired');
     const authTokenDescriptor = {
-      authTokenUri: authToken?.authTokenUri || '',
+      authTokenUri: authToken?.authTokenUri ?? '',
       refreshToken: authToken?.refreshToken.value,
       walletDid: authToken?.walletDid,
       relyingPartyDid: authToken?.relyingPartyDid,
@@ -155,41 +158,42 @@ const onSubmitPresentation = async (
   }
 };
 
-const onGetExchangeProgress = (
+const onGetExchangeProgress = async (
   presentationRequest: Dictionary<any>,
   submissionResult: Dictionary<any>
 ) => {
-  getExchangeProgress(
-    {
-      verifiableCredentials: Constants.getIdentificationList(environment),
-      presentationRequest,
-    },
-    submissionResult
-  )
-    .then((exchangeProgress) => {
-      console.log('exchange progress: ', exchangeProgress);
-    })
-    .catch((exchangeError) => {
-      console.log(exchangeError);
-    });
+  try {
+    const exchangeProgress = await getExchangeProgress(
+      {
+        verifiableCredentials: Constants.getIdentificationList(environment),
+        presentationRequest,
+      },
+      submissionResult
+    );
+    console.log('exchange progress: ', exchangeProgress);
+  } catch (error) {
+    console.log('Error getting exchange progress: ', error);
+  }
 };
 
-const onGetCredentialManifestByDeepLink = () => {
+const onGetCredentialManifestByDeepLink = async () => {
   const deepLinkValue =
     environment === Environment.Dev.valueOf()
       ? Constants.CredentialManifestDeepLinkStrDev
       : Constants.CredentialManifestDeepLinkStrStaging;
-  getCredentialManifestByDeepLink({ value: deepLinkValue }, didJwk)
-    .then((credentialManifest) => {
-      console.log('credential manifest: ', credentialManifest);
-      onGenerateOffers(credentialManifest);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  try {
+    const credentialManifest = await getCredentialManifestByDeepLink(
+      { value: deepLinkValue },
+      didJwk
+    );
+    console.log('credential manifest: ', credentialManifest);
+    await onGenerateOffers(credentialManifest);
+  } catch (error) {
+    console.log('Error getting credential manifest by deep link: ', error);
+  }
 };
 
-const onGetOrganizationsThenCredentialManifestByService = () => {
+const onGetOrganizationsThenCredentialManifestByService = async () => {
   searchForOrganizations(
     environment === Environment.Dev.valueOf()
       ? Constants.OrganizationsSearchDescriptorByDidDev
@@ -218,38 +222,36 @@ const onGetOrganizationsThenCredentialManifestByService = () => {
     });
 };
 
-const onGenerateOffers = (credentialManifest: Dictionary<any>) => {
+const onGenerateOffers = async (credentialManifest: Dictionary<any>) => {
   const generateOffersDescriptor = {
     credentialManifest,
     types: Constants.CredentialTypes,
     identificationVerifiableCredentials:
       Constants.getIdentificationList(environment),
   };
-  generateOffers(generateOffersDescriptor)
-    .then((offers) => {
-      console.log('generate offers: ', offers);
-      onCheckOffers(generateOffersDescriptor, offers.sessionToken);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  try {
+    const offers = await generateOffers(generateOffersDescriptor);
+    console.log('generate offers: ', offers);
+    onCheckOffers(generateOffersDescriptor, offers.sessionToken);
+  } catch (error) {
+    console.log('Error generating offers: ', error);
+  }
 };
 
-const onCheckOffers = (
+const onCheckOffers = async (
   generateOffersDescriptor: Dictionary<any>,
   sessionToken: Dictionary<any>
 ) => {
-  checkOffers(generateOffersDescriptor, sessionToken)
-    .then((offers) => {
-      console.log('check offers: ', offers);
-      onFinalizeOffers(generateOffersDescriptor.credentialManifest, offers);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  try {
+    const offers = await checkOffers(generateOffersDescriptor, sessionToken);
+    console.log('check offers: ', offers);
+    onFinalizeOffers(generateOffersDescriptor.credentialManifest, offers);
+  } catch (error) {
+    console.log('Error checking offers: ', error);
+  }
 };
 
-const onFinalizeOffers = (
+const onFinalizeOffers = async (
   credentialManifest: Dictionary<any>,
   offers: Dictionary<any>
 ) => {
@@ -260,13 +262,15 @@ const onFinalizeOffers = (
     approvedOfferIds: approvedRejectedOfferIds[0],
     rejectedOfferIds: approvedRejectedOfferIds[1],
   };
-  finalizeOffers(finalizeOffersDescriptor, offers.sessionToken)
-    .then((credentials) => {
-      console.log('credentials: ', credentials);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  try {
+    const credentials = await finalizeOffers(
+      finalizeOffersDescriptor,
+      offers.sessionToken
+    );
+    console.log('credentials: ', credentials);
+  } catch (error) {
+    console.log('Error finalizing offers: ', error);
+  }
 };
 
 const onSubmitPresentationUsingAuthToken = async (
@@ -280,88 +284,87 @@ const onSubmitPresentationUsingAuthToken = async (
   return onSubmitPresentation(presentationRequest, authToken);
 };
 
-const onGetCredentialTypesUIFormSchema = () => {
-  getCredentialTypesUIFormSchema({
-    credentialType: 'ResidentPermitV1.0',
-    countryCode: 'US',
-  })
-    .then((credentialTypesUIFormSchema) => {
-      console.log(
-        'credential types UI form schema: ',
-        credentialTypesUIFormSchema
-      );
-    })
-    .catch((error) => {
-      console.log(error);
+const onGetCredentialTypesUIFormSchema = async () => {
+  try {
+    const credentialTypesUIFormSchema = await getCredentialTypesUIFormSchema({
+      credentialType: 'ResidentPermitV1.0',
+      countryCode: 'US',
     });
+    console.log(
+      'credential types UI form schema: ',
+      credentialTypesUIFormSchema
+    );
+  } catch (error) {
+    console.log('Error getting credential types UI form schema: ', error);
+  }
 };
 
-const onRefreshCredentials = () => {
-  getCredentialManifestToRefreshCredentials({
-    service: JSON.parse(Constants.IssuingServiceJsonStr),
-    credentialIds: Constants.getCredentialIdsToRefresh(environment),
-    didJwk,
-  })
-    .then((credentialManifest) => {
-      console.log(
-        'credential manifest to refresh credentials: ',
-        credentialManifest
-      );
-    })
-    .catch((error) => {
-      console.log(error);
+const onRefreshCredentials = async () => {
+  try {
+    const credentialManifest = await getCredentialManifestToRefreshCredentials({
+      service: JSON.parse(Constants.IssuingServiceJsonStr),
+      credentialIds: Constants.getCredentialIdsToRefresh(environment),
+      didJwk,
     });
+    console.log(
+      'credential manifest to refresh credentials: ',
+      credentialManifest
+    );
+  } catch (error) {
+    console.log(
+      'Error getting credential manifest to refresh credentials: ',
+      error
+    );
+  }
 };
 
-const onGetVerifiedProfile = () => {
-  getVerifiedProfile(Constants.getVerifiedProfileDescriptor(environment))
-    .then((verifiedProfile) => {
-      console.log('verified profile: ', verifiedProfile);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const onGetVerifiedProfile = async () => {
+  try {
+    const verifiedProfile = await getVerifiedProfile(
+      Constants.getVerifiedProfileDescriptor(environment)
+    );
+    console.log('verified profile: ', verifiedProfile);
+  } catch (error) {
+    console.log('Error getting verified profile: ', error);
+  }
 };
 
-const onVerifyJwt = () => {
-  verifyJwt(Constants.SomeJwt, Constants.SomePublicJwk)
-    .then((isVerified) => {
-      console.log('is verified: ', isVerified);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-const onGenerateSignedJwt = () => {
-  generateSignedJwt(
-    {
-      payload: Constants.SomePayload,
-      iss: 'iss123',
-      jti: 'jti123',
-    },
-    didJwk
-  )
-    .then((signedJwt) => {
-      console.log('signed jwt: ', signedJwt);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const onVerifyJwt = async () => {
+  try {
+    const isVerified = await verifyJwt(
+      Constants.SomeJwt,
+      Constants.SomePublicJwk
+    );
+    console.log('is verified: ', isVerified);
+  } catch (error) {
+    console.log('Error verifying JWT: ', error);
+  }
 };
 
-const onGenerateDidJwk = () => {
-  generateDidJwk({
-    signatureAlgorithm: 'P-256',
-    remoteCryptoServicesToken: null,
-  })
-    .then((newDidJwk) => {
-      console.log('new didJwk: ', newDidJwk);
-      // eslint-disable-next-line better-mutation/no-mutation
-      didJwk = newDidJwk;
-    })
-    .catch((error) => {
-      console.log(error);
+const onGenerateSignedJwt = async () => {
+  try {
+    const signedJwt = await generateSignedJwt(
+      {
+        payload: Constants.SomePayload,
+        iss: 'iss123',
+        jti: 'jti123',
+      },
+      didJwk
+    );
+  } catch (error) {
+    console.log('Error generating signed JWT: ', error);
+  }
+};
+
+const onGenerateDidJwk = async () => {
+  try {
+    const newDidJwk = await generateDidJwk({
+      signatureAlgorithm: 'P-256',
+      remoteCryptoServicesToken: null,
     });
+  } catch (error) {
+    console.log('Error generating didJwk: ', error);
+  }
 };
 
 const MainScreen: React.FC = () => {

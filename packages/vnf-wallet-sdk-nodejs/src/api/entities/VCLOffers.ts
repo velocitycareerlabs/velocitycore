@@ -28,7 +28,7 @@ export default class VCLOffers {
             return new VCLOffers(
                 payload,
                 VCLOffers.offersFromJsonArray(
-                    payload[VCLOffers.CodingKeys.KeyOffers] || []
+                    payload[VCLOffers.CodingKeys.KeyOffers] ?? []
                 ),
                 responseCode,
                 sessionToken,

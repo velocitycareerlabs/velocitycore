@@ -26,9 +26,9 @@ export default class VCLJwt {
             const encodedJwtArr = encodedJwt.split('.');
             item = new VCLJwt(
                 new SignedJWT(
-                    encodedJwtArr[0] || '',
-                    encodedJwtArr[1] || '',
-                    encodedJwtArr[2] || ''
+                    encodedJwtArr[0] ?? '',
+                    encodedJwtArr[1] ?? '',
+                    encodedJwtArr[2] ?? ''
                 )
             );
         } catch (e) {
@@ -38,11 +38,11 @@ export default class VCLJwt {
     }
 
     get kid(): string {
-        return this.header.kid || this.jwk.kid || '';
+        return this.header.kid ?? this.jwk.kid ?? '';
     }
 
     get jwk(): Dictionary<any> {
-        return this.header.jwk || {};
+        return this.header.jwk ?? {};
     }
 
     getHeader(): Dictionary<any> {

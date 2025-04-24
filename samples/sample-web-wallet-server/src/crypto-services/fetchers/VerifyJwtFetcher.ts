@@ -24,7 +24,7 @@ export const verifyJwtFetcher = async (
     method: 'POST',
     data: {
       jwt: jwt.encodedJwt,
-      publicKey: publicJwk?.valueJson || {},
+      publicKey: publicJwk?.valueJson ?? {},
     },
   };
   return fetcher(config);
