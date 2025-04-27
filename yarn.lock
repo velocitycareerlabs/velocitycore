@@ -2274,9 +2274,9 @@
   integrity sha512-VBYApgvqX5e+M2BAWKCxrYk9yTo8z127xsSzsSePQZlxt97tbQay74n//NDFK4ovFMgyhKSjoWtHTbdGw/RDvQ==
 
 "@fastify/basic-auth@^6.0.0":
-  version "6.1.0"
-  resolved "https://registry.npmjs.org/@fastify/basic-auth/-/basic-auth-6.1.0.tgz#a2e3524114b8678812c41a2dc52d0c451faa1f0f"
-  integrity sha512-66yA8LpWLUZjCYX5vn6yxtoCG33McFapbUdiVIXqRoTednWGMo4q3xWvYbw91y5leevP0JkM0EjsipMASyPrBQ==
+  version "6.2.0"
+  resolved "https://registry.npmjs.org/@fastify/basic-auth/-/basic-auth-6.2.0.tgz#c311870a3343879e11b57225587349c9cce5a046"
+  integrity sha512-Ao9Jf8TyW8v7p3CPy++c+E3qcCDeWfAlSIfFo0CsKrfvm81i0OCpnobIMwaSSkg/At0rzsLzbJPDWrgNru0G1w==
   dependencies:
     "@fastify/error" "^4.0.0"
     fastify-plugin "^5.0.0"
