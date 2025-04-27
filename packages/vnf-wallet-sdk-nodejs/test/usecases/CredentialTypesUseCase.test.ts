@@ -1,6 +1,6 @@
 import { expect } from '@jest/globals';
 import { CredentialTypesMocks } from '../infrastructure/resources/valid/CredentialTypesMocks';
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import CredentialTypesRepositoryImpl from '../../src/impl/data/repositories/CredentialTypesRepositoryImpl';
 import CredentialTypesUseCaseImpl from '../../src/impl/data/usecases/CredentialTypesUseCaseImpl';
 import { VCLCredentialType, VCLErrorCode } from '../../src';
