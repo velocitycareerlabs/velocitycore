@@ -34,7 +34,7 @@ import remoteDataProvider from './utils/remoteDataProvider';
 import { useConfig } from './utils/ConfigContext';
 import theme from './theme/theme';
 
-export const PrivateAppRoot = ({ customDataProvider, children }) => {
+export const PrivateAppRoot = ({ extendedRemoteDataProvider, children }) => {
   const auth = useAuth();
   const config = useConfig();
   const queryClient = new QueryClient({
@@ -55,7 +55,7 @@ export const PrivateAppRoot = ({ customDataProvider, children }) => {
       <Admin
         theme={theme}
         authProvider={initReactAdminAuthProvider(auth)}
-        dataProvider={remoteDataProvider(config, auth, customDataProvider)}
+        dataProvider={remoteDataProvider(config, auth, extendedRemoteDataProvider)}
         queryClient={queryClient}
         dashboard={Dashboard}
         requireAuth
@@ -73,5 +73,5 @@ export const PrivateAppRoot = ({ customDataProvider, children }) => {
 // eslint-disable-next-line better-mutation/no-mutation
 PrivateAppRoot.propTypes = {
   children: PropTypes.node.isRequired,
-  customDataProvider: PropTypes.func,
+  extendedRemoteDataProvider: PropTypes.func,
 };
