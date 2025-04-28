@@ -87,8 +87,11 @@ export const equalsToDate = (date1: Date, date2: Date): boolean => {
     return selfCopy === check;
 };
 
-export const ensureDefined = <T>(value: T | undefined, name: string) => {
-    if (value === undefined) {
+export const ensureDefined = <T>(
+    value: T | null | undefined,
+    name: string
+): T => {
+    if (value === null || value === undefined) {
         throw new VCLError(`${name} is required`);
     }
     return value;
