@@ -17,7 +17,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { kebabCase } from 'lodash/string';
 import { useRedirect, useCreate, useGetList } from 'react-admin';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 
 import Popup from '@/components/common/Popup.jsx';

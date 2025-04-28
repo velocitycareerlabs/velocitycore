@@ -27,7 +27,7 @@ import {
   SimpleFormIterator,
   TextInput,
 } from 'react-admin';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Box, Stack, Tooltip, Typography, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import InfoIcon from '@mui/icons-material/Info';

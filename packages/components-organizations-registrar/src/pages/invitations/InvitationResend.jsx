@@ -16,7 +16,7 @@
 
 import { useState, useCallback } from 'react';
 import { useUpdate, useRedirect, useRefresh } from 'react-admin';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import PropTypes from 'prop-types';
 import { Typography, Button } from '@mui/material';
 import useSelectedOrganization from '../../state/selectedOrganizationState';

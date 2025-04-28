@@ -19,7 +19,7 @@ import { Box, Button, Divider, Paper, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router';
 import { useGetOne, useRedirect } from 'react-admin';
 import {
   copyTextToClipboard,

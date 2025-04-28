@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import { render } from '@testing-library/react';
 // eslint-disable-next-line no-unused-vars
 import IndividualsEdit from '../../individuals/IndividualsEdit.jsx';

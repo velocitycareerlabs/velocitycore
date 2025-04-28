@@ -3,16 +3,16 @@ import '@testing-library/jest-dom';
 // eslint-disable-next-line no-unused-vars
 import { AdminContext } from 'react-admin';
 // eslint-disable-next-line no-unused-vars
-import Router from 'react-router-dom';
+import Router from 'react-router';
 // eslint-disable-next-line no-unused-vars
 import { TestAuthProvider } from '../../../utils/auth/__tests__/TestAuthProvider.jsx';
 // eslint-disable-next-line no-unused-vars
 import OrganizationShow from '../OrganizationShow.jsx';
 import * as utils from '../../../utils/index.jsx';
 
-jest.mock('react-router-dom', () => ({
+jest.mock('react-router', () => ({
   // __esModule: true,
-  ...jest.requireActual('react-router-dom'),
+  ...jest.requireActual('react-router'),
   useParams: jest.fn(),
 }));
 
