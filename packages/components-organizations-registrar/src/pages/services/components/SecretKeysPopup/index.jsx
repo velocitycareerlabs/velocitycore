@@ -11,7 +11,7 @@ export const SecretKeysPopup = ({ isOpen, secretKeys, onClose, wording, warningW
 
   const [isOpenWarningSecretPopup, setIsOpenWarningSecretPopup] = useState(false);
 
-  const handleClsoe = useCallback(() => {
+  const handleClose = useCallback(() => {
     if ((!isCopied && !isDownloaded) || isLoadingKeysError) {
       setIsOpenWarningSecretPopup(true);
     } else {
@@ -27,7 +27,7 @@ export const SecretKeysPopup = ({ isOpen, secretKeys, onClose, wording, warningW
 
   return (
     <Popup
-      onClose={handleClsoe}
+      onClose={handleClose}
       title=""
       isOpen={isOpen}
       mainContainerStyles={styles.mainContainer}

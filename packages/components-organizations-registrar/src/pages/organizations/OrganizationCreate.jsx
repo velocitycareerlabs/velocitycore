@@ -67,7 +67,6 @@ import { OrganizationRegistrationNumbers } from './components/OrganizationRegist
 import { OrganizationBrand } from './components/OrganizationBrand.jsx';
 import { OrganizationSubmitButton } from './components/OrganizationSubmitButton.jsx';
 import { OrganizationCreateTitle } from './components/OrganizationCreateTitle.jsx';
-import { MockOrganization } from './components/MockOrganization.jsx';
 import ServiceCreateFormContainer from './OrganizationAddService.jsx';
 import {
   requestOptions,
@@ -75,7 +74,6 @@ import {
   validateName,
   validateEmail,
   getSellSizeIfLocalAuthority,
-  initialRecordMock,
 } from './utils';
 
 export const defaultBrandValue = [
@@ -89,7 +87,10 @@ export const isAddBrandDisabled = (values) => {
   return values && !allBrandsFilled(values) && (values.length % 2 === 0 || values.length !== 1);
 };
 
-const OrganizationCreate = ({ CreateServiceComponent = ServiceCreateFormContainer }) => {
+const OrganizationCreate = ({
+  CreateServiceComponent = ServiceCreateFormContainer,
+  MockOrganization,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const notify = useNotify();
@@ -108,7 +109,7 @@ const OrganizationCreate = ({ CreateServiceComponent = ServiceCreateFormContaine
   const [hasOrganisations, setHasOrganisations] = useState(false);
   const [serviceType, setServiceType] = useState('');
   const [selectedCAO, setSelectedCAO] = useState('');
-  const [initialRecord, setInitialRecord] = useState({ profile: { name: '' } }, initialRecordMock);
+  const [initialRecord, setInitialRecord] = useState({ profile: { name: '' } });
 
   const { refetch } = useGetList('organizations', undefined, {
     enabled: false,
@@ -225,7 +226,7 @@ const OrganizationCreate = ({ CreateServiceComponent = ServiceCreateFormContaine
   return (
     <Box sx={sx.root}>
       <Stack sx={sx.content}>
-        <MockOrganization setInitialRecord={setInitialRecord} />
+        {MockOrganization && <MockOrganization setInitialRecord={setInitialRecord} />}
 
         <OrganizationCreateTitle />
 
@@ -543,6 +544,7 @@ const OrganizationCreate = ({ CreateServiceComponent = ServiceCreateFormContaine
 // eslint-disable-next-line better-mutation/no-mutation
 OrganizationCreate.propTypes = {
   CreateServiceComponent: PropTypes.elementType,
+  MockOrganization: PropTypes.elementType,
 };
 
 export default OrganizationCreate;
