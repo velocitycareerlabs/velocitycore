@@ -162,7 +162,6 @@ describe('Invitations controller test suite', () => {
       });
       expect(invitationFromDb).toEqual({
         ...invitation,
-        inviterId: new ObjectId(inviterOrganization._id),
         _id: new ObjectId(invitation._id),
         acceptedAt: expect.any(Date),
         acceptedBy: 'fooUser2',
@@ -228,7 +227,6 @@ describe('Invitations controller test suite', () => {
       expect(invitationFromDb).toEqual({
         ...invitation,
         _id: new ObjectId(invitation._id),
-        inviterId: new ObjectId(inviterOrganization._id),
         acceptedAt: expect.any(Date),
         acceptedBy: 'fooUser2',
         updatedBy: 'fooUser1',
@@ -290,9 +288,9 @@ describe('Invitations controller test suite', () => {
       expect(invitationFromDb).toEqual(
         mongoify({
           _id: invitation._id,
-          inviterId: inviterOrganization._id,
           acceptedAt: expect.any(Date),
           acceptedBy: 'fooUser2',
+          inviterDid: inviterOrganization.didDoc.id,
           inviteeDid: 'fooInviteeDid',
           inviteeEmail: 'foo@example.com',
           inviteeProfile: {
@@ -373,9 +371,9 @@ describe('Invitations controller test suite', () => {
       expect(invitationFromDb).toEqual([
         mongoify({
           _id: invitation._id,
-          inviterId: inviterOrganization._id,
           acceptedAt: expect.any(Date),
           acceptedBy: 'fooUser2',
+          inviterDid: inviterOrganization.didDoc.id,
           inviteeDid: 'fooInviteeDid',
           inviteeEmail: 'foo@example.com',
           inviteeProfile: {
@@ -410,7 +408,7 @@ const invitationResponseExpectation = (
   overrides
 ) => {
   return {
-    ...omit(['_id', 'inviterId'], invitation),
+    ...omit(['_id'], invitation),
     id: invitation._id.toString(),
     inviterDid: inviterOrganization.didDoc.id,
     acceptedAt: expect.stringMatching(ISO_DATETIME_FORMAT),

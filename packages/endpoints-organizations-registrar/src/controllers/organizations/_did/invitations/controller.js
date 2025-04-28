@@ -109,7 +109,7 @@ const invitationsController = async (fastify) => {
       const expiresAt = addSeconds(registrarInvitationTtl, new Date());
       const invitation = await repos.invitations.insert({
         invitationUrl: buildInvitationUrl({ code }, req),
-        inviterId: inviterOrganization._id,
+        inviterDid: did,
         inviteeEmail,
         inviteeService,
         inviteeProfile,
@@ -127,7 +127,7 @@ const invitationsController = async (fastify) => {
         code,
       });
       return {
-        invitation: { ...invitation, inviterDid: did },
+        invitation,
         messageCode,
       };
     }
@@ -177,11 +177,9 @@ const invitationsController = async (fastify) => {
         query: { page, sort = [] },
         repos,
       } = req;
-      const organization = await repos.organizations.findOneByDid(did, {
-        _id: 1,
-      });
+      await repos.organizations.findOneByDid(did, { _id: 1 });
       const filter = transformToFinder({
-        filter: { inviterId: organization._id },
+        filter: { inviterDid: did },
         page,
         sort,
       });

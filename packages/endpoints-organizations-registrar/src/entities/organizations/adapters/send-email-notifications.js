@@ -160,8 +160,8 @@ const initSendEmailNotifications = (initCtx) => {
     const invitation = organization.invitationId
       ? await context.repos.invitations.findById(organization.invitationId)
       : null;
-    const inviterOrganization = invitation?.inviterId
-      ? await context.repos.organizations.findById(invitation.inviterId)
+    const inviterOrganization = invitation?.inviterDid
+      ? await context.repos.organizations.findOneByDid(invitation.inviterDid)
       : null;
     const emailTemplateSignatoryApproval = compile(
       readFileSync(`${__dirname}/email-template-signatory-approval.hbs`, {

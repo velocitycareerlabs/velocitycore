@@ -18,7 +18,6 @@
 const { omit } = require('lodash/fp');
 const { register } = require('@spencejs/spence-factories');
 const { addWeeks } = require('date-fns/fp');
-const { ObjectId } = require('mongodb');
 const invitationsRepoPlugin = require('../repo');
 
 module.exports = (app) =>
@@ -30,15 +29,14 @@ module.exports = (app) =>
       const inviteeService =
         overridesResult.inviteeOrganization?.didDoc.service;
       const inviteeProfile = overridesResult.inviteeOrganization?.profile;
-      const inviterId = overridesResult.inviterOrganization
-        ? new ObjectId(overridesResult.inviterOrganization._id)
-        : undefined;
+      const inviterDid = overridesResult.inviterOrganization?.didDoc.id;
+
       return {
         inviteeEmail: 'foo@example.com',
         invitationUrl: 'https://someurl.com',
         inviteeService,
         inviteeProfile,
-        inviterId,
+        inviterDid,
         code: '1234567812345678',
         expiresAt: addWeeks(1, new Date()),
         createdAt: new Date(),

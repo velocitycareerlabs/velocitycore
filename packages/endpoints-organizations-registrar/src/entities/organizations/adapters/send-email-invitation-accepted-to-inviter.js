@@ -49,15 +49,8 @@ const initSendEmailInvitationAcceptedToInviter = (fastify) => {
     if (isEmpty(services)) {
       return;
     }
-    const inviterOrganization = await repos.organizations.findOne({
-      filter: {
-        '@ignoreScope': true,
-        _id: invitation.inviterId,
-      },
-    });
-    const group = await repos.groups.findGroupByDid(
-      inviterOrganization.didDoc.id
-    );
+
+    const group = await repos.groups.findGroupByDid(invitation.inviterDid);
     if (isEmpty(group?.clientAdminIds)) {
       return;
     }

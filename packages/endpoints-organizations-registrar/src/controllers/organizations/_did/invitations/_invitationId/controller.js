@@ -2,7 +2,6 @@ const { isEmpty } = require('lodash/fp');
 const newError = require('http-errors');
 const { nanoid } = require('nanoid/non-secure');
 const { addSeconds } = require('date-fns/fp');
-const { ObjectId } = require('mongodb');
 const {
   verifyUserOrganizationWriteAuthorized,
 } = require('../../../../../plugins/authorization');
@@ -47,13 +46,13 @@ const invitationController = async (fastify) => {
         params: { did, invitationId },
         repos,
       } = req;
-      const inviterOrganization = await repos.organizations.findOneByDid(did, {
+      await repos.organizations.findOneByDid(did, {
         _id: 1,
       });
       const invitation = await repos.invitations.findOne({
         filter: {
           _id: invitationId,
-          inviterId: new ObjectId(inviterOrganization._id),
+          inviterDid: did,
         },
       });
 
@@ -120,7 +119,7 @@ const invitationController = async (fastify) => {
       const invitation = await repos.invitations.findOne({
         filter: {
           _id: invitationId,
-          inviterId: new ObjectId(inviterOrganization._id),
+          inviterDid: did,
         },
       });
 
@@ -156,7 +155,6 @@ const invitationController = async (fastify) => {
           code,
           expiresAt,
           invitationUrl,
-          inviterDid: did,
           inviteeEmail,
         },
         messageCode,
@@ -192,14 +190,12 @@ const invitationController = async (fastify) => {
         repos,
         user,
       } = req;
-      const inviterOrganization = await repos.organizations.findOneByDid(did, {
-        _id: 1,
-      });
+      await repos.organizations.findOneByDid(did, { _id: 1 });
       const deletedAt = new Date();
       const invitation = await repos.invitations.findOne({
         filter: {
           _id: invitationId,
-          inviterId: new ObjectId(inviterOrganization._id),
+          inviterDid: did,
         },
       });
 
