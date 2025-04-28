@@ -13,8 +13,6 @@ export default class VCLCountries {
     }
 
     private countryBy(key: string, value: string): Nullish<VCLCountry> {
-        return (
-            this.all?.find((country) => country.payload[key] === value) || null
-        );
+        return this.all?.find((country) => country.payload[key] === value);
     }
 }

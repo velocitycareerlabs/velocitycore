@@ -26,7 +26,7 @@ export default class VCLToken {
      * token expiration period in milliseconds
      */
     public get expiresIn(): Nullish<bigint> {
-        return BigInt(this.jwtValue.payload[VCLToken.KeyExp]) || null;
+        return BigInt(this.jwtValue.payload[VCLToken.KeyExp]);
     }
 
     static readonly KeyExp = 'exp';

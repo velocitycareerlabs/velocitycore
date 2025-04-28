@@ -1,5 +1,5 @@
 import { beforeAll, expect } from '@jest/globals';
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import { GenerateOffersMocks } from '../infrastructure/resources/valid/GenerateOffersMocks';
 import FinalizeOffersUseCase from '../../src/impl/domain/usecases/FinalizeOffersUseCase';
 import {

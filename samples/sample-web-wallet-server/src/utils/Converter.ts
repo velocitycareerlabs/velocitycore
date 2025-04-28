@@ -79,7 +79,7 @@ export const presentationRequestDescriptorFrom = (
 
 export const authTokenFrom = (json?: Dictionary<any>): VCLAuthToken => {
   return new VCLAuthToken(
-    json?.payload || {},
+    json?.payload ?? {},
     json?.authTokenUri,
     json?.walletDid,
     json?.relyingPartyDid
@@ -223,7 +223,7 @@ export const finalizeOffersDescriptorFrom = (
 export const authTokenDescriptorFrom = (
   json: Dictionary<any>
 ): VCLAuthTokenDescriptor => {
-  if (json.presentationRequest) {
+  if (json.presentationRequest != null) {
     return new VCLAuthTokenDescriptor(
       new VCLPresentationRequest(
         VCLJwt.fromEncodedJwt(json.presentationRequest.jwt.encodedJwt),

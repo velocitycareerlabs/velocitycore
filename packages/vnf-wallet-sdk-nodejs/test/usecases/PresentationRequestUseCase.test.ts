@@ -1,6 +1,6 @@
 import PresentationRequestUseCaseImpl from '../../src/impl/data/usecases/PresentationRequestUseCaseImpl';
 import PresentationRequestRepositoryImpl from '../../src/impl/data/repositories/PresentationRequestRepositoryImpl';
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import { PresentationRequestMocks } from '../infrastructure/resources/valid/PresentationRequestMocks';
 import ResolveKidRepositoryImpl from '../../src/impl/data/repositories/ResolveKidRepositoryImpl';
 import JwtServiceRepositoryImpl from '../../src/impl/data/repositories/JwtServiceRepositoryImpl';

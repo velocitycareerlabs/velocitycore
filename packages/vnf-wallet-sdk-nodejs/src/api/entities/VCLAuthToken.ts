@@ -24,8 +24,8 @@ export default class VCLAuthToken {
         this.accessToken = new VCLToken(payload.access_token);
         this.refreshToken = new VCLToken(payload.refresh_token);
         this.tokenType = payload.token_type;
-        this.authTokenUri = authTokenUri || payload.authTokenUri;
-        this.walletDid = walletDid || payload.walletDid;
-        this.relyingPartyDid = relyingPartyDid || payload.relyingPartyDid;
+        this.authTokenUri = authTokenUri ?? payload.authTokenUri;
+        this.walletDid = walletDid ?? payload.walletDid;
+        this.relyingPartyDid = relyingPartyDid ?? payload.relyingPartyDid;
     }
 }
