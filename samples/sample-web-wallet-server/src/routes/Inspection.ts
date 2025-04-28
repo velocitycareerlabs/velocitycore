@@ -21,7 +21,7 @@ export default async function inspectionRoutes(fastify) {
         )
       );
     } catch (error: any) {
-      reply.status(error.statusCode).send(error);
+      reply.status(error.statusCode ?? 500).send(error);
     }
   });
   fastify.post('/submitPresentation', async (req, reply) => {
@@ -33,7 +33,7 @@ export default async function inspectionRoutes(fastify) {
         )
       );
     } catch (error: any) {
-      reply.status(error.statusCode).send(error);
+      reply.status(error.statusCode ?? 500).send(error);
     }
   });
   fastify.post('/getExchangeProgress', async (req, reply) => {
@@ -47,7 +47,7 @@ export default async function inspectionRoutes(fastify) {
         )
       );
     } catch (error: any) {
-      reply.status(error.statusCode).send(error);
+      reply.status(error.statusCode ?? 500).send(error);
     }
   });
 }

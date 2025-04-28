@@ -20,7 +20,7 @@ export default async function issuingRoutes(fastify) {
         )
       );
     } catch (error: any) {
-      reply.status(error.statusCode).send(error);
+      reply.status(error.statusCode ?? 500).send(error);
     }
   });
   fastify.post('/generateOffers', async (req, reply) => {
@@ -29,7 +29,7 @@ export default async function issuingRoutes(fastify) {
         await req.vclSdk.generateOffers(generateOffersDescriptorFrom(req.body))
       );
     } catch (error: any) {
-      reply.status(error.statusCode).send(error);
+      reply.status(error.statusCode ?? 500).send(error);
     }
   });
   fastify.post('/checkOffers', async (req, reply) => {
@@ -41,7 +41,7 @@ export default async function issuingRoutes(fastify) {
         )
       );
     } catch (error: any) {
-      reply.status(error.statusCode).send(error);
+      reply.status(error.statusCode ?? 500).send(error);
     }
   });
   fastify.post('/finalizeOffers', async (req, reply) => {
@@ -53,7 +53,7 @@ export default async function issuingRoutes(fastify) {
         )
       );
     } catch (error: any) {
-      reply.status(error.statusCode).send(error);
+      reply.status(error.statusCode ?? 500).send(error);
     }
   });
 }

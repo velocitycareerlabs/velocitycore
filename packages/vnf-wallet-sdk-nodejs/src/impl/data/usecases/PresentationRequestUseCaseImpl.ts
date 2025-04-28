@@ -32,7 +32,7 @@ export default class PresentationRequestUseCaseImpl
             const jwt = await this.jwtServiceRepository.decode(encodedJwtStr);
             return this.onGetPresentationRequestSuccess(
                 new VCLPresentationRequest(
-                    jwt as VCLJwt,
+                    jwt,
                     verifiedProfile,
                     presentationRequestDescriptor.deepLink,
                     presentationRequestDescriptor.pushDelegate,
