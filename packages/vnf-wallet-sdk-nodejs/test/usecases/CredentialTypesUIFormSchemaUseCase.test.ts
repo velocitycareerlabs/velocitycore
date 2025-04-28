@@ -3,7 +3,7 @@ import CredentialTypesUIFormSchemaUseCase from '../../src/impl/domain/usecases/C
 import CredentialTypesUIFormSchemaUseCaseImpl from '../../src/impl/data/usecases/CredentialTypesUIFormSchemaUseCaseImpl';
 import CredentialTypesUIFormSchemaRepositoryImpl from '../../src/impl/data/repositories/CredentialTypesUIFormSchemaRepositoryImpl';
 import { CredentialTypesUIFormSchemaMocks } from '../infrastructure/resources/valid/CredentialTypesUIFormSchemaMocks';
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import VCLCredentialTypesUIFormSchema from '../../src/api/entities/VCLCredentialTypesUIFormSchema';
 import VCLCredentialTypesUIFormSchemaDescriptor from '../../src/api/entities/VCLCredentialTypesUIFormSchemaDescriptor';
 import VCLCountry from '../../src/api/entities/VCLCountry';

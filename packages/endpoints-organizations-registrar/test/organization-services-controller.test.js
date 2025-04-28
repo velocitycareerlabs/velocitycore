@@ -1189,7 +1189,7 @@ describe('Organization Services Test Suite', () => {
         const response = await fastify.injectJson({
           method: 'POST',
           url: `${baseUrl}/${did}/services`,
-          payload: 'MALFORMED',
+          payload: {},
         });
 
         expect(response.statusCode).toEqual(400);
@@ -3978,7 +3978,7 @@ describe('Organization Services Test Suite', () => {
         const response = await fastify.injectJson({
           method: 'PUT',
           url: `${baseUrl}/${did}/services/service-1`,
-          payload: 'MALFORMED',
+          payload: {},
         });
 
         expect(response.statusCode).toEqual(400);

@@ -14,6 +14,6 @@ export class JwtSignServiceMock implements VCLJwtSignService {
         nonce: Nullish<string>,
         remoteCryptoServicesToken: Nullish<VCLToken>
     ): Promise<VCLJwt> {
-        return VCLJwt.fromEncodedJwt(this.successValue || '');
+        return VCLJwt.fromEncodedJwt(this.successValue ?? '');
     }
 }

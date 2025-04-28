@@ -625,7 +625,7 @@ describe('Organizations Full Test Suite', () => {
         const response = await fastify.injectJson({
           method: 'POST',
           url: fullUrl,
-          payload: 'MALFORMED',
+          payload: {},
         });
 
         expect(response.statusCode).toEqual(400);

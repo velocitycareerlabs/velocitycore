@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/agentdb-cli",
   "version": "0.5.0-build",
   "description": "A cli for working with agent database.",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "src/index.js",
   "bin": {
     "agentdb-cli": "src/index.js"

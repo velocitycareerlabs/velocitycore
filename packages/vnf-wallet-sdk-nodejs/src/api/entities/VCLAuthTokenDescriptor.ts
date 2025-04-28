@@ -22,7 +22,7 @@ export default class VCLAuthTokenDescriptor {
 
     public readonly relyingPartyDid?: Nullish<string>;
 
-    public readonly vendorOriginContext?: Nullish<string>;
+    public readonly authorizationCode?: Nullish<string>; // vendorOriginContext value
 
     constructor(
         authTokenUri: string,
@@ -52,14 +52,14 @@ export default class VCLAuthTokenDescriptor {
             this.refreshToken = refreshToken;
             this.walletDid = authTokenUriOrPresentationRequest.didJwk.did;
             this.relyingPartyDid = authTokenUriOrPresentationRequest.iss;
-            this.vendorOriginContext =
+            this.authorizationCode =
                 authTokenUriOrPresentationRequest.vendorOriginContext;
         } else {
             // Called with tokenUrl, walletDid, relyingPartyDid, etc.
             this.authTokenUri = authTokenUriOrPresentationRequest;
             this.walletDid = walletDid;
             this.relyingPartyDid = relyingPartyDid;
-            this.vendorOriginContext = vendorOriginContext;
+            this.authorizationCode = vendorOriginContext;
             this.refreshToken = refreshToken;
         }
     }
@@ -78,7 +78,7 @@ export default class VCLAuthTokenDescriptor {
                       GrantType.AuthorizationCode.toString(),
                   [VCLAuthTokenDescriptor.KeyClientId]: this.walletDid,
                   [GrantType.AuthorizationCode.toString()]:
-                      this.vendorOriginContext,
+                      this.authorizationCode,
                   [VCLAuthTokenDescriptor.KeyAudience]: this.relyingPartyDid,
                   [VCLAuthTokenDescriptor.KeyTokenType]:
                       VCLAuthTokenDescriptor.KeyTokenTypeValue,

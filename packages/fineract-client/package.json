@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/fineract-client",
   "version": "0.5.0-build",
   "description": "Package containing the functions that interact with the fineract system",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "license": "Apache-2.0",
   "publishConfig": {
@@ -32,7 +32,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-watch": "7.0.0",
     "jest": "29.7.0",
-    "nock": "13.5.6",
+    "nock": "14.0.4",
     "prettier": "2.8.8"
   },
   "nx": {
