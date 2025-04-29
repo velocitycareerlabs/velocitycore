@@ -46,7 +46,11 @@ const initPermissions = async (
       scopesToAdd,
       scopesToRemove,
     });
-    const tx = await contractClient.updateAddressScopes(address, scopesToAdd, scopesToRemove);
+    const tx = await contractClient.updateAddressScopes(
+      address,
+      scopesToAdd,
+      scopesToRemove
+    );
     await tx.wait();
   };
 
@@ -69,7 +73,11 @@ const initPermissions = async (
 
   const addPrimary = async ({ primary, permissioning, rotation }) => {
     log.info({ func: 'addPrimary', primary, permissioning, rotation });
-    const tx = await contractClient.addPrimary(primary, permissioning, rotation);
+    const tx = await contractClient.addPrimary(
+      primary,
+      permissioning,
+      rotation
+    );
     await tx.wait();
   };
 
@@ -87,7 +95,11 @@ const initPermissions = async (
 
   const rotateOperatorKey = async ({ primary, newOperator, oldOperator }) => {
     log.info({ func: 'rotateOperatorKey', primary, newOperator, oldOperator });
-    const tx = await contractClient.rotateOperatorKey(primary, newOperator, oldOperator);
+    const tx = await contractClient.rotateOperatorKey(
+      primary,
+      newOperator,
+      oldOperator
+    );
     await tx.wait();
   };
 

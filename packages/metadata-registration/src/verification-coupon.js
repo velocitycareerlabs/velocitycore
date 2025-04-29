@@ -25,16 +25,15 @@ const initVerificationCoupon = async (
   const { log } = context;
   log.info({ privateKey, contractAddress }, 'initVerificationCoupon');
 
-  const { contractClient, pullEvents } =
-    await initContractClient(
-      {
-        privateKey,
-        contractAddress,
-        rpcProvider,
-        contractAbi,
-      },
-      context
-    );
+  const { contractClient, pullEvents } = await initContractClient(
+    {
+      privateKey,
+      contractAddress,
+      rpcProvider,
+      contractAbi,
+    },
+    context
+  );
 
   const isExpired = (tokenId) => {
     log.info({ tokenId }, 'isExpired');
@@ -49,7 +48,8 @@ const initVerificationCoupon = async (
       Math.floor(Date.parse(expirationTime) / 1000),
       quantity,
       traceId,
-      ownerDid);
+      ownerDid
+    );
 
     const transactionReceipt = await tx.wait();
 
@@ -58,9 +58,15 @@ const initVerificationCoupon = async (
 
   const burn = async (tokenId, traceId, caoDid, burnerDid, burnAddress) => {
     log.info({ tokenId, traceId, caoDid, burnerDid, burnAddress }, 'burn');
-    const tx = await contractClient.burn(tokenId, traceId, caoDid, burnerDid, burnAddress);
+    const tx = await contractClient.burn(
+      tokenId,
+      traceId,
+      caoDid,
+      burnerDid,
+      burnAddress
+    );
 
-    transactionReceipt = await tx.wait();
+    const transactionReceipt = await tx.wait();
 
     return last(transactionReceipt.logs).args;
   };

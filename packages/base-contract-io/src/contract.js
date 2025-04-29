@@ -91,7 +91,7 @@ const initContractClient = async (
   );
 
   const pullEvents = initPullLogEntries(contractClient);
-  
+
   context.log.info('initContractClient done');
 
   return { wallet, contractClient, pullEvents };
