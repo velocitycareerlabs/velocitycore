@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/blockchain-functions",
   "version": "0.5.0-build",
   "description": "Hyperledger Besu on-chain permissioning library.",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "publishConfig": {
     "access": "public"

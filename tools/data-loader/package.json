@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/data-loader",
   "version": "0.5.0-build",
   "description": "A tool for uploading data to the different target systems.",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "src/index.js",
   "bin": {
     "data-loader": "src/index.js"
@@ -26,7 +26,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-watch": "7.0.0",
     "jest": "29.7.0",
-    "nock": "13.5.6",
+    "nock": "14.0.4",
     "prettier": "2.8.8"
   },
   "dependencies": {

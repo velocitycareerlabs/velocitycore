@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/config",
   "version": "0.5.0-build",
   "description": "Generic configuration file for Velocity Projects",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "publishConfig": {
     "access": "public"

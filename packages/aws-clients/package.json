@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/aws-clients",
   "version": "0.5.0-build",
   "description": "Set of aws functions and utils used by Velocity Foundation projects",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "author": "Denis Smolonski",
   "license": "Apache-2.0",
@@ -23,7 +23,7 @@
     "@aws-sdk/client-sns": "^3.731.1",
     "@aws-sdk/lib-dynamodb": "^3.731.1",
     "@aws-sdk/s3-request-presigner": "^3.731.1",
-    "fastify-plugin": "^4.5.1",
+    "fastify-plugin": "^5.0.0",
     "lodash": "^4.17.21",
     "twilio": "^5.0.0"
   },

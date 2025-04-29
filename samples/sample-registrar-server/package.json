@@ -3,7 +3,7 @@
   "version": "0.5.0-build",
   "private": true,
   "description": "Sample Registrar application",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "engines": {
     "node": ">=22.11.0"
   },
@@ -21,12 +21,12 @@
   "author": "Yauheni Pozdnyakov",
   "license": "Apache-2.0",
   "dependencies": {
-    "@fastify/autoload": "^5.10.0",
-    "@fastify/basic-auth": "^5.1.1",
-    "@fastify/helmet": "^11.1.1",
-    "@fastify/sensible": "^5.6.0",
-    "@fastify/swagger": "^8.15.0",
-    "@fastify/swagger-ui": "^4.2.0",
+    "@fastify/autoload": "^6.0.0",
+    "@fastify/basic-auth": "^6.0.0",
+    "@fastify/helmet": "^13.0.0",
+    "@fastify/sensible": "^6.0.0",
+    "@fastify/swagger": "^9.0.0",
+    "@fastify/swagger-ui": "^5.0.0",
     "@spencejs/spence-mongo-repos": "0.10.2",
     "@velocitycareerlabs/auth": "0.5.0-build",
     "@velocitycareerlabs/aws-clients": "0.5.0-build",
@@ -41,8 +41,8 @@
     "@velocitycareerlabs/server-provider": "0.5.0-build",
     "@velocitycareerlabs/validation": "0.5.0-build",
     "env-var": "^7.0.0",
-    "fastify": "^4.29.0",
-    "fastify-plugin": "^4.5.1",
+    "fastify": "^5.0.0",
+    "fastify-plugin": "^5.0.0",
     "http-errors": "2.0.0",
     "lodash": "~4.17.21"
   },
@@ -63,7 +63,7 @@
     "eslint-watch": "7.0.0",
     "jest": "29.7.0",
     "migrate-mongo": "11.0.0",
-    "nock": "13.5.6",
+    "nock": "14.0.4",
     "prettier": "2.8.8"
   }
 }

@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/server-provider",
   "version": "0.5.0-build",
   "description": "Server common package for Velocity Projects ",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "license": "Apache-2.0",
   "publishConfig": {

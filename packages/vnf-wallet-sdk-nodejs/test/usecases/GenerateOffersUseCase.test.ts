@@ -2,7 +2,7 @@ import { expect } from '@jest/globals';
 import GenerateOffersUseCase from '../../src/impl/domain/usecases/GenerateOffersUseCase';
 import GenerateOffersRepositoryImpl from '../../src/impl/data/repositories/GenerateOffersRepositoryImpl';
 import GenerateOffersUseCaseImpl from '../../src/impl/data/usecases/GenerateOffersUseCaseImpl';
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import { GenerateOffersMocks } from '../infrastructure/resources/valid/GenerateOffersMocks';
 import {
     VCLCredentialManifest,

@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/did-doc",
   "version": "0.5.0-build",
   "description": "Velocity DID documents library",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "publishConfig": {
     "access": "public"
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "jest": "29.7.0",
-    "nock": "13.5.6"
+    "nock": "14.0.4"
   },
   "nx": {
     "tags": ["lib"]

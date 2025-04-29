@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/crypto",
   "version": "0.5.0-build",
   "description": "Set of secp256k1 based functions used in Velocity Foundation projects",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "publishConfig": {
     "access": "public"

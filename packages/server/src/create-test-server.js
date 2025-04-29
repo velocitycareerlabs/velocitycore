@@ -44,17 +44,22 @@ const createTestServer = (config) => {
 
   // eslint-disable-next-line better-mutation/no-mutation
   server.injectJson = async ({ method, url, userId, payload, headers }) => {
-    const response = await server.inject({
+    const request = {
       method,
       url,
       payload,
       headers: {
-        'content-type': 'application/json',
         Accept: 'application/json',
         'x-user-id': userId || '',
         ...headers,
       },
-    });
+    };
+
+    if (payload != null) {
+      request['content-type'] = 'application/json';
+    }
+
+    const response = await server.inject(request);
     if (
       isEmpty(response.body) ||
       !response.headers['content-type'].startsWith('application/json')

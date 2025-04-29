@@ -38,6 +38,7 @@
         "fastify{/,}**",
         "avvio{/,}**",
         "fast-json{/,}**",
+        "fast-jwt{/,}**",
         "pino{/,}**"
       ]
     },

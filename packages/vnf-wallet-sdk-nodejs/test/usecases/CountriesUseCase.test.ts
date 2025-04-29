@@ -1,4 +1,4 @@
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import CountriesUseCaseImpl from '../../src/impl/data/usecases/CountriesModelUseCaseImpl';
 import CountriesRepositoryImpl from '../../src/impl/data/repositories/CountriesRepositoryImpl';
 import { CountriesMocks } from '../infrastructure/resources/valid/CountriesMocks';
