@@ -1,5 +1,4 @@
 const SignatoryEventStatus = {
-  EMAIL_SENT: 'EMAIL_SENT',
   APPROVED: 'APPROVED',
   COMPLETED: 'COMPLETED',
   REJECTED: 'REJECTED',
