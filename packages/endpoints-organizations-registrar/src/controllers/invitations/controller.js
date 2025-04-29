@@ -74,9 +74,7 @@ const invitationsController = async (fastify) => {
             errorCode: 'invitation_expired',
           });
         }
-        return {
-          invitation,
-        };
+        return { invitation };
       }
     );
 };

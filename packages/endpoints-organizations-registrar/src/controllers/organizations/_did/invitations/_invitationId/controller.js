@@ -63,10 +63,7 @@ const invitationController = async (fastify) => {
       }
 
       return {
-        invitation: {
-          ...invitation,
-          inviterDid: did,
-        },
+        invitation,
       };
     }
   );
