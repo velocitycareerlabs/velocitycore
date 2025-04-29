@@ -82,7 +82,7 @@ const initCreateOrganization = (fastify) => {
       const consents = map((service) => {
         return {
           userId: user.sub,
-          organization,
+          organizationId: organization._id,
           type: getServiceConsentType(service),
           version: 1,
           serviceId: service.id,

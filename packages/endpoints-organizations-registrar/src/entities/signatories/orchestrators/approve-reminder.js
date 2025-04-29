@@ -13,7 +13,7 @@ const approveReminder = async (organization, req) => {
   );
   await repos.registrarConsents.registerConsent({
     userId: organization.profile.signatoryEmail,
-    organization,
+    organizationId: organization._id,
     type: ConsentTypes.Signatory,
     version: config.signatoryConsentVersion,
   });

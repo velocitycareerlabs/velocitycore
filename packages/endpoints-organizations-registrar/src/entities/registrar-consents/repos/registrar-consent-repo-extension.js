@@ -15,18 +15,17 @@
  */
 
 const { castArray, map } = require('lodash/fp');
-const { ObjectId } = require('mongodb');
 const { nanoid } = require('nanoid');
 
 const registrarConsentRepoExtension = (parent) => ({
   registerConsent: (consentParams, ...args) => {
     let consents = castArray(consentParams);
     consents = map((consent) => {
-      const { userId, organization, type, version, ...rest } = consent;
+      const { userId, organizationId, type, version, ...rest } = consent;
       return {
         consentId: nanoid(),
         userId,
-        organizationId: organization ? organization._id : undefined,
+        organizationId,
         version,
         type,
         createdAt: new Date(),

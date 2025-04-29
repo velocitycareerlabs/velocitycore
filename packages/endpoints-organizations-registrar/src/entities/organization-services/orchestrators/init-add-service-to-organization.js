@@ -59,7 +59,7 @@ const initAddServiceToOrganization = (fastify) => {
     // add consent
     await repos.registrarConsents.registerConsent({
       userId: user.sub,
-      organization,
+      organizationId: organization._id,
       type: getServiceConsentType(createdService),
       version: config.serviceConsentVersion,
       serviceId: createdService.id,
