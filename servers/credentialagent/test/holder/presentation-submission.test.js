@@ -42,6 +42,9 @@ const { getDidUriFromJwk } = require('@velocitycareerlabs/did-doc');
 const { ISO_DATETIME_FORMAT } = require('@velocitycareerlabs/test-regexes');
 const { generatePresentation } = require('./helpers/generate-presentation');
 const {
+  jwtAccessTokenExpectation,
+} = require('./helpers/jwt-access-token-expectation');
+const {
   initTenantFactory,
   initDisclosureFactory,
   initDisclosureExchangeFactory,
@@ -1048,17 +1051,12 @@ describe('presentation submission', () => {
 
       expect(
         await jwtVerify(response.json.token, tenantKeyPair.publicKey)
-      ).toEqual({
-        header: { alg: 'ES256K', typ: 'JWT', kid: '#exchanges-1' },
-        payload: {
-          aud: tenant.did,
-          iss: tenant.did,
-          exp: expect.any(Number),
-          iat: expect.any(Number),
-          nbf: expect.any(Number),
+      ).toEqual(
+        jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-        },
-      });
+          sub: expect.stringMatching(/vnf-anonymous-/),
+        })
+      );
       const dbExchange = await mongoDb()
         .collection('exchanges')
         .findOne({ _id: new ObjectId(disclosureExchange._id) });
@@ -1205,17 +1203,12 @@ describe('presentation submission', () => {
 
       expect(
         await jwtVerify(response.json.token, tenantKeyPair.publicKey)
-      ).toEqual({
-        header: { alg: 'ES256K', typ: 'JWT', kid: '#exchanges-1' },
-        payload: {
-          aud: tenant.did,
-          iss: tenant.did,
-          exp: expect.any(Number),
-          iat: expect.any(Number),
-          nbf: expect.any(Number),
+      ).toEqual(
+        jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-        },
-      });
+          sub: expect.stringMatching(/vnf-anonymous-/),
+        })
+      );
       const dbDisclosureAfterRequest = await mongoDb()
         .collection('disclosures')
         .findOne({
@@ -1293,17 +1286,12 @@ describe('presentation submission', () => {
 
       expect(
         await jwtVerify(response.json.token, tenantKeyPair.publicKey)
-      ).toEqual({
-        header: { alg: 'ES256K', typ: 'JWT', kid: '#exchanges-1' },
-        payload: {
-          aud: tenant.did,
-          iss: tenant.did,
-          exp: expect.any(Number),
-          iat: expect.any(Number),
-          nbf: expect.any(Number),
+      ).toEqual(
+        jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-        },
-      });
+          sub: expect.stringMatching(/vnf-anonymous-/),
+        })
+      );
 
       const dbDisclosureAfterRequest = await mongoDb()
         .collection('disclosures')
@@ -1360,17 +1348,12 @@ describe('presentation submission', () => {
 
       expect(
         await jwtVerify(response.json.token, tenantKeyPair.publicKey)
-      ).toEqual({
-        header: { alg: 'ES256K', typ: 'JWT', kid: '#exchanges-1' },
-        payload: {
-          aud: tenant.did,
-          iss: tenant.did,
-          exp: expect.any(Number),
-          iat: expect.any(Number),
-          nbf: expect.any(Number),
+      ).toEqual(
+        jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-        },
-      });
+          sub: expect.stringMatching(/vnf-anonymous-/),
+        })
+      );
 
       const dbExchange = await mongoDb()
         .collection('exchanges')
@@ -1832,17 +1815,12 @@ describe('presentation submission', () => {
 
       expect(
         await jwtVerify(response.json.token, tenantKeyPair.publicKey)
-      ).toEqual({
-        header: { alg: 'ES256K', typ: 'JWT', kid: '#exchanges-1' },
-        payload: {
-          aud: tenant.did,
-          iss: tenant.did,
-          exp: expect.any(Number),
-          iat: expect.any(Number),
-          nbf: expect.any(Number),
+      ).toEqual(
+        jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-        },
-      });
+          sub: expect.stringMatching(/vnf-anonymous-/),
+        })
+      );
 
       const dbExchange = await mongoDb()
         .collection('exchanges')

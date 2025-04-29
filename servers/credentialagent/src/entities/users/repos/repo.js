@@ -24,6 +24,9 @@ const {
 const {
   findOrInsertVendorUserRepoExtension,
 } = require('./find-or-insert-vendor-user-repo-extension');
+const {
+  addAnonymousUserRepoExtension,
+} = require('./add-anonymous-user-repo-extension');
 
 module.exports = (app, options, next = () => {}) => {
   next();
@@ -41,6 +44,7 @@ module.exports = (app, options, next = () => {}) => {
         autoboxIdsExtension,
         findOrInsertVendorUserRepoExtension,
         multitenantExtension(),
+        addAnonymousUserRepoExtension,
       ],
     },
     app
