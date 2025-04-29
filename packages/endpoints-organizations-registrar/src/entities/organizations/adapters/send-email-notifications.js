@@ -16,8 +16,6 @@
  */
 
 const { isEmpty, omitBy, isNil, map } = require('lodash/fp');
-const { compile } = require('handlebars');
-const { readFileSync } = require('fs');
 const { initAuth0Provisioner } = require('../../oauth');
 const { parseProfileToCsv, ServiceTypeLabels } = require('../domains');
 const {
@@ -163,11 +161,13 @@ const initSendEmailNotifications = (initCtx) => {
     const inviterOrganization = invitation?.inviterDid
       ? await context.repos.organizations.findOneByDid(invitation.inviterDid)
       : null;
-    const emailTemplateSignatoryApproval = compile(
-      readFileSync(`${__dirname}/email-template-signatory-approval.hbs`, {
-        encoding: 'utf8',
-      })
-    );
+    const html = await initCtx.view('email-template-signatory-approval', {
+      organization,
+      inviterOrganization,
+      authCode,
+      ServiceTypeLabels,
+      config,
+    });
     await initCtx.sendEmail({
       subject: `${isReminder ? 'Reminder: ' : ''}${
         inviterOrganization?.profile?.name ??
@@ -175,13 +175,7 @@ const initSendEmailNotifications = (initCtx) => {
       } is requesting your approval to register ${
         organization.profile.name
       } on the Velocity Network`,
-      message: emailTemplateSignatoryApproval({
-        organization,
-        inviterOrganization,
-        authCode,
-        ServiceTypeLabels,
-        config,
-      }),
+      message: html,
       sender: config.registrarSupportEmail,
       recipients: [organization.profile.signatoryEmail],
       bccs: [config.registrarSupportEmail],
