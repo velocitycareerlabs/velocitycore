@@ -164,6 +164,10 @@ describe('signatoriesController', () => {
             state: SignatoryEventStatus.APPROVED,
             timestamp: expect.any(Date),
           },
+          {
+            state: SignatoryEventStatus.COMPLETED,
+            timestamp: expect.any(Date),
+          },
         ],
         authCodes: [
           {
@@ -359,6 +363,10 @@ describe('signatoriesController', () => {
           },
           {
             state: SignatoryEventStatus.REJECTED,
+            timestamp: expect.any(Date),
+          },
+          {
+            state: SignatoryEventStatus.COMPLETED,
             timestamp: expect.any(Date),
           },
         ],
@@ -693,44 +701,17 @@ describe('signatoriesController', () => {
       expect(mockSendEmail).toHaveBeenCalledTimes(1);
     });
 
-    it('should not send emails if there are signatory reminders with approved state', async () => {
+    it('should not send emails if there are signatory reminders with completed state', async () => {
       const organization = await persistOrganization();
       await persistSignatoryStatus({
         organization,
         events: [
           {
-            state: SignatoryEventStatus.LINK_SENT,
-            timestamp: subDays(7)(new Date()),
-          },
-          {
-            state: SignatoryEventStatus.APPROVED,
+            state: SignatoryEventStatus.COMPLETED,
             timestamp: new Date(),
           },
         ],
         approvedAt: new Date(),
-      });
-      await sendReminders(
-        sendEmailToSignatoryForOrganizationApproval,
-        testContext
-      );
-      expect(mockSendEmail).toHaveBeenCalledTimes(0);
-    });
-
-    it('should not send emails if there are signatory reminders with rejected state', async () => {
-      const organization = await persistOrganization();
-      await persistSignatoryStatus({
-        organization,
-        events: [
-          {
-            state: SignatoryEventStatus.LINK_SENT,
-            timestamp: subDays(7)(new Date()),
-          },
-          {
-            state: SignatoryEventStatus.REJECTED,
-            timestamp: new Date(),
-          },
-        ],
-        rejectedAt: new Date(),
       });
       await sendReminders(
         sendEmailToSignatoryForOrganizationApproval,
