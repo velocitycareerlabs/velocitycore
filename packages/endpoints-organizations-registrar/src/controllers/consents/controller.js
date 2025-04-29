@@ -16,6 +16,7 @@
  */
 
 const { values } = require('lodash/fp');
+const { optional } = require('@velocitycareerlabs/common-functions');
 const { ConsentTypes } = require('../../entities');
 const { consentResponseSchema } = require('./schemas/consent-response.schema');
 
@@ -56,12 +57,13 @@ const consentsController = async (fastify) => {
           user,
         } = req;
 
-        const organization =
-          did != null
-            ? await repos.organizations.findOneByDid(did, {
-                _id: 1,
-              })
-            : null;
+        const organization = await optional(
+          () =>
+            repos.organizations.findOneByDid(did, {
+              _id: 1,
+            }),
+          [did]
+        );
 
         const { consentId, ...consent } =
           await repos.registrarConsents.registerConsent({
