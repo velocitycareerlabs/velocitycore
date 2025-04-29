@@ -14,13 +14,29 @@
  * limitations under the License.
  */
 
-const { castArray, map } = require('lodash/fp');
+const { map } = require('lodash/fp');
 const { nanoid } = require('nanoid');
 
 const registrarConsentRepoExtension = (parent) => ({
-  registerConsent: (consentParams, ...args) => {
-    let consents = castArray(consentParams);
-    consents = map((consent) => {
+  registerConsent: (
+    { userId, organizationId, type, version, ...rest },
+    ...args
+  ) => {
+    return parent.insert(
+      {
+        consentId: nanoid(),
+        userId,
+        organizationId,
+        version,
+        type,
+        createdAt: new Date(),
+        ...rest,
+      },
+      ...args
+    );
+  },
+  registerConsents: (consents, ...args) => {
+    const consentsForInsert = map((consent) => {
       const { userId, organizationId, type, version, ...rest } = consent;
       return {
         consentId: nanoid(),
@@ -32,10 +48,7 @@ const registrarConsentRepoExtension = (parent) => ({
         ...rest,
       };
     }, consents);
-    if (consents.length === 1) {
-      return parent.insert(consents[0], ...args);
-    }
-    return parent.insertMany(consents, ...args);
+    return parent.insertMany(consentsForInsert, ...args);
   },
   extensions: parent.extensions.concat(['registrarConsentRepoExtension']),
 });

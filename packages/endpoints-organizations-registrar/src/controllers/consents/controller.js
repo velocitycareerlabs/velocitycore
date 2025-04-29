@@ -68,7 +68,7 @@ const consentsController = async (fastify) => {
         const { consentId, ...consent } =
           await repos.registrarConsents.registerConsent({
             userId: user.sub,
-            organizationId: organization._id,
+            organizationId: organization?._id,
             type,
             version,
           });

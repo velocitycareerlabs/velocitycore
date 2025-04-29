@@ -88,7 +88,7 @@ const initCreateOrganization = (fastify) => {
           serviceId: service.id,
         };
       }, organization.services);
-      await repos.registrarConsents.registerConsent(consents);
+      await repos.registrarConsents.registerConsents(consents);
     }
     const authClients = await provisionAuth0Clients(
       organization,
