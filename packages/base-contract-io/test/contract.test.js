@@ -174,12 +174,11 @@ describe('Contract Client Test Suite', () => {
         context
       );
 
-      const { executeContractTx, contractClient: client } = contractClient;
+      const { contractClient: client } = contractClient;
       fakeAddress = toEthereumAddress(generateKeyPair().publicKey);
       testTxFunc = async ({ address, scope }) => {
-        await executeContractTx((nonce) =>
-          client.addAddressScope(address, scope, { nonce })
-        );
+        const tx = await client.addAddressScope(address, scope);
+        return tx.wait();
       };
       await wait(2000);
     });
@@ -228,49 +227,6 @@ describe('Contract Client Test Suite', () => {
       await expect(
         Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(3)))
       ).resolves.toEqual([undefined, undefined, undefined]);
-    });
-
-    it('should transparently reinitialize if the nonce is reused', async () => {
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'foo',
-      });
-      const { nonce: initialNonce } = await nonceRepo.findById(deployerAddress);
-      nonceRepo.update(deployerAddress, { nonce: initialNonce - 1 });
-
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'bar',
-      });
-
-      const { nonce: finalNonce } = await nonceRepo.findById(deployerAddress);
-      expect(finalNonce).toEqual(initialNonce + 1);
-    });
-
-    it('should rollback the nonce if the transaction fails', async () => {
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'foo',
-      });
-      const { nonce: nonce1 } = await nonceRepo.findById(deployerAddress);
-
-      await expect(() =>
-        testTxFunc({
-          scope: 'bar',
-        })
-      ).rejects.toThrowError(/unsupported addressable value/);
-
-      const { nonce: nonce2 } = await nonceRepo.findById(deployerAddress);
-      expect(nonce2).toEqual(nonce1);
-
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'bar',
-      });
-
-      // should increment
-      const { nonce: nonce3 } = await nonceRepo.findById(deployerAddress);
-      expect(nonce3).toEqual(nonce1 + 1);
     });
 
     it('should rethrow other errors', async () => {

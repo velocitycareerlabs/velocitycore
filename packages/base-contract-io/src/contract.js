@@ -16,30 +16,8 @@
 
 const { rangeStep } = require('lodash/fp');
 const ethers = require('ethers');
-const { initNonceManagement } = require('@velocitycareerlabs/nonce-management');
 
 const QueryMaxBlocks = 500;
-
-const BAD_NONCE_VALUE_ERROR_CODES = [
-  'NONCE_EXPIRED',
-  'REPLACEMENT_UNDERPRICED',
-  'TRANSACTION_REPLACED',
-];
-const BAD_TRANSACTION_ERROR_CODES = [
-  'UNPREDICTABLE_GAS_LIMIT',
-  'INSUFFICIENT_FUNDS',
-  'CALL_EXCEPTION',
-  'INVALID_ARGUMENT',
-  'MISSING_ARGUMENT',
-  'UNEXPECTED_ARGUMENT',
-  'MISSING_NEW',
-  'NUMERIC_FAULT',
-  'BUFFER_OVERRUN',
-  'SERVER_ERROR',
-  'NETWORK_ERROR',
-  'UNSUPPORTED_OPERATION',
-  'NOT_IMPLEMENTED',
-];
 
 const ensureHexPrefix = (privateKey) => {
   const prefix = privateKey?.startsWith('0x') ? '' : '0x';
@@ -113,35 +91,10 @@ const initContractClient = async (
   );
 
   const pullEvents = initPullLogEntries(contractClient);
-
-  const { nextAddressNonce, resetAddressNonce, rollbackAddressNonce } =
-    initNonceManagement(wallet?.address, rpcProvider, context);
-
-  const doExecuteContractTx = async (contractFunction, nonce) => {
-    const transaction = await contractFunction(nonce);
-    return transaction.wait();
-  };
-
-  const executeContractTx = async (contractFunction) => {
-    const nonce = await nextAddressNonce();
-    try {
-      return await doExecuteContractTx(contractFunction, nonce);
-    } catch (e) {
-      context.log.warn({ errorCode: e.code }, 'executeContractTx');
-      if (BAD_NONCE_VALUE_ERROR_CODES.includes(e.code)) {
-        const resetNonce = await resetAddressNonce(nonce);
-        return doExecuteContractTx(contractFunction, resetNonce);
-      }
-      if (BAD_TRANSACTION_ERROR_CODES.includes(e.code)) {
-        await rollbackAddressNonce(nonce);
-      }
-      throw e;
-    }
-  };
-
+  
   context.log.info('initContractClient done');
 
-  return { wallet, contractClient, executeContractTx, pullEvents };
+  return { wallet, contractClient, pullEvents };
 };
 
 module.exports = {

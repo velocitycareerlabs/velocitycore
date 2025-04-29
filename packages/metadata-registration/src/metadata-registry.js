@@ -42,7 +42,7 @@ const initMetadataRegistry = async (
   const { log } = context;
   log.info({ contractAddress }, 'initMetadataRegistry');
 
-  const { contractClient, executeContractTx, pullEvents } =
+  const { contractClient, pullEvents } =
     await initContractClient(
       {
         privateKey,
@@ -438,11 +438,9 @@ const initMetadataRegistry = async (
   };
 
   const setPermissionsAddress = async (permissionsContractAddress) => {
-    return executeContractTx((nonce) =>
-      contractClient.setPermissionsAddress(permissionsContractAddress, {
-        nonce,
-      })
-    );
+    const tx = await contractClient.setPermissionsAddress(permissionsContractAddress);
+
+    return tx.wait();
   };
 
   const toDID = ({ accountId, listId, index }) =>

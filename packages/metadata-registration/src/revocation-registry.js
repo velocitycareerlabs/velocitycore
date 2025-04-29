@@ -30,16 +30,15 @@ const initRevocationRegistry = async (
   const { log } = context;
   log.info({ privateKey, contractAddress }, 'initRevocationRegistry');
 
-  const { contractClient, executeContractTx, pullEvents } =
-    await initContractClient(
-      {
-        privateKey,
-        contractAddress,
-        rpcProvider,
-        contractAbi,
-      },
-      context
-    );
+  const { contractClient, pullEvents } = await initContractClient(
+    {
+      privateKey,
+      contractAddress,
+      rpcProvider,
+      contractAbi,
+    },
+    context
+  );
 
   const addWalletToRegistrySigned = async ({ caoDid }) => {
     log.info({ caoDid }, 'addWalletToRegistrySigned');
@@ -156,11 +155,9 @@ const initRevocationRegistry = async (
   };
 
   const setPermissionsAddress = async (permissionsContractAddress) => {
-    return executeContractTx((nonce) =>
-      contractClient.setPermissionsAddress(permissionsContractAddress, {
-        nonce,
-      })
-    );
+    const tx = contractClient.setPermissionsAddress(permissionsContractAddress);
+    
+    return tx.wait();
   };
 
   const pullWalletAddedEvents = pullEvents('WalletAdded');
