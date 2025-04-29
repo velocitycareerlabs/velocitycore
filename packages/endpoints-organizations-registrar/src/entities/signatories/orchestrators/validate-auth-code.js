@@ -23,14 +23,7 @@ const validateAuthCode = async (organization, authCode, context) => {
     });
   }
 
-  if (
-    find(
-      (evt) =>
-        evt.state === SignatoryEventStatus.APPROVED ||
-        evt.state === SignatoryEventStatus.REJECTED,
-      signatoryStatus.events
-    )
-  ) {
+  if (find({ state: SignatoryEventStatus.COMPLETED }, signatoryStatus.events)) {
     throw newError(400, 'Signatory has already signed', {
       errorCode: 'signatory_status_already_complete',
     });

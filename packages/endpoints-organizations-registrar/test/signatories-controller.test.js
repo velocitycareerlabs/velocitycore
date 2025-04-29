@@ -259,6 +259,10 @@ describe('signatoriesController', () => {
             state: SignatoryEventStatus.APPROVED,
             timestamp: new Date(),
           },
+          {
+            state: SignatoryEventStatus.COMPLETED,
+            timestamp: new Date(),
+          },
         ],
       });
       const response = await fastify.injectJson({
@@ -436,6 +440,10 @@ describe('signatoriesController', () => {
         events: [
           {
             state: SignatoryEventStatus.REJECTED,
+            timestamp: new Date(),
+          },
+          {
+            state: SignatoryEventStatus.COMPLETED,
             timestamp: new Date(),
           },
         ],
