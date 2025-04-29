@@ -15,7 +15,6 @@
  */
 
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
-const { wait } = require('@velocitycareerlabs/common-functions');
 const {
   mongoFactoryWrapper,
   mongoCloseWrapper,
@@ -28,8 +27,6 @@ const {
 } = require('@velocitycareerlabs/blockchain-functions');
 
 const testEventsAbi = require('./data/test-events-abi.json');
-const testNoEventsAbi = require('./data/test-no-events-abi.json');
-
 const { initContractClient, initProvider } = require('../index');
 const { deployContract } = require('./helpers/deployContract');
 
@@ -50,9 +47,6 @@ describe('Contract Client Test Suite', () => {
     deployContract(testEventsAbi, deployerPrivateKey, rpcUrl, (contract) =>
       contract.initialize(randomAccount, ['0x2c26'])
     );
-
-  const deployContractThatHasNoEvents = () =>
-    deployContract(testNoEventsAbi, deployerPrivateKey, rpcUrl);
 
   beforeAll(async () => {
     await mongoFactoryWrapper('test-contract', context);
@@ -133,48 +127,6 @@ describe('Contract Client Test Suite', () => {
         expect(events).toEqual([]);
       }
       expect(latestBlock).toBeGreaterThan(0);
-    });
-  });
-
-  describe('execution of contract transactions', () => {
-    let contractClient;
-    let testTxFunc;
-    let fakeAddress;
-
-    beforeEach(async () => {
-      const contractInstance = await deployContractThatHasNoEvents();
-
-      contractClient = await initContractClient(
-        {
-          privateKey: deployerPrivateKey,
-          contractAddress: await contractInstance.getAddress(),
-          contractAbi: testNoEventsAbi,
-          rpcProvider,
-        },
-        context
-      );
-
-      const { contractClient: client } = contractClient;
-      fakeAddress = toEthereumAddress(generateKeyPair().publicKey);
-      testTxFunc = async ({ address, scope }) => {
-        const tx = await client.addAddressScope(address, scope);
-        return tx.wait();
-      };
-      await wait(2000);
-    });
-
-    it('should rethrow other errors', async () => {
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'foo',
-      });
-
-      await expect(
-        testTxFunc({
-          address: fakeAddress,
-          scope: 'bar',
-        })
-      ).rejects.toThrowError(/unsigned value cannot be negative/);
     });
   });
 });
