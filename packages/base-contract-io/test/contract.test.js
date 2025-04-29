@@ -40,8 +40,7 @@ const context = {
 
 describe('Contract Client Test Suite', () => {
   jest.setTimeout(15000);
-  const { privateKey: deployerPrivateKey, publicKey: deployerPublicKey } =
-    generateKeyPair();
+  const { privateKey: deployerPrivateKey } = generateKeyPair();
   const randomAccount = toEthereumAddress(generateKeyPair().publicKey);
   const rpcUrl = 'http://localhost:8545';
   const authenticate = () => 'TOKEN';
@@ -141,7 +140,7 @@ describe('Contract Client Test Suite', () => {
     let contractClient;
     let testTxFunc;
     let fakeAddress;
-    
+
     beforeEach(async () => {
       const contractInstance = await deployContractThatHasNoEvents();
 
