@@ -31,14 +31,14 @@ const generatePrimaryAndAddOperatorToPrimary = async (
     config: { permissionsContractAddress, rpcUrl },
   } = context;
   const rpcProvider = initProvider(rpcUrl, () => 'TOKEN');
-  
+
   const permissionRootContract = await initPermissions(
     {
       privateKey: rootPrivateKey,
       contractAddress: permissionsContractAddress,
       rpcProvider,
     },
-    { ...context, repos: { } }
+    { ...context, repos: {} }
   );
   const primaryKeyPair = generateKeyPair();
   const primaryPublicAddress = toEthereumAddress(primaryKeyPair.publicKey);
@@ -53,7 +53,7 @@ const generatePrimaryAndAddOperatorToPrimary = async (
       contractAddress: permissionsContractAddress,
       rpcProvider,
     },
-    { ...context, repos: { } }
+    { ...context, repos: {} }
   );
   await permissionContract.addOperatorKey({
     primary: primaryPublicAddress,

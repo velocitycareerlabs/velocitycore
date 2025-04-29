@@ -39,7 +39,7 @@ describe('Contract With Transacting Client Test Suite', () => {
   const rpcUrl = 'http://localhost:8545';
   const authenticate = () => 'TOKEN';
   const rpcProvider = initProvider(rpcUrl, authenticate);
-  
+
   const deployContractWrapper = () =>
     deployContract(testNoEventsAbi, deployerPrivateKey, rpcUrl);
 

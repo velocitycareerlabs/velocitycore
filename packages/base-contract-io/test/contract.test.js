@@ -15,7 +15,7 @@
  */
 
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
-const { mapWithIndex, wait } = require('@velocitycareerlabs/common-functions');
+const { wait } = require('@velocitycareerlabs/common-functions');
 const {
   mongoFactoryWrapper,
   mongoCloseWrapper,
@@ -38,8 +38,6 @@ const context = {
   config,
 };
 
-const arrayOfSize = (size) => new Array(size).fill(1);
-
 describe('Contract Client Test Suite', () => {
   jest.setTimeout(15000);
   const { privateKey: deployerPrivateKey, publicKey: deployerPublicKey } =
@@ -48,7 +46,7 @@ describe('Contract Client Test Suite', () => {
   const rpcUrl = 'http://localhost:8545';
   const authenticate = () => 'TOKEN';
   const rpcProvider = initProvider(rpcUrl, authenticate);
-  
+
   const deployContractThatHasEvents = () =>
     deployContract(testEventsAbi, deployerPrivateKey, rpcUrl, (contract) =>
       contract.initialize(randomAccount, ['0x2c26'])
@@ -143,18 +141,7 @@ describe('Contract Client Test Suite', () => {
     let contractClient;
     let testTxFunc;
     let fakeAddress;
-    let deployerAddress;
-
-    const basicTest = (i) =>
-      testTxFunc({
-        address: fakeAddress,
-        scope: `foo${i}`,
-      });
-
-    beforeAll(() => {
-      deployerAddress = toEthereumAddress(deployerPublicKey);
-    });
-
+    
     beforeEach(async () => {
       const contractInstance = await deployContractThatHasNoEvents();
 
@@ -182,7 +169,7 @@ describe('Contract Client Test Suite', () => {
         address: fakeAddress,
         scope: 'foo',
       });
-      
+
       await expect(
         testTxFunc({
           address: fakeAddress,
