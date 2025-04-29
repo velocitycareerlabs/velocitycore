@@ -29,7 +29,6 @@ const registrarConsentRepoExtension = (parent) => ({
         organizationId,
         version,
         type,
-        createdAt: new Date(),
         ...rest,
       },
       ...args
