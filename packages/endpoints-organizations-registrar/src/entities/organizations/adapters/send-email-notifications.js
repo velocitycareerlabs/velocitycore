@@ -16,6 +16,7 @@
  */
 
 const { isEmpty, omitBy, isNil, map } = require('lodash/fp');
+const { optional } = require('@velocitycareerlabs/common-functions');
 const { initAuth0Provisioner } = require('../../oauth');
 const { parseProfileToCsv, ServiceTypeLabels } = require('../domains');
 const {
@@ -155,9 +156,10 @@ const initSendEmailNotifications = (initCtx) => {
     { organization, authCode, isReminder = false },
     context
   ) => {
-    const invitation = organization.invitationId
-      ? await context.repos.invitations.findById(organization.invitationId)
-      : null;
+    const invitation = await optional(
+      () => context.repos.invitations.findById(organization.invitationId),
+      [organization.invitationId]
+    );
     const inviterOrganization = invitation?.inviterDid
       ? await context.repos.organizations.findOneByDid(invitation.inviterDid)
       : null;
