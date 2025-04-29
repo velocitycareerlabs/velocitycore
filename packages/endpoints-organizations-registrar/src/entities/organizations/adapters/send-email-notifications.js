@@ -163,7 +163,7 @@ const initSendEmailNotifications = (initCtx) => {
     const inviterOrganization = invitation?.inviterDid
       ? await context.repos.organizations.findOneByDid(invitation.inviterDid)
       : null;
-    const html = await initCtx.view('email-template-signatory-approval', {
+    const html = await initCtx.view('signatory-approval-email-body', {
       organization,
       inviterOrganization,
       authCode,
