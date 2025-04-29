@@ -1,5 +1,5 @@
 import { expect } from '@jest/globals';
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import CredentialTypeSchemasUseCaseImpl from '../../src/impl/data/usecases/CredentialTypeSchemasUseCaseImpl';
 import CredentialTypeSchemaRepositoryImpl from '../../src/impl/data/repositories/CredentialTypeSchemaRepositoryImpl';
 import { CredentialTypeSchemaMocks } from '../infrastructure/resources/valid/CredentialTypeSchemaMocks';

@@ -1,5 +1,5 @@
 import { expect } from '@jest/globals';
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import ExchangeProgressRepositoryImpl from '../../src/impl/data/repositories/ExchangeProgressRepositoryImpl';
 import ExchangeProgressUseCaseImpl from '../../src/impl/data/usecases/ExchangeProgressUseCaseImpl';
 import { ExchangeProgressMocks } from '../infrastructure/resources/valid/ExchangeProgressMocks';

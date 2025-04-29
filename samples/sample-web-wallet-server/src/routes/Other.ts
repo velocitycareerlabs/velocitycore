@@ -18,7 +18,7 @@ export default async function otherRoutes(fastify) {
         )
       );
     } catch (error: any) {
-      reply.status(error.statusCode).send(error);
+      reply.status(error.statusCode ?? 500).send(error);
     }
   });
   fastify.post('/getVerifiedProfile', async (req, reply) => {
@@ -29,7 +29,7 @@ export default async function otherRoutes(fastify) {
         )
       );
     } catch (error: any) {
-      reply.status(error.statusCode).send(error);
+      reply.status(error.statusCode ?? 500).send(error);
     }
   });
 }
