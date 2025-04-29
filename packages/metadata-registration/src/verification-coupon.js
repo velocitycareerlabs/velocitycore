@@ -43,7 +43,7 @@ const initVerificationCoupon = async (
   const mint = async ({ toAddress, expirationTime, quantity, ownerDid }) => {
     log.info({ toAddress, expirationTime, quantity, ownerDid }, 'mint');
     const { traceId } = context;
-    const tx = contractClient.mint(
+    const tx = await contractClient.mint(
       toAddress,
       Math.floor(Date.parse(expirationTime) / 1000),
       quantity,
