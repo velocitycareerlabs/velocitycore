@@ -28,7 +28,6 @@ const {
 } = require('@velocitycareerlabs/tests-helpers');
 const { env } = require('@spencejs/spence-config');
 const console = require('console');
-const nonceRepoPlugin = require('../../nonce-management/test/repo');
 
 const { initVerificationCoupon } = require('../index');
 const {
@@ -65,7 +64,6 @@ describe('Verification Coupon', () => {
 
   beforeAll(async () => {
     await mongoFactoryWrapper('test-verification-coupon', context);
-    context.repos = { walletNonces: nonceRepoPlugin({})(context) };
 
     permissionsContractAddress = await deployPermissionContract();
     verificationCouponAddress = await deployVerificationCouponContract(

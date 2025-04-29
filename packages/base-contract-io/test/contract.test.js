@@ -26,7 +26,6 @@ const console = require('console');
 const {
   toEthereumAddress,
 } = require('@velocitycareerlabs/blockchain-functions');
-const nonceRepoPlugin = require('../../nonce-management/test/repo');
 
 const testEventsAbi = require('./data/test-events-abi.json');
 const testNoEventsAbi = require('./data/test-no-events-abi.json');
@@ -49,8 +48,7 @@ describe('Contract Client Test Suite', () => {
   const rpcUrl = 'http://localhost:8545';
   const authenticate = () => 'TOKEN';
   const rpcProvider = initProvider(rpcUrl, authenticate);
-  let nonceRepo;
-
+  
   const deployContractThatHasEvents = () =>
     deployContract(testEventsAbi, deployerPrivateKey, rpcUrl, (contract) =>
       contract.initialize(randomAccount, ['0x2c26'])
@@ -61,8 +59,6 @@ describe('Contract Client Test Suite', () => {
 
   beforeAll(async () => {
     await mongoFactoryWrapper('test-contract', context);
-    nonceRepo = nonceRepoPlugin({})(context);
-    context.repos = { walletNonces: nonceRepo };
   });
 
   afterAll(async () => {
@@ -160,8 +156,6 @@ describe('Contract Client Test Suite', () => {
     });
 
     beforeEach(async () => {
-      await nonceRepo.delUsingFilter({ filter: {} });
-
       const contractInstance = await deployContractThatHasNoEvents();
 
       contractClient = await initContractClient(
@@ -183,59 +177,12 @@ describe('Contract Client Test Suite', () => {
       await wait(2000);
     });
 
-    // the following test indicates the limits of what is possible with the current blockchain setup
-    it('should be able to execute many transactions in parallel', async () => {
-      await basicTest(0);
-      const { nonce: initialNonce } = await nonceRepo.findById(deployerAddress);
-
-      await Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(5)));
-
-      await wait(2000);
-
-      await Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(5)));
-
-      const { nonce: finalNonce } = await nonceRepo.findById(deployerAddress);
-
-      expect(finalNonce).toEqual(initialNonce + 10);
-    });
-
-    // the following test indicates the limits of what is possible with the current blockchain setup
-    it.skip('should be recover if too many transactions are sent', async () => {
-      await basicTest(0);
-      const { nonce: nonce1 } = await nonceRepo.findById(deployerAddress);
-
-      await wait(2000);
-
-      await expect(() =>
-        Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(11)))
-      ).rejects.toThrowError('Transaction nonce is too distant');
-
-      await wait(2000);
-      const { nonce: nonce2 } = await nonceRepo.findById(deployerAddress);
-      expect(nonce2).toBeLessThan(nonce1 + 10);
-      expect(nonce2).toBeGreaterThanOrEqual(nonce1 + 5);
-
-      await Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(1)));
-
-      const { nonce: nonce3 } = await nonceRepo.findById(deployerAddress);
-
-      expect(nonce3).toEqual(nonce2 + 1);
-    });
-
-    // the following test indicates the limits of what is possible with the current blockchain setup
-    it.skip('should be able to recover from too many initializations at once', async () => {
-      await expect(
-        Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(3)))
-      ).resolves.toEqual([undefined, undefined, undefined]);
-    });
-
     it('should rethrow other errors', async () => {
       await testTxFunc({
         address: fakeAddress,
         scope: 'foo',
       });
-      nonceRepo.update(deployerAddress, { nonce: -1 });
-
+      
       await expect(
         testTxFunc({
           address: fakeAddress,
