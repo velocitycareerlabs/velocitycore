@@ -27,6 +27,7 @@ const generatePresentation = async ({
         common.readFile(`${credentialSource}`, 'JWT not found'),
       credentialSources
     );
+
     const presentationRequest = JSON.parse(
       common.readFile(
         `${presentationRequestFilename}`,
