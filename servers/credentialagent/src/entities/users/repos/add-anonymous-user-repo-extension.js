@@ -16,7 +16,7 @@
 const { nanoid } = require('nanoid');
 
 const addAnonymousUserRepoExtension = (parent) => ({
-  addAnonymousUser: () => parent.insert({ _id: `vnf-anonymous-${nanoid()}` }),
+  addAnonymousUser: () => parent.insert({ _id: `anonymous|${nanoid()}` }),
   extensions: parent.extensions.concat(['addAnonymousUserRepoExtension']),
 });
 

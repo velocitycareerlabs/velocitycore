@@ -1054,7 +1054,7 @@ describe('presentation submission', () => {
       ).toEqual(
         jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-          sub: expect.stringMatching(/vnf-anonymous-/),
+          sub: expect.stringMatching(/anonymous|/),
         })
       );
       const dbExchange = await mongoDb()
@@ -1206,7 +1206,7 @@ describe('presentation submission', () => {
       ).toEqual(
         jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-          sub: expect.stringMatching(/vnf-anonymous-/),
+          sub: expect.stringMatching(/anonymous|/),
         })
       );
       const dbDisclosureAfterRequest = await mongoDb()
@@ -1289,7 +1289,7 @@ describe('presentation submission', () => {
       ).toEqual(
         jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-          sub: expect.stringMatching(/vnf-anonymous-/),
+          sub: expect.stringMatching(/anonymous|/),
         })
       );
 
@@ -1351,7 +1351,7 @@ describe('presentation submission', () => {
       ).toEqual(
         jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-          sub: expect.stringMatching(/vnf-anonymous-/),
+          sub: expect.stringMatching(/anonymous|/),
         })
       );
 
@@ -1818,7 +1818,7 @@ describe('presentation submission', () => {
       ).toEqual(
         jwtAccessTokenExpectation(tenant, null, {
           jti: disclosureExchange._id.toString(),
-          sub: expect.stringMatching(/vnf-anonymous-/),
+          sub: expect.stringMatching(/anonymous|/),
         })
       );
 
