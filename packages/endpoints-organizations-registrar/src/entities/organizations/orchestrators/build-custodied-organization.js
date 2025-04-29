@@ -61,7 +61,7 @@ const buildCustodiedOrganization = async (
       normalizedProfileName: normalizeProfileName(profile.name),
       didNotCustodied: false,
       services: newServices,
-      invitationId: invitation?._id ?? undefined,
+      invitationId: invitation?._id,
     },
     newKeys,
     newKeyPairs,
