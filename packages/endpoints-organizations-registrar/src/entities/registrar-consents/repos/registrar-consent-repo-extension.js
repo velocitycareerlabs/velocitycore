@@ -26,9 +26,7 @@ const registrarConsentRepoExtension = (parent) => ({
       return {
         consentId: nanoid(),
         userId,
-        organizationId: organization
-          ? new ObjectId(organization._id)
-          : undefined,
+        organizationId: organization ? organization._id : undefined,
         version,
         type,
         createdAt: new Date(),
