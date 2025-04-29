@@ -155,7 +155,9 @@ const initRevocationRegistry = async (
   };
 
   const setPermissionsAddress = async (permissionsContractAddress) => {
-    const tx = await contractClient.setPermissionsAddress(permissionsContractAddress);
+    const tx = await contractClient.setPermissionsAddress(
+      permissionsContractAddress
+    );
 
     return tx.wait();
   };
