@@ -30,7 +30,6 @@
   },
   "devDependencies": {
     "@velocitycareerlabs/contract-permissions": "0.5.0-build",
-    "@velocitycareerlabs/nonce-management": "0.5.0-build",
     "@velocitycareerlabs/request": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
