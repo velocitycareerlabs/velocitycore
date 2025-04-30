@@ -31,7 +31,7 @@ const CustomImageInput = ({
   editMode,
   addTo,
   style,
-  labelText = "Organization's Logo",
+  labelText = 'Logo',
   isRequired = true,
   orientation = 'horizontal',
   onChange,

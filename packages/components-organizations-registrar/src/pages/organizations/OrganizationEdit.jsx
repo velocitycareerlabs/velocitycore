@@ -144,7 +144,7 @@ const OrganizationEdit = () => {
                           <TextField
                             fullWidth
                             source="profile.name"
-                            label="Organization’s Legal Name"
+                            label="Legal Name"
                             validate={required()}
                             disabled
                           />
@@ -153,7 +153,7 @@ const OrganizationEdit = () => {
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s Website"
+                          label="Website"
                           source="profile.website"
                           validate={[...validateWebsite, required()]}
                           disabled
@@ -162,7 +162,7 @@ const OrganizationEdit = () => {
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s Address"
+                          label="Address"
                           source="profile.physicalAddress.line1"
                           validate={required()}
                         />
@@ -170,7 +170,7 @@ const OrganizationEdit = () => {
                       <Grid size={{ xs: 12 }}>
                         <AutocompleteInput
                           fullWidth
-                          label="Organization’s Country"
+                          label="Country"
                           source="profile.location.countryCode"
                           validate={required()}
                           choices={countryCodes}
@@ -191,7 +191,7 @@ const OrganizationEdit = () => {
                     <Stack flexDirection="row" gap={1.75}>
                       <TextInput
                         fullWidth
-                        label="Organization’s LinkedIn Page"
+                        label="LinkedIn Page"
                         source="profile.linkedInProfile"
                         validate={[...validateWebsite, required()]}
                       />
@@ -290,7 +290,7 @@ const OrganizationEdit = () => {
                     <TextInput
                       fullWidth
                       multiline
-                      label="Short Description of the Organization"
+                      label="Short Description"
                       source="profile.description"
                       validate={required()}
                       sx={sx.description}

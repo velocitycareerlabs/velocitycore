@@ -241,7 +241,7 @@ const OrganizationCreate = ({
                         <Stack flexDirection="row" gap={1.75}>
                           <TextInput
                             fullWidth
-                            label="Organization’s Legal Name"
+                            label="Legal Name"
                             source="profile.name"
                             validate={validateName}
                           />
@@ -250,7 +250,7 @@ const OrganizationCreate = ({
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s website"
+                          label="Website"
                           source="profile.website"
                           validate={[...validateWebsite, required()]}
                         />
@@ -258,14 +258,14 @@ const OrganizationCreate = ({
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s address"
+                          label="Address"
                           source="profile.physicalAddress.line1"
                           validate={[required(), maxLength(1024)]}
                         />
                       </Grid>
                       <Grid size={{ xs: 12 }}>
                         <AutocompleteInput
-                          label="Organization’s country"
+                          label="Country"
                           source="profile.location.countryCode"
                           choices={countryCodes}
                           validate={required()}
@@ -279,7 +279,7 @@ const OrganizationCreate = ({
                   <Grid size={{ xs: 6 }}>
                     <TextInput
                       fullWidth
-                      label="Organization’s LinkedIn Page"
+                      label="LinkedIn Page"
                       source="profile.linkedInProfile"
                       validate={[...validateWebsite, required()]}
                     />
@@ -358,7 +358,7 @@ const OrganizationCreate = ({
                     <TextInput
                       fullWidth
                       multiline
-                      label="Short Description of the Organization"
+                      label="Short Description"
                       placeholder={organizationPlaceholder}
                       source="profile.description"
                       validate={required()}

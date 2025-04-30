@@ -34,18 +34,18 @@ const mockRecord = {
 };
 
 const basicLables = [
-  'Organization’s Legal Name',
-  'Organization’s Website',
-  'Organization’s Address',
-  'Organization’s Country',
-  'Organization’s LinkedIn Page',
+  'Legal Name',
+  'Website',
+  'Address',
+  'Country',
+  'LinkedIn Page',
   'LinkedIn Company Page ID',
   'Support Email',
   'Technical Contact Email',
   `D-U-N-S${String.fromCodePoint(174)} Number`,
   'LEI',
   'Local Country Registration ID',
-  'Short Description of the Organization',
+  'Short Description',
   'DID',
   'Registrar Access Token',
 ];

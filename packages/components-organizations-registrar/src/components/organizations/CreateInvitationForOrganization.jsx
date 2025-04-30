@@ -97,7 +97,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
             <>
               <TextInput
                 fullWidth
-                label="Organization’s Legal Name"
+                label="Legal Name"
                 source="name"
                 validate={orgNamevalidation}
                 pb={1}
@@ -115,27 +115,17 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                   isRequired={false}
                 />
               </Stack>
-              <TextInput
-                fullWidth
-                multiline
-                label="Short Description of the Organization"
-                source="description"
-              />
-              <TextInput
-                fullWidth
-                label="Organization’s website"
-                source="website"
-                validate={validateWebsite}
-              />
-              <TextInput fullWidth label="Organization’s address" source="physicalAddress.line1" />
+              <TextInput fullWidth multiline label="Short Description" source="description" />
+              <TextInput fullWidth label="Website" source="website" validate={validateWebsite} />
+              <TextInput fullWidth label="Address" source="physicalAddress.line1" />
               <AutocompleteInput
-                label="Organization’s country"
+                label="Country"
                 source="location.countryCode"
                 choices={countryCodes}
               />
               <TextInput
                 fullWidth
-                label="Organization’s LinkedIn Page"
+                label="LinkedIn Page"
                 source="linkedInProfile"
                 validate={validateWebsite}
               />
