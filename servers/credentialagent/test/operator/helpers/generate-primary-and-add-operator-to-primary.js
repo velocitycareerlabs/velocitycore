@@ -22,7 +22,6 @@ const {
   toEthereumAddress,
 } = require('@velocitycareerlabs/blockchain-functions');
 const { initProvider } = require('@velocitycareerlabs/base-contract-io');
-const { walletNoncesRepoPlugin } = require('../../../src/entities');
 
 const generatePrimaryAndAddOperatorToPrimary = async (
   operatorAddress,
@@ -32,10 +31,6 @@ const generatePrimaryAndAddOperatorToPrimary = async (
     config: { permissionsContractAddress, rpcUrl },
   } = context;
   const rpcProvider = initProvider(rpcUrl, () => 'TOKEN');
-  const walletNoncesRepo = walletNoncesRepoPlugin({})({
-    ...context,
-    tenant: { _id: '0' },
-  });
 
   const permissionRootContract = await initPermissions(
     {
@@ -43,7 +38,7 @@ const generatePrimaryAndAddOperatorToPrimary = async (
       contractAddress: permissionsContractAddress,
       rpcProvider,
     },
-    { ...context, repos: { walletNonces: walletNoncesRepo } }
+    { ...context, repos: {} }
   );
   const primaryKeyPair = generateKeyPair();
   const primaryPublicAddress = toEthereumAddress(primaryKeyPair.publicKey);
@@ -58,7 +53,7 @@ const generatePrimaryAndAddOperatorToPrimary = async (
       contractAddress: permissionsContractAddress,
       rpcProvider,
     },
-    { ...context, repos: { walletNonces: walletNoncesRepo } }
+    { ...context, repos: {} }
   );
   await permissionContract.addOperatorKey({
     primary: primaryPublicAddress,

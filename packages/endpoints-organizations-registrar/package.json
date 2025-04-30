@@ -41,7 +41,6 @@
     "@velocitycareerlabs/image-processing": "0.5.0-build",
     "@velocitycareerlabs/jwt": "0.5.0-build",
     "@velocitycareerlabs/db-kms": "0.5.0-build",
-    "@velocitycareerlabs/nonce-management": "0.5.0-build",
     "@velocitycareerlabs/organizations-registry": "0.5.0-build",
     "@velocitycareerlabs/rest-queries": "0.5.0-build",
     "@velocitycareerlabs/spencer-mongo-extensions": "0.5.0-build",

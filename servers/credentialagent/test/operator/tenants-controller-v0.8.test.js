@@ -97,7 +97,6 @@ describe('Tenants management Test suite', () => {
     tenantRepo = tenantRepoPlugin(fastify)();
     findKmsKey = initFindKmsKey(fastify);
     ({ orgDoc, orgKey, orgPublicKey } = await createOrgDoc());
-    await mongoDb().collection('walletNonces').deleteMany({});
 
     primaryAddress = await generatePrimaryAndAddOperatorToPrimary(
       toEthereumAddress(orgPublicKey),
@@ -946,7 +945,6 @@ describe('Tenants management Test suite', () => {
       );
       orgPublicKey = hexFromJwk(keyPair.publicKey, false);
 
-      await mongoDb().collection('walletNonces').deleteMany({});
       primaryAddress = await generatePrimaryAndAddOperatorToPrimary(
         toEthereumAddress(orgPublicKey),
         {

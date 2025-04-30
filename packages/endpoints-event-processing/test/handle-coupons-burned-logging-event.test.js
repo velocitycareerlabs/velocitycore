@@ -82,9 +82,6 @@ describe('Coupons burned event logging task test suite', () => {
     log: {
       info: mockLogInfo,
     },
-    repos: {
-      walletNonces: {},
-    },
   };
 
   beforeEach(() => {
