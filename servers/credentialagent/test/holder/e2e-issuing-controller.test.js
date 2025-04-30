@@ -32,7 +32,6 @@ const {
   rpcUrl,
 } = require('@velocitycareerlabs/metadata-registration/test/helpers/deploy-contracts');
 const { initPermissions } = require('@velocitycareerlabs/contract-permissions');
-const nonceRepoPlugin = require('@velocitycareerlabs/nonce-management/test/repo');
 const {
   toEthereumAddress,
 } = require('@velocitycareerlabs/blockchain-functions');
@@ -90,7 +89,6 @@ describe('e2e issuing tests', () => {
 
     const contractContext = {
       log: console,
-      repos: { walletNonces: nonceRepoPlugin({})({}) },
       config: {
         rpcUrl,
       },

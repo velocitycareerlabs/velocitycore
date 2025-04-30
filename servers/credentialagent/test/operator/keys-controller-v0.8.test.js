@@ -89,7 +89,6 @@ describe('Tenant keys test suite', () => {
       config: fastify.config,
       log: fastify.log,
     };
-    await mongoDb().collection('walletNonces').deleteMany({});
     primaryAddress = await generatePrimaryAndAddOperatorToPrimary(
       toEthereumAddress(orgPublicKey),
       baseContext
@@ -720,8 +719,6 @@ describe('Tenant keys test suite', () => {
       });
       nockRegistrarGetOrganizationDidDoc('did:web:123', orgDoc);
       orgPublicKey = hexFromJwk(keyPair.publicKey, false);
-
-      await mongoDb().collection('walletNonces').deleteMany({});
 
       const baseContext = {
         config: fastify.config,
