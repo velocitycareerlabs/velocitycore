@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React from 'react';
 // react admin
 import { Admin } from 'react-admin';
 
@@ -20,24 +21,20 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { QueryClient } from '@tanstack/react-query';
 
-// pages
-
-import React from 'react';
-
 // components
+import MainLayout from './layouts/MainLayout.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import Loading from './components/Loading.jsx';
 import Footer from './components/Footer.jsx';
-import MainLayout from './layouts/MainLayout.jsx';
 import ConsentProvider from './components/ConsentProvider.jsx';
 import initReactAdminAuthProvider from './utils/reactAdminAuthProvider';
 import { useAuth } from './utils/auth/AuthContext';
 import useSignupRedirect from './utils/auth/useSignupRedirect';
-import theme from './theme/theme';
 import remoteDataProvider from './utils/remoteDataProvider';
 import { useConfig } from './utils/ConfigContext';
+import theme from './theme/theme';
 
-export const PrivateAppRoot = ({ children }) => {
+export const PrivateAppRoot = ({ extendedRemoteDataProvider, children }) => {
   const auth = useAuth();
   const config = useConfig();
   const queryClient = new QueryClient({
@@ -58,7 +55,7 @@ export const PrivateAppRoot = ({ children }) => {
       <Admin
         theme={theme}
         authProvider={initReactAdminAuthProvider(auth)}
-        dataProvider={remoteDataProvider(config, auth)}
+        dataProvider={remoteDataProvider(config, auth, extendedRemoteDataProvider)}
         queryClient={queryClient}
         dashboard={Dashboard}
         requireAuth
@@ -76,4 +73,5 @@ export const PrivateAppRoot = ({ children }) => {
 // eslint-disable-next-line better-mutation/no-mutation
 PrivateAppRoot.propTypes = {
   children: PropTypes.node.isRequired,
+  extendedRemoteDataProvider: PropTypes.func,
 };
