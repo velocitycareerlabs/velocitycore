@@ -15,16 +15,16 @@
  */
 
 import React from 'react';
+import { useParams, useNavigate } from 'react-router';
+import { useGetOne, useRedirect } from 'react-admin';
 import { Box, Button, Stack, Typography, Grid, Paper, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useGetOne, useRedirect } from 'react-admin';
-import Loading from '../../components/Loading.jsx';
-import useSelectedOrganization from '../../state/selectedOrganizationState';
-import DataItem from '../../components/common/DataItem.jsx';
-import { ADMINISTRATOR_DETAILS_HINT, SIGNATORY_DETAILS_HINT } from '../../utils/index.jsx';
-import { useAuth } from '../../utils/auth/AuthContext';
+import useSelectedOrganization from '@/state/selectedOrganizationState';
+import Loading from '@/components/Loading.jsx';
+import DataItem from '@/components/common/DataItem.jsx';
+import { useAuth } from '@/utils/auth/AuthContext';
+import { ADMINISTRATOR_DETAILS_HINT, SIGNATORY_DETAILS_HINT } from '@/utils/index.jsx';
 
 const IndividualsShow = () => {
   const [savedDid, setDid] = useSelectedOrganization();

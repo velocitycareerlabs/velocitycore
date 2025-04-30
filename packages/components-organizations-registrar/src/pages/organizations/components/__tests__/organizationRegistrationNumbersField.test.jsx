@@ -1,14 +1,13 @@
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-// eslint-disable-next-line no-unused-vars
+import { MemoryRouter } from 'react-router';
 import { AdminContext, Form } from 'react-admin';
 import { testDataProvider } from 'ra-core';
 
-// eslint-disable-next-line no-unused-vars
+import { Authorities, authorityOptions } from '@/constants/messageCodes';
 import OrganizationRegistrationNumbersField, {
   registrationNumbersValidation,
 } from '../OrganizationRegistrationNumbersField.jsx';
-import { Authorities, authorityOptions } from '../../../../constants/messageCodes';
 
 const mockRecord = {
   profile: {
@@ -44,14 +43,16 @@ describe('OrganizationRegistrationNumbersField', () => {
           getOne: () => Promise.resolve({ data: { id: 1, name: 'foo' } }),
         })}
       >
-        <Form defaultValues={mockRecord} onSubmit={jest.fn} resource="organizations">
-          <OrganizationRegistrationNumbersField
-            fieldType={Authorities.DunnAndBradstreet}
-            label={authorityOptions[Authorities.DunnAndBradstreet]}
-            record={mockRecord}
-            type="number"
-          />
-        </Form>
+        <MemoryRouter>
+          <Form defaultValues={mockRecord} onSubmit={jest.fn} resource="organizations">
+            <OrganizationRegistrationNumbersField
+              fieldType={Authorities.DunnAndBradstreet}
+              label={authorityOptions[Authorities.DunnAndBradstreet]}
+              record={mockRecord}
+              type="number"
+            />
+          </Form>
+        </MemoryRouter>
       </AdminContext>,
     );
 
@@ -61,15 +62,17 @@ describe('OrganizationRegistrationNumbersField', () => {
   it('renders with the InfoIcon and Label when tooltip prop presents', () => {
     const { getByTestId, getByLabelText } = render(
       <AdminContext dataProvider={testDataProvider()}>
-        <Form defaultValues={mockRecord} onSubmit={jest.fn}>
-          <OrganizationRegistrationNumbersField
-            fieldType={Authorities.DunnAndBradstreet}
-            label={authorityOptions[Authorities.DunnAndBradstreet]}
-            record={mockRecord}
-            type="number"
-            tooltip="This is a tooltip"
-          />
-        </Form>
+        <MemoryRouter>
+          <Form defaultValues={mockRecord} onSubmit={jest.fn}>
+            <OrganizationRegistrationNumbersField
+              fieldType={Authorities.DunnAndBradstreet}
+              label={authorityOptions[Authorities.DunnAndBradstreet]}
+              record={mockRecord}
+              type="number"
+              tooltip="This is a tooltip"
+            />
+          </Form>
+        </MemoryRouter>
       </AdminContext>,
     );
 
@@ -80,15 +83,17 @@ describe('OrganizationRegistrationNumbersField', () => {
   it('displays correct registration number', () => {
     const { getByLabelText } = render(
       <AdminContext dataProvider={testDataProvider()}>
-        <Form defaultValues={mockRecord} onSubmit={jest.fn}>
-          <OrganizationRegistrationNumbersField
-            fieldType={Authorities.NationalAuthority}
-            label={authorityOptions[Authorities.NationalAuthority]}
-            record={mockRecord}
-            type="number"
-            isRequired={false}
-          />
-        </Form>
+        <MemoryRouter>
+          <Form defaultValues={mockRecord} onSubmit={jest.fn}>
+            <OrganizationRegistrationNumbersField
+              fieldType={Authorities.NationalAuthority}
+              label={authorityOptions[Authorities.NationalAuthority]}
+              record={mockRecord}
+              type="number"
+              isRequired={false}
+            />
+          </Form>
+        </MemoryRouter>
       </AdminContext>,
     );
     const input = getByLabelText(authorityOptions[Authorities.NationalAuthority]);
@@ -97,15 +102,17 @@ describe('OrganizationRegistrationNumbersField', () => {
   it('displays input value as emty string if no registration number was saved', () => {
     const { getByLabelText } = render(
       <AdminContext dataProvider={testDataProvider()}>
-        <Form defaultValues={mockRecord} onSubmit={jest.fn}>
-          <OrganizationRegistrationNumbersField
-            fieldType={Authorities.GLEIF}
-            label={authorityOptions[Authorities.GLEIF]}
-            record={mockRecord}
-            type="number"
-            isRequired={false}
-          />
-        </Form>
+        <MemoryRouter>
+          <Form defaultValues={mockRecord} onSubmit={jest.fn}>
+            <OrganizationRegistrationNumbersField
+              fieldType={Authorities.GLEIF}
+              label={authorityOptions[Authorities.GLEIF]}
+              record={mockRecord}
+              type="number"
+              isRequired={false}
+            />
+          </Form>
+        </MemoryRouter>
       </AdminContext>,
     );
     const input = getByLabelText(authorityOptions[Authorities.GLEIF]);
@@ -115,15 +122,17 @@ describe('OrganizationRegistrationNumbersField', () => {
   it('displays correct registration uri', () => {
     const { getByLabelText } = render(
       <AdminContext dataProvider={testDataProvider()}>
-        <Form defaultValues={mockRecord} onSubmit={jest.fn}>
-          <OrganizationRegistrationNumbersField
-            fieldType={Authorities.NationalAuthority}
-            label={authorityOptions[Authorities.NationalAuthority]}
-            record={mockRecord}
-            type="uri"
-            isRequired={false}
-          />
-        </Form>
+        <MemoryRouter>
+          <Form defaultValues={mockRecord} onSubmit={jest.fn}>
+            <OrganizationRegistrationNumbersField
+              fieldType={Authorities.NationalAuthority}
+              label={authorityOptions[Authorities.NationalAuthority]}
+              record={mockRecord}
+              type="uri"
+              isRequired={false}
+            />
+          </Form>
+        </MemoryRouter>
       </AdminContext>,
     );
     const input = getByLabelText(authorityOptions[Authorities.NationalAuthority]);
@@ -133,14 +142,16 @@ describe('OrganizationRegistrationNumbersField', () => {
   it('updates the registration number when the input changes', () => {
     const { getByLabelText } = render(
       <AdminContext dataProvider={testDataProvider()}>
-        <Form defaultValues={mockRecord} onSubmit={jest.fn}>
-          <OrganizationRegistrationNumbersField
-            fieldType={Authorities.DunnAndBradstreet}
-            label={authorityOptions[Authorities.DunnAndBradstreet]}
-            record={mockRecord}
-            type="number"
-          />
-        </Form>
+        <MemoryRouter>
+          <Form defaultValues={mockRecord} onSubmit={jest.fn}>
+            <OrganizationRegistrationNumbersField
+              fieldType={Authorities.DunnAndBradstreet}
+              label={authorityOptions[Authorities.DunnAndBradstreet]}
+              record={mockRecord}
+              type="number"
+            />
+          </Form>
+        </MemoryRouter>
       </AdminContext>,
     );
 

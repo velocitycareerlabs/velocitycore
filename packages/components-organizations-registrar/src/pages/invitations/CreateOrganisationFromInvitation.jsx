@@ -15,7 +15,7 @@
  */
 
 import { Stack, Typography } from '@mui/material';
-import { Link as ReactRouterLink, useParams } from 'react-router-dom';
+import { Link as ReactRouterLink, useParams } from 'react-router';
 import { useCreateController, useGetOne, useRedirect, useLogout, useRefresh } from 'react-admin';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';

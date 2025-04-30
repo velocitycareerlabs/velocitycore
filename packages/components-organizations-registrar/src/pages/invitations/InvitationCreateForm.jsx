@@ -15,11 +15,12 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { useLocation } from 'react-router';
 import { useGetOne, useCreateController, useRedirect, useRefresh } from 'react-admin';
+import { Box, Typography, Button } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+// eslint-disable-next-line import/no-extraneous-dependencies
 
-import { useLocation } from 'react-router-dom';
 import Popup from '../../components/common/Popup.jsx';
 import CreateInvitationForOrganization from '../../components/organizations/CreateInvitationForOrganization.jsx';
 import { CREDENTIAL_TYPES_IDS } from '../../utils/serviceTypes';

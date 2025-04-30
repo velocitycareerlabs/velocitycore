@@ -16,7 +16,7 @@
 
 import { Typography, Link, Box, Toolbar, AppBar, List, ListItem } from '@mui/material';
 
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink } from 'react-router';
 
 import theme, { FOOTER_HEIGHT } from '../theme/theme';
 
