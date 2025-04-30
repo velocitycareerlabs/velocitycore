@@ -23,7 +23,6 @@ module.exports = {
   ...require('./organization-services'),
   ...require('./organizations'),
   ...require('./organization-keys'),
-  ...require('./nonce-management'),
   ...require('./registrar-consents'),
   ...require('./monitors'),
   // TODO probably remove the below once broker is refactored vl-5139

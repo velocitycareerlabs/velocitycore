@@ -27,7 +27,6 @@ const {
   toEthereumAddress,
 } = require('@velocitycareerlabs/blockchain-functions');
 const { initPermissions } = require('@velocitycareerlabs/contract-permissions');
-const nonceRepoPlugin = require('../../nonce-management/test/repo');
 const initRevocationRegistry = require('../src/revocation-registry');
 const {
   deployPermissionContract,
@@ -51,7 +50,6 @@ describe('Revocation Registry', () => {
 
   beforeAll(async () => {
     await mongoFactoryWrapper('test-revocation-registry', context);
-    context.repos = { walletNonces: nonceRepoPlugin({})(context) };
 
     permissionsContractAddress = await deployPermissionContract();
     revocationRegistryContractAddress = await deployRevocationContract(
