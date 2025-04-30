@@ -33,6 +33,6 @@
     "@velocitycareerlabs/crypto": "^0.5.0-build",
     "commander": "~13.1.0",
     "lodash": "^4.17.21",
-    "mongodb": "~6.15.0"
+    "mongodb": "~6.16.0"
   }
 }
