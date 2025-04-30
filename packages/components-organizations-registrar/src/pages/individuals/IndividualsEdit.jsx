@@ -24,7 +24,7 @@ import {
   FormDataConsumer,
   email,
 } from 'react-admin';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Grid, Stack, Typography, Box, Tooltip } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { useState } from 'react';

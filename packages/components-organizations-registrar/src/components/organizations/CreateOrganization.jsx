@@ -27,7 +27,7 @@ import {
 import { useState } from 'react';
 import InfoIcon from '@mui/icons-material/Info';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { FOOTER_HEIGHT } from '../../theme/theme';
 import { validateEmail, validateName, validateWebsite } from './CreateOrganization.utils';
 import OrganizationSubmitButton from './OrganisationSubmitButton.jsx';

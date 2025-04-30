@@ -1,18 +1,14 @@
 import { render, screen, act, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-// eslint-disable-next-line no-unused-vars
 import { AdminContext } from 'react-admin';
-// eslint-disable-next-line no-unused-vars
-import Router from 'react-router-dom';
-// eslint-disable-next-line no-unused-vars
-import { TestAuthProvider } from '../../../utils/auth/__tests__/TestAuthProvider.jsx';
-// eslint-disable-next-line no-unused-vars
+import Router, { MemoryRouter } from 'react-router';
+import { TestAuthProvider } from '@/utils/auth/__tests__/TestAuthProvider.jsx';
+import * as utils from '@/utils/index.jsx';
 import OrganizationShow from '../OrganizationShow.jsx';
-import * as utils from '../../../utils/index.jsx';
 
-jest.mock('react-router-dom', () => ({
+jest.mock('react-router', () => ({
   // __esModule: true,
-  ...jest.requireActual('react-router-dom'),
+  ...jest.requireActual('react-router'),
   useParams: jest.fn(),
 }));
 
@@ -71,7 +67,9 @@ describe('OrganizationShow', () => {
               getOne: () => new Promise(() => {}),
             }}
           >
-            <OrganizationShow />
+            <MemoryRouter>
+              <OrganizationShow />
+            </MemoryRouter>
           </AdminContext>
         </TestAuthProvider>,
       ),
@@ -90,7 +88,9 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <OrganizationShow />
+            <MemoryRouter>
+              <OrganizationShow />
+            </MemoryRouter>
           </AdminContext>
         </TestAuthProvider>,
       ),
@@ -109,7 +109,9 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <OrganizationShow />
+            <MemoryRouter>
+              <OrganizationShow />
+            </MemoryRouter>
           </AdminContext>
         </TestAuthProvider>,
       ),
@@ -128,7 +130,9 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <OrganizationShow />
+            <MemoryRouter>
+              <OrganizationShow />
+            </MemoryRouter>
           </AdminContext>
         </TestAuthProvider>,
       ),
@@ -148,7 +152,9 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <OrganizationShow />
+            <MemoryRouter>
+              <OrganizationShow />
+            </MemoryRouter>
           </AdminContext>
         </TestAuthProvider>,
       ),
@@ -175,7 +181,9 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecordWithCommercials, isLoading: false }),
             }}
           >
-            <OrganizationShow />
+            <MemoryRouter>
+              <OrganizationShow />
+            </MemoryRouter>
           </AdminContext>
         </TestAuthProvider>,
       ),
@@ -202,7 +210,9 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <OrganizationShow />
+            <MemoryRouter>
+              <OrganizationShow />
+            </MemoryRouter>
           </AdminContext>
         </TestAuthProvider>,
       ),

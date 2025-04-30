@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router';
 import { useStore } from 'react-admin';
 import { useEffect } from 'react';
 

@@ -5,7 +5,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 // eslint-disable-next-line no-unused-vars
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router';
 import { render } from '@testing-library/react';
 // eslint-disable-next-line no-unused-vars
 import IndividualsDashboard from '../../individuals/IndividualsDashboard.jsx';
