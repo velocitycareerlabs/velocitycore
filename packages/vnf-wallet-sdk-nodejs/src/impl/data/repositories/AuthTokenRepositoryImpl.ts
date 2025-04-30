@@ -12,6 +12,7 @@ import VCLLog from '../../utils/VCLLog';
 import Request, { HttpMethod } from '../infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from './Urls';
 import VCLError from '../../../api/entities/error/VCLError';
+import { Dictionary } from '../../../api/VCLTypes';
 
 export default class AuthTokenRepositoryImpl implements AuthTokenRepository {
     constructor(private readonly networkService: NetworkService) {}
@@ -20,7 +21,7 @@ export default class AuthTokenRepositoryImpl implements AuthTokenRepository {
         authTokenDescriptor: VCLAuthTokenDescriptor
     ): Promise<VCLAuthToken> {
         const { authTokenUri } = authTokenDescriptor;
-        if (!authTokenUri) {
+        if (authTokenUri == null) {
             throw new VCLError('authTokenDescriptor.authTokenUri = null');
         }
         try {
@@ -35,6 +36,7 @@ export default class AuthTokenRepositoryImpl implements AuthTokenRepository {
                 useCaches: true,
                 body: authTokenDescriptor.generateRequestBody(),
             });
+            await this.verifyAuthTokenPayload(authTokenResponse.payload);
             return new VCLAuthToken(
                 authTokenResponse.payload,
                 authTokenUri,
@@ -43,7 +45,16 @@ export default class AuthTokenRepositoryImpl implements AuthTokenRepository {
             );
         } catch (e) {
             VCLLog.error('AuthTokenRepositoryImpl.getAuthToken', e);
-            throw e;
+            throw VCLError.fromError(e);
+        }
+    }
+
+    async verifyAuthTokenPayload(payload: Dictionary<any>): Promise<void> {
+        if (payload.access_token == null) {
+            throw new VCLError('payload.access_token = null');
+        }
+        if (payload.refresh_token == null) {
+            throw new VCLError('payload.refresh_token = null');
         }
     }
 }

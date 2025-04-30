@@ -75,8 +75,8 @@ const invitationsController = async (fastify) => {
         body;
 
       // validate inviter
-      const caoOrganization = await repos.organizations.findOneByDid(did);
-      const caoService = find(isCaoService, caoOrganization.services);
+      const inviterOrganization = await repos.organizations.findOneByDid(did);
+      const caoService = find(isCaoService, inviterOrganization.services);
       if (isEmpty(caoService)) {
         throw newError(400, 'CAO service does not exist', {
           errorCode: 'invitations_not_supported',
@@ -88,7 +88,7 @@ const invitationsController = async (fastify) => {
 
       const caoServiceRefs = await buildReferenceCaoServices({
         caoServiceIds: extractCaoServiceRefs(inviteeService),
-        caoOrganizations: [caoOrganization],
+        caoOrganizations: [inviterOrganization],
       });
 
       forEach(
@@ -122,7 +122,7 @@ const invitationsController = async (fastify) => {
 
       const messageCode = await sendEmailToInvitee({
         inviteeEmail,
-        caoOrganization,
+        inviterOrganization,
         ticket,
         code,
       });

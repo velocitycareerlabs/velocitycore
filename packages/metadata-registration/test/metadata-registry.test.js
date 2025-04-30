@@ -38,7 +38,6 @@ const {
   rpcProvider,
   deployerPrivateKey,
 } = require('./helpers/deploy-contracts');
-const nonceRepoPlugin = require('../../nonce-management/test/repo');
 const { initMetadataRegistry, initVerificationCoupon } = require('../index');
 
 const testListAlgType = '0x6b86';
@@ -134,7 +133,6 @@ describe('Metadata Registry', () => {
       log: console,
     };
     await mongoFactoryWrapper('test-metadata-registry', context);
-    context.repos = { walletNonces: nonceRepoPlugin({})(context) };
 
     const permissionsAddress = await deployPermissionContract();
     const verificationCouponAddress = await deployVerificationCouponContract(
@@ -163,7 +161,6 @@ describe('Metadata Registry', () => {
       context
     );
 
-    await context.repos.walletNonces.delUsingFilter({ filter: {} });
     deployerPermissionsClient = await initPermissions(
       {
         privateKey: deployerPrivateKey,
@@ -178,7 +175,6 @@ describe('Metadata Registry', () => {
       rotation: primaryAddress,
     });
 
-    await context.repos.walletNonces.delUsingFilter({ filter: {} });
     const operatorPermissionsClient = await initPermissions(
       {
         privateKey: primaryKeyPair.privateKey,

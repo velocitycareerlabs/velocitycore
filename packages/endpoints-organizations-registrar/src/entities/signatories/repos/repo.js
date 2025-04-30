@@ -15,6 +15,7 @@ module.exports = (app, options, next = () => {}) => {
       defaultProjection: {
         _id: 1,
         organizationDid: 1,
+        organizationId: 1,
         approvedAt: 1,
         rejectedAt: 1,
         events: 1,

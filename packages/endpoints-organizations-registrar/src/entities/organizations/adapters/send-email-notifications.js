@@ -15,12 +15,10 @@
  *
  */
 
-const { isEmpty, omitBy, isNil, map, first } = require('lodash/fp');
-const {
-  extractCaoServiceRefs,
-} = require('../../organization-services/domains');
+const { isEmpty, omitBy, isNil, map } = require('lodash/fp');
+const { optional } = require('@velocitycareerlabs/common-functions');
 const { initAuth0Provisioner } = require('../../oauth');
-const { parseProfileToCsv } = require('../domains');
+const { parseProfileToCsv, ServiceTypeLabels } = require('../domains');
 const {
   initOrganizationRegistrarEmails,
 } = require('./init-organization-registrar-emails');
@@ -33,7 +31,6 @@ const initSendEmailNotifications = (initCtx) => {
     emailToSupportForServicesAddedAndNeedActivation,
     emailToRegisteredOrgForServicesActivated,
     emailOrganizationCreated,
-    emailToSignatoryForOrganizationApproval,
   } = initOrganizationRegistrarEmails(config);
   const { getUsersByIds } = initAuth0Provisioner(config);
 
@@ -159,17 +156,34 @@ const initSendEmailNotifications = (initCtx) => {
     { organization, authCode, isReminder = false },
     context
   ) => {
-    const caoServiceIds = extractCaoServiceRefs(organization.services);
-    const caos = await context.repos.organizations.findCaos(caoServiceIds);
-    const caoOrganization = first(caos);
-    await initCtx.sendEmail(
-      emailToSignatoryForOrganizationApproval({
-        organization,
-        caoOrganization,
-        authCode,
-        isReminder,
-      })
+    const invitation = await optional(
+      () => context.repos.invitations.findById(organization.invitationId),
+      [organization.invitationId]
     );
+    const inviterOrganization = invitation?.inviterDid
+      ? await context.repos.organizations.findOneByDid(invitation.inviterDid)
+      : null;
+    const html = await initCtx.view('signatory-approval-email-body', {
+      organization,
+      inviterOrganization,
+      authCode,
+      ServiceTypeLabels,
+      config,
+    });
+    await initCtx.sendEmail({
+      subject: `${isReminder ? 'Reminder: ' : ''}${
+        inviterOrganization?.profile?.name ??
+        `${organization.profile.adminGivenName} ${organization.profile.adminFamilyName}`
+      } is requesting your approval to register ${
+        organization.profile.name
+      } on the Velocity Network`,
+      message: html,
+      sender: config.registrarSupportEmail,
+      recipients: [organization.profile.signatoryEmail],
+      bccs: [config.registrarSupportEmail],
+      replyTo: config.registrarSupportEmail,
+      html: true,
+    });
   };
 
   return {

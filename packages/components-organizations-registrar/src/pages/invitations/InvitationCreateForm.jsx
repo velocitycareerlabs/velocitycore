@@ -19,17 +19,18 @@ import { useLocation } from 'react-router';
 import { useGetOne, useCreateController, useRedirect, useRefresh } from 'react-admin';
 import { Box, Typography, Button } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+// eslint-disable-next-line import/no-extraneous-dependencies
 
-import Popup from '@/components/common/Popup.jsx';
-import useSelectedOrganization from '@/state/selectedOrganizationState';
-import CreateInvitationForOrganization from '@/components/organizations/CreateInvitationForOrganization.jsx';
-import StatusPopup from '@/components/common/StatusPopup.jsx';
-import SetInvitationService from '@/components/invitations/SetInvitationService.jsx';
-import SetKeyIndividuals from '@/components/invitations/SetKeyIndividuals.jsx';
-import { MESSAGE_CODES } from '@/constants/messageCodes';
-import useCountryCodes from '@/utils/countryCodes';
-import { CREDENTIAL_TYPES_IDS } from '@/utils/serviceTypes';
-import { formatWebSiteUrl, formatRegistrationNumbers } from '@/utils/index.jsx';
+import Popup from '../../components/common/Popup.jsx';
+import CreateInvitationForOrganization from '../../components/organizations/CreateInvitationForOrganization.jsx';
+import { CREDENTIAL_TYPES_IDS } from '../../utils/serviceTypes';
+import useCountryCodes from '../../utils/countryCodes';
+import useSelectedOrganization from '../../state/selectedOrganizationState';
+import StatusPopup from '../../components/common/StatusPopup.jsx';
+import SetInvitationService from '../../components/invitations/SetInvitationService.jsx';
+import { MESSAGE_CODES } from '../../constants/messageCodes';
+import SetKeyIndividuals from '../../components/invitations/SetKeyIndividuals.jsx';
+import { formatWebSiteUrl, formatRegistrationNumbers } from '../../utils/index.jsx';
 
 export const getStatusByCode = (errorCode) => {
   switch (errorCode) {

@@ -18,6 +18,7 @@ module.exports = {
   ...require('./src/apply-overrides'),
   ...require('./src/dateify'),
   ...require('./src/idKeyMapper'),
+  ...require('./src/optional'),
   ...require('./src/wait'),
   ...require('./src/promise-all-sequential'),
   ...require('./src/bytes32toString'),

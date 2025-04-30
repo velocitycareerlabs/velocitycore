@@ -28,7 +28,7 @@ const { omit } = require('lodash/fp');
 const initConsentsFactory = require('../src/entities/registrar-consents/factories/registrar-consents-factory');
 const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const buildFastify = require('./helpers/build-fastify');
-const consentsRepoPlugin = require('../src/entities/registrar-consents/repo');
+const consentsRepoPlugin = require('../src/entities/registrar-consents/repos/repo');
 const { ConsentTypes } = require('../src/entities');
 
 describe('Registrar Consents controller', () => {

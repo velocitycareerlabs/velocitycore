@@ -23,7 +23,7 @@ import { useRedirect } from 'react-admin';
 import AppBarOrganization from './AppBarOrganization.jsx';
 import useSelectedOrganization from '../../state/selectedOrganizationState';
 import { parseJwt } from '../../utils/index.jsx';
-import chainNames from '../../utils/chainNames';
+import { chainNames } from '../../utils/chainNames';
 import { useAuth } from '../../utils/auth/AuthContext';
 import { useConfig } from '../../utils/ConfigContext';
 

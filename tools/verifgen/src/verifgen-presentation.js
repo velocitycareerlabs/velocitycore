@@ -66,10 +66,8 @@ const createPayload = ({
   vendorOriginContext,
 }) => {
   const presentationDefinition =
-    presentationRequest?.presentation_request?.payload
-      ?.presentation_definition ??
-    presentationRequest?.issuing_request?.payload?.presentation_definition;
-
+    presentationRequest?.presentation_request?.presentation_definition ??
+    presentationRequest?.issuing_request?.presentation_definition;
   const payload = {
     '@context': ['https://www.w3.org/2018/credentials/v1'],
     id: nanoid(),

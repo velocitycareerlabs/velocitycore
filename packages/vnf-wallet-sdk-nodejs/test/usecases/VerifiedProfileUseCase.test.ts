@@ -1,5 +1,5 @@
 import { expect } from '@jest/globals';
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import VerifiedProfileUseCaseImpl from '../../src/impl/data/usecases/VerifiedProfileUseCaseImpl';
 import VerifiedProfileRepositoryImpl from '../../src/impl/data/repositories/VerifiedProfileRepositoryImpl';
 import { VerifiedProfileMocks } from '../infrastructure/resources/valid/VerifiedProfileMocks';

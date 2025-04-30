@@ -38,12 +38,12 @@ export default class VCLError extends Error {
 
     static fromJson(payloadJson: Dictionary<any>): VCLError {
         const result = new VCLError(
-            payloadJson?.[VCLError.KeyError] || null,
-            payloadJson?.[VCLError.KeyErrorCode] ||
+            payloadJson?.[VCLError.KeyError],
+            payloadJson?.[VCLError.KeyErrorCode] ??
                 VCLErrorCode.SdkError.toString(),
-            payloadJson?.[VCLError.KeyRequestId] || null,
-            payloadJson?.[VCLError.KeyMessage] || null,
-            payloadJson?.[VCLError.KeyStatusCode] || null
+            payloadJson?.[VCLError.KeyRequestId],
+            payloadJson?.[VCLError.KeyMessage],
+            payloadJson?.[VCLError.KeyStatusCode]
         );
         result.payload = JSON.stringify(payloadJson);
 
@@ -59,7 +59,7 @@ export default class VCLError extends Error {
             VCLError.findErrorCode(error),
             error.requestId,
             error.message,
-            statusCode || error.statusCode
+            statusCode ?? error.statusCode
         );
     }
 
@@ -81,7 +81,7 @@ export default class VCLError extends Error {
             [VCLError.KeyError]: this.error,
             [VCLError.KeyRequestId]: this.requestId,
             [VCLError.KeyErrorCode]:
-                this.errorCode || VCLErrorCode.SdkError.toString(),
+                this.errorCode ?? VCLErrorCode.SdkError.toString(),
             [VCLError.KeyMessage]: this.message,
             [VCLError.KeyStatusCode]: this.statusCode,
         };

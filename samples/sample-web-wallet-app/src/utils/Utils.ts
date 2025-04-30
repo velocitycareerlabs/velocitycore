@@ -36,3 +36,7 @@ export const getApprovedRejectedOfferIdsMock = (
   }
   return [approvedOfferIds, rejectedOfferIds];
 };
+
+export const verifyToken = (token) => {
+  return token?.jwtValue?.payload?.exp > Date.now() / 1000;
+};

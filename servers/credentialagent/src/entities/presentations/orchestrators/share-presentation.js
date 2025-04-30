@@ -81,7 +81,7 @@ const sharePresentation = async (presentation, context) => {
 
   const user = vendorUser
     ? await repos.vendorUserIdMappings.findOrInsertVendorUser(vendorUser)
-    : undefined;
+    : await repos.vendorUserIdMappings.addAnonymousUser();
 
   const completionState = isIssuingDisclosure(disclosure)
     ? ExchangeStates.IDENTIFIED

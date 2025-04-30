@@ -85,9 +85,6 @@ describe('Coupons minted event logging task test suite', () => {
     log: {
       info: mockLogInfo,
     },
-    repos: {
-      walletNonces: {},
-    },
   };
 
   beforeEach(() => {

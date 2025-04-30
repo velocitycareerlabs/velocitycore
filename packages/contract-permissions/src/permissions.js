@@ -25,7 +25,7 @@ const initPermissions = async (
   const { log } = context;
   log.info({ func: 'initPermission', privateKey, contractAddress });
 
-  const { contractClient, executeContractTx } = await initContractClient(
+  const { contractClient } = await initContractClient(
     {
       privateKey,
       contractAddress,
@@ -46,25 +46,24 @@ const initPermissions = async (
       scopesToAdd,
       scopesToRemove,
     });
-    await executeContractTx((nonce) =>
-      contractClient.updateAddressScopes(address, scopesToAdd, scopesToRemove, {
-        nonce,
-      })
+    const tx = await contractClient.updateAddressScopes(
+      address,
+      scopesToAdd,
+      scopesToRemove
     );
+    await tx.wait();
   };
 
   const addAddressScope = async ({ address, scope }) => {
     log.info({ func: 'addAddressScope', address, scope });
-    await executeContractTx((nonce) =>
-      contractClient.addAddressScope(address, scope, { nonce })
-    );
+    const tx = await contractClient.addAddressScope(address, scope);
+    await tx.wait();
   };
 
   const removeAddressScope = async ({ address, scope }) => {
     log.info({ func: 'removeAddressScope', address, scope });
-    await executeContractTx((nonce) =>
-      contractClient.removeAddressScope(address, scope, { nonce })
-    );
+    const tx = await contractClient.removeAddressScope(address, scope);
+    await tx.wait();
   };
 
   const getPrimaries = async () => {
@@ -74,38 +73,34 @@ const initPermissions = async (
 
   const addPrimary = async ({ primary, permissioning, rotation }) => {
     log.info({ func: 'addPrimary', primary, permissioning, rotation });
-    await executeContractTx((nonce) =>
-      contractClient.addPrimary(primary, permissioning, rotation, {
-        nonce,
-      })
+    const tx = await contractClient.addPrimary(
+      primary,
+      permissioning,
+      rotation
     );
+    await tx.wait();
   };
 
   const removeOperatorKey = async ({ primary, operator }) => {
     log.info({ func: 'removeOperator', primary, operator });
-    await executeContractTx((nonce) =>
-      contractClient.removeOperatorKey(primary, operator, {
-        nonce,
-      })
-    );
+    const tx = await contractClient.removeOperatorKey(primary, operator);
+    await tx.wait();
   };
 
   const addOperatorKey = async ({ primary, operator }) => {
     log.info({ func: 'addOperatorKey', primary, operator });
-    await executeContractTx((nonce) =>
-      contractClient.addOperatorKey(primary, operator, {
-        nonce,
-      })
-    );
+    const tx = await contractClient.addOperatorKey(primary, operator);
+    await tx.wait();
   };
 
   const rotateOperatorKey = async ({ primary, newOperator, oldOperator }) => {
     log.info({ func: 'rotateOperatorKey', primary, newOperator, oldOperator });
-    await executeContractTx((nonce) =>
-      contractClient.rotateOperatorKey(primary, newOperator, oldOperator, {
-        nonce,
-      })
+    const tx = await contractClient.rotateOperatorKey(
+      primary,
+      newOperator,
+      oldOperator
     );
+    await tx.wait();
   };
 
   const rotatePermissioning = async ({
@@ -119,16 +114,12 @@ const initPermissions = async (
       newPermissioning,
       newRotation,
     });
-    await executeContractTx((nonce) =>
-      contractClient.rotatePermissioning(
-        primary,
-        newPermissioning,
-        newRotation,
-        {
-          nonce,
-        }
-      )
+    const tx = await contractClient.rotatePermissioning(
+      primary,
+      newPermissioning,
+      newRotation
     );
+    await tx.wait();
   };
 
   const lookupPrimary = async (address) => {
