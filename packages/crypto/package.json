@@ -17,7 +17,7 @@
   "dependencies": {
     "@trust/keyto": "~2.0.0-alpha1",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
-    "argon2": "0.41.1",
+    "argon2": "0.43.0",
     "canonicalize": "^2.0.0",
     "elliptic": "^6.6.1",
     "lodash": "^4.17.21",
