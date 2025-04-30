@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-const { map } = require('lodash/fp');
+const { map, isPlainObject, includes } = require('lodash/fp');
+const { ObjectId } = require('mongodb');
+const { SignatoryEventStatus } = require('../domain');
 
 const signatoryStatusStateRepoExtension = (parent) => ({
   insertWithState: ({ states, authCode, ...val }, ...args) => {
@@ -29,13 +31,25 @@ const signatoryStatusStateRepoExtension = (parent) => ({
     );
   },
   addState: async (
-    did,
+    _idOrFilter,
     state,
     $set,
     projection = parent.defaultColumnsSelection
   ) => {
+    const eventsArr = [{ state, timestamp: new Date() }];
+    if (
+      includes(state, [
+        SignatoryEventStatus.APPROVED,
+        SignatoryEventStatus.REJECTED,
+      ])
+    ) {
+      eventsArr.push({
+        state: SignatoryEventStatus.COMPLETED,
+        timestamp: new Date(),
+      });
+    }
     let updateStatement = {
-      $push: { events: { state, timestamp: new Date() } },
+      $push: { events: { $each: eventsArr } },
     };
     if ($set) {
       updateStatement = {
@@ -43,28 +57,28 @@ const signatoryStatusStateRepoExtension = (parent) => ({
         $set: parent.prepModification($set),
       };
     }
+    const filter = isPlainObject(_idOrFilter)
+      ? _idOrFilter
+      : { _id: new ObjectId(_idOrFilter) };
+
     const result = await parent
       .collection()
-      .findOneAndUpdate(
-        parent.prepFilter({ organizationDid: did }),
-        updateStatement,
-        {
-          returnDocument: 'after',
-          includeResultMetadata: true,
-          projection,
-        }
-      );
+      .findOneAndUpdate(parent.prepFilter(filter), updateStatement, {
+        returnDocument: 'after',
+        includeResultMetadata: true,
+        projection,
+      });
     return result.value;
   },
   addStateAndCode: async (
-    did,
+    _id,
     state,
     authCode,
     projection = parent.defaultColumnsSelection
   ) => {
     const timestamp = new Date();
     const result = await parent.collection().findOneAndUpdate(
-      parent.prepFilter({ organizationDid: did }),
+      parent.prepFilter({ _id: new ObjectId(_id) }),
       {
         $push: {
           events: { state, timestamp },
@@ -78,6 +92,46 @@ const signatoryStatusStateRepoExtension = (parent) => ({
       }
     );
     return result.value;
+  },
+  findByEvent: async (eventState, eventTimestamp) => {
+    const aggregationPipeline = [
+      {
+        $match: {
+          'events.state': { $ne: SignatoryEventStatus.COMPLETED },
+        },
+      },
+      {
+        $unwind: {
+          path: '$events',
+        },
+      },
+      {
+        $project: {
+          event: '$events',
+          organizationId: 1,
+        },
+      },
+      {
+        $match: {
+          'event.state': eventState,
+          'event.timestamp': {
+            $lte: eventTimestamp,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          events: {
+            $push: '$event',
+          },
+          organizationId: {
+            $first: '$organizationId',
+          },
+        },
+      },
+    ];
+    return parent.collection().aggregate(aggregationPipeline);
   },
   extensions: parent.extensions.concat(['signatoryStatusStateRepoExtension']),
 });

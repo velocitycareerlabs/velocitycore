@@ -18,7 +18,7 @@
 const { register } = require('@spencejs/spence-factories');
 
 const { testRegistrarSuperUser } = require('@velocitycareerlabs/tests-helpers');
-const consentsRepoPlugin = require('../repo');
+const consentsRepoPlugin = require('../repos/repo');
 const { ConsentTypes } = require('../../index');
 
 module.exports = (app) => {

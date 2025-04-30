@@ -1,9 +1,9 @@
 const initInvitationEmails = (config) => ({
-  emailToInvitee: ({ caoOrgProfileName, inviteeEmail, uri }) => ({
-    subject: `Invitation by ${caoOrgProfileName} to join Velocity network Invitation by Velocity Career Labs to Join Velocity Network™`,
+  emailToInvitee: ({ inviterOrgProfileName, inviteeEmail, uri }) => ({
+    subject: `Invitation by ${inviterOrgProfileName} to join Velocity network Invitation by Velocity Career Labs to Join Velocity Network™`,
     /* eslint-disable max-len */
     message: `
-You've received an invitation from ${caoOrgProfileName} to join Velocity Network™.
+You've received an invitation from ${inviterOrgProfileName} to join Velocity Network™.
 <br>
 <br>
 For more information about Velocity Network™ and self-sovereign credentials, <a href="https://www.velocitynetwork.foundation/">visit the Velocity Network Foundation® website.</a>.
