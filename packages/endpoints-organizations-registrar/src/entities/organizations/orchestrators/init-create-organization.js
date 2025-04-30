@@ -18,7 +18,6 @@ const {
 } = require('../../organization-keys');
 const {
   activateServices,
-  buildServicesConsents,
   isNodeOperator,
   initProvisionAuth0Clients,
   updateBlockchainPermissionsFromPermittedServices,
@@ -35,6 +34,9 @@ const {
 } = require('./build-non-custodied-organization');
 const { initProvisionGroup } = require('./init-provision-group');
 const { addPrimaryPermissions } = require('./add-primary-permissions');
+const {
+  getServiceConsentType,
+} = require('../../organization-services/domains/get-service-consent-type');
 
 const initCreateOrganization = (fastify) => {
   const buildOrganizationModificationsOnServiceChange =
@@ -48,7 +50,7 @@ const initCreateOrganization = (fastify) => {
     { byoDid, byoKeys, serviceEndpoints, profile, invitationCode },
     context
   ) => {
-    const { repos, kms } = context;
+    const { repos, kms, user } = context;
 
     const invitation = await acceptInvitation(invitationCode, context);
     const buildOrganization =
@@ -76,13 +78,17 @@ const initCreateOrganization = (fastify) => {
       context
     );
 
-    const consents = buildServicesConsents(
-      organization,
-      organization.services,
-      context
-    );
-    if (!isEmpty(consents)) {
-      await repos.registrarConsents.insertMany(consents);
+    if (!isEmpty(organization.services)) {
+      const consents = map((service) => {
+        return {
+          userId: user.sub,
+          organizationId: organization._id,
+          type: getServiceConsentType(service),
+          version: 1,
+          serviceId: service.id,
+        };
+      }, organization.services);
+      await repos.registrarConsents.registerConsents(consents);
     }
     const authClients = await provisionAuth0Clients(
       organization,

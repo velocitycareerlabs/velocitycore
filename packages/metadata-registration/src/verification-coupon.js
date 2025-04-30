@@ -25,16 +25,15 @@ const initVerificationCoupon = async (
   const { log } = context;
   log.info({ privateKey, contractAddress }, 'initVerificationCoupon');
 
-  const { contractClient, executeContractTx, pullEvents } =
-    await initContractClient(
-      {
-        privateKey,
-        contractAddress,
-        rpcProvider,
-        contractAbi,
-      },
-      context
-    );
+  const { contractClient, pullEvents } = await initContractClient(
+    {
+      privateKey,
+      contractAddress,
+      rpcProvider,
+      contractAbi,
+    },
+    context
+  );
 
   const isExpired = (tokenId) => {
     log.info({ tokenId }, 'isExpired');
@@ -44,37 +43,40 @@ const initVerificationCoupon = async (
   const mint = async ({ toAddress, expirationTime, quantity, ownerDid }) => {
     log.info({ toAddress, expirationTime, quantity, ownerDid }, 'mint');
     const { traceId } = context;
-    const transactionReceipt = await executeContractTx((nonce) =>
-      contractClient.mint(
-        toAddress,
-        Math.floor(Date.parse(expirationTime) / 1000),
-        quantity,
-        traceId,
-        ownerDid,
-        { nonce }
-      )
+    const tx = await contractClient.mint(
+      toAddress,
+      Math.floor(Date.parse(expirationTime) / 1000),
+      quantity,
+      traceId,
+      ownerDid
     );
+
+    const transactionReceipt = await tx.wait();
 
     return last(transactionReceipt.logs).args;
   };
 
   const burn = async (tokenId, traceId, caoDid, burnerDid, burnAddress) => {
     log.info({ tokenId, traceId, caoDid, burnerDid, burnAddress }, 'burn');
-    const transactionReceipt = await executeContractTx((nonce) =>
-      contractClient.burn(tokenId, traceId, caoDid, burnerDid, burnAddress, {
-        nonce,
-      })
+    const tx = await contractClient.burn(
+      tokenId,
+      traceId,
+      caoDid,
+      burnerDid,
+      burnAddress
     );
+
+    const transactionReceipt = await tx.wait();
 
     return last(transactionReceipt.logs).args;
   };
 
   const setPermissionsAddress = async (permissionsContractAddress) => {
-    return executeContractTx((nonce) =>
-      contractClient.setPermissionsAddress(permissionsContractAddress, {
-        nonce,
-      })
+    const tx = await contractClient.setPermissionsAddress(
+      permissionsContractAddress
     );
+
+    return tx.wait();
   };
 
   const getCoupon = (fromAddress) => {

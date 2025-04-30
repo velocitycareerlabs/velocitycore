@@ -25,12 +25,13 @@ jest.mock('@aws-sdk/client-ses', () => ({
 
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { ObjectId } = require('mongodb');
-const { subDays, subMonths } = require('date-fns/fp');
+const { subDays, subMonths, subHours } = require('date-fns/fp');
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
 const { errorResponseMatcher } = require('@velocitycareerlabs/tests-helpers');
 const buildFastify = require('./helpers/build-fastify');
 const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const initSignatoryStatusFactory = require('../src/entities/signatories/factories/signatory-status-factory');
+const initInvitationFactory = require('../src/entities/invitations/factories/invitations-factory');
 const {
   expectedSignatoryApprovedEmail,
   expectedSignatoryRejectedEmail,
@@ -38,6 +39,7 @@ const {
 } = require('./helpers/email-matchers');
 const signatoryStatusPlugin = require('../src/entities/signatories/repos/repo');
 const organizationsPlugin = require('../src/entities/organizations/repos/repo');
+const invitationsPlugin = require('../src/entities/invitations/repo');
 const {
   sendReminders,
   initSendEmailNotifications,
@@ -66,9 +68,11 @@ describe('signatoriesController', () => {
   let testContext;
   let fastify;
   let persistOrganization;
+  let persistInvitation;
   let persistSignatoryStatus;
   let signatoryStatusRepo;
   let organizationsRepo;
+  let invitationsRepo;
   let sendEmailToSignatoryForOrganizationApproval;
 
   beforeAll(async () => {
@@ -76,12 +80,17 @@ describe('signatoriesController', () => {
     await fastify.ready();
     ({ persistOrganization } = initOrganizationFactory(fastify));
     ({ persistSignatoryStatus } = initSignatoryStatusFactory(fastify));
+    ({ persistInvitation } = initInvitationFactory(fastify));
 
     signatoryStatusRepo = signatoryStatusPlugin(fastify)({
       log: fastify.log,
       config: fastify.config,
     });
     organizationsRepo = organizationsPlugin(fastify)({
+      log: fastify.log,
+      config: fastify.config,
+    });
+    invitationsRepo = invitationsPlugin(fastify)({
       log: fastify.log,
       config: fastify.config,
     });
@@ -93,6 +102,7 @@ describe('signatoriesController', () => {
       repos: {
         signatoryStatus: signatoryStatusRepo,
         organizations: organizationsRepo,
+        invitations: invitationsRepo,
       },
     };
   });
@@ -100,7 +110,9 @@ describe('signatoriesController', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     await mongoDb().collection('organizations').deleteMany({});
+    await mongoDb().collection('invitations').deleteMany({});
     await mongoDb().collection('signatoryStatus').deleteMany({});
+    await mongoDb().collection('registrarConsents').deleteMany({});
   });
 
   afterAll(async () => {
@@ -124,7 +136,7 @@ describe('signatoriesController', () => {
       );
     });
 
-    it('should send email and mark signatory reminder as approved', async () => {
+    it('should send email, mark signatory reminder approved, and register a consent', async () => {
       const organization = await persistOrganization();
       const signatory = await persistSignatoryStatus({
         organization,
@@ -142,13 +154,18 @@ describe('signatoriesController', () => {
       expect(signatoryReminderDb).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
             state: SignatoryEventStatus.APPROVED,
+            timestamp: expect.any(Date),
+          },
+          {
+            state: SignatoryEventStatus.COMPLETED,
             timestamp: expect.any(Date),
           },
         ],
@@ -161,6 +178,18 @@ describe('signatoriesController', () => {
         approvedAt: expect.any(Date),
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
+      });
+      const dbRegistrarConsent = await mongoDb()
+        .collection('registrarConsents')
+        .findOne();
+      expect(dbRegistrarConsent).toEqual({
+        _id: expect.any(ObjectId),
+        consentId: '1',
+        createdAt: expect.any(Date),
+        organizationId: new ObjectId(organization._id),
+        type: 'Signatory',
+        userId: organization.profile.signatoryEmail,
+        version: 1,
       });
     });
 
@@ -211,6 +240,46 @@ describe('signatoriesController', () => {
       );
     });
 
+    it('should return 400 if signatory has already approved', async () => {
+      const organization = await persistOrganization();
+      await persistSignatoryStatus({
+        organization,
+        authCodes: [
+          {
+            code: '1',
+            timestamp: subDays(4)(new Date()),
+          },
+          {
+            code: '2',
+            timestamp: subDays(1)(new Date()),
+          },
+        ],
+        events: [
+          {
+            state: SignatoryEventStatus.APPROVED,
+            timestamp: new Date(),
+          },
+          {
+            state: SignatoryEventStatus.COMPLETED,
+            timestamp: new Date(),
+          },
+        ],
+      });
+      const response = await fastify.injectJson({
+        method: 'GET',
+        url: `/api/v0.6/organizations/${organization.didDoc.id}/signatories/response/approve?authCode=1`,
+      });
+      expect(response.statusCode).toEqual(400);
+      expect(response.json).toEqual(
+        errorResponseMatcher({
+          error: 'Bad Request',
+          errorCode: 'signatory_status_already_complete',
+          message: 'Signatory has already signed',
+          statusCode: 400,
+        })
+      );
+    });
+
     it('should return 400 if authCode expired', async () => {
       const organization = await persistOrganization();
       await persistSignatoryStatus({
@@ -218,7 +287,7 @@ describe('signatoriesController', () => {
         authCodes: [
           {
             code: '1',
-            timestamp: subMonths(4)(new Date()),
+            timestamp: subHours(48)(new Date()),
           },
         ],
       });
@@ -290,13 +359,18 @@ describe('signatoriesController', () => {
       expect(signatoryReminderDb).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
             state: SignatoryEventStatus.REJECTED,
+            timestamp: expect.any(Date),
+          },
+          {
+            state: SignatoryEventStatus.COMPLETED,
             timestamp: expect.any(Date),
           },
         ],
@@ -357,6 +431,37 @@ describe('signatoriesController', () => {
           statusCode: 400,
         })
       );
+    });
+
+    it('should 400 if signatory has already rejected', async () => {
+      const organization = await persistOrganization();
+      const signatoryStatus = await persistSignatoryStatus({
+        organization,
+        events: [
+          {
+            state: SignatoryEventStatus.REJECTED,
+            timestamp: new Date(),
+          },
+          {
+            state: SignatoryEventStatus.COMPLETED,
+            timestamp: new Date(),
+          },
+        ],
+      });
+      const response = await fastify.injectJson({
+        method: 'GET',
+        url: `/api/v0.6/organizations/${organization.didDoc.id}/signatories/response/reject?authCode=${signatoryStatus.authCodes[0].code}`,
+      });
+      expect(response.statusCode).toEqual(400);
+      expect(response.json).toEqual(
+        errorResponseMatcher({
+          error: 'Bad Request',
+          errorCode: 'signatory_status_already_complete',
+          message: 'Signatory has already signed',
+          statusCode: 400,
+        })
+      );
+      expect(mockSendEmail).toHaveBeenCalledTimes(0);
     });
 
     it('should return 400 if authCode expired', async () => {
@@ -433,65 +538,75 @@ describe('signatoriesController', () => {
     });
 
     it('should send emails if there are active signatory reminders', async () => {
-      const caoOrganization = await persistOrganization();
+      const inviterOrganization = await persistOrganization();
+      const invitation1 = await persistInvitation({
+        inviterOrganization,
+      });
       const organization1 = await persistOrganization({
+        invitationId: new ObjectId(invitation1._id),
         service: [
           {
             id: '#iss-1',
             type: ServiceTypes.HolderAppProviderType,
-            serviceEndpoint: `${caoOrganization.didDoc.id}#cao-1`,
+            serviceEndpoint: `${inviterOrganization.didDoc.id}#cao-1`,
           },
         ],
+      });
+      const invitation2 = await persistInvitation({
+        inviterOrganization,
       });
       const organization2 = await persistOrganization({
+        invitationId: new ObjectId(invitation2._id),
         service: [
           {
             id: '#iss-1',
             type: ServiceTypes.HolderAppProviderType,
-            serviceEndpoint: `${caoOrganization.didDoc.id}#cao-1`,
+            serviceEndpoint: `${inviterOrganization.didDoc.id}#cao-1`,
           },
         ],
       });
-      const signatoryReminder1 = await persistSignatoryStatus({
+
+      const signatoryStatus1 = await persistSignatoryStatus({
         organization: organization1,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(8)(new Date()),
           },
         ],
       });
-      const signatoryReminder2 = await persistSignatoryStatus({
+      const signatoryStatus2 = await persistSignatoryStatus({
         organization: organization2,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(8)(new Date()),
           },
         ],
       });
-      const signatoryReminder3 = await persistSignatoryStatus({});
+      const signatoryStatus3 = await persistSignatoryStatus({});
       await sendReminders(
         sendEmailToSignatoryForOrganizationApproval,
         testContext
       );
 
       expect(mockSendEmail.mock.calls).toEqual([
-        [expectedSignatoryReminderEmail(organization2, caoOrganization)],
-        [expectedSignatoryReminderEmail(organization1, caoOrganization)],
+        [expectedSignatoryReminderEmail(organization2, inviterOrganization)],
+        [expectedSignatoryReminderEmail(organization1, inviterOrganization)],
       ]);
 
-      const signatoryReminderDb = await signatoryStatusRepo.findOne({
+      const signatoryStatus3Db = await signatoryStatusRepo.findOne({
         filter: {
-          _id: new ObjectId(signatoryReminder3._id),
+          _id: new ObjectId(signatoryStatus3._id),
         },
       });
-      expect(signatoryReminderDb).toEqual({
+      expect(signatoryStatus3Db).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: expect.any(String),
+        organizationId: expect.any(ObjectId),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
         ],
@@ -505,21 +620,22 @@ describe('signatoriesController', () => {
         updatedAt: expect.any(Date),
       });
 
-      const signatoryReminderDb1 = await signatoryStatusRepo.findOne({
+      const signatoryStatusDb1 = await signatoryStatusRepo.findOne({
         filter: {
-          _id: new ObjectId(signatoryReminder1._id),
+          _id: new ObjectId(signatoryStatus1._id),
         },
       });
-      expect(signatoryReminderDb1).toEqual({
+      expect(signatoryStatusDb1).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization1.didDoc.id,
+        organizationId: new ObjectId(organization1._id),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
-            state: SignatoryEventStatus.REMINDER_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
         ],
@@ -539,19 +655,20 @@ describe('signatoriesController', () => {
 
       const signatoryReminderDb2 = await signatoryStatusRepo.findOne({
         filter: {
-          _id: new ObjectId(signatoryReminder2._id),
+          _id: new ObjectId(signatoryStatus2._id),
         },
       });
       expect(signatoryReminderDb2).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization2.didDoc.id,
+        organizationId: new ObjectId(organization2._id),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
-            state: SignatoryEventStatus.REMINDER_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
         ],
@@ -570,18 +687,18 @@ describe('signatoriesController', () => {
       });
     });
 
-    it('should not send emails if there are reminder with reminder sent state', async () => {
+    it('should resend emails if enough time has passed since previous email', async () => {
       const organization = await persistOrganization();
       await persistSignatoryStatus({
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(7)(new Date()),
           },
           {
-            state: SignatoryEventStatus.REMINDER_SENT,
-            timestamp: new Date(),
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: subDays(1)(new Date()),
           },
         ],
       });
@@ -589,20 +706,16 @@ describe('signatoriesController', () => {
         sendEmailToSignatoryForOrganizationApproval,
         testContext
       );
-      expect(mockSendEmail).toHaveBeenCalledTimes(0);
+      expect(mockSendEmail).toHaveBeenCalledTimes(1);
     });
 
-    it('should not send emails if there are signatory reminders with approved state', async () => {
+    it('should not send emails if there are signatory reminders with completed state', async () => {
       const organization = await persistOrganization();
       await persistSignatoryStatus({
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
-          },
-          {
-            state: SignatoryEventStatus.APPROVED,
+            state: SignatoryEventStatus.COMPLETED,
             timestamp: new Date(),
           },
         ],
@@ -615,37 +728,14 @@ describe('signatoriesController', () => {
       expect(mockSendEmail).toHaveBeenCalledTimes(0);
     });
 
-    it('should not send emails if there are signatory reminders with rejected state', async () => {
+    it('should not send emails if there are signatory reminders but email was sent within delay period from config', async () => {
       const organization = await persistOrganization();
       await persistSignatoryStatus({
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(7)(new Date()),
-          },
-          {
-            state: SignatoryEventStatus.REJECTED,
-            timestamp: new Date(),
-          },
-        ],
-        rejectedAt: new Date(),
-      });
-      await sendReminders(
-        sendEmailToSignatoryForOrganizationApproval,
-        testContext
-      );
-      expect(mockSendEmail).toHaveBeenCalledTimes(0);
-    });
-
-    it('should not send emails if there are signatory reminders but email sent less than 7 days ago', async () => {
-      const organization = await persistOrganization();
-      await persistSignatoryStatus({
-        organization,
-        events: [
-          {
-            state: SignatoryEventStatus.EMAIL_SENT,
-            timestamp: subDays(6)(new Date()),
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: subHours(10)(new Date()),
           },
         ],
       });
@@ -671,7 +761,7 @@ describe('signatoriesController', () => {
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(8)(new Date()),
           },
         ],
@@ -690,9 +780,10 @@ describe('signatoriesController', () => {
       expect(signatoryReminderDb).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {
@@ -720,7 +811,7 @@ describe('signatoriesController', () => {
         organization,
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: subDays(8)(new Date()),
           },
         ],
@@ -738,9 +829,10 @@ describe('signatoriesController', () => {
       expect(signatoryReminderDb).toEqual({
         _id: expect.any(ObjectId),
         organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),
           },
           {

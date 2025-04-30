@@ -15,7 +15,6 @@
  */
 
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
-const { mapWithIndex, wait } = require('@velocitycareerlabs/common-functions');
 const {
   mongoFactoryWrapper,
   mongoCloseWrapper,
@@ -26,11 +25,8 @@ const console = require('console');
 const {
   toEthereumAddress,
 } = require('@velocitycareerlabs/blockchain-functions');
-const nonceRepoPlugin = require('../../nonce-management/test/repo');
 
 const testEventsAbi = require('./data/test-events-abi.json');
-const testNoEventsAbi = require('./data/test-no-events-abi.json');
-
 const { initContractClient, initProvider } = require('../index');
 const { deployContract } = require('./helpers/deployContract');
 
@@ -39,30 +35,21 @@ const context = {
   config,
 };
 
-const arrayOfSize = (size) => new Array(size).fill(1);
-
 describe('Contract Client Test Suite', () => {
   jest.setTimeout(15000);
-  const { privateKey: deployerPrivateKey, publicKey: deployerPublicKey } =
-    generateKeyPair();
+  const { privateKey: deployerPrivateKey } = generateKeyPair();
   const randomAccount = toEthereumAddress(generateKeyPair().publicKey);
   const rpcUrl = 'http://localhost:8545';
   const authenticate = () => 'TOKEN';
   const rpcProvider = initProvider(rpcUrl, authenticate);
-  let nonceRepo;
 
   const deployContractThatHasEvents = () =>
     deployContract(testEventsAbi, deployerPrivateKey, rpcUrl, (contract) =>
       contract.initialize(randomAccount, ['0x2c26'])
     );
 
-  const deployContractThatHasNoEvents = () =>
-    deployContract(testNoEventsAbi, deployerPrivateKey, rpcUrl);
-
   beforeAll(async () => {
     await mongoFactoryWrapper('test-contract', context);
-    nonceRepo = nonceRepoPlugin({})(context);
-    context.repos = { walletNonces: nonceRepo };
   });
 
   afterAll(async () => {
@@ -140,152 +127,6 @@ describe('Contract Client Test Suite', () => {
         expect(events).toEqual([]);
       }
       expect(latestBlock).toBeGreaterThan(0);
-    });
-  });
-
-  describe('execution of contract transactions', () => {
-    let contractClient;
-    let testTxFunc;
-    let fakeAddress;
-    let deployerAddress;
-
-    const basicTest = (i) =>
-      testTxFunc({
-        address: fakeAddress,
-        scope: `foo${i}`,
-      });
-
-    beforeAll(() => {
-      deployerAddress = toEthereumAddress(deployerPublicKey);
-    });
-
-    beforeEach(async () => {
-      await nonceRepo.delUsingFilter({ filter: {} });
-
-      const contractInstance = await deployContractThatHasNoEvents();
-
-      contractClient = await initContractClient(
-        {
-          privateKey: deployerPrivateKey,
-          contractAddress: await contractInstance.getAddress(),
-          contractAbi: testNoEventsAbi,
-          rpcProvider,
-        },
-        context
-      );
-
-      const { executeContractTx, contractClient: client } = contractClient;
-      fakeAddress = toEthereumAddress(generateKeyPair().publicKey);
-      testTxFunc = async ({ address, scope }) => {
-        await executeContractTx((nonce) =>
-          client.addAddressScope(address, scope, { nonce })
-        );
-      };
-      await wait(2000);
-    });
-
-    // the following test indicates the limits of what is possible with the current blockchain setup
-    it('should be able to execute many transactions in parallel', async () => {
-      await basicTest(0);
-      const { nonce: initialNonce } = await nonceRepo.findById(deployerAddress);
-
-      await Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(5)));
-
-      await wait(2000);
-
-      await Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(5)));
-
-      const { nonce: finalNonce } = await nonceRepo.findById(deployerAddress);
-
-      expect(finalNonce).toEqual(initialNonce + 10);
-    });
-
-    // the following test indicates the limits of what is possible with the current blockchain setup
-    it.skip('should be recover if too many transactions are sent', async () => {
-      await basicTest(0);
-      const { nonce: nonce1 } = await nonceRepo.findById(deployerAddress);
-
-      await wait(2000);
-
-      await expect(() =>
-        Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(11)))
-      ).rejects.toThrowError('Transaction nonce is too distant');
-
-      await wait(2000);
-      const { nonce: nonce2 } = await nonceRepo.findById(deployerAddress);
-      expect(nonce2).toBeLessThan(nonce1 + 10);
-      expect(nonce2).toBeGreaterThanOrEqual(nonce1 + 5);
-
-      await Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(1)));
-
-      const { nonce: nonce3 } = await nonceRepo.findById(deployerAddress);
-
-      expect(nonce3).toEqual(nonce2 + 1);
-    });
-
-    // the following test indicates the limits of what is possible with the current blockchain setup
-    it.skip('should be able to recover from too many initializations at once', async () => {
-      await expect(
-        Promise.all(mapWithIndex((v, i) => basicTest(i), arrayOfSize(3)))
-      ).resolves.toEqual([undefined, undefined, undefined]);
-    });
-
-    it('should transparently reinitialize if the nonce is reused', async () => {
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'foo',
-      });
-      const { nonce: initialNonce } = await nonceRepo.findById(deployerAddress);
-      nonceRepo.update(deployerAddress, { nonce: initialNonce - 1 });
-
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'bar',
-      });
-
-      const { nonce: finalNonce } = await nonceRepo.findById(deployerAddress);
-      expect(finalNonce).toEqual(initialNonce + 1);
-    });
-
-    it('should rollback the nonce if the transaction fails', async () => {
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'foo',
-      });
-      const { nonce: nonce1 } = await nonceRepo.findById(deployerAddress);
-
-      await expect(() =>
-        testTxFunc({
-          scope: 'bar',
-        })
-      ).rejects.toThrowError(/unsupported addressable value/);
-
-      const { nonce: nonce2 } = await nonceRepo.findById(deployerAddress);
-      expect(nonce2).toEqual(nonce1);
-
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'bar',
-      });
-
-      // should increment
-      const { nonce: nonce3 } = await nonceRepo.findById(deployerAddress);
-      expect(nonce3).toEqual(nonce1 + 1);
-    });
-
-    it('should rethrow other errors', async () => {
-      await testTxFunc({
-        address: fakeAddress,
-        scope: 'foo',
-      });
-      nonceRepo.update(deployerAddress, { nonce: -1 });
-
-      await expect(
-        testTxFunc({
-          address: fakeAddress,
-          scope: 'bar',
-        })
-      ).rejects.toThrowError(/unsigned value cannot be negative/);
     });
   });
 });

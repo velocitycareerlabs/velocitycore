@@ -1,5 +1,5 @@
-/**
- * Copyright 2023 Velocity Team
+/*
+ * Copyright 2024 Velocity Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,26 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-const { repoFactory } = require('@spencejs/spence-mongo-repos');
-const {
-  defaultMongoCollectionConfig,
-} = require('@velocitycareerlabs/nonce-management');
-const {
-  multitenantExtension,
-} = require('@velocitycareerlabs/spencer-mongo-extensions');
+const jwtAccessTokenExpectation = (tenant, header, payload) => ({
+  header: { alg: 'ES256K', typ: 'JWT', kid: '#exchanges-1', ...header },
+  payload: {
+    aud: tenant.did,
+    iss: tenant.did,
+    exp: expect.any(Number),
+    iat: expect.any(Number),
+    nbf: expect.any(Number),
+    jti: expect.any(String),
+    sub: expect.any(String),
+    ...payload,
+  },
+});
 
-module.exports = (app, options, next = () => {}) => {
-  next();
-  return repoFactory(
-    {
-      ...defaultMongoCollectionConfig,
-      extensions: [
-        ...defaultMongoCollectionConfig.extensions,
-        multitenantExtension(),
-      ],
-    },
-    app
-  );
-};
+module.exports = { jwtAccessTokenExpectation };

@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { nanoid } = require('nanoid');
 
-const jestConfig = require('../../jest.config.base');
-const pack = require('./package.json');
+const addAnonymousUserRepoExtension = (parent) => ({
+  addAnonymousUser: () => parent.insert({ _id: `anonymous|${nanoid()}` }),
+  extensions: parent.extensions.concat(['addAnonymousUserRepoExtension']),
+});
 
-module.exports = jestConfig(pack.name);
+module.exports = { addAnonymousUserRepoExtension };

@@ -1,5 +1,5 @@
 /**
- * Copyright 2023 Velocity Team
+ * Copyright 2025 Velocity Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,19 @@
  * limitations under the License.
  */
 
-const NonceCollectionErrors = {
-  NONCE_NOT_FOUND: 'NONCE_NOT_FOUND',
+const { some, isNil, isArray } = require('lodash/fp');
+
+const optional = (func, params) => {
+  if (typeof func !== 'function') {
+    throw new Error('First argument must be a function');
+  }
+  if (!isArray(params)) {
+    throw new Error('Second argument must be an array');
+  }
+  if (some(isNil, params)) {
+    return null;
+  }
+  return func(...params);
 };
 
-module.exports = { NonceCollectionErrors };
+module.exports = { optional };

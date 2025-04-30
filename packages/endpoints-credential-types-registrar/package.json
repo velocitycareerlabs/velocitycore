@@ -54,7 +54,7 @@
     "eslint-watch": "7.0.0",
     "form-data": "4.0.2",
     "jest": "29.7.0",
-    "mongodb": "6.15.0",
+    "mongodb": "6.16.0",
     "nock": "14.0.4",
     "prettier": "2.8.8"
   }

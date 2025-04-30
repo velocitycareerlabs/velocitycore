@@ -29,7 +29,7 @@
     "@velocitycareerlabs/signature-verification-library": "^0.5.0-build",
     "bignumber.js": "9.3.0",
     "cbor": "7.0.6",
-    "ethers": "6.13.5",
+    "ethers": "6.13.7",
     "fs": "0.0.1-security",
     "ganache": "7.9.2",
     "lodash": "4.17.21",

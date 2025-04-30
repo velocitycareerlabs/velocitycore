@@ -6105,10 +6105,10 @@
   dependencies:
     undici-types "~6.21.0"
 
-"@types/node@22.15.0":
-  version "22.15.0"
-  resolved "https://registry.npmjs.org/@types/node/-/node-22.15.0.tgz#5fcf430c079da64e96028b87cbffc218a02685db"
-  integrity sha512-99S8dWD2DkeE6PBaEDw+In3aar7hdoBvjyJMR6vaKBTzpvR0P00ClzJMOoVrj9D2+Sy/YCwACYHnBTpMhg1UCA==
+"@types/node@22.15.2":
+  version "22.15.2"
+  resolved "https://registry.npmjs.org/@types/node/-/node-22.15.2.tgz#1db55aa64618ee93a58c8912f74beefe44aca905"
+  integrity sha512-uKXqKN9beGoMdBfcaTY1ecwz6ctxuJAcUlwE55938g0ZJ8lRxwAZqRz2AJ4pzpt5dHdTPMB863UZ0ESiFUcP7A==
   dependencies:
     undici-types "~6.21.0"
 
@@ -10601,10 +10601,10 @@ ethereumjs-wallet@^1.0.1:
     utf8 "^3.0.0"
     uuid "^8.3.2"
 
-ethers@6.13.5, ethers@~6.13.0:
-  version "6.13.5"
-  resolved "https://registry.npmjs.org/ethers/-/ethers-6.13.5.tgz#8c1d6ac988ac08abc3c1d8fabbd4b8b602851ac4"
-  integrity sha512-+knKNieu5EKRThQJWwqaJ10a6HE9sSehGeqWN65//wE7j47ZpFhKAnHB/JJFibwwg61I/koxaPsXbXpD/skNOQ==
+ethers@6.13.7:
+  version "6.13.7"
+  resolved "https://registry.npmjs.org/ethers/-/ethers-6.13.7.tgz#7457fcb32413b441a3ee6e9f4cd63bf782de6226"
+  integrity sha512-qbaJ0uIrjh+huP1Lad2f2QtzW5dcqSVjIzVH6yWB4dKoMuj2WqYz5aMeeQTCNpAKgTJBM5J9vcc2cYJ23UAimQ==
   dependencies:
     "@adraffy/ens-normalize" "1.10.1"
     "@noble/curves" "1.2.0"
@@ -10664,6 +10664,19 @@ ethers@^5.0.13:
     "@ethersproject/wallet" "5.8.0"
     "@ethersproject/web" "5.8.0"
     "@ethersproject/wordlists" "5.8.0"
+
+ethers@~6.13.0:
+  version "6.13.5"
+  resolved "https://registry.npmjs.org/ethers/-/ethers-6.13.5.tgz#8c1d6ac988ac08abc3c1d8fabbd4b8b602851ac4"
+  integrity sha512-+knKNieu5EKRThQJWwqaJ10a6HE9sSehGeqWN65//wE7j47ZpFhKAnHB/JJFibwwg61I/koxaPsXbXpD/skNOQ==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.1"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@types/node" "22.7.5"
+    aes-js "4.0.0-beta.5"
+    tslib "2.7.0"
+    ws "8.17.1"
 
 ethjs-unit@0.1.6:
   version "0.1.6"
@@ -11087,11 +11100,6 @@ fb-watchman@^2.0.0:
   integrity sha512-p5161BqbuCaSnB8jIbzQHOlpgsPmK5rJVDfDKO91Axs5NC1uu3HRQm6wt9cd9/+GtQQIO53JdGXXoyDpTAsgYA==
   dependencies:
     bser "2.1.1"
-
-fdir@^6.4.3:
-  version "6.4.3"
-  resolved "https://registry.npmjs.org/fdir/-/fdir-6.4.3.tgz#011cdacf837eca9b811c89dbb902df714273db72"
-  integrity sha512-PMXmW2y1hDDfTSRc9gaXIuCCRpuoz3Kaz8cUelp3smouvfT632ozg2vrT6lJsHKKOF59YLbOGfAWGUcKEfRMQw==
 
 fdir@^6.4.4:
   version "6.4.4"
@@ -11960,7 +11968,7 @@ h2url@0.2.0:
     pump "^3.0.0"
     tinysonic "^1.3.0"
 
-handlebars@^4.7.7, handlebars@~4.7.7:
+handlebars@^4.7.7:
   version "4.7.8"
   resolved "https://registry.npmjs.org/handlebars/-/handlebars-4.7.8.tgz#41c42c18b1be2365439188c77c6afae71c0cd9e9"
   integrity sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==
@@ -15106,10 +15114,10 @@ mongodb-connection-string-url@^3.0.0:
     "@types/whatwg-url" "^11.0.2"
     whatwg-url "^14.1.0 || ^13.0.0"
 
-mongodb@6.15.0, mongodb@~6.15.0:
-  version "6.15.0"
-  resolved "https://registry.npmjs.org/mongodb/-/mongodb-6.15.0.tgz#4303ce0f7d5e5750749b1cb318dc7a115778f92e"
-  integrity sha512-ifBhQ0rRzHDzqp9jAQP6OwHSH7dbYIQjD3SbJs9YYk9AikKEettW/9s/tbSFDTpXcRbF+u1aLrhHxDFaYtZpFQ==
+mongodb@6.16.0, mongodb@~6.16.0:
+  version "6.16.0"
+  resolved "https://registry.npmjs.org/mongodb/-/mongodb-6.16.0.tgz#2a7a1986ec151d9c738fc8ce4cf4324c3f728a2f"
+  integrity sha512-D1PNcdT0y4Grhou5Zi/qgipZOYeWrhLEpk33n3nm6LGtz61jvO88WlrWCK/bigMjpnOdAUKKQwsGIl0NtWMyYw==
   dependencies:
     "@mongodb-js/saslprep" "^1.1.9"
     bson "^6.10.3"
@@ -15394,10 +15402,10 @@ node-releases@^2.0.19:
   resolved "https://registry.npmjs.org/node-releases/-/node-releases-2.0.19.tgz#9e445a52950951ec4d177d843af370b411caf314"
   integrity sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==
 
-nodemon@3.1.9:
-  version "3.1.9"
-  resolved "https://registry.npmjs.org/nodemon/-/nodemon-3.1.9.tgz#df502cdc3b120e1c3c0c6e4152349019efa7387b"
-  integrity sha512-hdr1oIb2p6ZSxu3PB2JWWYS7ZQ0qvaZsc3hK8DR8f02kRzc8rjYmxAIvdz+aYC+8F2IjNaB7HMcSDg8nQpJxyg==
+nodemon@3.1.10:
+  version "3.1.10"
+  resolved "https://registry.npmjs.org/nodemon/-/nodemon-3.1.10.tgz#5015c5eb4fffcb24d98cf9454df14f4fecec9bc1"
+  integrity sha512-WDjw3pJ0/0jMFmyNDp3gvY2YizjLmmOUQo6DEBY+JgdvW/yQ9mEeSw6H5ythl5Ny2ytb7f9C2nIbjSxMNzbJXw==
   dependencies:
     chokidar "^3.5.2"
     debug "^4"
@@ -17254,10 +17262,10 @@ quick-lru@^5.1.1, quick-lru@~5.1.1:
   resolved "https://registry.npmjs.org/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
-ra-core@^5.5.2, ra-core@^5.7.3:
-  version "5.7.3"
-  resolved "https://registry.npmjs.org/ra-core/-/ra-core-5.7.3.tgz#4b330b5da71ed952d97deb9ea5a2594eb96680b8"
-  integrity sha512-efPFdUnrLpERy0IuonvVS2LxYhNr9q+WrFNtDn+AZiPLqM8z+4zP+66lEHch6zmZR+jJWzR3Jo/8L01cuvPVnA==
+ra-core@^5.5.2, ra-core@^5.7.4:
+  version "5.7.4"
+  resolved "https://registry.npmjs.org/ra-core/-/ra-core-5.7.4.tgz#e5cf337464f409ab94ec474f842fd1c1aeb53b33"
+  integrity sha512-wHZ6Pco5x7DWWK9c9tIJt/n4kOIM/IMG7NMLHtx5ar59lHnLiifg1opfAPmgtyq+AVX7R75z2C0WH/5NJ9HATQ==
   dependencies:
     "@tanstack/react-query" "^5.21.7"
     clsx "^2.1.1"
@@ -17270,40 +17278,40 @@ ra-core@^5.5.2, ra-core@^5.7.3:
     react-error-boundary "^4.0.13"
     react-is "^18.2.0 || ^19.0.0"
 
-ra-data-fakerest@^5.7.3:
-  version "5.7.3"
-  resolved "https://registry.npmjs.org/ra-data-fakerest/-/ra-data-fakerest-5.7.3.tgz#0e7a49c58b0aaceb0f2149b142f72fbf206470d8"
-  integrity sha512-9rjrwsqx6s8ABjqSYsOtuRZEjQ6/YMqcRfDVa3PiereZQC6RweBm3S2JyW1Pjy+qVTFJaeEXPqTa9A8ReZ75eA==
+ra-data-fakerest@^5.7.4:
+  version "5.7.4"
+  resolved "https://registry.npmjs.org/ra-data-fakerest/-/ra-data-fakerest-5.7.4.tgz#806fa8c6a12f9e6f16963d2966373c969073aa11"
+  integrity sha512-a4vcElrFSiRaf7huHI3ewl85hm9EY0RbfgguzEzPgXypzNHHejx+wQ33wIxsw2XdgtwbIWcfLHNiprEyIpHSOw==
   dependencies:
     fakerest "^4.0.1"
 
 ra-data-local-storage@^5.5.2:
-  version "5.7.3"
-  resolved "https://registry.npmjs.org/ra-data-local-storage/-/ra-data-local-storage-5.7.3.tgz#a3f71ff4545b0f6201038161a717c75d72418c9f"
-  integrity sha512-q8SkG3wAPbL38DvtY76dpO5pMN1V7Wt1Ad1sse6bYa8nueULF5VHlUGpBXsg2R1ZNBoKwoEURoU/FaWFrydMQA==
+  version "5.7.4"
+  resolved "https://registry.npmjs.org/ra-data-local-storage/-/ra-data-local-storage-5.7.4.tgz#2798b4c8c2b8b46c018f2933069263b8a922d949"
+  integrity sha512-ld5wHYzqn6F2GuzqiRQiNk4jTpR2+0pBj6EpWxjw/ukMBQTGljb2Niyuxu6GYQrQiLfoxa0uBPyijqiizFZwoA==
   dependencies:
     lodash "~4.17.5"
-    ra-data-fakerest "^5.7.3"
+    ra-data-fakerest "^5.7.4"
 
-ra-i18n-polyglot@^5.7.3:
-  version "5.7.3"
-  resolved "https://registry.npmjs.org/ra-i18n-polyglot/-/ra-i18n-polyglot-5.7.3.tgz#d9c05b2d8af989cbfbcd4791d640078b29e57c20"
-  integrity sha512-BbgXPSGlUTHcceO6047VOD6WTAFUe3YQAsurp1mRHGj8/SySgSbvJdYPaoeR0TMLcmdOxFy84u1jGKPmBF+lnw==
+ra-i18n-polyglot@^5.7.4:
+  version "5.7.4"
+  resolved "https://registry.npmjs.org/ra-i18n-polyglot/-/ra-i18n-polyglot-5.7.4.tgz#81c771fc8bb592d80fa5787f506f957a27a2a3f8"
+  integrity sha512-85ZfwsEzElc/o05Enol+5fOpaUtkqNoU5DKu+w3vyaFGHbUWyIWhZUOkLfvno42OowE3qedBpSKwIIwxSpDgyg==
   dependencies:
     node-polyglot "^2.2.2"
-    ra-core "^5.7.3"
+    ra-core "^5.7.4"
 
-ra-language-english@^5.7.3:
-  version "5.7.3"
-  resolved "https://registry.npmjs.org/ra-language-english/-/ra-language-english-5.7.3.tgz#3aef8af35d6f3ed174ad317983c89b2e32247585"
-  integrity sha512-x6vQ2yg9Ra/8kco0ZNHsFpjdR3fjtyoSmEQcxDR0DEmZn7vrq3F8OJOMeBFedB1upqXjYZZgIWdMIlQScqM8/w==
+ra-language-english@^5.7.4:
+  version "5.7.4"
+  resolved "https://registry.npmjs.org/ra-language-english/-/ra-language-english-5.7.4.tgz#9c535a68ae40fceb0b693518b45802570dcc024b"
+  integrity sha512-oOijEQkhSWF/+h9UBkdKSNen76K3ykKlAtJk1ObX1fmyNjkQ0f4hP9bMS0c8ZgPsivE501/BKWkiZy7AgADAxg==
   dependencies:
-    ra-core "^5.7.3"
+    ra-core "^5.7.4"
 
-ra-ui-materialui@^5.7.3:
-  version "5.7.3"
-  resolved "https://registry.npmjs.org/ra-ui-materialui/-/ra-ui-materialui-5.7.3.tgz#1c65e6875d25c3c174e44c15826bedec8ceeb677"
-  integrity sha512-xSBGTIWkcE/LcdbVfJ4jmP5CCwzG1vUHn95wQAXxGRwXps/QDqNKOS/yactzLJ77wgqZteVNlhcgdkLQUBr9Tw==
+ra-ui-materialui@^5.7.4:
+  version "5.7.4"
+  resolved "https://registry.npmjs.org/ra-ui-materialui/-/ra-ui-materialui-5.7.4.tgz#dd335b3ecdec65a8cd6a25aa6181c840d947dedf"
+  integrity sha512-9+1ovcED48XZp2fmx9HBJwrOQiOzMYtdwMJNKWZuO+yS9hL9zRIeoKdWXF/4gyPVVAdVSc+2a/IK9aRahTqAQw==
   dependencies:
     "@tanstack/react-query" "^5.21.7"
     autosuggest-highlight "^3.1.1"
@@ -17362,18 +17370,18 @@ raw-body@2.5.2:
     unpipe "1.0.0"
 
 react-admin@^5.5.2:
-  version "5.7.3"
-  resolved "https://registry.npmjs.org/react-admin/-/react-admin-5.7.3.tgz#0a72a402446f5d8a137eb12088e2462cf15ad7e8"
-  integrity sha512-1ZOH6uHrhYbNNy5aTlPXpgB9CBZsVdb08yuPJ5HkLAWf1vEiL31jblAK1Ofs27mgju0UHSxzVJBCHfi9HnZIgQ==
+  version "5.7.4"
+  resolved "https://registry.npmjs.org/react-admin/-/react-admin-5.7.4.tgz#6386f755484dc0a4463840109c03c1f5193d61aa"
+  integrity sha512-VvyeLDAKYzRL57XhxseyPt8N3lAfV9zgxBuwpK2KrRz/Hl6sPSA+fLWRevA+YctEzaan/WcTsYdmNQ6k6qCm/g==
   dependencies:
     "@emotion/react" "^11.14.0"
     "@emotion/styled" "^11.14.0"
     "@mui/icons-material" "^5.16.12 || ^6.0.0"
     "@mui/material" "^5.16.12 || ^6.0.0"
-    ra-core "^5.7.3"
-    ra-i18n-polyglot "^5.7.3"
-    ra-language-english "^5.7.3"
-    ra-ui-materialui "^5.7.3"
+    ra-core "^5.7.4"
+    ra-i18n-polyglot "^5.7.4"
+    ra-language-english "^5.7.4"
+    ra-ui-materialui "^5.7.4"
     react-hook-form "^7.53.0"
     react-router "^6.28.1 || ^7.1.1"
     react-router-dom "^6.28.1 || ^7.1.1"
@@ -17403,9 +17411,9 @@ react-error-boundary@^4.0.13:
     "@babel/runtime" "^7.12.5"
 
 react-hook-form@^7.53.0:
-  version "7.55.0"
-  resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.55.0.tgz#df3c80a20a68f6811f49bec3406defaefb6dce80"
-  integrity sha512-XRnjsH3GVMQz1moZTW53MxfoWN7aDpUg/GpVNc4A3eXRVNdGXfbzJ4vM4aLQ8g6XCUh1nIbx70aaNCl7kxnjog==
+  version "7.56.1"
+  resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.56.1.tgz#45b2040fef997b873d656959d2e7f864f35bf95d"
+  integrity sha512-qWAVokhSpshhcEuQDSANHx3jiAEFzu2HAaaQIzi/r9FNPm1ioAvuJSD4EuZzWd7Al7nTRKcKPnBKO7sRn+zavQ==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
@@ -19177,14 +19185,6 @@ tiny-typed-emitter@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/tiny-typed-emitter/-/tiny-typed-emitter-2.1.0.tgz#b3b027fdd389ff81a152c8e847ee2f5be9fad7b5"
   integrity sha512-qVtvMxeXbVej0cQWKqVSSAHmKZEHAvxdF8HEUBFWts8h+xEo5m/lEiPakuyZ3BnCBjOD8i24kzNOiOLLgsSxhA==
-
-tinyglobby@^0.2.12:
-  version "0.2.12"
-  resolved "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.12.tgz#ac941a42e0c5773bd0b5d08f32de82e74a1a61b5"
-  integrity sha512-qkf4trmKSIiMTs/E63cxH+ojC2unam7rJ0WrauAzpT3ECNTxGRMlaXxVbfxMUC/w0LaYk6jQ4y/nGR9uBO3tww==
-  dependencies:
-    fdir "^6.4.3"
-    picomatch "^4.0.2"
 
 tinyglobby@^0.2.13:
   version "0.2.13"

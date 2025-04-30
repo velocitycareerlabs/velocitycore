@@ -30,8 +30,6 @@ const {
 
 const { initPermissions } = require('../index');
 
-const nonceRepoPlugin = require('../../nonce-management/test/repo');
-
 describe('Permissions Contract Test Suite', () => {
   jest.setTimeout(10000);
   const rpcUrl = 'http://localhost:8545';
@@ -69,7 +67,6 @@ describe('Permissions Contract Test Suite', () => {
 
   beforeAll(async () => {
     await mongoFactoryWrapper('test-permissions', context);
-    context.repos = { walletNonces: nonceRepoPlugin({})(context) };
 
     const rootKeyPair = generateKeyPair();
     deployedContract = await deployTestPermissionsContract(

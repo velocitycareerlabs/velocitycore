@@ -91,7 +91,6 @@ describe('org registration and issuing e2e', () => {
   });
   beforeAll(async () => {
     client = await MongoClient.connect('mongodb://localhost:17017');
-    await client.db('oracle').collection('walletNonces').deleteMany({});
 
     // Generate holder DID and key pair for fake wallet
     holderKeyPair = generateKeyPair({ format: 'jwk' });

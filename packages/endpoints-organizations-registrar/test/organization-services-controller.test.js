@@ -3538,7 +3538,7 @@ describe('Organization Services Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const organization = await setupOrganizationWithGroup();
           const did = organization.didDoc.id;
@@ -3621,7 +3621,7 @@ describe('Organization Services Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const organization = await setupOrganizationWithGroup();
           const dltKey = extractVerificationMethod(
@@ -3720,7 +3720,7 @@ describe('Organization Services Test Suite', () => {
           const invitationCode = '1234567812345678';
           await persistInvitation({
             invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const organization = await persistOrganization({
             keys: [

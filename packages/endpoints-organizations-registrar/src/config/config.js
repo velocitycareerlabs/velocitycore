@@ -178,14 +178,14 @@ const createConfig = (packageJson) => {
     libS3Bucket: env.get('LIB_S3_BUCKET').required(!isTest).asString(),
     libUrl: env.get('LIB_URL').required(!isTest).asString(),
     custodiedDidWebHost: env.get('CUSTODIED_DID_WEB_HOST').asString(),
-    reminderDelayInMinutes: env
-      .get('REMINDER_DELAY_IN_MINUTES')
-      .default(10080)
-      .asIntPositive(),
     kmsPluginModule: env
       .get('KMS_PLUGIN_MODULE')
       .default('@velocitycareerlabs/db-kms')
       .asString(),
+    serviceConsentVersion: env
+      .get('SERVICE_CONSENT_VERSION')
+      .default('1')
+      .asIntPositive(),
     kmsPlugin: env.get('KMS_PLUGIN').default('dbKmsPlugin').asString(),
   };
 
@@ -226,11 +226,27 @@ const createConfig = (packageJson) => {
       .asString(),
   };
 
+  const signatoryConfig = {
+    signatoryLinkResend: env
+      .get('SIGNATORY_LINK_RESEND')
+      .default('1440')
+      .asIntPositive(),
+    signatoryLinkExpiration: env
+      .get('SIGNATORY_LINK_EXPIRATION')
+      .default('1440')
+      .asIntPositive(),
+    signatoryConsentVersion: env
+      .get('SIGNATORY_CONSENT_VERSION')
+      .default('1')
+      .asIntPositive(),
+  };
+
   return {
     ...sharedConfig,
     ...registrarConfig,
     ...monitoringEnvConfig,
     ...tokenConfig,
+    ...signatoryConfig,
   };
 };
 

@@ -4,14 +4,14 @@ const initSendEmailInvitee = (fastify) => {
   const { sendEmail, sendError, log, config } = fastify;
   const { emailToInvitee } = initInvitationEmails(fastify.config);
 
-  return async ({ ticket, inviteeEmail, caoOrganization, code }) => {
+  return async ({ ticket, inviteeEmail, inviterOrganization, code }) => {
     try {
       const uri = buildInvitationUrl({ code, ticket }, { config });
 
       await sendEmail(
         emailToInvitee({
           inviteeEmail,
-          caoOrgProfileName: caoOrganization.profile.name,
+          inviterOrgProfileName: inviterOrganization.profile.name,
           uri,
         })
       );
