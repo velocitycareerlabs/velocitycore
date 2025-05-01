@@ -37,7 +37,7 @@
     "nanoid": "~3.3.8"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.731.1",
+    "@aws-sdk/client-s3": "^3.787.0",
     "@spencejs/spence-factories": "0.10.2",
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "@velocitycareerlabs/server-provider": "0.5.0-build",
