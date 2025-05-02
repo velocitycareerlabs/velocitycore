@@ -15,6 +15,7 @@
  *
  */
 
+const { omit } = require('lodash/fp');
 const { register } = require('@spencejs/spence-factories');
 const { addWeeks } = require('date-fns/fp');
 const invitationsRepoPlugin = require('../repo');
@@ -25,9 +26,11 @@ module.exports = (app) =>
     invitationsRepoPlugin(app)({ config: app.config }),
     async (overrides) => {
       const overridesResult = overrides();
-      const inviteeService = overridesResult.organization?.didDoc.service;
-      const inviteeProfile = overridesResult.organization?.profile;
-      const inviterDid = overridesResult.organization?.didDoc.id;
+      const inviteeService =
+        overridesResult.inviteeOrganization?.didDoc.service;
+      const inviteeProfile = overridesResult.inviteeOrganization?.profile;
+      const inviterDid = overridesResult.inviterOrganization?.didDoc.id;
+
       return {
         inviteeEmail: 'foo@example.com',
         invitationUrl: 'https://someurl.com',
@@ -39,7 +42,10 @@ module.exports = (app) =>
         createdAt: new Date(),
         updatedAt: new Date(),
         createdBy: 'sub-123',
-        ...overridesResult,
+        ...omit(
+          ['inviterOrganization', 'inviteeOrganization'],
+          overridesResult
+        ),
       };
     }
   );

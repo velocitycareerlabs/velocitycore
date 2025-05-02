@@ -21,7 +21,6 @@ const {
 } = require('@velocitycareerlabs/tests-helpers');
 const { env: config } = require('@spencejs/spence-config');
 const console = require('console');
-const nonceRepoPlugin = require('@velocitycareerlabs/nonce-management/test/repo');
 
 const testEventsAbi = require('./data/test-events-abi.json');
 const testNoEventsAbi = require('./data/test-no-events-abi.json');
@@ -40,15 +39,12 @@ describe('Contract With Transacting Client Test Suite', () => {
   const rpcUrl = 'http://localhost:8545';
   const authenticate = () => 'TOKEN';
   const rpcProvider = initProvider(rpcUrl, authenticate);
-  let nonceRepo;
 
   const deployContractWrapper = () =>
     deployContract(testNoEventsAbi, deployerPrivateKey, rpcUrl);
 
   beforeAll(async () => {
     await mongoFactoryWrapper('test-contract-with-transacting-client', context);
-    nonceRepo = nonceRepoPlugin({})(context);
-    context.repos = { walletNonces: nonceRepo };
   });
 
   afterAll(async () => {

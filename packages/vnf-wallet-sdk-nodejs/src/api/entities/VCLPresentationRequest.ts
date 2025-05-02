@@ -51,7 +51,7 @@ export default class VCLPresentationRequest {
 
     get progressUri() {
         return (
-            (this.jwt.payload[VCLPresentationRequest.KeyMetadata] ?? {})[
+            this.jwt.payload[VCLPresentationRequest.KeyMetadata]?.[
                 VCLPresentationRequest.KeyProgressUri
             ] ?? ''
         );
@@ -59,7 +59,7 @@ export default class VCLPresentationRequest {
 
     get submitPresentationUri() {
         return (
-            (this.jwt.payload[VCLPresentationRequest.KeyMetadata] ?? {})[
+            this.jwt.payload[VCLPresentationRequest.KeyMetadata]?.[
                 VCLPresentationRequest.KeySubmitPresentationUri
             ] ?? ''
         );
@@ -67,7 +67,7 @@ export default class VCLPresentationRequest {
 
     get authTokenUri() {
         return (
-            (this.jwt.payload[VCLPresentationRequest.KeyMetadata] ?? {})[
+            this.jwt.payload[VCLPresentationRequest.KeyMetadata]?.[
                 VCLPresentationRequest.KeyAuthTokenUri
             ] ?? ''
         );
@@ -76,7 +76,7 @@ export default class VCLPresentationRequest {
 
     getFeed(): boolean {
         return (
-            (this.jwt.payload[VCLPresentationRequest.KeyMetadata] ?? {})[
+            this.jwt.payload[VCLPresentationRequest.KeyMetadata]?.[
                 VCLPresentationRequest.KeyFeed
             ] ?? false
         );

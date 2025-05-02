@@ -8,6 +8,7 @@
 import { randomBytes } from 'crypto';
 import { Nullish } from '../../api/VCLTypes';
 import VCLLog from './VCLLog';
+import VCLError from '../../api/entities/error/VCLError';
 
 export const getQueryParamsFromString = (
     srcStr: string
@@ -84,4 +85,14 @@ export const equalsToDate = (date1: Date, date2: Date): boolean => {
         )
     );
     return selfCopy === check;
+};
+
+export const ensureDefined = <T>(
+    value: T | null | undefined,
+    name: string
+): T => {
+    if (value == null) {
+        throw new VCLError(`${name} is required`);
+    }
+    return value;
 };

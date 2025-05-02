@@ -78,6 +78,7 @@ describe('Get exchange progress test suite', () => {
     await mongoDb().collection('tenants').deleteMany({});
     await mongoDb().collection('keys').deleteMany({});
     await mongoDb().collection('exchanges').deleteMany({});
+    await mongoDb().collection('vendorUserIdMappings').deleteMany({});
 
     const keyPair = generateKeyPair({ format: 'jwk' });
     exchangePrivateKey = keyPair.privateKey;
@@ -443,7 +444,7 @@ describe('Get exchange progress test suite', () => {
     });
   });
 
-  it('should 200 for an complete DISCLOSURE exchange', async () => {
+  it('should 200 for a complete DISCLOSURE exchange', async () => {
     const disclosureExchange = await persistDisclosureExchange({
       tenant,
       events: [
@@ -480,7 +481,7 @@ describe('Get exchange progress test suite', () => {
     });
   });
 
-  it('should 200 for an complete DISCLOSURE exchange that errored after completion, errors should be suppressed', async () => {
+  it('should 200 for a complete DISCLOSURE exchange that errored after completion, errors should be suppressed', async () => {
     const disclosureExchange = await persistDisclosureExchange({
       tenant,
       events: [

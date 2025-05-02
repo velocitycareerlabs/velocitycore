@@ -1,12 +1,12 @@
 // eslint-disable-next-line no-unused-vars,import/no-extraneous-dependencies
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // eslint-disable-next-line no-unused-vars
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router';
 import { render } from '@testing-library/react';
 // eslint-disable-next-line no-unused-vars
+import { TestAuthProvider } from '@/utils/auth/__tests__/TestAuthProvider.jsx';
 import IndividualsShow from '../../individuals/IndividualsShow.jsx';
 // eslint-disable-next-line no-unused-vars
-import { TestAuthProvider } from '../../../utils/auth/__tests__/TestAuthProvider.jsx';
 
 const queryClient = new QueryClient();
 

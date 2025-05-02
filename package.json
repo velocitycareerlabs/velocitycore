@@ -47,14 +47,14 @@
     "**/semver": "~7.7.0",
     "**/json5": "~2.2.3",
     "**/http-cache-semantics": "~4.1.1",
-    "**/migrate-mongo/mongodb": "~6.15.0",
+    "**/migrate-mongo/mongodb": "~6.16.0",
     "**/fast-json-stringify": "6.0.1",
-    "react-router": "6.30.0",
-    "react-router-dom": "6.30.0"
+    "react-router": "7.5.2",
+    "react-router-dom": "7.5.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "18.6.1",
-    "@commitlint/config-conventional": "18.6.3",
+    "@commitlint/cli": "19.8.0",
+    "@commitlint/config-conventional": "19.8.0",
     "depcheck": "1.4.7",
     "husky": "4.3.8",
     "jest-junit": "16.0.0",

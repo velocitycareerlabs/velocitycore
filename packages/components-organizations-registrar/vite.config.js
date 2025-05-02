@@ -25,6 +25,11 @@ import { libInjectCss } from 'vite-plugin-lib-inject-css';
 export default defineConfig({
   // Automatically externalizes deps based on package.json
   plugins: [libInjectCss(), externalizeDeps({}), react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
   build: {
     minify: false,
     sourcemap: true,

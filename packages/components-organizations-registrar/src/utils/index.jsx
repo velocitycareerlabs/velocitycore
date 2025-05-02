@@ -16,7 +16,7 @@
 
 /* eslint-disable */
 import { Link } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 function fallbackCopyTextToClipboard(text, cb) {
   const textArea = document.createElement('textarea');

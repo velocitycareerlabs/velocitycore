@@ -42,16 +42,15 @@ const initMetadataRegistry = async (
   const { log } = context;
   log.info({ contractAddress }, 'initMetadataRegistry');
 
-  const { contractClient, executeContractTx, pullEvents } =
-    await initContractClient(
-      {
-        privateKey,
-        contractAddress,
-        rpcProvider,
-        contractAbi,
-      },
-      context
-    );
+  const { contractClient, pullEvents } = await initContractClient(
+    {
+      privateKey,
+      contractAddress,
+      rpcProvider,
+      contractAbi,
+    },
+    context
+  );
 
   // TODO this check should NOT require a contractClient call. All free types should be cached on startup, and reloaded every X (configurable) hours
   const isExistMetadataList = (id, accountId) => {
@@ -438,11 +437,11 @@ const initMetadataRegistry = async (
   };
 
   const setPermissionsAddress = async (permissionsContractAddress) => {
-    return executeContractTx((nonce) =>
-      contractClient.setPermissionsAddress(permissionsContractAddress, {
-        nonce,
-      })
+    const tx = await contractClient.setPermissionsAddress(
+      permissionsContractAddress
     );
+
+    return tx.wait();
   };
 
   const toDID = ({ accountId, listId, index }) =>

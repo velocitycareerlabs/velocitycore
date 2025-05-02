@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { useGetOne, useRedirect, useCreate } from 'react-admin';
 import { Box, Button, Typography } from '@mui/material';
 import { kebabCase } from 'lodash/string';

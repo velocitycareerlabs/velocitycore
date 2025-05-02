@@ -24,8 +24,8 @@
     "react-admin": "^5.5.2",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
-    "react-router-dom": "6.30",
-    "react-router": "6.30"
+    "react-router-dom": "7.5.2",
+    "react-router": "7.5.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react-swc": "3.9.0",
@@ -40,7 +40,7 @@
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "4.6.2",
     "postcss-normalize": "10.0.1",
-    "vite": "6.3.3"
+    "vite": "6.3.4"
   },
   "scripts": {
     "start": "vite dev --mode dev.local",

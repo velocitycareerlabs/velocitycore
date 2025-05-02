@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-const chainNames = {
+export const chainNames = {
   mainnet: 'Mainnet',
   testnet: 'Testnet',
   qanet: 'Qanet',

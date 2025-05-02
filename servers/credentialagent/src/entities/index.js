@@ -22,7 +22,6 @@ module.exports = {
   ...require('./exchanges'),
   ...require('./feeds'),
   ...require('./keys'),
-  ...require('./nonce-management'),
   ...require('./notifications'),
   ...require('./metadata-list-allocations'),
   ...require('./offers'),

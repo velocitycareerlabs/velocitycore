@@ -15,49 +15,62 @@
  */
 
 import { Stack, Typography } from '@mui/material';
-import { Link as ReactRouterLink, useParams } from 'react-router-dom';
-import { useCreateController, useGetOne, useRedirect, useLogout } from 'react-admin';
+import { Link as ReactRouterLink, useParams } from 'react-router';
+import { useCreateController, useGetOne, useRedirect, useLogout, useRefresh } from 'react-admin';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState, useCallback } from 'react';
-import CreateOrganisation from '../../components/organizations/CreateOrganization.jsx';
-import useCountryCodes from '../../utils/countryCodes';
-import Loading from '../../components/Loading.jsx';
-import useSelectedOrganization from '../../state/selectedOrganizationState';
-import SecretKeysPopup from './SecretKeysPopup.jsx';
-import WarningSecretKeysPopup from '../../components/common/WarningSecretKeysPopup.jsx';
-import InvitationServiceInfo from '../../components/invitations/InvitationServiceInfo.jsx';
-import { FOOTER_HEIGHT } from '../../theme/theme';
-import Popup from '../../components/common/Popup.jsx';
-import { MESSAGE_CODES } from '../../constants/messageCodes';
-import { formatWebSiteUrl, formatRegistrationNumbers, parseJwt } from '../../utils/index.jsx';
-import { dataResources } from '../../utils/remoteDataProvider';
-import { useAuth } from '../../utils/auth/AuthContext';
+import PropTypes from 'prop-types';
+import { FOOTER_HEIGHT } from '@/theme/theme';
+import CreateOrganisation from '@/components/organizations/CreateOrganization.jsx';
+import InvitationServiceInfo from '@/components/invitations/InvitationServiceInfo.jsx';
+import Popup from '@/components/common/Popup.jsx';
+import Loading from '@/components/Loading.jsx';
+import { MESSAGE_CODES } from '@/constants/messageCodes';
+import { formatWebSiteUrl, formatRegistrationNumbers, parseJwt } from '@/utils/index.jsx';
+import useCountryCodes from '@/utils/countryCodes';
+import { dataResources } from '@/utils/remoteDataProvider';
+import { useAuth } from '@/utils/auth/AuthContext';
+import useSelectedOrganization from '@/state/selectedOrganizationState';
+import { SecretKeysPopup } from '../services/components/SecretKeysPopup/index.jsx';
 
-const CreateOrganisationFromInvitation = () => {
+const CreateOrganizationFromInvitation = ({ InterceptOnCreate }) => {
   const { code } = useParams();
-  const queryClient = useQueryClient();
+  const refresh = useRefresh();
   const redirect = useRedirect();
-  const [, setDid] = useSelectedOrganization();
-  const [isLoader, setIsLoader] = useState(false);
-  const [secretKeys, setSecretKeys] = useState(null);
-  const [messageCode, setMessageCode] = useState(null);
-  const [isOpenSecretPopup, setIsOpenSecretPopup] = useState(false);
-  const [isOpenWarningSecretPopup, setIsOpenWarningSecretPopup] = useState(false);
-  const [isOpenNotExistingPopup, setIsOpenNotExistingPopup] = useState(false);
-  const [isOpenExpiredPopup, setIsOpenExpiredPopup] = useState(false);
-  const [isDownloaded, setIsDownloaded] = useState(false);
-  const [isLoadingKeys, setIsLoadingKeys] = useState(false);
-  const [isLoadingKeysError, setIsLoadingKeysError] = useState(false);
-  const { data: countryCodes, isLoading } = useCountryCodes();
-  const [hasOrganisations, setHasOrganisations] = useState(false);
   const auth = useAuth();
   const { user, getAccessToken } = auth;
+  const logout = useLogout();
+
+  const [setDid] = useSelectedOrganization();
+  const { data: countryCodes, isLoading } = useCountryCodes();
+
+  const [hasOrganisations, setHasOrganisations] = useState(false);
+
+  const [isLoader, setIsLoader] = useState(false);
+  const [secretKeys, setSecretKeys] = useState(null);
+  // popups
+  const [isOpenSecretPopup, setIsOpenSecretPopup] = useState(false);
+  const [isOpenNotExistingPopup, setIsOpenNotExistingPopup] = useState(false);
+  const [isOpenExpiredPopup, setIsOpenExpiredPopup] = useState(false);
+  const [isInterceptOnCreateOpen, setIsInterceptOnCreateOpen] = useState(false);
+
+  const { save, saving: creatingIsLoading } = useCreateController({
+    resource: 'organizations',
+    mutationOptions: {
+      onSuccess: async (resp) => {
+        refresh();
+        setDid(resp.id);
+        setSecretKeys({ keys: resp.keys, authClients: resp.authClients });
+        getAccessToken({ cacheMode: 'off' });
+      },
+    },
+  });
+
   const { data: userData, isLoading: isUserDataLoading } = useGetOne(dataResources.USERS, {
     id: user.sub,
   });
+
   const { data: invitationData, isLoading: invitationIsLoading } = useGetOne(
     'invitations',
     {
@@ -85,11 +98,7 @@ const CreateOrganisationFromInvitation = () => {
       { enabled: !!invitationData?.inviterDid },
     );
 
-  const handleWarningSecretKeyPopupClose = useCallback(() => {
-    setIsOpenWarningSecretPopup(false);
-    redirect('/');
-  }, [redirect]);
-
+  // Check if the user has an organization
   useEffect(() => {
     (async () => {
       try {
@@ -107,22 +116,6 @@ const CreateOrganisationFromInvitation = () => {
     })();
   }, [getAccessToken]);
 
-  const { save, saving: creatingIsLoading } = useCreateController({
-    resource: 'organizations',
-    mutationOptions: {
-      onSuccess: async (resp) => {
-        await queryClient.invalidateQueries(['organizations', 'getList']);
-        setDid(resp.id);
-        setSecretKeys({ keys: resp.keys, authClients: resp.authClients });
-        setMessageCode(resp.messageCode && resp.messageCode === MESSAGE_CODES.KEY_TRANFER_SUCCESS);
-        setIsOpenSecretPopup(true);
-        getAccessToken({ cacheMode: 'off' });
-      },
-    },
-  });
-
-  const logout = useLogout();
-
   useEffect(() => {
     const inviteeEmail = invitationData?.inviteeEmail;
     const userEmail = userData?.email;
@@ -134,29 +127,30 @@ const CreateOrganisationFromInvitation = () => {
   }, [userData, invitationData, logout, auth]);
 
   useEffect(() => {
-    if (isOpenWarningSecretPopup && !isLoadingKeys && !isLoadingKeysError && isDownloaded) {
-      handleWarningSecretKeyPopupClose();
+    if (secretKeys) {
+      if (InterceptOnCreate) {
+        setIsInterceptOnCreateOpen(false);
+      } else {
+        setIsOpenSecretPopup(true);
+      }
     }
-  }, [
-    isOpenWarningSecretPopup,
-    isLoadingKeys,
-    isLoadingKeysError,
-    isDownloaded,
-    handleWarningSecretKeyPopupClose,
-  ]);
+  }, [InterceptOnCreate, secretKeys]);
 
-  const handleSubmit = async (formData) => {
-    await save({
-      profile: {
-        ...formData,
-        website: formatWebSiteUrl(formData.website),
-        linkedInProfile: formatWebSiteUrl(formData.linkedInProfile),
-        registrationNumbers: formatRegistrationNumbers(formData.registrationNumbers),
-      },
-      serviceEndpoints: invitationData?.inviteeService,
-      invitationCode: code,
-    });
-  };
+  const handleSubmit = useCallback(
+    async (formData) => {
+      await save({
+        profile: {
+          ...formData,
+          website: formatWebSiteUrl(formData.website),
+          linkedInProfile: formatWebSiteUrl(formData.linkedInProfile),
+          registrationNumbers: formatRegistrationNumbers(formData.registrationNumbers),
+        },
+        serviceEndpoints: invitationData?.inviteeService,
+        invitationCode: code,
+      });
+    },
+    [save, code, invitationData],
+  );
 
   useEffect(() => {
     setIsLoader(isLoading || invitationIsLoading || isLoadingOrgData || isUserDataLoading);
@@ -193,39 +187,59 @@ const CreateOrganisationFromInvitation = () => {
             <InvitationServiceInfo inviteeService={invitationData?.inviteeService} />
           </CreateOrganisation>
         )}
+
+        {InterceptOnCreate && (
+          <InterceptOnCreate
+            isInterceptOnCreateOpen={isInterceptOnCreateOpen}
+            serviceId={invitationData?.inviteeService?.[0]?.id}
+            // did={did}
+            onNext={() => {
+              setIsOpenSecretPopup(true);
+            }}
+            onClose={() => {
+              setIsOpenSecretPopup(true);
+            }}
+            isIssueOrInspection={true}
+            selectedCAO={invitationData?.inviterDid}
+          />
+        )}
+
         <SecretKeysPopup
-          isModalOpened={isOpenSecretPopup}
-          onClose={() => setIsOpenSecretPopup(false)}
+          isOpen={isOpenSecretPopup}
           secretKeys={secretKeys}
-          isTransferConfirmed={messageCode}
-          onShowWarning={() => setIsOpenWarningSecretPopup(true)}
+          onClose={() => {
+            setIsOpenSecretPopup(false);
+            redirect('/');
+          }}
+          wording={{
+            title: 'Your organization is now registered on Velocity Network™.',
+            subtitle:
+              'Please save your organization’s unique keys in a secure location, as they will not be available once you close this window.',
+          }}
+          warningWording={{
+            title: 'You must download a copy of your keys before exiting',
+            subtitle:
+              'They will not be available again and are critical for managing your organization data.',
+          }}
         />
-        <WarningSecretKeysPopup
-          isModalOpened={isOpenWarningSecretPopup}
-          onClose={handleWarningSecretKeyPopupClose}
-          secretKeys={secretKeys}
-          onLoading={(loading) => setIsLoadingKeys(loading)}
-          onClick={(isClicked) => setIsDownloaded(isClicked)}
-          isLoading={isLoadingKeys}
-          onError={(isError) => setIsLoadingKeysError(isError)}
-        />
+
         <Popup
+          isOpen={isOpenNotExistingPopup}
           onClose={() => {
             setIsOpenNotExistingPopup(false);
             redirect('/');
           }}
           title="That invitation link either has been deleted or doesn’t exist"
-          isOpen={isOpenNotExistingPopup}
           mainContainerStyles={sxStyles.errorPopupContainer}
           titleStyles={{ ...sxStyles.errorTitle, ...sxStyles.noInvitation }}
         />
         <Popup
+          isOpen={isOpenExpiredPopup}
           onClose={() => {
             setIsOpenExpiredPopup(false);
             redirect('/');
           }}
           title="This invitation link either has expired"
-          isOpen={isOpenExpiredPopup}
           mainContainerStyles={sxStyles.errorPopupContainer}
           titleStyles={sxStyles.errorTitle}
         >
@@ -238,7 +252,12 @@ const CreateOrganisationFromInvitation = () => {
   );
 };
 
-export default CreateOrganisationFromInvitation;
+// eslint-disable-next-line better-mutation/no-mutation
+CreateOrganizationFromInvitation.propTypes = {
+  InterceptOnCreate: PropTypes.elementType,
+};
+
+export default CreateOrganizationFromInvitation;
 
 const sxStyles = {
   root: { minHeight: '100vh' },
@@ -255,12 +274,6 @@ const sxStyles = {
     borderRadius: '12px',
     p: '32px 40px',
     mt: '25px',
-  },
-  agreement: {
-    color: (theme) => theme.customColors.grey2,
-    textAlign: 'center',
-    mt: 5,
-    display: 'block',
   },
   errorPopupContainer: {
     px: '50px',

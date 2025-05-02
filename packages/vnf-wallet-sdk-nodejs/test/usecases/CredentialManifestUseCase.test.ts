@@ -2,7 +2,7 @@ import { expect } from '@jest/globals';
 import CredentialManifestUseCase from '../../src/impl/domain/usecases/CredentialManifestUseCase';
 import CredentialManifestUseCaseImpl from '../../src/impl/data/usecases/CredentialManifestUseCaseImpl';
 import CredentialManifestRepositoryImpl from '../../src/impl/data/repositories/CredentialManifestRepositoryImpl';
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import { CredentialManifestMocks } from '../infrastructure/resources/valid/CredentialManifestMocks';
 import ResolveKidRepositoryImpl from '../../src/impl/data/repositories/ResolveKidRepositoryImpl';
 import JwtServiceRepositoryImpl from '../../src/impl/data/repositories/JwtServiceRepositoryImpl';

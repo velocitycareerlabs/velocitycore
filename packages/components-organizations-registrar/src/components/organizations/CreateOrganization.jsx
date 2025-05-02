@@ -27,7 +27,7 @@ import {
 import { useState } from 'react';
 import InfoIcon from '@mui/icons-material/Info';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { FOOTER_HEIGHT } from '../../theme/theme';
 import { validateEmail, validateName, validateWebsite } from './CreateOrganization.utils';
 import OrganizationSubmitButton from './OrganisationSubmitButton.jsx';
@@ -100,7 +100,7 @@ const CreateOrganization = ({
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s Legal Name"
+                          label="Legal Name"
                           source="name"
                           validate={validateName}
                         />
@@ -108,7 +108,7 @@ const CreateOrganization = ({
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s website"
+                          label="Website"
                           source="website"
                           validate={[required(), ...validateWebsite]}
                         />
@@ -116,14 +116,14 @@ const CreateOrganization = ({
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s address"
+                          label="Address"
                           source="physicalAddress.line1"
                           validate={[required(), maxLength(1024)]}
                         />
                       </Grid>
                       <Grid size={{ xs: 12 }}>
                         <AutocompleteInput
-                          label="Organization’s Country"
+                          label="Country"
                           source="location.countryCode"
                           choices={countryCodes}
                           validate={required()}
@@ -144,7 +144,7 @@ const CreateOrganization = ({
                     <Stack flexDirection="row" gap={1.75}>
                       <TextInput
                         fullWidth
-                        label="Organization’s LinkedIn Page"
+                        label="LinkedIn Page"
                         source="linkedInProfile"
                         validate={[...validateWebsite, required()]}
                       />
@@ -229,7 +229,7 @@ const CreateOrganization = ({
                     <TextInput
                       fullWidth
                       multiline
-                      label="Short Description of the Organization"
+                      label="Short Description"
                       placeholder="Description (a boilerplate for other Network participants to read about the organization)"
                       source="description"
                       validate={required()}
