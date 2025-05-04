@@ -125,7 +125,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                   </Tooltip>
                 </Box>
               </Stack>
-              <TextInput fullWidth label="Organization’s address" source="physicalAddress.line1" />
+              <TextInput fullWidth label="Address" source="physicalAddress.line1" />
               <AutocompleteInput
                 label="Country"
                 source="location.countryCode"
