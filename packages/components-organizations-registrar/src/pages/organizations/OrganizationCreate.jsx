@@ -53,6 +53,7 @@ import {
   TECHNICAL_EMAIL_HINT,
   ADMINISTRATOR_DETAILS_HINT,
   SIGNATORY_DETAILS_HINT,
+  WEBSITE_HINT,
   parseJwt,
   ERRORS,
 } from '@/utils/index.jsx';
@@ -248,12 +249,19 @@ const OrganizationCreate = ({
                         </Stack>
                       </Grid>
                       <Grid size={{ xs: 12 }}>
-                        <TextInput
-                          fullWidth
-                          label="Website"
-                          source="profile.website"
-                          validate={[...validateWebsite, required()]}
-                        />
+                        <Stack flexDirection="row" gap={1.75}>
+                          <TextInput
+                            fullWidth
+                            label="Website"
+                            source="profile.website"
+                            validate={[...validateWebsite, required()]}
+                          />
+                          <Box mt={2}>
+                            <Tooltip title={WEBSITE_HINT}>
+                              <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                            </Tooltip>
+                          </Box>
+                        </Stack>
                       </Grid>
                       <Grid size={{ xs: 12 }}>
                         <TextInput

@@ -41,6 +41,7 @@ import {
   formatRegistrationNumbers,
   SUPPORT_EMAIL_HINT,
   TECHNICAL_EMAIL_HINT,
+  WEBSITE_HINT_SHORT,
 } from '../../utils/index.jsx';
 import useCountryCodes from '../../utils/countryCodes';
 import CustomImageInput from '../../components/common/CustomImageInput/index.jsx';
@@ -151,13 +152,20 @@ const OrganizationEdit = () => {
                         </Stack>
                       </Grid>
                       <Grid size={{ xs: 12 }}>
-                        <TextInput
-                          fullWidth
-                          label="Website"
-                          source="profile.website"
-                          validate={[...validateWebsite, required()]}
-                          disabled
-                        />
+                        <Stack flexDirection="row" gap={1.75}>
+                          <TextInput
+                            fullWidth
+                            label="Website"
+                            source="profile.website"
+                            validate={[...validateWebsite, required()]}
+                            disabled
+                          />
+                          <Box mt={2}>
+                            <Tooltip title={WEBSITE_HINT_SHORT}>
+                              <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                            </Tooltip>
+                          </Box>
+                        </Stack>
                       </Grid>
                       <Grid size={{ xs: 12 }}>
                         <TextInput
