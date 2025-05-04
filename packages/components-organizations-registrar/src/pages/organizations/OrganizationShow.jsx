@@ -23,6 +23,7 @@ import { useParams, useNavigate } from 'react-router';
 import { useGetOne, useRedirect } from 'react-admin';
 import {
   copyTextToClipboard,
+  WEBSITE_HINT_SHORT,
   DID_HINT,
   LINKEDIN_ORGANIZATION_ID,
   SUPPORT_EMAIL_HINT,
@@ -127,7 +128,12 @@ const OrganizationShow = () => {
                 <DataItem title="Legal Name" value={record.profile.name} sxValue={sx.value} />
               </Grid>
               <Grid size={{ xs: 6 }}>
-                <DataItem title="Website" value={record.profile.website} sxValue={sx.value} />
+                <DataItem
+                  title="Website"
+                  value={record.profile.website}
+                  sxValue={sx.value}
+                  hint={WEBSITE_HINT_SHORT}
+                />
               </Grid>
               <Grid size={{ xs: 6 }}>
                 <DataItem

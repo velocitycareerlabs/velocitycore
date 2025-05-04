@@ -23,6 +23,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 import {
   LINKEDIN_ORGANIZATION_ID,
+  WEBSITE_HINT,
   SUPPORT_EMAIL_HINT,
   TECHNICAL_EMAIL_HINT,
 } from '../../utils/index.jsx';
@@ -116,7 +117,14 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                 />
               </Stack>
               <TextInput fullWidth multiline label="Short Description" source="description" />
-              <TextInput fullWidth label="Website" source="website" validate={validateWebsite} />
+              <Stack flexDirection="row" gap={1.75}>
+                <TextInput fullWidth label="Website" source="website" validate={validateWebsite} />
+                <Box mt={2}>
+                  <Tooltip title={WEBSITE_HINT}>
+                    <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                  </Tooltip>
+                </Box>
+              </Stack>
               <TextInput fullWidth label="Address" source="physicalAddress.line1" />
               <AutocompleteInput
                 label="Country"
