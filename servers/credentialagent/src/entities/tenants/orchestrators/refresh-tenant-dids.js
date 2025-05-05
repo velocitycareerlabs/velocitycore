@@ -15,10 +15,17 @@
  */
 const { resolveDid } = require('@velocitycareerlabs/common-fetchers');
 const { leafMap } = require('@velocitycareerlabs/common-functions');
-const { getDidAndAliases } = require('@velocitycareerlabs/did-doc');
+const {
+  getDidAndAliases,
+  isDidUrlWithFragment,
+  toDidUrl,
+} = require('@velocitycareerlabs/did-doc');
 const { find, startsWith, omitBy, isNil, isEmpty, map } = require('lodash/fp');
 const { ObjectId } = require('mongodb');
 const newError = require('http-errors');
+const {
+  splitDidUrlWithFragment,
+} = require('@velocitycareerlabs/did-doc/src/did-parsing');
 
 const refreshTenantDids = async ({ all, did }, context) => {
   const { repos, log } = context;
@@ -68,6 +75,13 @@ const buildTenantWrite = (tenantDoc, didMap) => {
   if (preferredDid == null) {
     return undefined;
   }
+  const serviceIds = map((serviceId) => {
+    if (!isDidUrlWithFragment(serviceId)) {
+      return serviceId;
+    }
+    const [, fragment] = splitDidUrlWithFragment(serviceId);
+    return toDidUrl(preferredDid, fragment);
+  }, tenantDoc.serviceIds);
   return {
     updateOne: {
       filter: { _id: new ObjectId(tenantDoc._id) },
@@ -75,6 +89,7 @@ const buildTenantWrite = (tenantDoc, didMap) => {
         $set: omitBy(isNil)({
           did: preferredDid,
           dids,
+          serviceIds,
           updatedAt: new Date(),
         }),
       },
