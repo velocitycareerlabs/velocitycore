@@ -43,7 +43,6 @@ export const PublicAppRoot = ({ children }) => {
         dataProvider={remoteDataProvider(config)}
         queryClient={queryClient}
         dashboard={Dashboard}
-        requireAuth
         layout={MainLayout}
         title=""
         basename=""

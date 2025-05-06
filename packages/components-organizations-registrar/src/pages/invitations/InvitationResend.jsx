@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import { Typography, Button } from '@mui/material';
 import useSelectedOrganization from '../../state/selectedOrganizationState';
 import { MESSAGE_CODES } from '../../constants/messageCodes';
-import { getStatusByCode } from './InvitationCreateForm.jsx';
+import { getStatusByCode } from './utils';
 import SetInvitationEmail from '../../components/invitations/SetInvitationEmail.jsx';
 import Popup from '../../components/common/Popup.jsx';
 import StatusPopup from '../../components/common/StatusPopup.jsx';
