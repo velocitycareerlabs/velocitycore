@@ -16,3 +16,5 @@ export const getStatusByCode = (errorCode) => {
       return 'The invitation was not sent';
   }
 };
+
+export default getStatusByCode;
