@@ -31,7 +31,7 @@
     "find-my-way": "^9.0.1",
     "postcss": "^8.2.13",
     "tar": "^6.1.2",
-    "ansi-regex": "~5.0.1",
+    "ansi-regex": "~6.1.0",
     "fast-jwt": "^6.0.0",
     "eslint-plugin-react": "^7.37.3",
     "**/minimist": "^1.2.6",
