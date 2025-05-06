@@ -31,23 +31,8 @@ import SetInvitationService from '../../components/invitations/SetInvitationServ
 import { MESSAGE_CODES } from '../../constants/messageCodes';
 import SetKeyIndividuals from '../../components/invitations/SetKeyIndividuals.jsx';
 import { formatWebSiteUrl, formatRegistrationNumbers } from '../../utils/index.jsx';
+import { getStatusByCode } from './utils';
 
-export const getStatusByCode = (errorCode) => {
-  switch (errorCode) {
-    case MESSAGE_CODES.BAD_INVITEE_EMAIL: {
-      return 'The email address is invalid and the invitation was not sent';
-    }
-    case MESSAGE_CODES.INVITATION_SENT: {
-      return 'The invitation was sent';
-    }
-    case MESSAGE_CODES.INVITATION_NOT_SENT: {
-      return 'Invitation was not sent. Check the email address';
-    }
-
-    default:
-      return 'The invitation was not sent';
-  }
-};
 const DEFAULT_STATUS_STATE = { error: null, title: '' };
 
 const InvitationCreateForm = () => {
@@ -55,19 +40,21 @@ const InvitationCreateForm = () => {
   const redirect = useRedirect();
   const [did] = useSelectedOrganization();
   const refresh = useRefresh();
+  const { data: countryCodes } = useCountryCodes();
+
   const isModalOpened = /\/invitations\/create/.test(pathname);
   const isStep1 = /\/invitations\/create\/step-1/.test(pathname);
   const isStep2 = /\/invitations\/create\/step-2/.test(pathname);
   const isStep3 = /\/invitations\/create\/step-3/.test(pathname);
-  const isStatusPopupOpen = /\/invitations\/create\/status/.test(pathname);
 
   const [organizationProfileData, setOrganizationProfileData] = useState(null);
   const [serviceData, setServiceData] = useState(null);
   const [keyIndividualsData, setKeyIndividualsData] = useState(null);
+
   const [statusPopup, setStatusPopup] = useState(DEFAULT_STATUS_STATE);
+  const [isStatusPopupOpen, setIsStatusPopupOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { data: countryCodes } = useCountryCodes();
   const { data: organisationData } = useGetOne('organizations', { id: did }, { enabled: !!did });
   const serviceEndpointsOptions = useMemo(
     () =>
@@ -87,16 +74,16 @@ const InvitationCreateForm = () => {
         return;
       }
 
-      redirect('/invitations');
       setOrganizationProfileData(null);
+      redirect('/invitations');
     },
     [redirect],
   );
 
   const handleCloseStatusPopup = useCallback(() => {
     setStatusPopup(DEFAULT_STATUS_STATE);
+    setIsStatusPopupOpen(false);
     onClose();
-    setOrganizationProfileData(null);
   }, [onClose]);
 
   // clear previous state after close
@@ -166,6 +153,7 @@ const InvitationCreateForm = () => {
           error: resp.messageCode === MESSAGE_CODES.INVITATION_SENT ? null : resp.messageCode,
           title: getStatusByCode(resp.messageCode),
         });
+        setIsStatusPopupOpen(true);
         redirect('/invitations/create/status');
       },
       onError: (error) => {
@@ -173,6 +161,7 @@ const InvitationCreateForm = () => {
           error: error?.body?.errorCode || 'bad request',
           title: getStatusByCode(error?.body?.errorCode),
         });
+        setIsStatusPopupOpen(true);
         redirect('/invitations/create/status');
       },
     },
@@ -197,8 +186,75 @@ const InvitationCreateForm = () => {
     setLoading(false);
   };
 
-  if (isStatusPopupOpen && statusPopup.title) {
-    return (
+  return (
+    <>
+      <Popup
+        onClose={onClose}
+        title=""
+        isOpen={isModalOpened}
+        mainContainerStyles={styles.mainContainer}
+      >
+        <Box sx={{ width: '524px' }}>
+          {isStep1 && (
+            <>
+              <Typography variant="pm" sx={styles.step}>
+                Step 1/3
+              </Typography>
+              <CreateInvitationForOrganization
+                buttonTitle="Next"
+                onSubmit={goToCreateServiceStep}
+                onCancel={onClose}
+                defaultValues={organizationProfileData}
+                countryCodes={countryCodes}
+              />
+            </>
+          )}
+          {isStep2 && (
+            <>
+              <Typography variant="pm" sx={styles.step}>
+                Step 2/3
+              </Typography>
+              <Typography variant="h1" mb={2}>
+                Service
+              </Typography>
+              <Typography>Please complete the details below to continue</Typography>
+              <SetInvitationService
+                onSubmit={goToSetKeyIndividualsStep}
+                defaultValues={serviceData}
+                serviceEndpointsOptions={serviceEndpointsOptions}
+              >
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  sx={styles.backButton}
+                  onClick={() => redirect('/invitations/create/step-1')}
+                  startIcon={<KeyboardArrowLeftIcon />}
+                >
+                  Back
+                </Button>
+              </SetInvitationService>
+            </>
+          )}
+          {isStep3 && (
+            <>
+              <Typography variant="pm" sx={styles.step}>
+                Step 3/3
+              </Typography>
+              <Typography variant="h1" mb={2}>
+                Key Individuals
+              </Typography>
+              <SetKeyIndividuals
+                onSubmit={handleSubmit}
+                serviceEndpointsOptions={serviceEndpointsOptions}
+                defaultValues={keyIndividualsData}
+                onBack={handleBackToServiceStep}
+                loading={loading}
+              />
+            </>
+          )}
+        </Box>
+      </Popup>
+
       <StatusPopup
         isModalOpened={isStatusPopupOpen}
         buttonLabel="Back to invitations"
@@ -208,76 +264,7 @@ const InvitationCreateForm = () => {
         onClose={handleCloseStatusPopup}
         onButtonClick={handleCloseStatusPopup}
       />
-    );
-  }
-
-  return (
-    <Popup
-      onClose={onClose}
-      title=""
-      isOpen={isModalOpened}
-      mainContainerStyles={styles.mainContainer}
-    >
-      <Box sx={{ width: '524px' }}>
-        {isStep1 && (
-          <>
-            <Typography variant="pm" sx={styles.step}>
-              Step 1/3
-            </Typography>
-            <CreateInvitationForOrganization
-              buttonTitle="Next"
-              onSubmit={goToCreateServiceStep}
-              onCancel={onClose}
-              defaultValues={organizationProfileData}
-              countryCodes={countryCodes}
-            />
-          </>
-        )}
-        {isStep2 && (
-          <>
-            <Typography variant="pm" sx={styles.step}>
-              Step 2/3
-            </Typography>
-            <Typography variant="h1" mb={2}>
-              Service
-            </Typography>
-            <Typography>Please complete the details below to continue</Typography>
-            <SetInvitationService
-              onSubmit={goToSetKeyIndividualsStep}
-              defaultValues={serviceData}
-              serviceEndpointsOptions={serviceEndpointsOptions}
-            >
-              <Button
-                variant="outlined"
-                color="secondary"
-                sx={styles.backButton}
-                onClick={() => redirect('/invitations/create/step-1')}
-                startIcon={<KeyboardArrowLeftIcon />}
-              >
-                Back
-              </Button>
-            </SetInvitationService>
-          </>
-        )}
-        {isStep3 && (
-          <>
-            <Typography variant="pm" sx={styles.step}>
-              Step 3/3
-            </Typography>
-            <Typography variant="h1" mb={2}>
-              Key Individuals
-            </Typography>
-            <SetKeyIndividuals
-              onSubmit={handleSubmit}
-              serviceEndpointsOptions={serviceEndpointsOptions}
-              defaultValues={keyIndividualsData}
-              onBack={handleBackToServiceStep}
-              loading={loading}
-            />
-          </>
-        )}
-      </Box>
-    </Popup>
+    </>
   );
 };
 
