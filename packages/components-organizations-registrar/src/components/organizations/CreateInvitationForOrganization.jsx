@@ -27,7 +27,12 @@ import {
   SUPPORT_EMAIL_HINT,
   TECHNICAL_EMAIL_HINT,
 } from '../../utils/index.jsx';
-import { validateEmail, validateWebsite, validateName } from './CreateOrganization.utils';
+import {
+  validateEmail,
+  validateWebsite,
+  validateName,
+  validateWebsiteStrict,
+} from './CreateOrganization.utils';
 import OrganizationSubmitButton from './OrganisationSubmitButton.jsx';
 import CustomImageInput from '../common/CustomImageInput/index.jsx';
 import OrganizationRegistrationNumbersField from '../../pages/organizations/components/OrganizationRegistrationNumbersField.jsx';
@@ -135,7 +140,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                 fullWidth
                 label="LinkedIn Page"
                 source="linkedInProfile"
-                validate={validateWebsite}
+                validate={validateWebsiteStrict}
               />
               <Stack flexDirection="row" gap={1.75}>
                 <OrganizationRegistrationNumbersField

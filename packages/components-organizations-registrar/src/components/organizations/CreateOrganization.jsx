@@ -29,7 +29,12 @@ import InfoIcon from '@mui/icons-material/Info';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
 import { FOOTER_HEIGHT } from '../../theme/theme';
-import { validateEmail, validateName, validateWebsite } from './CreateOrganization.utils';
+import {
+  validateEmail,
+  validateName,
+  validateWebsite,
+  validateWebsiteStrict,
+} from './CreateOrganization.utils';
 import OrganizationSubmitButton from './OrganisationSubmitButton.jsx';
 import CustomImageInput from '../common/CustomImageInput/index.jsx';
 import OrganizationRegistrationNumbersField from '../../pages/organizations/components/OrganizationRegistrationNumbersField.jsx';
@@ -110,7 +115,7 @@ const CreateOrganization = ({
                           fullWidth
                           label="Website"
                           source="website"
-                          validate={[required(), ...validateWebsite]}
+                          validate={[required(), ...validateWebsiteStrict]}
                         />
                       </Grid>
                       <Grid size={{ xs: 12 }}>

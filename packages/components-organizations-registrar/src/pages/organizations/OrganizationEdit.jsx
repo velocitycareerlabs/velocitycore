@@ -32,7 +32,10 @@ import { Box, Stack, Tooltip, Typography, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import InfoIcon from '@mui/icons-material/Info';
 import { useEffect, useState } from 'react';
-import { validateWebsite } from '../../components/organizations/CreateOrganization.utils';
+import {
+  validateWebsite,
+  validateWebsiteStrict,
+} from '../../components/organizations/CreateOrganization.utils';
 import Loading from '../../components/Loading.jsx';
 import {
   ERRORS,
@@ -157,7 +160,7 @@ const OrganizationEdit = () => {
                             fullWidth
                             label="Website"
                             source="profile.website"
-                            validate={[...validateWebsite, required()]}
+                            validate={[...validateWebsiteStrict, required()]}
                             disabled
                           />
                           <Box mt={2}>
