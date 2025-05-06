@@ -41,7 +41,10 @@ import PropTypes from 'prop-types';
 
 import useSelectedOrganization from '@/state/selectedOrganizationState';
 import Loading from '@/components/Loading.jsx';
-import { validateWebsite } from '@/components/organizations/CreateOrganization.utils';
+import {
+  validateWebsite,
+  validateWebsiteStrict,
+} from '@/components/organizations/CreateOrganization.utils';
 import CustomImageInput from '@/components/common/CustomImageInput/index.jsx';
 import PlusButtonBlock from '@/components/common/PlusButtonBlock.jsx';
 import { authorityOptions, Authorities } from '@/constants/messageCodes';
@@ -254,7 +257,7 @@ const OrganizationCreate = ({
                             fullWidth
                             label="Website"
                             source="profile.website"
-                            validate={[...validateWebsite, required()]}
+                            validate={[...validateWebsiteStrict, required()]}
                           />
                           <Box mt={2}>
                             <Tooltip title={WEBSITE_HINT}>

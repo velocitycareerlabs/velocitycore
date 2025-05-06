@@ -99,9 +99,9 @@ WarningSecretKeysPopup.propTypes = {
   isModalOpened: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   onClose: PropTypes.func,
-  title: PropTypes.string.isRequired,
-  subTitle: PropTypes.string.isRequired,
-  buttonLabel: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  subTitle: PropTypes.string,
+  buttonLabel: PropTypes.string,
   isLoading: PropTypes.bool,
   onClick: PropTypes.func,
 };
