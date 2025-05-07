@@ -44,6 +44,7 @@ import {
   SIGNATORY_DETAILS_HINT,
   SUPPORT_EMAIL_HINT,
   TECHNICAL_EMAIL_HINT,
+  WEBSITE_HINT,
 } from '../../utils/index.jsx';
 import OrganizationAuthorityRadioGroup from '../../pages/organizations/components/OrganizationAuthorityRadioGroup.jsx';
 import { OrganizationRegistrationNumbers } from '../../pages/organizations/components/OrganizationRegistrationNumbersContainer.jsx';
@@ -111,12 +112,19 @@ const CreateOrganization = ({
                         />
                       </Grid>
                       <Grid size={{ xs: 12 }}>
-                        <TextInput
-                          fullWidth
-                          label="Website"
-                          source="website"
-                          validate={[required(), ...validateWebsiteStrict]}
-                        />
+                        <Stack flexDirection="row" gap={1.75}>
+                          <TextInput
+                            fullWidth
+                            label="Website"
+                            source="website"
+                            validate={[required(), ...validateWebsiteStrict]}
+                          />
+                          <Box mt={2}>
+                            <Tooltip title={WEBSITE_HINT}>
+                              <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                            </Tooltip>
+                          </Box>
+                        </Stack>
                       </Grid>
                       <Grid size={{ xs: 12 }}>
                         <TextInput

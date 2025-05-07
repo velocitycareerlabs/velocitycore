@@ -42,7 +42,7 @@ const CreateOrganizationFromInvitation = ({ InterceptOnCreate }) => {
   const { user, getAccessToken } = auth;
   const logout = useLogout();
 
-  const [setDid] = useSelectedOrganization();
+  const [, setDid] = useSelectedOrganization();
   const { data: countryCodes, isLoading } = useCountryCodes();
 
   const [hasOrganisations, setHasOrganisations] = useState(false);
@@ -129,7 +129,7 @@ const CreateOrganizationFromInvitation = ({ InterceptOnCreate }) => {
   useEffect(() => {
     if (secretKeys) {
       if (InterceptOnCreate) {
-        setIsInterceptOnCreateOpen(false);
+        setIsInterceptOnCreateOpen(true);
       } else {
         setIsOpenSecretPopup(true);
       }
