@@ -189,13 +189,13 @@ describe('Test pino logger provider with redaction', () => {
 
     expect(consoleSpy).toHaveBeenCalledWith(
       expect.stringContaining(
-        '"access_token":"...shhh...","body":{"access_token":"access_token"}'
+        '"access_token":"...shhh...","body":{"access_token":"...shhh..."}'
       )
     );
 
     expect(output).toEqual(
       expect.stringContaining(
-        '"access_token":"...shhh...","body":{"access_token":"access_token"}'
+        '"access_token":"...shhh...","body":{"access_token":"...shhh..."}'
       )
     );
   });
@@ -347,11 +347,15 @@ describe('Test pino logger provider with redaction', () => {
     log.info(dataForLog);
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"token":"...shhh...","body":{"token":"token"}}')
+      expect.stringContaining(
+        '"token":"...shhh...","body":{"token":"...shhh..."}}'
+      )
     );
 
     expect(output).toEqual(
-      expect.stringContaining('"token":"...shhh...","body":{"token":"token"}}')
+      expect.stringContaining(
+        '"token":"...shhh...","body":{"token":"...shhh..."}}'
+      )
     );
   });
 
@@ -816,7 +820,7 @@ describe('Test pino logger provider with redaction', () => {
     log.info(dataForLog);
 
     const logInfo =
-      '"body":{"account":{"refreshToken":"refresh_token"},"access_token":"access_token","refresh_token":"refresh_token"}';
+      '"body":{"account":{"refreshToken":"...shhh..."},"access_token":"...shhh...","refresh_token":"...shhh..."}';
 
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining(logInfo));
 
