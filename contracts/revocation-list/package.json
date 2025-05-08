@@ -32,6 +32,6 @@
     "ethers": "6.13.7",
     "ganache": "7.9.2",
     "truffle": "5.11.5",
-    "truffle-flattener": "1.5.0"
+    "truffle-flattener": "1.6.0"
   }
 }
