@@ -91,14 +91,7 @@ const initServer = (server) => {
       },
     })
     .register(credentialTypesRepoPlugin)
-    .register(organizationRegistrarEndpoints)
-    .register(fastifyView, {
-      engine: {
-        handlebars,
-      },
-      root: path.join(__dirname, 'templates'),
-      includeViewExtension: true,
-    });
+    .register(organizationRegistrarEndpoints);
 };
 
 module.exports = { initServer };
