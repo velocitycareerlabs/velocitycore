@@ -15,7 +15,6 @@
  *
  */
 
-const fastifyView = require('@fastify/view');
 const { validationPlugin } = require('@velocitycareerlabs/validation');
 const {
   corsPlugin,
