@@ -26,9 +26,7 @@ const {
   rpcProviderPlugin,
 } = require('@velocitycareerlabs/base-contract-io');
 const { oauthPlugin } = require('@velocitycareerlabs/auth');
-const handlebars = require('handlebars');
 const credentialTypesRepoPlugin = require('@velocitycareerlabs/endpoints-credential-types-registrar/src/entities/credential-types/repos/repo');
-const path = require('path');
 const {
   organizationRegistrarEndpoints,
 } = require('./organizations-registrar-endpoints');
