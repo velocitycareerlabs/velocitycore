@@ -17555,9 +17555,9 @@ react-error-boundary@^4.0.13:
     "@babel/runtime" "^7.12.5"
 
 react-hook-form@^7.53.0:
-  version "7.56.1"
-  resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.56.1.tgz#45b2040fef997b873d656959d2e7f864f35bf95d"
-  integrity sha512-qWAVokhSpshhcEuQDSANHx3jiAEFzu2HAaaQIzi/r9FNPm1ioAvuJSD4EuZzWd7Al7nTRKcKPnBKO7sRn+zavQ==
+  version "7.56.3"
+  resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.56.3.tgz#c459f59fead379db30113951152e13db386cc015"
+  integrity sha512-IK18V6GVbab4TAo1/cz3kqajxbDPGofdF0w7VHdCo0Nt8PrPlOZcuuDq9YYIV1BtjcX78x0XsldbQRQnQXWXmw==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
