@@ -2426,9 +2426,9 @@
     yaml "^2.4.1"
 
 "@fastify/swagger@^9.0.0":
-  version "9.5.0"
-  resolved "https://registry.npmjs.org/@fastify/swagger/-/swagger-9.5.0.tgz#761ce5aae9e76116cd1b6fee4b463c7d1d11f4a7"
-  integrity sha512-6WiwB1Nh+GHqm4wsDGH/ym6ming3DyH9cuAkIwGN9nhbyrCoNSZ+l9h3TAsksffbNEI/RHCiw2BH2LeGNRrOoQ==
+  version "9.5.1"
+  resolved "https://registry.npmjs.org/@fastify/swagger/-/swagger-9.5.1.tgz#8ec9e2e6e8390a674cf3da9f339c9e59466e46fa"
+  integrity sha512-EGjYLA7vDmCPK7XViAYMF6y4+K3XUy5soVTVxsyXolNe/Svb4nFQxvtuQvvoQb2Gzc9pxiF3+ZQN/iZDHhKtTg==
   dependencies:
     fastify-plugin "^5.0.0"
     json-schema-resolver "^3.0.0"
@@ -2437,9 +2437,9 @@
     yaml "^2.4.2"
 
 "@fastify/view@^11.0.0":
-  version "11.0.0"
-  resolved "https://registry.npmjs.org/@fastify/view/-/view-11.0.0.tgz#eb28693d2f3e7a5d92c5bfc27966ddc2e3b8047e"
-  integrity sha512-uMNwZoY88uUMP6hidJYHT0/7bXzLrWgo/X5kjKdKPi3bj69kSkuNKmcG5KEU2sDF91n+IiLAnqx3dkldFfz5hQ==
+  version "11.1.0"
+  resolved "https://registry.npmjs.org/@fastify/view/-/view-11.1.0.tgz#ab5199d92ac7cc3bc0b55134957c375b142510ae"
+  integrity sha512-ab8LG5V8srCdnknYlufaSusrjkYLYf5TUWm3DTdPFr5m1C9tI7KNl78UCcP0BJiaGaZj1udsyzAC67JCf5Ol/g==
   dependencies:
     fastify-plugin "^5.0.0"
     toad-cache "^3.7.0"
