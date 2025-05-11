@@ -15,7 +15,7 @@
  *
  */
 export { default as PrivacyPolicy } from './PrivacyPolicy.jsx';
-export { default as SignatoryLanding } from './SignatoryLanding.jsx';
+export { default as SignatoryLanding } from './SignatoryLanding/index.jsx';
 export { default as TermsAndConditions } from './TermsAndConditions.jsx';
 export { default as TermsAndConditionsPdf } from './TermsAndConditionsPdf.jsx';
 export { default as users } from './users.jsx';
