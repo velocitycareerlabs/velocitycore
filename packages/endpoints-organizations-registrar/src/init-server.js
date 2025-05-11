@@ -15,7 +15,6 @@
  *
  */
 
-const fastifyView = require('@fastify/view');
 const { validationPlugin } = require('@velocitycareerlabs/validation');
 const {
   corsPlugin,
@@ -27,9 +26,7 @@ const {
   rpcProviderPlugin,
 } = require('@velocitycareerlabs/base-contract-io');
 const { oauthPlugin } = require('@velocitycareerlabs/auth');
-const handlebars = require('handlebars');
 const credentialTypesRepoPlugin = require('@velocitycareerlabs/endpoints-credential-types-registrar/src/entities/credential-types/repos/repo');
-const path = require('path');
 const {
   organizationRegistrarEndpoints,
 } = require('./organizations-registrar-endpoints');
@@ -91,14 +88,7 @@ const initServer = (server) => {
       },
     })
     .register(credentialTypesRepoPlugin)
-    .register(organizationRegistrarEndpoints)
-    .register(fastifyView, {
-      engine: {
-        handlebars,
-      },
-      root: path.join(__dirname, 'templates'),
-      includeViewExtension: true,
-    });
+    .register(organizationRegistrarEndpoints);
 };
 
 module.exports = { initServer };
