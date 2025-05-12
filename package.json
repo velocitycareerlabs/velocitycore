@@ -53,8 +53,8 @@
     "react-router-dom": "7.5.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.8.0",
-    "@commitlint/config-conventional": "19.8.0",
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
     "depcheck": "1.4.7",
     "husky": "4.3.8",
     "jest-junit": "16.0.0",
