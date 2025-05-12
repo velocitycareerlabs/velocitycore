@@ -1,14 +1,13 @@
-import { useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router';
-import { Typography, Box } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { useGetOne } from 'ra-core';
-import Loading from '../components/Loading.jsx';
-import { dataResources } from '../utils/remoteDataProvider';
-import { useConfig } from '../utils/ConfigContext';
+import Loading from '@/components/Loading.jsx';
+import { dataResources } from '@/utils/remoteDataProvider';
+import { useSignatoryResponse } from './hooks/useSignatoryResponse';
+import { Wording } from './components/Wording.jsx';
 
 const SignatoryLanding = () => {
-  const config = useConfig();
   const { response } = useParams();
   const [searchParams] = useSearchParams();
   const did = searchParams.get('did');
@@ -16,28 +15,13 @@ const SignatoryLanding = () => {
 
   const { data: profile, isLoading } = useGetOne(dataResources.VERIFIED_PROFILE, { id: did });
 
-  useEffect(() => {
-    const addResponse = async () => {
-      try {
-        const resp = await fetch(
-          `${config.registrarApi}/organizations/${did}/signatories/response/${response}?authCode=${authCode}`,
-        );
+  const { isLoading: isSignatoryLoading, errorCode } = useSignatoryResponse({
+    did,
+    authCode,
+    response,
+  });
 
-        if (!resp.ok) {
-          const data = await resp.json();
-          throw data;
-        }
-      } catch (e) {
-        console.error('signatory error', e);
-      }
-    };
-
-    if (did && authCode && response) {
-      addResponse();
-    }
-  }, [did, authCode, response, config.registrarApi, config]);
-
-  if (isLoading) {
+  if (isLoading || isSignatoryLoading) {
     return (
       <Box sx={styles.loading} pt={5} pb={10} pr={8} pl={9}>
         <Loading />
@@ -55,13 +39,7 @@ const SignatoryLanding = () => {
           height={42}
           style={styles.image}
         />
-        <Typography variant="h1" textAlign="center" marginBottom={3.5}>
-          Thank you!
-        </Typography>
-        <Typography variant="pL" textAlign="center" marginBottom={11}>
-          Your {response === 'approve' ? 'approval' : 'rejection'} regarding the addition of{' '}
-          {profile.credentialSubject.name} on the Velocity Network has been acknowledged.
-        </Typography>
+        <Wording response={response} errorCode={errorCode} name={profile.credentialSubject.name} />
       </Box>
     </Box>
   );
