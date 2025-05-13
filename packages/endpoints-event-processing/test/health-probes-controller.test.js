@@ -15,6 +15,17 @@
  *
  */
 
+const { after, before, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
+
+mock.module('@velocitycareerlabs/blockchain-functions', {
+  namedExports: {
+    initGetSignerMetrics: mock.fn(),
+    initGetBlockNumber: mock.fn(),
+    initGetBlock: mock.fn(),
+  },
+});
+
 const {
   initGetSignerMetrics,
   initGetBlockNumber,
@@ -22,32 +33,26 @@ const {
 } = require('@velocitycareerlabs/blockchain-functions');
 const buildFastify = require('./helpers/build-fastify');
 
-jest.mock('@velocitycareerlabs/blockchain-functions', () => ({
-  initGetSignerMetrics: jest.fn(),
-  initGetBlockNumber: jest.fn(),
-  initGetBlock: jest.fn(),
-}));
-
 describe('Blockchain Health', () => {
   const baseUrl = 'api/v0.6/health-probes';
   const nodeAddress = '0x0';
   let fastify;
 
-  beforeAll(async () => {
+  before(async () => {
     fastify = buildFastify();
     await fastify.ready();
   });
 
-  afterAll(async () => {
+  after(async () => {
     await fastify.close();
   });
 
   describe('Consensus Health', () => {
     it('Should return UP if last block is from last few seconds', async () => {
-      initGetBlockNumber.mockImplementation(() =>
+      initGetBlockNumber.mock.mockImplementationOnce(() =>
         Promise.resolve(() => Promise.resolve(1))
       );
-      initGetBlock.mockImplementation(() =>
+      initGetBlock.mock.mockImplementationOnce(() =>
         Promise.resolve(() =>
           Promise.resolve({
             timestamp: Math.floor(new Date().getTime() / 1000),
@@ -64,10 +69,10 @@ describe('Blockchain Health', () => {
     });
 
     it('Should return DOWN too much time has passed since last block', async () => {
-      initGetBlockNumber.mockImplementation(() =>
+      initGetBlockNumber.mock.mockImplementationOnce(() =>
         Promise.resolve(() => Promise.resolve(1))
       );
-      initGetBlock.mockImplementation(() =>
+      initGetBlock.mock.mockImplementationOnce(() =>
         Promise.resolve(() =>
           Promise.resolve({
             timestamp: 1,
@@ -86,7 +91,7 @@ describe('Blockchain Health', () => {
 
   describe('Node Health', () => {
     it('Should return UP if node metrics changed', async () => {
-      initGetSignerMetrics.mockImplementation(() =>
+      initGetSignerMetrics.mock.mockImplementationOnce(() =>
         Promise.resolve(() =>
           Promise.resolve([
             { address: nodeAddress, lastProposedBlockNumber: '0x1' },
@@ -94,7 +99,7 @@ describe('Blockchain Health', () => {
           ])
         )
       );
-      initGetBlockNumber.mockImplementation(() =>
+      initGetBlockNumber.mock.mockImplementationOnce(() =>
         Promise.resolve(() => Promise.resolve(2))
       );
 
@@ -107,7 +112,7 @@ describe('Blockchain Health', () => {
     });
 
     it('Should return DOWN if node metrics did not change', async () => {
-      initGetSignerMetrics.mockImplementation(() =>
+      initGetSignerMetrics.mock.mockImplementationOnce(() =>
         Promise.resolve(() =>
           Promise.resolve([
             { address: nodeAddress, lastProposedBlockNumber: '0x1' },
@@ -115,7 +120,7 @@ describe('Blockchain Health', () => {
           ])
         )
       );
-      initGetBlockNumber.mockImplementation(() =>
+      initGetBlockNumber.mock.mockImplementationOnce(() =>
         Promise.resolve(() => Promise.resolve(8))
       );
 

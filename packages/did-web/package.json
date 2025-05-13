@@ -9,7 +9,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "jest --config ./jest.config.js --runInBand --coverage",
+    "test": "NODE_ENV=test node --test --test-concurrency=1 --experimental-test-module-mocks --experimental-test-coverage **/*.test.js",
     "lint": "eslint . --format json >> eslint.json",
     "lint:fix": "eslint --fix --ext .js ."
   },
@@ -20,7 +20,7 @@
     "http-errors": "^2.0.0"
   },
   "devDependencies": {
-    "jest": "29.7.0",
+    "expect": "29.7.0",
     "nock": "14.0.4"
   },
   "nx": {

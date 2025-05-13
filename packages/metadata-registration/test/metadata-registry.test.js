@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+const { after, before, beforeEach, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const {
   generateKeyPair,
   get2BytesHash,
@@ -105,8 +108,7 @@ const defaultCredentialType = 'Certification';
 const password =
   '3dbc33ed4f3b5ca79d75a698e2b36f6010604a96c3126ec3d326aa222a71bde0';
 
-describe('Metadata Registry', () => {
-  jest.setTimeout(30000);
+describe('Metadata Registry', { timeout: 30000 }, () => {
   let metadataAddress;
 
   const expirationTime = new Date(Date.now() + 60 * 60 * 1000).toISOString();
@@ -126,7 +128,7 @@ describe('Metadata Registry', () => {
     credentialTypeEncoded: get2BytesHash(defaultCredentialType),
   };
 
-  beforeAll(async () => {
+  before(async () => {
     context = {
       traceId,
       config: { ...env },
@@ -207,12 +209,12 @@ describe('Metadata Registry', () => {
     );
   });
 
-  afterAll(async () => {
+  after(async () => {
     await mongoCloseWrapper();
   });
 
   describe('Create credential metadata list', () => {
-    beforeAll(async () => {
+    before(async () => {
       await deployerPermissionsClient.addAddressScope({
         address: primaryAddress,
         scope: 'transactions:write',
@@ -274,7 +276,7 @@ describe('Metadata Registry', () => {
   });
 
   describe('add entry to list', () => {
-    beforeAll(async () => {
+    before(async () => {
       await deployerPermissionsClient.addAddressScope({
         address: primaryAddress,
         scope: 'credential:identityissue',
@@ -493,7 +495,7 @@ describe('Metadata Registry', () => {
   describe('Metadata list resolution test group', () => {
     const burnerDid = 'did:ion:123';
 
-    beforeAll(async () => {
+    before(async () => {
       await deployerPermissionsClient.addAddressScope({
         address: primaryAddress,
         scope: 'credential:identityissue',
@@ -722,7 +724,7 @@ describe('Metadata Registry', () => {
         publicKey,
       };
 
-      beforeAll(async () => {
+      before(async () => {
         credentialId = `did:velocity:v2:${primaryAddress}:${credentialMetadata.listId}:${credentialMetadata.index}`;
         await operatorMetadataRegistryClient.addCredentialMetadataEntry(
           credentialMetadata,

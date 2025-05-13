@@ -15,7 +15,8 @@
  */
 
 // eslint-disable-next-line import/order
-const buildFastify = require('./helpers/credentialagent-operator-build-fastify');
+const { after, before, beforeEach, describe, it } = require('node:test');
+const { expect } = require('expect');
 
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const nock = require('nock');
@@ -33,6 +34,7 @@ const {
 const {
   samplePresentationDefinition,
 } = require('@velocitycareerlabs/sample-data');
+const buildFastify = require('./helpers/credentialagent-operator-build-fastify');
 const {
   initDisclosureFactory,
   initFeedFactory,
@@ -68,7 +70,7 @@ describe('disclosures management', () => {
   let nockVP;
   let nockAltVP;
 
-  beforeAll(async () => {
+  before(async () => {
     fastify = buildFastify();
     await fastify.ready();
     ({ persistFeed } = initFeedFactory(fastify));
@@ -123,7 +125,7 @@ describe('disclosures management', () => {
     });
   });
 
-  afterAll(async () => {
+  after(async () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();

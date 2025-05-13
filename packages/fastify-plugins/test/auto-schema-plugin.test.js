@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
+const { describe, it, mock } = require('node:test');
+const { expect } = require('expect');
+
 const fastify = require('fastify');
 const { autoSchemaPlugin } = require('../src/auto-schema-plugin');
 
 describe('Auto Schema Plugin', () => {
   const fakeServer = {
-    decorate: jest.fn().mockImplementation((key, value) => {
+    decorate: mock.fn((key, value) => {
       fakeServer[key] = value;
     }),
-    getSchema: jest.fn().mockReturnValue(true),
+    getSchema: mock.fn(() => true),
     // eslint-disable-next-line no-prototype-builtins
     hasDecorator: (key) => fakeServer.hasOwnProperty(key),
   };
@@ -47,7 +50,9 @@ describe('Auto Schema Plugin', () => {
       { 403: { $ref: 'error#' } },
     ]);
     expect(fakeServer.ForbiddenResponse).toEqual({ 403: { $ref: 'error#' } });
-    expect(fakeServer.decorate.mock.calls).toHaveLength(44);
+    expect(
+      fakeServer.decorate.mock.calls.map((call) => call.arguments)
+    ).toHaveLength(44);
     expect(fakeServer.currentAutoSchemaPreset).toEqual(null);
     expect(fakeServer.autoSchemaPreset).toEqual(expect.any(Function));
     expect(fakeServer.autoSchema).toEqual(expect.any(Function));
@@ -55,8 +60,8 @@ describe('Auto Schema Plugin', () => {
 
   it('should fail if no error schema is defined', async () => {
     const fakeServerError = {
-      decorate: jest.fn(),
-      getSchema: jest.fn().mockReturnValue(undefined),
+      decorate: mock.fn(),
+      getSchema: mock.fn(() => undefined),
     };
 
     await expect(autoSchemaPlugin(fakeServerError)).rejects.toEqual(
@@ -66,10 +71,10 @@ describe('Auto Schema Plugin', () => {
 
   it('should add custom error schema', async () => {
     const fakeServerError = {
-      decorate: jest.fn().mockImplementation((key, value) => {
+      decorate: mock.fn((key, value) => {
         fakeServer[key] = value;
       }),
-      getSchema: jest.fn().mockReturnValue(true),
+      getSchema: mock.fn(() => true),
     };
 
     await autoSchemaPlugin(fakeServerError, { errorSchemaId: 'randomId' });

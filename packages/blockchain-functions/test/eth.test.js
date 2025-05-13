@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { describe, it, mock } = require('node:test');
+const { expect } = require('expect');
 
 const { initGetBlockNumber, initGetBlock, sendNoOpTx } = require('../src/eth');
 
-jest.mock('ethers', () => ({
-  ...jest.requireActual('ethers'),
-  JsonRpcProvider: jest.fn(() => ({
-    getBlockNumber: () => Promise.resolve(blockNumberResult),
-    getBlock: (blockNumber) => Promise.resolve({ blockNumber }),
-  })),
-}));
+class JsonRpcProvider {}
+JsonRpcProvider.prototype.getBlockNumber = mock.fn(() =>
+  Promise.resolve(blockNumberResult)
+);
+JsonRpcProvider.prototype.getBlock = mock.fn((blockNumber) =>
+  Promise.resolve({ blockNumber })
+);
+mock.module('ethers', {
+  namedExports: {
+    JsonRpcProvider,
+  },
+});
 
 const rpcUrl = 'RPC-URL';
 const authenticate = () => Promise.resolve('TOKEN');
@@ -59,9 +66,9 @@ describe('Send No Op Transaction', () => {
     const nonce = 10;
     const address = '0x0000000000000000000000000000000000000000';
     const value = '0x0';
-    const mockSendTransaction = jest.fn();
-    const mockGetTransactionCount = jest.fn(() => Promise.resolve(10));
-    const mockGetNonce = jest.fn(() => Promise.resolve(nonce));
+    const mockSendTransaction = mock.fn();
+    const mockGetTransactionCount = mock.fn(() => Promise.resolve(10));
+    const mockGetNonce = mock.fn(() => Promise.resolve(nonce));
     const wallet = {
       address,
       sendTransaction: mockSendTransaction,
@@ -71,10 +78,14 @@ describe('Send No Op Transaction', () => {
 
     await sendNoOpTx(wallet, nonce);
 
-    expect(mockSendTransaction).toHaveBeenCalledWith({
-      to: address,
-      value,
-      nonce,
-    });
+    expect(
+      mockSendTransaction.mock.calls.map((call) => call.arguments)
+    ).toContainEqual([
+      {
+        to: address,
+        value,
+        nonce,
+      },
+    ]);
   });
 });

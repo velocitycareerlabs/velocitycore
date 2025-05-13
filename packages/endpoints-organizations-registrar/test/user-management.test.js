@@ -14,20 +14,14 @@
  * limitations under the License.
  *
  */
+const { before, beforeEach, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
 
-const console = require('console');
-const { pick, omit, omitBy, isNil } = require('lodash/fp');
-const { initUserManagement, RoleNames } = require('../src/entities');
-
-const mockAuth0UpdateUser = jest
-  .fn()
-  .mockImplementation(async ({ id }, obj) => {
-    console.log(`update auth0 user ${id}`);
-    return { user_id: id, ...obj };
-  });
-const mockAuth0GetUserRoles = jest.fn().mockResolvedValue([]);
-
-const mockAuth0GetUserByEmail = jest.fn().mockResolvedValue([]);
+const mockAuth0UpdateUser = mock.fn(({ id }, obj) =>
+  Promise.resolve({ user_id: id, ...obj })
+);
+const mockAuth0GetUserRoles = mock.fn(() => Promise.resolve([]));
+const mockAuth0GetUserByEmail = mock.fn(() => Promise.resolve([]));
 
 const auth0User = {
   user_id: 'auth0|1',
@@ -38,31 +32,44 @@ const auth0User = {
   email: 'foo@example.com',
   logins_count: 1,
 };
-const mockAuth0GetUser = jest.fn().mockResolvedValue(auth0User);
+const mockAuth0GetUser = mock.fn(() => Promise.resolve(auth0User));
+
+class ManagementClient {
+  constructor() {
+    this.users = {
+      update: mockAuth0UpdateUser,
+      get: mockAuth0GetUser,
+      getByEmail: mockAuth0GetUserByEmail,
+    };
+    this.getUserRoles = mockAuth0GetUserRoles;
+  }
+}
+mock.module('auth0', {
+  namedExports: {
+    ManagementClient,
+  },
+});
+
+const { last, pick, omit, omitBy, isNil } = require('lodash/fp');
+const { initUserManagement, RoleNames } = require('../src/entities');
+
 const testConfig = {
   auth0SuperuserRoleId: 'superuserRoleIdFoo',
   auth0ClientAdminRoleId: 'clientadminRoleIdFoo',
   auth0ClientFinanceAdminRoleId: 'clientfinanceadminFoo',
   auth0ClientSystemUserRoleId: 'clientsystemuserFoo',
 };
-jest.mock('auth0', () => ({
-  ManagementClient: jest.fn().mockImplementation(() => ({
-    users: {
-      update: mockAuth0UpdateUser,
-      get: mockAuth0GetUser,
-      getByEmail: mockAuth0GetUserByEmail,
-    },
-    getUserRoles: mockAuth0GetUserRoles,
-  })),
-}));
 
 describe('user management test suite', () => {
   let userManagementClient;
-  beforeAll(async () => {
+  before(async () => {
     userManagementClient = initUserManagement(testConfig);
   });
   beforeEach(async () => {
-    jest.clearAllMocks();
+    mockAuth0UpdateUser.mock.resetCalls();
+    mockAuth0GetUser.mock.resetCalls();
+    mockAuth0GetUserRoles.mock.resetCalls();
+    mockAuth0GetUserByEmail.mock.resetCalls();
   });
   describe('user soft delete test suite', () => {
     it('soft delete user not permitted from wrong scope', async () => {
@@ -73,17 +80,17 @@ describe('user management test suite', () => {
           { scope: { userId: 'otherUser', groupId: 'otherGroup' } }
         );
       await expect(func()).resolves.toEqual(undefined);
-      expect(mockAuth0UpdateUser).toHaveBeenCalledTimes(0);
+      expect(mockAuth0UpdateUser.mock.callCount()).toEqual(0);
     });
     it('soft delete user permitted for superuser', async () => {
       const { softDeleteUser } = userManagementClient;
       const func = () => softDeleteUser({ id: 'foo' }, {});
       await expect(func()).resolves.toEqual(undefined);
-      expect(mockAuth0UpdateUser).toHaveBeenLastCalledWith(
+      expect(last(mockAuth0UpdateUser.mock.calls).arguments).toEqual([
         { id: 'foo' },
-        { blocked: true }
-      );
-      expect(mockAuth0UpdateUser).toHaveBeenCalledTimes(1);
+        { blocked: true },
+      ]);
+      expect(mockAuth0UpdateUser.mock.callCount()).toEqual(1);
     });
 
     it('soft delete user permitted for group admin', async () => {
@@ -99,20 +106,22 @@ describe('user management test suite', () => {
           }
         );
       await expect(func()).resolves.toEqual(undefined);
-      expect(mockAuth0UpdateUser).toHaveBeenLastCalledWith(
+      expect(last(mockAuth0UpdateUser.mock.calls).arguments).toEqual([
         { id: 'foo' },
-        { blocked: true }
-      );
-      expect(mockAuth0UpdateUser).toHaveBeenCalledTimes(1);
+        { blocked: true },
+      ]);
+      expect(mockAuth0UpdateUser.mock.callCount()).toEqual(1);
     });
   });
 
   describe('user get test suite', () => {
     it('get user', async () => {
-      mockAuth0GetUserRoles.mockResolvedValue([
-        { id: testConfig.auth0ClientAdminRoleId },
-        { id: testConfig.auth0ClientFinanceAdminRoleId },
-      ]);
+      mockAuth0GetUserRoles.mock.mockImplementation(() =>
+        Promise.resolve([
+          { id: testConfig.auth0ClientAdminRoleId },
+          { id: testConfig.auth0ClientFinanceAdminRoleId },
+        ])
+      );
       const { getUser } = userManagementClient;
       const func = () => getUser({ id: 'foo' });
       await expect(func()).resolves.toEqual({
@@ -122,17 +131,23 @@ describe('user management test suite', () => {
         familyName: auth0User.family_name,
         isRegistered: true,
       });
-      expect(mockAuth0GetUser).toHaveBeenLastCalledWith({ id: 'foo' });
-      expect(mockAuth0GetUser).toHaveBeenCalledTimes(1);
+      expect(last(mockAuth0GetUser.mock.calls).arguments).toEqual([
+        {
+          id: 'foo',
+        },
+      ]);
+      expect(mockAuth0GetUser.mock.callCount()).toEqual(1);
     });
   });
 
   describe('get user with roles test suite', () => {
     it('get user with roles', async () => {
-      mockAuth0GetUserRoles.mockResolvedValue([
-        { id: testConfig.auth0ClientAdminRoleId },
-        { id: testConfig.auth0ClientFinanceAdminRoleId },
-      ]);
+      mockAuth0GetUserRoles.mock.mockImplementation(() =>
+        Promise.resolve([
+          { id: testConfig.auth0ClientAdminRoleId },
+          { id: testConfig.auth0ClientFinanceAdminRoleId },
+        ])
+      );
       const { getUserWithRoles } = userManagementClient;
       expect(await getUserWithRoles({ id: 'foo' }, {})).toEqual(
         expectedUser(auth0User, {
@@ -140,19 +155,25 @@ describe('user management test suite', () => {
           tokenWalletRole: RoleNames.TokenWalletClientFinanceAdmin,
         })
       );
-      expect(mockAuth0GetUser).toHaveBeenLastCalledWith({ id: 'foo' });
-      expect(mockAuth0GetUser).toHaveBeenCalledTimes(1);
-      expect(mockAuth0GetUserRoles).toHaveBeenLastCalledWith({
-        id: 'foo',
-        page: 0,
-        per_page: 10,
-      });
-      expect(mockAuth0GetUserRoles).toHaveBeenCalledTimes(1);
+      expect(last(mockAuth0GetUser.mock.calls).arguments).toEqual([
+        {
+          id: 'foo',
+        },
+      ]);
+      expect(mockAuth0GetUser.mock.callCount()).toEqual(1);
+      expect(last(mockAuth0GetUserRoles.mock.calls).arguments).toEqual([
+        {
+          id: 'foo',
+          page: 0,
+          per_page: 10,
+        },
+      ]);
+      expect(mockAuth0GetUserRoles.mock.callCount()).toEqual(1);
     });
     it('get user with superuser role', async () => {
-      mockAuth0GetUserRoles.mockResolvedValue([
-        { id: testConfig.auth0SuperuserRoleId },
-      ]);
+      mockAuth0GetUserRoles.mock.mockImplementation(() =>
+        Promise.resolve([{ id: testConfig.auth0SuperuserRoleId }])
+      );
       const { getUserWithRoles } = userManagementClient;
       expect(await getUserWithRoles({ id: 'foo' }, {})).toEqual(
         expectedUser(auth0User, {
@@ -161,9 +182,9 @@ describe('user management test suite', () => {
       );
     });
     it('get user with clientsystemuser role', async () => {
-      mockAuth0GetUserRoles.mockResolvedValue([
-        { id: testConfig.auth0ClientSystemUserRoleId },
-      ]);
+      mockAuth0GetUserRoles.mock.mockImplementation(() =>
+        Promise.resolve([{ id: testConfig.auth0ClientSystemUserRoleId }])
+      );
       const { getUserWithRoles } = userManagementClient;
       expect(await getUserWithRoles({ id: 'foo' }, {})).toEqual(
         expectedUser(auth0User, {
@@ -175,9 +196,11 @@ describe('user management test suite', () => {
 
   describe('user get by email test suite', () => {
     let minimalAuth0User;
-    beforeAll(() => {
+    before(() => {
       minimalAuth0User = omit(['given_name', 'logins_count'], auth0User);
-      mockAuth0GetUserByEmail.mockResolvedValue([minimalAuth0User]);
+      mockAuth0GetUserByEmail.mock.mockImplementation(() =>
+        Promise.resolve([minimalAuth0User])
+      );
     });
     it('get user by email for same user', async () => {
       const { getUserByEmail } = userManagementClient;
@@ -186,10 +209,10 @@ describe('user management test suite', () => {
           scope: { userId: auth0User.user_id },
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
-      expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
+      expect(last(mockAuth0GetUserByEmail.mock.calls).arguments).toEqual([
+        'test@email.com',
+      ]);
+      expect(mockAuth0GetUserByEmail.mock.callCount()).toEqual(1);
     });
 
     it('get user by email for same group', async () => {
@@ -199,10 +222,10 @@ describe('user management test suite', () => {
           scope: { groupId: auth0User.app_metadata.groupId },
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
-      expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
+      expect(last(mockAuth0GetUserByEmail.mock.calls).arguments).toEqual([
+        'test@email.com',
+      ]);
+      expect(mockAuth0GetUserByEmail.mock.callCount()).toEqual(1);
     });
 
     it('get user public information by email', async () => {
@@ -212,10 +235,10 @@ describe('user management test suite', () => {
           pick(['user_id', 'family_name', 'email'], minimalAuth0User)
         ),
       ]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
-      expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
+      expect(last(mockAuth0GetUserByEmail.mock.calls).arguments).toEqual([
+        'test@email.com',
+      ]);
+      expect(mockAuth0GetUserByEmail.mock.callCount()).toEqual(1);
     });
   });
 });

@@ -8,7 +8,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "jest --config ./jest.config.js --runInBand --coverage",
+    "test": "NODE_ENV=test node --test --test-concurrency=1 --experimental-test-module-mocks --experimental-test-coverage **/*.test.js",
     "lint": "eslint . --format json >> eslint.json",
     "lint:fix": "eslint --fix --ext .js ."
   },
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
-    "jest": "29.7.0"
+    "expect": "29.7.0"
   },
   "nx": {
     "tags": ["lib"]

@@ -14,6 +14,8 @@
  * limitations under the License.
  *
  */
+const { describe, it } = require('node:test');
+const { expect } = require('expect');
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
 const { generateDocJwt, jwtDecode } = require('@velocitycareerlabs/jwt');
 const { nanoid } = require('nanoid');

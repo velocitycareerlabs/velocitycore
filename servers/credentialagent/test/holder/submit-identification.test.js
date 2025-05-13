@@ -13,9 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { after, before, beforeEach, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
 
-// eslint-disable-next-line import/order
-const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
+const initVerificationCoupon = mock.fn(() => ({
+  getCoupon: () => Promise.resolve(42),
+}));
+const initRevocationRegistry = mock.fn(() => ({
+  getRevokedStatus: () => Promise.resolve(0),
+}));
+mock.module('@velocitycareerlabs/metadata-registration', {
+  namedExports: {
+    initVerificationCoupon,
+    initRevocationRegistry,
+  },
+});
+
+const mockVerifyCredentials = mock.fn();
+mock.module('@velocitycareerlabs/verifiable-credentials', {
+  namedExports: {
+    ...require('@velocitycareerlabs/verifiable-credentials'),
+    verifyCredentials: mockVerifyCredentials,
+  },
+});
+
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
 const { VnfProtocolVersions } = require('@velocitycareerlabs/vc-checks');
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
@@ -28,7 +49,6 @@ const {
   mongoify,
   errorResponseMatcher,
 } = require('@velocitycareerlabs/tests-helpers');
-const metadataRegistration = require('@velocitycareerlabs/metadata-registration');
 
 const DEFAULT_CREDENTIAL_CHECKS = {
   TRUSTED_HOLDER: 'PASS',
@@ -38,18 +58,11 @@ const DEFAULT_CREDENTIAL_CHECKS = {
   UNREVOKED: 'PASS',
 };
 
-jest.mock('@velocitycareerlabs/metadata-registration');
-
-const mockVerifyCredentials = jest.fn();
-jest.mock('@velocitycareerlabs/verifiable-credentials', () => ({
-  ...jest.requireActual('@velocitycareerlabs/verifiable-credentials'),
-  verifyCredentials: (...args) => mockVerifyCredentials(...args),
-}));
-
 const {
   CredentialCheckResultValue,
 } = require('@velocitycareerlabs/verifiable-credentials');
 const { getDidUriFromJwk } = require('@velocitycareerlabs/did-doc');
+const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
 const { holderConfig } = require('../../src/config/holder-config');
 const {
   initTenantFactory,
@@ -73,7 +86,7 @@ const {
 const setMockVerifyCredentials = (checkResults = DEFAULT_CREDENTIAL_CHECKS) => {
   const { decodeCredentialJwt } = require('@velocitycareerlabs/jwt');
   // mockVerifyCredentials.reset();
-  mockVerifyCredentials.mockImplementation(async ({ credentials }) =>
+  mockVerifyCredentials.mock.mockImplementation(async ({ credentials }) =>
     Promise.resolve(
       credentials.map((credential) => ({
         credential: decodeCredentialJwt(credential),
@@ -106,7 +119,7 @@ describe('submit identification disclosure', () => {
 
   const identifyUserOnVendorEndpoint = '/issuing/identify';
 
-  beforeAll(async () => {
+  before(async () => {
     fastify = buildFastify(holderConfig);
     await fastify.ready();
     ({ persistOfferExchange } = initOfferExchangeFactory(fastify));
@@ -120,7 +133,6 @@ describe('submit identification disclosure', () => {
   beforeEach(async () => {
     fastify.resetOverrides();
     nock.cleanAll();
-    jest.resetAllMocks();
     setMockVerifyCredentials();
 
     await mongoDb().collection('tenants').deleteMany({});
@@ -153,16 +165,9 @@ describe('submit identification disclosure', () => {
         ],
         { 'cache-control': 'max-age=3600' }
       );
-
-    metadataRegistration.initVerificationCoupon.mockImplementation(() => ({
-      getCoupon: () => Promise.resolve(42),
-    }));
-    metadataRegistration.initRevocationRegistry.mockImplementation(() => ({
-      getRevokedStatus: () => Promise.resolve(0),
-    }));
   });
 
-  afterAll(async () => {
+  after(async () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
@@ -1950,7 +1955,7 @@ describe('submit identification disclosure', () => {
         exchange,
         'email'
       );
-      metadataRegistration.initVerificationCoupon.mockImplementation(() => ({
+      initVerificationCoupon.mock.mockImplementation(() => ({
         getCoupon: () => Promise.resolve(null),
       }));
 
@@ -2036,7 +2041,7 @@ describe('submit identification disclosure', () => {
         tenantId: tenant._id,
         exchangeId: exchange._id,
       });
-      metadataRegistration.initVerificationCoupon.mockImplementation(() => ({
+      initVerificationCoupon.mock.mockImplementation(() => ({
         getCoupon: () => Promise.resolve(42),
       }));
     });
@@ -4044,7 +4049,7 @@ describe('submit identification disclosure', () => {
           identifyWebhookVersion: 1,
         });
       });
-      afterAll(() => {
+      after(() => {
         fastify.overrides.reqConfig = (config) => ({
           ...config,
           identifyWebhookVersion: 2,

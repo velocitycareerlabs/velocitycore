@@ -13,9 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { after, before, beforeEach, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
 
-const mockVerifyCredentials = jest.fn();
-const mockSendPush = jest.fn().mockResolvedValue(undefined);
+const initVerificationCoupon = mock.fn(() => ({
+  getCoupon: () => Promise.resolve(42),
+}));
+const initRevocationRegistry = mock.fn(() => ({
+  getRevokedStatus: () => Promise.resolve(0),
+}));
+mock.module('@velocitycareerlabs/metadata-registration', {
+  namedExports: {
+    initRevocationRegistry,
+    initVerificationCoupon,
+  },
+});
+const mockVerifyCredentials = mock.fn();
+mock.module('@velocitycareerlabs/verifiable-credentials', {
+  namedExports: {
+    ...require('@velocitycareerlabs/verifiable-credentials'),
+    verifyCredentials: mockVerifyCredentials,
+  },
+});
+const mockSendPush = mock.fn(() => Promise.resolve(undefined));
+mock.module('../../src/fetchers/push-gateway/push-fetcher.js', {
+  namedExports: {
+    sendPush: mockSendPush,
+  },
+});
+
 // eslint-disable-next-line import/order
 const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
 const { subHours, getUnixTime } = require('date-fns/fp');
@@ -37,7 +63,6 @@ const { VnfProtocolVersions } = require('@velocitycareerlabs/vc-checks');
 const { map, omit, isString } = require('lodash/fp');
 const { nanoid } = require('nanoid');
 const nock = require('nock');
-const metadataRegistration = require('@velocitycareerlabs/metadata-registration');
 const { getDidUriFromJwk } = require('@velocitycareerlabs/did-doc');
 const { ISO_DATETIME_FORMAT } = require('@velocitycareerlabs/test-regexes');
 const { generatePresentation } = require('./helpers/generate-presentation');
@@ -57,19 +82,6 @@ const {
   VendorEndpoint,
   NotificationTypes,
 } = require('../../src/entities');
-
-jest.mock('@velocitycareerlabs/metadata-registration');
-jest.mock('@velocitycareerlabs/verifiable-credentials', () => ({
-  ...jest.requireActual('@velocitycareerlabs/verifiable-credentials'),
-  verifyCredentials: mockVerifyCredentials,
-}));
-jest.mock('../../src/fetchers', () => {
-  const actualFetchers = jest.requireActual('../../src/fetchers');
-  return {
-    ...actualFetchers,
-    sendPush: mockSendPush,
-  };
-});
 
 describe('presentation submission', () => {
   let fastify;
@@ -108,7 +120,7 @@ describe('presentation submission', () => {
     },
   };
 
-  beforeAll(async () => {
+  before(async () => {
     fastify = buildFastify();
     await fastify.ready();
     ({ persistDisclosure } = initDisclosureFactory(fastify));
@@ -120,7 +132,8 @@ describe('presentation submission', () => {
   });
 
   beforeEach(async () => {
-    jest.resetAllMocks();
+    mockSendPush.mock.resetCalls();
+    mockVerifyCredentials.mock.resetCalls();
     nock.cleanAll();
     fastify.resetOverrides();
 
@@ -131,7 +144,7 @@ describe('presentation submission', () => {
     await mongoDb().collection('vendorUserIdMappings').deleteMany({});
     await mongoDb().collection('feeds').deleteMany({});
 
-    mockVerifyCredentials.mockImplementation(async ({ credentials }) => {
+    mockVerifyCredentials.mock.mockImplementation(async ({ credentials }) => {
       return credentials.map((credential) => ({
         credential: decodeCredentialJwt(credential),
         credentialChecks: {
@@ -183,12 +196,6 @@ describe('presentation submission', () => {
       vendorEndpoint: VendorEndpoint.RECEIVE_CHECKED_CREDENTIALS,
     });
     vendorUserIdMapping = await persistVendorUserIdMapping({ tenant });
-    metadataRegistration.initVerificationCoupon.mockImplementation(() => ({
-      getCoupon: () => Promise.resolve(42),
-    }));
-    metadataRegistration.initRevocationRegistry.mockImplementation(() => ({
-      getRevokedStatus: () => Promise.resolve(0),
-    }));
 
     nock('http://oracle.localhost.test')
       .get('/api/v0.6/credential-types', () => {
@@ -221,7 +228,7 @@ describe('presentation submission', () => {
     });
   });
 
-  afterAll(async () => {
+  after(async () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
@@ -372,7 +379,7 @@ describe('presentation submission', () => {
       });
 
       expect(response.statusCode).toEqual(200);
-      expect(mockSendPush).toBeCalledTimes(0);
+      expect(mockSendPush.mock.callCount()).toEqual(0);
 
       expect(response.statusCode).toEqual(200);
       expect(webhookPayload).toEqual({
@@ -466,7 +473,7 @@ describe('presentation submission', () => {
       });
 
       expect(response.statusCode).toEqual(200);
-      expect(mockSendPush).toBeCalledTimes(0);
+      expect(mockSendPush.mock.callCount()).toEqual(0);
 
       expect(response.statusCode).toEqual(200);
       expect(webhookPayload).toEqual({
@@ -606,8 +613,10 @@ describe('presentation submission', () => {
       });
 
       expect(response.statusCode).toEqual(200);
-      expect(mockSendPush).toBeCalledTimes(1);
-      expect(mockSendPush).toBeCalledWith(
+      expect(mockSendPush.mock.callCount()).toEqual(1);
+      expect(
+        mockSendPush.mock.calls.map((call) => call.arguments)
+      ).toContainEqual([
         {
           data: {
             exchangeId: expect.any(ObjectId),
@@ -616,11 +625,11 @@ describe('presentation submission', () => {
             issuer: tenant.did,
           },
           pushToken: pushDelegate.pushToken,
-          id: mockSendPush.mock.calls[0][0].id,
+          id: mockSendPush.mock.calls[0].arguments[0].id,
         },
         pushDelegate,
-        expect.any(Object)
-      );
+        expect.any(Object),
+      ]);
 
       expect(response.statusCode).toEqual(200);
       expect(webhookPayload).toEqual({
@@ -697,7 +706,7 @@ describe('presentation submission', () => {
       });
 
       expect(response.statusCode).toEqual(200);
-      expect(mockSendPush).toBeCalledTimes(0);
+      expect(mockSendPush.mock.callCount()).toEqual(0);
 
       expect(response.statusCode).toEqual(200);
       expect(webhookPayload).toEqual({
@@ -727,18 +736,16 @@ describe('presentation submission', () => {
         ),
       });
 
-      expect(mockVerifyCredentials.mock.calls).toEqual([
-        [
-          {
-            credentials: expect.any(Array),
-            relyingParty: {
-              dltOperatorKMSKeyId: new ObjectId(tenantDltKey._id),
-            },
-            expectedHolderDid: holderDidJwk,
+      expect(mockVerifyCredentials.mock.calls[0].arguments).toEqual([
+        {
+          credentials: expect.any(Array),
+          relyingParty: {
+            dltOperatorKMSKeyId: new ObjectId(tenantDltKey._id),
           },
-          expect.any(Object),
-          expect.any(Object),
-        ],
+          expectedHolderDid: holderDidJwk,
+        },
+        expect.any(Object),
+        expect.any(Object),
       ]);
     });
 
@@ -781,7 +788,7 @@ describe('presentation submission', () => {
       });
 
       expect(response.statusCode).toEqual(200);
-      expect(mockSendPush).toBeCalledTimes(0);
+      expect(mockSendPush.mock.callCount()).toEqual(0);
 
       expect(webhookPayload).toEqual({
         exchangeId: disclosurePresentationExchange._id,
@@ -851,7 +858,7 @@ describe('presentation submission', () => {
       });
 
       expect(response.statusCode).toEqual(200);
-      expect(mockSendPush).toBeCalledTimes(0);
+      expect(mockSendPush.mock.callCount()).toEqual(0);
 
       expect(webhookPayload).toEqual({
         exchangeId: disclosurePresentationExchange._id,
@@ -1160,28 +1167,27 @@ describe('presentation submission', () => {
           return sendCredentialsPayload;
         });
 
-      const mockDate = new Date('2023-10-05T12:00:00');
-      jest
-        .useFakeTimers({
-          doNotFake: [
-            'hrtime',
-            'nextTick',
-            'performance',
-            'queueMicrotask',
-            'requestAnimationFrame',
-            'cancelAnimationFrame',
-            'requestIdleCallback',
-            'cancelIdleCallback',
-            'setImmediate',
-            'clearImmediate',
-            'setInterval',
-            'clearInterval',
-            'setTimeout',
-            'clearTimeout',
-          ],
-        })
-        .setSystemTime(mockDate);
-      // const spy = jest.spyOn(global, 'Date').mockReturnValue(mockDate);
+      // const mockDate = new Date('2023-10-05T12:00:00');
+      // jest
+      //   .useFakeTimers({
+      //     doNotFake: [
+      //       'hrtime',
+      //       'nextTick',
+      //       'performance',
+      //       'queueMicrotask',
+      //       'requestAnimationFrame',
+      //       'cancelAnimationFrame',
+      //       'requestIdleCallback',
+      //       'cancelIdleCallback',
+      //       'setImmediate',
+      //       'clearImmediate',
+      //       'setInterval',
+      //       'clearInterval',
+      //       'setTimeout',
+      //       'clearTimeout',
+      //     ],
+      //   })
+      //   .setSystemTime(mockDate);
       const response = await fastify.injectJson({
         method: 'POST',
         url: inspectUrl(tenant, '/submit-presentation'),
@@ -1216,7 +1222,7 @@ describe('presentation submission', () => {
         });
 
       expect(dbDisclosureAfterRequest.configurationType).toEqual('inspection');
-      jest.useRealTimers();
+      // jest.useRealTimers();
     });
 
     it('should 200 and set configuration type to disclosure', async () => {
@@ -1303,18 +1309,20 @@ describe('presentation submission', () => {
     });
 
     it('should 200 with credentials status payment required', async () => {
-      mockVerifyCredentials.mockImplementationOnce(async ({ credentials }) => {
-        return credentials.map((credential) => ({
-          credential: decodeCredentialJwt(credential),
-          credentialChecks: {
-            TRUSTED_HOLDER: 'NOT_CHECKED',
-            TRUSTED_ISSUER: 'VOUCHER_RESERVE_EXHAUSTED',
-            UNEXPIRED: 'NOT_CHECKED',
-            UNTAMPERED: 'NOT_CHECKED',
-            UNREVOKED: 'NOT_CHECKED',
-          },
-        }));
-      });
+      mockVerifyCredentials.mock.mockImplementationOnce(
+        async ({ credentials }) => {
+          return credentials.map((credential) => ({
+            credential: decodeCredentialJwt(credential),
+            credentialChecks: {
+              TRUSTED_HOLDER: 'NOT_CHECKED',
+              TRUSTED_ISSUER: 'VOUCHER_RESERVE_EXHAUSTED',
+              UNEXPIRED: 'NOT_CHECKED',
+              UNTAMPERED: 'NOT_CHECKED',
+              UNREVOKED: 'NOT_CHECKED',
+            },
+          }));
+        }
+      );
       const presentationBuilder = await generatePresentation(
         disclosureExchange
       );
@@ -1421,12 +1429,14 @@ describe('presentation submission', () => {
         UNREVOKED: 'NOT_CHECKED',
       };
 
-      mockVerifyCredentials.mockImplementationOnce(async ({ credentials }) => {
-        return credentials.map((credential) => ({
-          credential: decodeCredentialJwt(credential),
-          credentialChecks,
-        }));
-      });
+      mockVerifyCredentials.mock.mockImplementationOnce(
+        async ({ credentials }) => {
+          return credentials.map((credential) => ({
+            credential: decodeCredentialJwt(credential),
+            credentialChecks,
+          }));
+        }
+      );
       const presentationBuilder = await generatePresentation(
         disclosureExchange
       );
@@ -1487,12 +1497,14 @@ describe('presentation submission', () => {
         UNREVOKED: 'NOT_CHECKED',
       };
 
-      mockVerifyCredentials.mockImplementationOnce(async ({ credentials }) => {
-        return credentials.map((credential) => ({
-          credential: decodeCredentialJwt(credential),
-          credentialChecks,
-        }));
-      });
+      mockVerifyCredentials.mock.mockImplementationOnce(
+        async ({ credentials }) => {
+          return credentials.map((credential) => ({
+            credential: decodeCredentialJwt(credential),
+            credentialChecks,
+          }));
+        }
+      );
       const presentationBuilder = await generatePresentation(
         disclosureExchange
       );

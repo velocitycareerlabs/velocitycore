@@ -13,13 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { after, before, beforeEach, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
 
-// eslint-disable-next-line import/order
-const buildFastify = require('./helpers/credentialagent-operator-build-fastify');
+mock.module('../../src/fetchers/push-gateway/generate-push-gateway-token.js', {
+  namedExports: { generatePushGatewayToken: () => Promise.resolve('token') },
+});
+
+const mockSetRevokedStatusSigned = mock.fn(() => Promise.resolve({}));
+const initRevocationRegistry = mock.fn(() =>
+  Promise.resolve({
+    setRevokedStatusSigned: mockSetRevokedStatusSigned,
+  })
+);
+mock.module('@velocitycareerlabs/metadata-registration', {
+  namedExports: { initRevocationRegistry },
+});
 
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 
-const metadataRegistration = require('@velocitycareerlabs/metadata-registration');
 const nock = require('nock');
 const {
   mongoify,
@@ -31,6 +43,7 @@ const {
 } = require('@velocitycareerlabs/blockchain-functions');
 const { ObjectId } = require('mongodb');
 const { hexFromJwk } = require('@velocitycareerlabs/jwt');
+const buildFastify = require('./helpers/credentialagent-operator-build-fastify');
 const {
   initOfferFactory,
   initTenantFactory,
@@ -39,11 +52,6 @@ const {
   exchangeRepoPlugin,
 } = require('../../src/entities');
 
-jest.mock(
-  '../../src/fetchers/push-gateway/generate-push-gateway-token',
-  () => ({ generatePushGatewayToken: () => Promise.resolve('token') })
-);
-jest.mock('@velocitycareerlabs/metadata-registration');
 const testPushEndpointURL = new URL('https://push.localhost.test/push');
 
 const getUrl = (tenant, credentialId) =>
@@ -63,10 +71,9 @@ describe('Credentials checking tests', () => {
   let persistOfferExchange;
   let exchangeRepo;
   let credentialId;
-  let mockSetRevokedStatusSigned;
   let offer;
 
-  beforeAll(async () => {
+  before(async () => {
     fastify = buildFastify();
     await fastify.ready();
     ({ persistOffer } = initOfferFactory(fastify));
@@ -75,7 +82,7 @@ describe('Credentials checking tests', () => {
     ({ persistOfferExchange } = initOfferExchangeFactory(fastify));
   });
 
-  afterAll(async () => {
+  after(async () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
@@ -83,7 +90,7 @@ describe('Credentials checking tests', () => {
 
   beforeEach(async () => {
     nock.cleanAll();
-    jest.resetAllMocks();
+    mockSetRevokedStatusSigned.mock.resetCalls();
     await mongoDb().collection('offers').deleteMany({});
     await mongoDb().collection('exchanges').deleteMany({});
     await mongoDb().collection('tenants').deleteMany({});
@@ -125,11 +132,6 @@ describe('Credentials checking tests', () => {
     await exchangeRepo.update(exchange._id, {
       finalizedOfferIds: [new ObjectId(offer._id)],
     });
-
-    mockSetRevokedStatusSigned = jest.fn(() => Promise.resolve({}));
-    metadataRegistration.initRevocationRegistry.mockResolvedValue({
-      setRevokedStatusSigned: mockSetRevokedStatusSigned,
-    });
   });
 
   it('Should return 200 when the credential is revoked successfully', async () => {
@@ -164,7 +166,9 @@ describe('Credentials checking tests', () => {
       updatedAt: expect.any(Date),
     });
 
-    expect(metadataRegistration.initRevocationRegistry.mock.calls).toEqual([
+    expect(
+      initRevocationRegistry.mock.calls.map((call) => call.arguments)
+    ).toEqual([
       [
         expect.objectContaining({
           privateKey: hexFromJwk(keyPair.privateKey, true),
@@ -173,12 +177,16 @@ describe('Credentials checking tests', () => {
       ],
     ]);
 
-    expect(mockSetRevokedStatusSigned).toHaveBeenCalledWith({
-      accountId: primaryAddress,
-      caoDid: 'did:ion:cao',
-      index: '5681',
-      listId: '1000257453',
-    });
+    expect(
+      mockSetRevokedStatusSigned.mock.calls.map((call) => call.arguments)
+    ).toContainEqual([
+      {
+        accountId: primaryAddress,
+        caoDid: 'did:ion:cao',
+        index: '5681',
+        listId: '1000257453',
+      },
+    ]);
     expect(nockedPushEndpoint.isDone()).toEqual(true);
     expect(pushBody).toEqual({
       data: {
@@ -245,18 +253,24 @@ describe('Credentials checking tests', () => {
       updatedAt: expect.any(Date),
     });
 
-    expect(metadataRegistration.initRevocationRegistry).toHaveBeenCalledWith(
+    expect(
+      initRevocationRegistry.mock.calls.map((call) => call.arguments)
+    ).toContainEqual([
       expect.objectContaining({
         privateKey: hexFromJwk(fallbackKeyPair.privateKey),
       }),
-      expect.any(Object)
-    );
-    expect(mockSetRevokedStatusSigned).toHaveBeenCalledWith({
-      accountId: primaryAddress,
-      caoDid: 'did:ion:cao',
-      index: '5682',
-      listId: '1000257453',
-    });
+      expect.any(Object),
+    ]);
+    expect(
+      mockSetRevokedStatusSigned.mock.calls.map((call) => call.arguments)
+    ).toContainEqual([
+      {
+        accountId: primaryAddress,
+        caoDid: 'did:ion:cao',
+        index: '5682',
+        listId: '1000257453',
+      },
+    ]);
   });
 
   it('Should not return notifiedOfRevocationAt when pushDelegate.pushToken is absent', async () => {
@@ -303,12 +317,16 @@ describe('Credentials checking tests', () => {
       updatedAt: expect.any(Date),
     });
 
-    expect(mockSetRevokedStatusSigned).toHaveBeenCalledWith({
-      accountId: primaryAddress,
-      caoDid: 'did:ion:cao',
-      index: '5682',
-      listId: '1000257453',
-    });
+    expect(
+      mockSetRevokedStatusSigned.mock.calls.map((call) => call.arguments)
+    ).toContainEqual([
+      {
+        accountId: primaryAddress,
+        caoDid: 'did:ion:cao',
+        index: '5682',
+        listId: '1000257453',
+      },
+    ]);
   });
 
   it('Should not return notifiedOfRevocationAt when pushDelegate.pushUrl is absent', async () => {
@@ -353,12 +371,16 @@ describe('Credentials checking tests', () => {
       },
       updatedAt: expect.any(Date),
     });
-    expect(mockSetRevokedStatusSigned).toHaveBeenCalledWith({
-      accountId: primaryAddress,
-      caoDid: 'did:ion:cao',
-      index: '5682',
-      listId: '1000257453',
-    });
+    expect(
+      mockSetRevokedStatusSigned.mock.calls.map((call) => call.arguments)
+    ).toContainEqual([
+      {
+        accountId: primaryAddress,
+        caoDid: 'did:ion:cao',
+        index: '5682',
+        listId: '1000257453',
+      },
+    ]);
   });
 
   it('Should return 200 when the credential is already revoked', async () => {
@@ -387,7 +409,7 @@ describe('Credentials checking tests', () => {
       id: expect.any(String),
       pushToken: 'token',
     });
-    expect(mockSetRevokedStatusSigned).toHaveBeenCalledTimes(1);
+    expect(mockSetRevokedStatusSigned.mock.callCount()).toEqual(1);
 
     const twicedRevokedResponse = await fastify.injectJson({
       method: 'POST',
@@ -397,7 +419,7 @@ describe('Credentials checking tests', () => {
     expect(twicedRevokedResponse.statusCode).toEqual(200);
     expect(twicedRevokedResponse.json).toEqual({});
 
-    expect(mockSetRevokedStatusSigned).toHaveBeenCalledTimes(1);
+    expect(mockSetRevokedStatusSigned.mock.callCount()).toEqual(1);
     expect(nockedPushEndpoint.isDone()).toEqual(true);
   });
 
@@ -423,12 +445,16 @@ describe('Credentials checking tests', () => {
       notifiedOfRevocationAt: expect.any(String),
     });
 
-    expect(mockSetRevokedStatusSigned).toHaveBeenCalledWith({
-      accountId: primaryAddress,
-      caoDid: 'did:ion:cao',
-      index: '5681',
-      listId: '1000257453',
-    });
+    expect(
+      mockSetRevokedStatusSigned.mock.calls.map((call) => call.arguments)
+    ).toContainEqual([
+      {
+        accountId: primaryAddress,
+        caoDid: 'did:ion:cao',
+        index: '5681',
+        listId: '1000257453',
+      },
+    ]);
 
     expect(nockedPushEndpoint.isDone()).toEqual(true);
     expect(pushBody).toEqual({
@@ -468,12 +494,16 @@ describe('Credentials checking tests', () => {
       notifiedOfRevocationAt: expect.any(String),
     });
 
-    expect(mockSetRevokedStatusSigned).toHaveBeenCalledWith({
-      accountId: primaryAddress,
-      caoDid: 'did:ion:cao',
-      index: '5681',
-      listId: '1000257453',
-    });
+    expect(
+      mockSetRevokedStatusSigned.mock.calls.map((call) => call.arguments)
+    ).toContainEqual([
+      {
+        accountId: primaryAddress,
+        caoDid: 'did:ion:cao',
+        index: '5681',
+        listId: '1000257453',
+      },
+    ]);
 
     expect(nockedPushEndpoint.isDone()).toEqual(true);
     expect(pushBody).toEqual({
@@ -513,8 +543,8 @@ describe('Credentials checking tests', () => {
   });
 
   it('Should return 500 when the blockchain doesnt respond', async () => {
-    mockSetRevokedStatusSigned.mockRejectedValue(
-      new Error('Transaction failed')
+    mockSetRevokedStatusSigned.mock.mockImplementationOnce(() =>
+      Promise.reject(new Error('Transaction failed'))
     );
     const response = await fastify.injectJson({
       method: 'POST',
@@ -531,11 +561,15 @@ describe('Credentials checking tests', () => {
       })
     );
 
-    expect(mockSetRevokedStatusSigned).toHaveBeenCalledWith({
-      accountId: primaryAddress,
-      caoDid: 'did:ion:cao',
-      index: '5681',
-      listId: '1000257453',
-    });
+    expect(
+      mockSetRevokedStatusSigned.mock.calls.map((call) => call.arguments)
+    ).toContainEqual([
+      {
+        accountId: primaryAddress,
+        caoDid: 'did:ion:cao',
+        index: '5681',
+        listId: '1000257453',
+      },
+    ]);
   });
 });

@@ -1,3 +1,5 @@
+const { expect } = require('expect');
+
 const privateKeyMatcher = {
   crv: 'secp256k1',
   kty: 'EC',

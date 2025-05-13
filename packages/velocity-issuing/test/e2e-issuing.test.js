@@ -15,6 +15,9 @@
  *
  */
 
+const { after, before, beforeEach, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const console = require('console');
 const {
   mongoFactoryWrapper,
@@ -58,8 +61,7 @@ const {
   mongoAllocationListQueries,
 } = require('../src/adapters/mongo-allocation-list-queries');
 
-describe('E2E issuing', () => {
-  jest.setTimeout(30000);
+describe('E2E issuing', { timeout: 30000 }, () => {
   const mongoClient = new MongoClient('mongodb://localhost:27017/');
 
   const repos = {};
@@ -72,7 +74,7 @@ describe('E2E issuing', () => {
   let revocationContractAddress;
   let metadataRegistryContractAddress;
 
-  beforeAll(async () => {
+  before(async () => {
     await mongoFactoryWrapper('test-metadata-registry', context);
     repos.revocationListAllocations = await collectionClient({
       mongoClient,
@@ -159,7 +161,7 @@ describe('E2E issuing', () => {
     });
   });
 
-  afterAll(async () => {
+  after(async () => {
     await mongoCloseWrapper();
     await mongoClient.close();
   });
@@ -167,7 +169,6 @@ describe('E2E issuing', () => {
   beforeEach(async () => {
     await repos.revocationListAllocations.deleteMany();
     await repos.metadataListAllocations.deleteMany();
-    jest.resetAllMocks();
     context = buildContext({
       issuerEntity,
       caoEntity,

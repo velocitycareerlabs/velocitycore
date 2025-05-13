@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+const { after, before, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const { last } = require('lodash/fp');
 const { toNumber } = require('@velocitycareerlabs/blockchain-functions');
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
@@ -48,7 +51,7 @@ describe('Revocation Registry', () => {
   let revocationRegistry;
   let defaultPrimaryAddress;
 
-  beforeAll(async () => {
+  before(async () => {
     await mongoFactoryWrapper('test-revocation-registry', context);
 
     permissionsContractAddress = await deployPermissionContract();
@@ -62,7 +65,7 @@ describe('Revocation Registry', () => {
     revocationRegistry = await createRevocationRegistryWallet(operatorKeyPair);
   });
 
-  afterAll(async () => {
+  after(async () => {
     await mongoCloseWrapper();
   });
 
@@ -264,12 +267,10 @@ describe('Revocation Registry', () => {
     });
   });
 
-  describe('Pull Revocation Registry Events', () => {
-    jest.setTimeout(30000);
-
+  describe('Pull Revocation Registry Events', { timeout: 30000 }, () => {
     const listId = 1000;
     const index = 1000n;
-    beforeAll(async () => {
+    before(async () => {
       await revocationRegistry.addRevocationListSigned(
         listId,
         'did:velocity:99'

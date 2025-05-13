@@ -14,10 +14,11 @@
  * limitations under the License.
  *
  */
+const { after, before, beforeEach, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
+const { nanoid } = require('nanoid');
 
-const mockCreateFineractClient = jest.fn();
-const mockCreateStakesAccount = jest.fn();
-const mockInitSendError = jest.fn().mockReturnValue({
+const mockInitSendError = mock.fn(() => ({
   sendError: (err) => {
     console.log(`fake capturing exception: ${err.message}`);
   },
@@ -27,20 +28,88 @@ const mockInitSendError = jest.fn().mockReturnValue({
   finishProfiling: () => {
     console.log('fake finish sentry profiling');
   },
+}));
+
+mock.module('@velocitycareerlabs/error-aggregation', {
+  namedExports: {
+    initSendError: mockInitSendError,
+  },
 });
 
-const mockAddPrimary = jest.fn().mockResolvedValue(undefined);
-const mockAddOperator = jest.fn().mockResolvedValue(undefined);
-const mockRemoveOperator = jest.fn().mockResolvedValue(undefined);
-const mockInitPermission = jest.fn().mockResolvedValue({
-  addPrimary: mockAddPrimary,
-  addOperatorKey: mockAddOperator,
-  removeOperatorKey: mockRemoveOperator,
+const mockAuth0ClientDelete = mock.fn(async ({ id }) => {
+  console.log(`deleting auth0 client ${id}`);
+});
+const mockAuth0ClientGrantDelete = mock.fn(async ({ id }) => {
+  console.log(`deleting auth0 client grant ${id}`);
+});
+const mockAuth0ClientCreate = mock.fn(async (obj) => {
+  const id = nanoid();
+  console.log(`create auth0 client ${id}`);
+  return { client_id: id, client_secret: nanoid(), ...obj };
+});
+const mockAuth0ClientGrantCreate = mock.fn(async (obj) => {
+  const id = nanoid();
+  console.log(`create auth0 clientGrant ${id}`);
+  return { id: nanoid(), ...obj };
+});
+const mockAuth0UserUpdate = mock.fn(async ({ id }, obj) => {
+  console.log(`update auth0 user ${id}`);
+  return { id, ...obj };
+});
+const mockAuth0GetUsers = mock.fn(() =>
+  Promise.resolve({
+    email: `${mockAuth0GetUsers.mock.callCount()}@localhost.test`,
+  })
+);
+
+class ManagementClient {
+  constructor() {
+    this.clients = {
+      create: mockAuth0ClientCreate,
+      delete: mockAuth0ClientDelete,
+    };
+    this.clientGrants = {
+      create: mockAuth0ClientGrantCreate,
+      delete: mockAuth0ClientGrantDelete,
+    };
+    this.users = {
+      update: mockAuth0UserUpdate,
+    };
+    this.getUsers = mockAuth0GetUsers;
+  }
+}
+mock.module('auth0', {
+  namedExports: {
+    ManagementClient,
+  },
 });
 
-const { times } = require('lodash/fp');
+const mockAddPrimary = mock.fn(() => Promise.resolve(undefined));
+const mockAddOperator = mock.fn(() => Promise.resolve(undefined));
+const mockRemoveOperator = mock.fn(() => Promise.resolve(undefined));
+const mockInitPermission = mock.fn(() =>
+  Promise.resolve({
+    addPrimary: mockAddPrimary,
+    addOperatorKey: mockAddOperator,
+    removeOperatorKey: mockRemoveOperator,
+  })
+);
+mock.module('@velocitycareerlabs/contract-permissions', {
+  namedExports: {
+    ...require('../../contract-permissions/src/constants'),
+    initPermissions: mockInitPermission,
+  },
+});
 
-const { nanoid } = require('nanoid');
+const mockCreateFineractClient = mock.fn();
+const mockCreateStakesAccount = mock.fn();
+mock.module('@velocitycareerlabs/fineract-client', {
+  namedExports: {
+    createFineractClient: mockCreateFineractClient,
+    createStakesAccount: mockCreateStakesAccount,
+  },
+});
+
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const {
   toEthereumAddress,
@@ -64,7 +133,6 @@ const {
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
 const { ObjectId } = require('mongodb');
 
-require('auth0');
 const console = require('console');
 
 const nock = require('nock');
@@ -82,90 +150,6 @@ const {
 } = require('../src/entities');
 
 const baseUrl = '/api/v0.6/organizations';
-
-const mockAuth0ClientDelete = jest.fn().mockImplementation(async ({ id }) => {
-  console.log(`deleting auth0 client ${id}`);
-});
-const mockAuth0ClientGrantDelete = jest
-  .fn()
-  .mockImplementation(async ({ id }) => {
-    console.log(`deleting auth0 client grant ${id}`);
-  });
-const mockAuth0ClientCreate = jest.fn().mockImplementation(async (obj) => {
-  const id = nanoid();
-  console.log(`create auth0 client ${id}`);
-  return { client_id: id, client_secret: nanoid(), ...obj };
-});
-const mockAuth0ClientGrantCreate = jest.fn().mockImplementation(async (obj) => {
-  const id = nanoid();
-  console.log(`create auth0 clientGrant ${id}`);
-  return { id: nanoid(), ...obj };
-});
-const mockAuth0UserUpdate = jest
-  .fn()
-  .mockImplementation(async ({ id }, obj) => {
-    console.log(`update auth0 user ${id}`);
-    return { id, ...obj };
-  });
-const mockAuth0GetUsers = jest
-  .fn()
-  .mockResolvedValue(times((id) => ({ email: `${id}@localhost.test` }), 2));
-
-jest.mock('auth0', () => ({
-  ManagementClient: jest.fn().mockImplementation(() => ({
-    clients: {
-      create: mockAuth0ClientCreate,
-      delete: mockAuth0ClientDelete,
-    },
-    clientGrants: {
-      create: mockAuth0ClientGrantCreate,
-      delete: mockAuth0ClientGrantDelete,
-    },
-    users: {
-      update: mockAuth0UserUpdate,
-    },
-    getUsers: mockAuth0GetUsers,
-  })),
-}));
-
-jest.mock('@velocitycareerlabs/contract-permissions', () => {
-  const originalModule = jest.requireActual(
-    '@velocitycareerlabs/contract-permissions'
-  );
-  return {
-    ...originalModule,
-    initPermissions: mockInitPermission,
-  };
-});
-
-jest.mock('@velocitycareerlabs/fineract-client', () => {
-  const originalModule = jest.requireActual(
-    '@velocitycareerlabs/fineract-client'
-  );
-  return {
-    ...originalModule,
-    createFineractClient: mockCreateFineractClient,
-    createStakesAccount: mockCreateStakesAccount,
-  };
-});
-
-jest.mock('@velocitycareerlabs/error-aggregation', () => {
-  const originalModule = jest.requireActual(
-    '@velocitycareerlabs/error-aggregation'
-  );
-  return {
-    ...originalModule,
-    initSendError: mockInitSendError,
-  };
-});
-
-jest.mock('nanoid/non-secure', () => {
-  const originalModule = jest.requireActual('nanoid/non-secure');
-  return {
-    ...originalModule,
-    nanoid: jest.fn().mockReturnValue('1'),
-  };
-});
 
 describe('Organization Registrar Test Suite', () => {
   let fastify;
@@ -188,7 +172,7 @@ describe('Organization Registrar Test Suite', () => {
     await mongoDb().collection('groups').deleteMany({});
   };
 
-  beforeAll(async () => {
+  before(async () => {
     fastify = buildFastify();
     await fastify.ready();
     ({ persistOrganization } = initOrganizationFactory(fastify));
@@ -225,12 +209,15 @@ describe('Organization Registrar Test Suite', () => {
   }, 10000);
 
   beforeEach(async () => {
-    jest.clearAllMocks();
-    mockCreateStakesAccount.mockResolvedValue('foo');
+    mockCreateStakesAccount.mock.resetCalls();
+    mockCreateStakesAccount.mock.mockImplementation(() =>
+      Promise.resolve('foo')
+    );
+    mockRemoveOperator.mock.resetCalls();
     nock.cleanAll();
   });
 
-  afterAll(async () => {
+  after(async () => {
     await mongoDb().collection('credentialSchemas').deleteMany({});
     await fastify.close();
     nock.cleanAll();
@@ -899,8 +886,8 @@ describe('Organization Registrar Test Suite', () => {
           },
         });
 
-        expect(mockInitPermission).toHaveBeenCalledTimes(0);
-        expect(mockAddOperator).toHaveBeenCalledTimes(0);
+        expect(mockInitPermission.mock.callCount()).toEqual(0);
+        expect(mockAddOperator.mock.callCount()).toEqual(0);
 
         expect(response).toMatchObject({
           statusCode: 201,
@@ -1097,7 +1084,7 @@ describe('Organization Registrar Test Suite', () => {
           })
         );
 
-        expect(mockRemoveOperator).toHaveBeenCalledTimes(0);
+        expect(mockRemoveOperator.mock.callCount()).toEqual(0);
 
         const updatedOrganizationKeys = await organizationKeysRepo.find({
           filter: { organizationId: new ObjectId(organization._id) },
@@ -1180,11 +1167,17 @@ describe('Organization Registrar Test Suite', () => {
 
         expect(response.statusCode).toEqual(204);
 
-        expect(mockRemoveOperator).toHaveBeenCalledTimes(1);
-        expect(mockRemoveOperator).toHaveBeenCalledWith({
-          operator: toEthereumAddress(hexFromJwk(removedKey.publicKey, false)),
-          primary: organization.ids.ethereumAccount,
-        });
+        expect(mockRemoveOperator.mock.callCount()).toEqual(1);
+        expect(
+          mockRemoveOperator.mock.calls.map((call) => call.arguments)
+        ).toContainEqual([
+          {
+            operator: toEthereumAddress(
+              hexFromJwk(removedKey.publicKey, false)
+            ),
+            primary: organization.ids.ethereumAccount,
+          },
+        ]);
 
         const updatedOrganizationKeys = await organizationKeysRepo.find({
           filter: { organizationId: new ObjectId(organization._id) },
@@ -1262,7 +1255,7 @@ describe('Organization Registrar Test Suite', () => {
 
         expect(response.statusCode).toEqual(204);
 
-        expect(mockRemoveOperator).toHaveBeenCalledTimes(0);
+        expect(mockRemoveOperator.mock.callCount()).toEqual(0);
 
         const updatedOrganizationKeys = await organizationKeysRepo.find({
           filter: { organizationId: new ObjectId(organization._id) },
@@ -1657,16 +1650,20 @@ describe('Organization Registrar Test Suite', () => {
 
         expect(response.statusCode).toEqual(204);
 
-        expect(mockRemoveOperator).toHaveBeenCalledTimes(1);
-        expect(mockRemoveOperator).toHaveBeenCalledWith({
-          operator: toEthereumAddress(
-            hexFromJwk(
-              expectedDidWebDoc.verificationMethod[0].publicKeyJwk,
-              false
-            )
-          ),
-          primary: organization.ids.ethereumAccount,
-        });
+        expect(mockRemoveOperator.mock.callCount()).toEqual(1);
+        expect(
+          mockRemoveOperator.mock.calls.map((call) => call.arguments)
+        ).toContainEqual([
+          {
+            operator: toEthereumAddress(
+              hexFromJwk(
+                expectedDidWebDoc.verificationMethod[0].publicKeyJwk,
+                false
+              )
+            ),
+            primary: organization.ids.ethereumAccount,
+          },
+        ]);
 
         const updatedOrganizationKeys = await organizationKeysRepo.find({
           filter: { organizationId: new ObjectId(organization._id) },

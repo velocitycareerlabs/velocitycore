@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+const { after, before, beforeEach, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const { startOfSecond } = require('date-fns/fp');
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
 const {
@@ -37,9 +40,7 @@ const {
   rpcProvider,
 } = require('./helpers/deploy-contracts');
 
-describe('Verification Coupon', () => {
-  jest.setTimeout(30000);
-
+describe('Verification Coupon', { timeout: 30000 }, () => {
   const expirationTimeNumber = Date.now() + 60 * 60 * 1000;
   const expirationTime = new Date(expirationTimeNumber).toISOString();
   const traceId = 'trackingId';
@@ -62,7 +63,7 @@ describe('Verification Coupon', () => {
   let primaryAddress;
   let operatorAddress;
 
-  beforeAll(async () => {
+  before(async () => {
     await mongoFactoryWrapper('test-verification-coupon', context);
 
     permissionsContractAddress = await deployPermissionContract();
@@ -91,7 +92,7 @@ describe('Verification Coupon', () => {
     verificationCoupon = await initVerificationCouponClient();
   });
 
-  afterAll(async () => {
+  after(async () => {
     await mongoCloseWrapper();
   });
 
@@ -164,7 +165,7 @@ describe('Verification Coupon', () => {
   });
 
   describe('Pull Verification Coupon Events', () => {
-    beforeAll(async () => {
+    before(async () => {
       const mintEvent = await verificationCouponAdmin.mint({
         toAddress: primaryAddress,
         quantity: 1,
