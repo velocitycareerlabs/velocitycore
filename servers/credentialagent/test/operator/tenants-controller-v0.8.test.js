@@ -97,7 +97,6 @@ describe('Tenants management Test suite', () => {
     tenantRepo = tenantRepoPlugin(fastify)();
     findKmsKey = initFindKmsKey(fastify);
     ({ orgDoc, orgKey, orgPublicKey } = await createOrgDoc());
-    await mongoDb().collection('walletNonces').deleteMany({});
 
     primaryAddress = await generatePrimaryAndAddOperatorToPrimary(
       toEthereumAddress(orgPublicKey),
@@ -946,7 +945,6 @@ describe('Tenants management Test suite', () => {
       );
       orgPublicKey = hexFromJwk(keyPair.publicKey, false);
 
-      await mongoDb().collection('walletNonces').deleteMany({});
       primaryAddress = await generatePrimaryAndAddOperatorToPrimary(
         toEthereumAddress(orgPublicKey),
         {
@@ -1833,14 +1831,17 @@ describe('Tenants management Test suite', () => {
         },
       });
     });
-    it("should 200 if 'all' is true and update existing tenants with preferred dids and their offers", async () => {
+    it("should 200 if 'all' is true and update existing tenants with preferred dids, serviceIds and their offers", async () => {
       const oldDid1 = 'did:test:foo1';
       const oldDid2 = 'did:test:foo2';
       const oldDid3 = 'did:test:foo3';
       const newDid1 = 'did:web:foo1';
       const newDid2 = 'did:web:foo2';
       const newDid3 = 'did:notweb:foo3';
-      const tenant1 = await persistTenant({ did: oldDid1 });
+      const tenant1 = await persistTenant({
+        did: oldDid1,
+        serviceIds: [`${oldDid1}#foo`],
+      });
       const tenant2 = await persistTenant({ did: oldDid2 });
       const tenant3 = await persistTenant({ did: oldDid3 });
       const disclosure1 = await persistDisclosure({ tenant: tenant1 });
@@ -1897,12 +1898,13 @@ describe('Tenants management Test suite', () => {
         .collection('tenants')
         .findOne(
           { _id: new ObjectId(tenant1._id) },
-          { projection: { did: 1, dids: 1 } }
+          { projection: { did: 1, dids: 1, serviceIds: 1 } }
         );
       expect(tenant1FromDb).toEqual({
         _id: new ObjectId(tenant1._id),
         did: newDid1,
         dids: [oldDid1, newDid1],
+        serviceIds: [`${newDid1}#foo`],
       });
       const tenant2FromDb = await mongoDb()
         .collection('tenants')
@@ -1955,8 +1957,14 @@ describe('Tenants management Test suite', () => {
       const oldDid1 = 'did:test:foo1';
       const oldDid2 = 'did:test:foo2';
       const newDid1 = 'did:web:foo1';
-      const tenant1 = await persistTenant({ did: oldDid1 });
-      const tenant2 = await persistTenant({ did: oldDid2 });
+      const tenant1 = await persistTenant({
+        did: oldDid1,
+        serviceIds: [`${oldDid1}#foo`],
+      });
+      const tenant2 = await persistTenant({
+        did: oldDid2,
+        serviceIds: [`${oldDid2}#foo`],
+      });
       const disclosure1 = await persistDisclosure({ tenant: tenant1 });
       const disclosure2 = await persistDisclosure({ tenant: tenant2 });
       const user1 = await persistVendorUserIdMapping({ tenant: tenant1 });
@@ -2000,22 +2008,24 @@ describe('Tenants management Test suite', () => {
         .collection('tenants')
         .findOne(
           { _id: new ObjectId(tenant1._id) },
-          { projection: { did: 1, dids: 1 } }
+          { projection: { did: 1, dids: 1, serviceIds: 1 } }
         );
       expect(tenant1FromDb).toEqual({
         _id: new ObjectId(tenant1._id),
         did: newDid1,
         dids: [oldDid1, newDid1],
+        serviceIds: [`${newDid1}#foo`],
       });
       const tenant2FromDb = await mongoDb()
         .collection('tenants')
         .findOne(
           { _id: new ObjectId(tenant2._id) },
-          { projection: { did: 1, dids: 1 } }
+          { projection: { did: 1, dids: 1, serviceIds: 1 } }
         );
       expect(tenant2FromDb).toEqual({
         _id: new ObjectId(tenant2._id),
         did: oldDid2,
+        serviceIds: [`${oldDid2}#foo`],
       });
       const offer1FromDb = await mongoDb()
         .collection('offers')

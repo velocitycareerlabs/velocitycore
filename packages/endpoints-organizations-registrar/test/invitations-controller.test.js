@@ -26,6 +26,7 @@ const {
 } = require('@velocitycareerlabs/tests-helpers');
 const { ObjectId } = require('mongodb');
 const initInvitationsFactory = require('../src/entities/invitations/factories/invitations-factory');
+const initOrganizationsFactory = require('../src/entities/organizations/factories/organizations-factory');
 const buildFastify = require('./helpers/build-fastify');
 
 const { invitationsRepoPlugin } = require('../src/entities/invitations');
@@ -35,6 +36,7 @@ const invitationsUrl = (code) => `/api/v0.6/invitations/${code}`;
 describe('Invitations controller test suite', () => {
   let fastify;
   let invitationsRepo;
+  let persistOrganization;
   let persistInvitation;
 
   const clearDb = async () => {
@@ -47,6 +49,7 @@ describe('Invitations controller test suite', () => {
     fastify = buildFastify();
     await fastify.ready();
     ({ persistInvitation } = initInvitationsFactory(fastify));
+    ({ persistOrganization } = initOrganizationsFactory(fastify));
 
     invitationsRepo = invitationsRepoPlugin(fastify)({
       log: fastify.log,
@@ -105,10 +108,10 @@ describe('Invitations controller test suite', () => {
 
     it('should return an invitation by code', async () => {
       const code = 'foo';
+      const inviterOrganization = await persistOrganization();
       const invitation = await persistInvitation({
+        inviterOrganization,
         code,
-        inviterDid: 'fooInviterDid',
-        inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
           name: 'fooName',
           description: 'fooDescription',
@@ -148,15 +151,10 @@ describe('Invitations controller test suite', () => {
 
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
-        invitation: {
-          ...omit(['_id'], invitation),
-          id: invitation._id.toString(),
-          acceptedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-          acceptedBy: 'fooUser2',
-          expiresAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-          createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-          updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-        },
+        invitation: invitationResponseExpectation(
+          invitation,
+          inviterOrganization
+        ),
       });
 
       const invitationFromDb = await invitationsRepo.findOne({
@@ -176,9 +174,10 @@ describe('Invitations controller test suite', () => {
 
     it('should return an invitation by code with a wallet provider service', async () => {
       const code = 'foo';
+      const inviterOrganization = await persistOrganization();
       const invitation = await persistInvitation({
+        inviterOrganization,
         code,
-        inviterDid: 'fooInviterDid',
         inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
           name: 'fooName',
@@ -216,15 +215,10 @@ describe('Invitations controller test suite', () => {
 
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
-        invitation: {
-          ...omit(['_id'], invitation),
-          id: invitation._id.toString(),
-          acceptedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-          acceptedBy: 'fooUser2',
-          expiresAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-          createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-          updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-        },
+        invitation: invitationResponseExpectation(
+          invitation,
+          inviterOrganization
+        ),
       });
 
       const invitationFromDb = await invitationsRepo.findOne({
@@ -244,9 +238,10 @@ describe('Invitations controller test suite', () => {
 
     it('should return an key individuals', async () => {
       const code = 'foo';
+      const inviterOrganization = await persistOrganization();
       const invitation = await persistInvitation({
+        inviterOrganization,
         code,
-        inviterDid: 'fooInviterDid',
         inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
           name: 'fooName',
@@ -281,41 +276,10 @@ describe('Invitations controller test suite', () => {
 
       expect(response.statusCode).toEqual(200);
       expect(response.json).toEqual({
-        invitation: {
-          id: invitation._id.toString(),
-          acceptedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-          acceptedBy: 'fooUser2',
-          inviterDid: 'fooInviterDid',
-          inviteeDid: 'fooInviteeDid',
-          inviteeEmail: 'foo@example.com',
-          inviteeProfile: {
-            name: 'fooName',
-          },
-          inviteeService: [
-            {
-              id: '#foo',
-              type: 'foo',
-              serviceEndpoint: 'foo#bar',
-            },
-          ],
-          keyIndividuals: {
-            adminGivenName: 'Bob',
-            adminFamilyName: 'Foobar',
-            adminTitle: 'PM',
-            adminEmail: 'pm@example.com',
-            signatoryGivenName: 'Jane',
-            signatoryFamilyName: 'Barfoo',
-            signatoryTitle: 'CEO',
-            signatoryEmail: 'cao@example.com',
-          },
-          invitationUrl: 'http://foo,invitation',
-          code,
-          createdBy: 'fooUser1',
-          updatedBy: 'fooUser1',
-          expiresAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-          createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-          updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-        },
+        invitation: invitationResponseExpectation(
+          invitation,
+          inviterOrganization
+        ),
       });
 
       const invitationFromDb = await invitationsRepo.findOne({
@@ -326,7 +290,7 @@ describe('Invitations controller test suite', () => {
           _id: invitation._id,
           acceptedAt: expect.any(Date),
           acceptedBy: 'fooUser2',
-          inviterDid: 'fooInviterDid',
+          inviterDid: inviterOrganization.didDoc.id,
           inviteeDid: 'fooInviteeDid',
           inviteeEmail: 'foo@example.com',
           inviteeProfile: {
@@ -362,9 +326,10 @@ describe('Invitations controller test suite', () => {
 
     it('should return error if invitation deleted', async () => {
       const code = 'foo';
+      const inviterOrganization = await persistOrganization();
       const invitation = await persistInvitation({
+        inviterOrganization,
         code,
-        inviterDid: 'fooInviterDid',
         inviteeDid: 'fooInviteeDid',
         inviteeProfile: {
           name: 'fooName',
@@ -408,7 +373,7 @@ describe('Invitations controller test suite', () => {
           _id: invitation._id,
           acceptedAt: expect.any(Date),
           acceptedBy: 'fooUser2',
-          inviterDid: 'fooInviterDid',
+          inviterDid: inviterOrganization.didDoc.id,
           inviteeDid: 'fooInviteeDid',
           inviteeEmail: 'foo@example.com',
           inviteeProfile: {
@@ -436,3 +401,21 @@ describe('Invitations controller test suite', () => {
     });
   });
 });
+
+const invitationResponseExpectation = (
+  invitation,
+  inviterOrganization,
+  overrides
+) => {
+  return {
+    ...omit(['_id'], invitation),
+    id: invitation._id.toString(),
+    inviterDid: inviterOrganization.didDoc.id,
+    acceptedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    acceptedBy: 'fooUser2',
+    expiresAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    ...overrides,
+  };
+};

@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-import { Box, Stack } from '@mui/material';
-import { Form, AutocompleteInput, required } from 'react-admin';
-import PropTypes from 'prop-types';
-import { kebabCase } from 'lodash/string';
 import { useCallback, useMemo } from 'react';
+import { Form, AutocompleteInput, required } from 'react-admin';
+import { Box, Stack } from '@mui/material';
+import { kebabCase } from 'lodash/string';
+import PropTypes from 'prop-types';
 
-import { serviceTypesForInvitation, credentialTypesByServiceTypes } from '../../utils/serviceTypes';
+import {
+  serviceTypesIssuingOrInspection,
+  credentialTypesByServiceTypes,
+} from '@/utils/serviceTypes';
 import OrganizationSubmitButton from '../organizations/OrganisationSubmitButton.jsx';
 
 const SetInvitationService = ({ children, onSubmit, defaultValues, serviceEndpointsOptions }) => {
@@ -55,7 +58,7 @@ const SetInvitationService = ({ children, onSubmit, defaultValues, serviceEndpoi
           label="Select service"
           source="type"
           optionText="title"
-          choices={serviceTypesForInvitation}
+          choices={serviceTypesIssuingOrInspection}
           validate={[required()]}
         />
         <AutocompleteInput

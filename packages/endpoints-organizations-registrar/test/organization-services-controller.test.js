@@ -1189,7 +1189,7 @@ describe('Organization Services Test Suite', () => {
         const response = await fastify.injectJson({
           method: 'POST',
           url: `${baseUrl}/${did}/services`,
-          payload: 'MALFORMED',
+          payload: {},
         });
 
         expect(response.statusCode).toEqual(400);
@@ -3538,7 +3538,7 @@ describe('Organization Services Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const organization = await setupOrganizationWithGroup();
           const did = organization.didDoc.id;
@@ -3621,7 +3621,7 @@ describe('Organization Services Test Suite', () => {
           const invitationCode = '1234567812345678';
           const invitation = await persistInvitation({
             invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const organization = await setupOrganizationWithGroup();
           const dltKey = extractVerificationMethod(
@@ -3720,7 +3720,7 @@ describe('Organization Services Test Suite', () => {
           const invitationCode = '1234567812345678';
           await persistInvitation({
             invitationCode,
-            inviterDid: inviterOrganization.didDoc.id,
+            inviterOrganization,
           });
           const organization = await persistOrganization({
             keys: [
@@ -3978,7 +3978,7 @@ describe('Organization Services Test Suite', () => {
         const response = await fastify.injectJson({
           method: 'PUT',
           url: `${baseUrl}/${did}/services/service-1`,
-          payload: 'MALFORMED',
+          payload: {},
         });
 
         expect(response.statusCode).toEqual(400);

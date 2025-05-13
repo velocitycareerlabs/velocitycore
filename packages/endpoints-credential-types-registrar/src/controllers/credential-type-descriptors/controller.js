@@ -22,13 +22,16 @@ const credentialTypeDescriptorController = async (fastify) => {
           required: ['credentialType'],
         },
         query: {
-          locale: {
-            type: 'string',
-            default: 'en',
-          },
-          includeDisplay: {
-            type: 'boolean',
-            default: false,
+          type: 'object',
+          properties: {
+            locale: {
+              type: 'string',
+              default: 'en',
+            },
+            includeDisplay: {
+              type: 'boolean',
+              default: false,
+            },
           },
         },
         response: {

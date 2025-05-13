@@ -15,29 +15,35 @@
  */
 
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useGetOne, useRedirect, useUpdate } from 'react-admin';
 
-import ListItem from '../../components/common/ListItem.jsx';
-import Loading from '../../components/Loading.jsx';
-import useSelectedOrganization from '../../state/selectedOrganizationState';
-import ServicesEdit from '../../components/services/ServicesEdit.jsx';
-import { dataResources } from '../../utils/remoteDataProvider';
-import useParticipantAgreementState from '../../state/participantAgreementState';
+import PropTypes from 'prop-types';
+import ListItem from '@/components/common/ListItem.jsx';
+import Loading from '@/components/Loading.jsx';
+import ServicesEdit from '@/components/services/ServicesEdit.jsx';
+import ServicesDelete from '@/components/services/ServicesDelete.jsx';
+import useSelectedOrganization from '@/state/selectedOrganizationState';
+import { dataResources } from '@/utils/remoteDataProvider';
+import useParticipantAgreementState from '@/state/participantAgreementState';
 import ServiceCreateForm from './ServiceCreateForm.jsx';
 import { serviceTypeTitlesMap } from '../../utils/serviceTypes';
 import useDeleteService from './useDeleteService';
-import ServicesDelete from '../../components/services/ServicesDelete.jsx';
 
 const SAVE_ERROR_MESSAGE =
   'We were unable to update your service with the details provided.  Please check to ensure you have provided valid information and then try again.';
 
 const getAmountTitle = (total) => `${total} active service${total > 1 ? 's' : ''}`;
 
-const ServicesList = () => {
+const ServicesList = ({
+  // override props, defaulting to your internal components
+  EditComponent = ServicesEdit,
+  CreateComponent = ServiceCreateForm,
+  DeleteComponent = ServicesDelete,
+}) => {
   const [params, setParams] = useSearchParams();
   const currentlyEditableServiceId = params.get('id');
   const [did] = useSelectedOrganization();
@@ -194,13 +200,13 @@ const ServicesList = () => {
             ]}
           />
         ))}
-      <ServicesEdit
+      <EditComponent
         onClose={handleCloseEdit}
         onSave={onSave}
         selectedService={currentlyEditableService}
       />
-      <ServiceCreateForm onServiceCreated={refetchOrganizationServices} services={services} />
-      <ServicesDelete
+      <CreateComponent onServiceCreated={refetchOrganizationServices} services={services} />
+      <DeleteComponent
         isLoading={isDeletingService}
         onClose={() => setServiceToDelete(null)}
         onConfirm={handleServiceDeleteConfirm}
@@ -208,6 +214,12 @@ const ServicesList = () => {
       />
     </Container>
   );
+};
+// eslint-disable-next-line better-mutation/no-mutation
+ServicesList.propTypes = {
+  EditComponent: PropTypes.elementType,
+  CreateComponent: PropTypes.elementType,
+  DeleteComponent: PropTypes.elementType,
 };
 
 export default ServicesList;

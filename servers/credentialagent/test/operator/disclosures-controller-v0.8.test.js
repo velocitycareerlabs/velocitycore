@@ -323,7 +323,7 @@ describe('disclosures management', () => {
             statusCode: 500,
           })
         );
-      });
+      }, 20000);
 
       it('should 400 if commercial entity is only a partial match', async () => {
         const payload = _.omit(

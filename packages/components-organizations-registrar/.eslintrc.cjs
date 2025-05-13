@@ -1,7 +1,9 @@
+const path = require('path');
 const eslintConfig = require('../../.eslintrc');
 
 module.exports = {
   ...eslintConfig,
+  plugins: eslintConfig.plugins.concat(['import']),
   root: true,
   extends: eslintConfig.extends.concat([
     'plugin:react/recommended',
@@ -13,14 +15,13 @@ module.exports = {
     browser: true,
     jest: true,
   },
-  rules: {
-    ...eslintConfig.rules,
-    'import/prefer-default-export': 0,
-    'no-unused-vars': ['warn', { varsIgnorePattern: '^React$' }],
-  },
-  overrides: [
-    {
-      files: ['**/*.{js,jsx}'],
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [['@', path.resolve(__dirname, 'src')]],
+        extensions: ['.js', '.jsx', '.json'],
+      },
     },
-  ],
+  },
+  ignorePatterns: ['dist/'],
 };

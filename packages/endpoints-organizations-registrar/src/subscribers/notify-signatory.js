@@ -33,8 +33,8 @@ const notifySignatory = async (fastify) => {
         const authCode = nanoid();
 
         await context.repos.signatoryStatus.insertWithState({
-          organizationDid: organization.didDoc.id,
-          states: [SignatoryEventStatus.EMAIL_SENT],
+          organizationId: organization._id,
+          states: [SignatoryEventStatus.LINK_SENT],
           authCode,
         });
 

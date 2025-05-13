@@ -19,10 +19,11 @@ import { Box, Button, Divider, Paper, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router';
 import { useGetOne, useRedirect } from 'react-admin';
 import {
   copyTextToClipboard,
+  WEBSITE_HINT_SHORT,
   DID_HINT,
   LINKEDIN_ORGANIZATION_ID,
   SUPPORT_EMAIL_HINT,
@@ -124,36 +125,33 @@ const OrganizationShow = () => {
           <Grid size={{ xs: 8 }}>
             <Grid sx={sx.dataRow} container spacing={4}>
               <Grid size={{ xs: 6 }}>
-                <DataItem
-                  title="Organization’s Legal Name"
-                  value={record.profile.name}
-                  sxValue={sx.value}
-                />
+                <DataItem title="Legal Name" value={record.profile.name} sxValue={sx.value} />
               </Grid>
               <Grid size={{ xs: 6 }}>
                 <DataItem
-                  title="Organization’s Website"
+                  title="Website"
                   value={record.profile.website}
                   sxValue={sx.value}
+                  hint={WEBSITE_HINT_SHORT}
                 />
               </Grid>
               <Grid size={{ xs: 6 }}>
                 <DataItem
-                  title="Organization’s Address"
+                  title="Address"
                   value={record.profile.physicalAddress?.line1}
                   sxValue={sx.value}
                 />
               </Grid>
               <Grid size={{ xs: 6 }}>
                 <DataItem
-                  title="Organization’s Country"
+                  title="Country"
                   value={getCountryNameByCode(record.profile.location.countryCode)}
                   sxValue={sx.value}
                 />
               </Grid>
               <Grid size={{ xs: 6 }}>
                 <DataItem
-                  title="Organization’s LinkedIn Page"
+                  title="LinkedIn Page"
                   value={record.profile.linkedInProfile}
                   sxValue={sx.value}
                 />
@@ -238,7 +236,7 @@ const OrganizationShow = () => {
         <Divider sx={{ my: 5 }} />
         <Box>
           <Typography component="div" mb={1} variant="pm">
-            Short Description of the Organization
+            Short Description
           </Typography>
           <Typography component="p" variant="pm">
             {record.profile.description || '-'}

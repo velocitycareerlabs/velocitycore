@@ -2,7 +2,7 @@
   "name": "@velocitycareerlabs/fastify-plugins",
   "version": "0.5.0-build",
   "description": "Plugin for handling errors",
-  "repository": "https://github.com/velocitycareerlabs/packages",
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "publishConfig": {
     "access": "public"
@@ -15,11 +15,11 @@
   "author": "Yauheni Pozdnyakov",
   "license": "Apache-2.0",
   "dependencies": {
-    "@fastify/cors": "9.0.1",
+    "@fastify/cors": "11.0.1",
     "@velocitycareerlabs/error-aggregation": "0.5.0-build",
     "@velocitycareerlabs/crypto": "0.5.0-build",
     "@velocitycareerlabs/request": "0.5.0-build",
-    "fastify-plugin": "~4.5.1",
+    "fastify-plugin": "~5.0.0",
     "lodash":"^4.17.21",
     "http-errors":"^2.0.0",
     "statuses": "~2.0.1",
@@ -37,8 +37,8 @@
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-watch": "7.0.0",
-    "nock": "13.5.6",
-    "fastify": "4.29.0",
+    "nock": "14.0.4",
+    "fastify": "5.3.2",
     "jest": "29.7.0",
     "prettier": "2.8.8"
   },

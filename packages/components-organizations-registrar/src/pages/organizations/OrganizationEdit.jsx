@@ -27,12 +27,15 @@ import {
   SimpleFormIterator,
   TextInput,
 } from 'react-admin';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Box, Stack, Tooltip, Typography, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import InfoIcon from '@mui/icons-material/Info';
 import { useEffect, useState } from 'react';
-import { validateWebsite } from '../../components/organizations/CreateOrganization.utils';
+import {
+  validateWebsite,
+  validateWebsiteStrict,
+} from '../../components/organizations/CreateOrganization.utils';
 import Loading from '../../components/Loading.jsx';
 import {
   ERRORS,
@@ -41,6 +44,7 @@ import {
   formatRegistrationNumbers,
   SUPPORT_EMAIL_HINT,
   TECHNICAL_EMAIL_HINT,
+  WEBSITE_HINT_SHORT,
 } from '../../utils/index.jsx';
 import useCountryCodes from '../../utils/countryCodes';
 import CustomImageInput from '../../components/common/CustomImageInput/index.jsx';
@@ -144,25 +148,32 @@ const OrganizationEdit = () => {
                           <TextField
                             fullWidth
                             source="profile.name"
-                            label="Organization’s Legal Name"
+                            label="Legal Name"
                             validate={required()}
                             disabled
                           />
                         </Stack>
                       </Grid>
                       <Grid size={{ xs: 12 }}>
-                        <TextInput
-                          fullWidth
-                          label="Organization’s Website"
-                          source="profile.website"
-                          validate={[...validateWebsite, required()]}
-                          disabled
-                        />
+                        <Stack flexDirection="row" gap={1.75}>
+                          <TextInput
+                            fullWidth
+                            label="Website"
+                            source="profile.website"
+                            validate={[...validateWebsiteStrict, required()]}
+                            disabled
+                          />
+                          <Box mt={2}>
+                            <Tooltip title={WEBSITE_HINT_SHORT}>
+                              <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                            </Tooltip>
+                          </Box>
+                        </Stack>
                       </Grid>
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s Address"
+                          label="Address"
                           source="profile.physicalAddress.line1"
                           validate={required()}
                         />
@@ -170,7 +181,7 @@ const OrganizationEdit = () => {
                       <Grid size={{ xs: 12 }}>
                         <AutocompleteInput
                           fullWidth
-                          label="Organization’s Country"
+                          label="Country"
                           source="profile.location.countryCode"
                           validate={required()}
                           choices={countryCodes}
@@ -191,7 +202,7 @@ const OrganizationEdit = () => {
                     <Stack flexDirection="row" gap={1.75}>
                       <TextInput
                         fullWidth
-                        label="Organization’s LinkedIn Page"
+                        label="LinkedIn Page"
                         source="profile.linkedInProfile"
                         validate={[...validateWebsite, required()]}
                       />
@@ -290,7 +301,7 @@ const OrganizationEdit = () => {
                     <TextInput
                       fullWidth
                       multiline
-                      label="Short Description of the Organization"
+                      label="Short Description"
                       source="profile.description"
                       validate={required()}
                       sx={sx.description}

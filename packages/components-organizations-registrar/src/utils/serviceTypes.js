@@ -79,7 +79,7 @@ const serviceTypes = [
   },
 ];
 
-export const serviceTypesForInvitation = [
+export const serviceTypesIssuingOrInspection = [
   {
     title: 'Relying Party',
     id: CREDENTIAL_TYPES_IDS.VLC_INSPECTOR,

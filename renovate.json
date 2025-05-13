@@ -38,6 +38,7 @@
         "fastify{/,}**",
         "avvio{/,}**",
         "fast-json{/,}**",
+        "fast-jwt{/,}**",
         "pino{/,}**"
       ]
     },
@@ -76,7 +77,7 @@
     },
     {
       "matchPackageNames": [
-        "aws-sdk"
+        "@aws-sdk/{/,}**"
       ],
       "extends": ["schedule:monthly"],
       "automerge": false

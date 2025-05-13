@@ -79,7 +79,7 @@ export const presentationRequestDescriptorFrom = (
 
 export const authTokenFrom = (json?: Dictionary<any>): VCLAuthToken => {
   return new VCLAuthToken(
-    json?.payload || {},
+    json?.payload ?? {},
     json?.authTokenUri,
     json?.walletDid,
     json?.relyingPartyDid
@@ -168,11 +168,13 @@ const credentialManifestDescriptorRefreshFrom = (
 export const credentialManifestDescriptorFrom = (
   json: Dictionary<any>
 ): VCLCredentialManifestDescriptor => {
-  return json.credentialIds
-    ? credentialManifestDescriptorRefreshFrom(json)
-    : json.service
-    ? credentialManifestDescriptorByServiceFrom(json)
-    : credentialManifestDescriptorByDeepLinkFrom(json);
+  if (json.credentialIds) {
+    return credentialManifestDescriptorRefreshFrom(json);
+  }
+  if (json.service) {
+    return credentialManifestDescriptorByServiceFrom(json);
+  }
+  return credentialManifestDescriptorByDeepLinkFrom(json);
 };
 
 export const credentialManifestFrom = (
@@ -221,7 +223,7 @@ export const finalizeOffersDescriptorFrom = (
 export const authTokenDescriptorFrom = (
   json: Dictionary<any>
 ): VCLAuthTokenDescriptor => {
-  if (json.presentationRequest) {
+  if (json.presentationRequest != null) {
     return new VCLAuthTokenDescriptor(
       new VCLPresentationRequest(
         VCLJwt.fromEncodedJwt(json.presentationRequest.jwt.encodedJwt),

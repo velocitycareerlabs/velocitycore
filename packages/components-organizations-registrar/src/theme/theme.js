@@ -53,12 +53,14 @@ export default createTheme({
     },
     success: {
       main: '#3AC0A2',
+      light: '#3AC0A21A',
     },
     warning: {
       main: '#ECC83D',
     },
     error: {
       main: '#CB1923',
+      light: '#CB19230A',
     },
   },
   customColors: {

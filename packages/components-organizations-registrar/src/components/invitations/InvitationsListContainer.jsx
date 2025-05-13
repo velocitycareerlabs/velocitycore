@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import PropTypes from 'prop-types';
 import { Button, Stack, Grid, Paper, Typography, TablePagination } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';

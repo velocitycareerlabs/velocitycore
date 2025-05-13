@@ -17,6 +17,8 @@
 const AutoLoad = require('@fastify/autoload');
 const fp = require('fastify-plugin');
 const path = require('path');
+const fastifyView = require('@fastify/view');
+const handlebars = require('handlebars');
 const { pubsubPlugin } = require('./plugins/pubsub-plugin');
 
 const organizationRegistrarEndpoints = async (fastify) =>
@@ -38,6 +40,13 @@ const organizationRegistrarEndpoints = async (fastify) =>
     .register(pubsubPlugin)
     .register(AutoLoad, {
       dir: path.join(__dirname, 'subscribers'),
+    })
+    .register(fastifyView, {
+      engine: {
+        handlebars,
+      },
+      root: path.join(__dirname, 'templates'),
+      includeViewExtension: true,
     });
 
 module.exports = {

@@ -17,6 +17,7 @@
 
 const { register } = require('@spencejs/spence-factories');
 
+const { ObjectId } = require('mongodb');
 const initOrganizationFactory = require('../../organizations/factories/organizations-factory');
 const { SignatoryEventStatus } = require('../../index');
 const signatoryStatusPlugin = require('../repos/repo');
@@ -33,9 +34,10 @@ module.exports = (app) =>
 
       return {
         organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
         events: [
           {
-            state: SignatoryEventStatus.EMAIL_SENT,
+            state: SignatoryEventStatus.LINK_SENT,
             timestamp: new Date(),
           },
         ],

@@ -1,4 +1,4 @@
-import NetworkServiceSuccess from '../NetworkServiceSuccess';
+import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import { VCLOrganizationsSearchDescriptor, VCLService } from '../../src';
 import OrganizationsUseCaseImpl from '../../src/impl/data/usecases/OrganizationsUseCaseImpl';
 import OrganizationsRepositoryImpl from '../../src/impl/data/repositories/OrganizationsRepositoryImpl';

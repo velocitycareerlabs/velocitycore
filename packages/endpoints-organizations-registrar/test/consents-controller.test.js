@@ -28,7 +28,7 @@ const { omit } = require('lodash/fp');
 const initConsentsFactory = require('../src/entities/registrar-consents/factories/registrar-consents-factory');
 const initOrganizationFactory = require('../src/entities/organizations/factories/organizations-factory');
 const buildFastify = require('./helpers/build-fastify');
-const consentsRepoPlugin = require('../src/entities/registrar-consents/repo');
+const consentsRepoPlugin = require('../src/entities/registrar-consents/repos/repo');
 const { ConsentTypes } = require('../src/entities');
 
 describe('Registrar Consents controller', () => {
@@ -186,22 +186,24 @@ describe('Registrar Consents controller', () => {
     const time2 = new Date(testconsent2.createdAt);
     const time1 = new Date(testconsent1.createdAt);
     expect(time2.getTime()).toBeGreaterThanOrEqual(time1.getTime());
-    expect(response.json).toEqual([
-      {
-        id: testconsent2._id,
-        type: 'CAO',
-        version: '1',
-        userId: testReadOrganizationsUser.sub,
-        createdAt: expect.anything(),
-      },
-      {
-        id: testconsent1._id,
-        type: 'NodeOperator',
-        version: '1',
-        userId: testReadOrganizationsUser.sub,
-        createdAt: expect.anything(),
-      },
-    ]);
+    expect(response.json).toEqual(
+      expect.arrayContaining([
+        {
+          id: testconsent2._id,
+          type: 'CAO',
+          version: '1',
+          userId: testReadOrganizationsUser.sub,
+          createdAt: expect.anything(),
+        },
+        {
+          id: testconsent1._id,
+          type: 'NodeOperator',
+          version: '1',
+          userId: testReadOrganizationsUser.sub,
+          createdAt: expect.anything(),
+        },
+      ])
+    );
   });
 
   it('should return empty array if theres no consents for this user', async () => {

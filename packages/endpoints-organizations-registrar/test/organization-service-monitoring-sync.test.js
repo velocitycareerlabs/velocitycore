@@ -367,7 +367,7 @@ describe('Monitoring Test Suite', () => {
           payload: {},
         });
 
-        expect(response.statusCode).toEqual(201);
+        expect(response.statusCode).toEqual(204);
         for (const monitorEventNock of monitorEventNocks) {
           expect(postMonitorNockExecuted(monitorEventNock)).toEqual(true);
         }
@@ -383,7 +383,7 @@ describe('Monitoring Test Suite', () => {
         });
 
         expect(postMonitorNockExecuted(monitorEventNock)).toEqual(true);
-        expect(response.statusCode).toEqual(201);
+        expect(response.statusCode).toEqual(204);
       });
       it('repeat sync doesnt sync anything', async () => {
         setGetMonitorsNock(dids, serviceIds);
@@ -394,7 +394,7 @@ describe('Monitoring Test Suite', () => {
           payload: {},
         });
 
-        expect(response.statusCode).toEqual(201);
+        expect(response.statusCode).toEqual(204);
         expect(postMonitorNockExecuted(monitorEventNock)).toEqual(false);
       });
       it('failed get service version should still create a service monitor', async () => {
@@ -415,7 +415,7 @@ describe('Monitoring Test Suite', () => {
           payload: {},
         });
 
-        expect(response.statusCode).toEqual(201);
+        expect(response.statusCode).toEqual(204);
         expect(
           getServiceVersionNockExecuted(serviceEndpoints[0])(
             serviceVersion0Nock

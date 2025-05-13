@@ -190,7 +190,7 @@ const AutoCompleteOrganizationName = ({ defaultValue }) => {
         renderInput={(params) => (
           <Box style={styles.inputBox}>
             <TextField
-              label="Organization’s Legal Name"
+              label="Legal Name"
               {...params}
               value={params.inputProps.value.name}
               onBlur={handleBlur}

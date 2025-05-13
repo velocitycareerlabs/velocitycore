@@ -27,9 +27,14 @@ import {
 import { useState } from 'react';
 import InfoIcon from '@mui/icons-material/Info';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { FOOTER_HEIGHT } from '../../theme/theme';
-import { validateEmail, validateName, validateWebsite } from './CreateOrganization.utils';
+import {
+  validateEmail,
+  validateName,
+  validateWebsite,
+  validateWebsiteStrict,
+} from './CreateOrganization.utils';
 import OrganizationSubmitButton from './OrganisationSubmitButton.jsx';
 import CustomImageInput from '../common/CustomImageInput/index.jsx';
 import OrganizationRegistrationNumbersField from '../../pages/organizations/components/OrganizationRegistrationNumbersField.jsx';
@@ -39,6 +44,7 @@ import {
   SIGNATORY_DETAILS_HINT,
   SUPPORT_EMAIL_HINT,
   TECHNICAL_EMAIL_HINT,
+  WEBSITE_HINT,
 } from '../../utils/index.jsx';
 import OrganizationAuthorityRadioGroup from '../../pages/organizations/components/OrganizationAuthorityRadioGroup.jsx';
 import { OrganizationRegistrationNumbers } from '../../pages/organizations/components/OrganizationRegistrationNumbersContainer.jsx';
@@ -100,30 +106,37 @@ const CreateOrganization = ({
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s Legal Name"
+                          label="Legal Name"
                           source="name"
                           validate={validateName}
                         />
                       </Grid>
                       <Grid size={{ xs: 12 }}>
-                        <TextInput
-                          fullWidth
-                          label="Organization’s website"
-                          source="website"
-                          validate={[required(), ...validateWebsite]}
-                        />
+                        <Stack flexDirection="row" gap={1.75}>
+                          <TextInput
+                            fullWidth
+                            label="Website"
+                            source="website"
+                            validate={[required(), ...validateWebsiteStrict]}
+                          />
+                          <Box mt={2}>
+                            <Tooltip title={WEBSITE_HINT}>
+                              <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                            </Tooltip>
+                          </Box>
+                        </Stack>
                       </Grid>
                       <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
-                          label="Organization’s address"
+                          label="Address"
                           source="physicalAddress.line1"
                           validate={[required(), maxLength(1024)]}
                         />
                       </Grid>
                       <Grid size={{ xs: 12 }}>
                         <AutocompleteInput
-                          label="Organization’s Country"
+                          label="Country"
                           source="location.countryCode"
                           choices={countryCodes}
                           validate={required()}
@@ -144,7 +157,7 @@ const CreateOrganization = ({
                     <Stack flexDirection="row" gap={1.75}>
                       <TextInput
                         fullWidth
-                        label="Organization’s LinkedIn Page"
+                        label="LinkedIn Page"
                         source="linkedInProfile"
                         validate={[...validateWebsite, required()]}
                       />
@@ -203,10 +216,11 @@ const CreateOrganization = ({
                       <Stack flexDirection="row">
                         <Box sx={sxStyles.fullWidth}>
                           <OrganizationRegistrationNumbers
-                            formData={formData}
+                            formData={{ ...defaultValues, ...formData }}
                             authority={authority}
                             type="uri"
                             label="Local Country Registration Authority Website"
+                            source="registrationNumbers"
                           />
                         </Box>
                       </Stack>
@@ -216,9 +230,10 @@ const CreateOrganization = ({
                     <Stack flexDirection="row">
                       <Box sx={sxStyles.fullWidth}>
                         <OrganizationRegistrationNumbers
-                          formData={formData}
+                          formData={{ ...defaultValues, ...formData }}
                           authority={authority}
                           type="number"
+                          source="registrationNumbers"
                         />
                       </Box>
                     </Stack>
@@ -227,7 +242,7 @@ const CreateOrganization = ({
                     <TextInput
                       fullWidth
                       multiline
-                      label="Short Description of the Organization"
+                      label="Short Description"
                       placeholder="Description (a boilerplate for other Network participants to read about the organization)"
                       source="description"
                       validate={required()}

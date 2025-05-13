@@ -2,10 +2,8 @@
   "name": "@velocitycareerlabs/server-mockvendor",
   "version": "0.5.0-build",
   "description": "Mock Vendor backend",
-  "repository": "https://github.com/velocitycareerlabs/packages",
-  "engines": {
-    "node": ">=20.5.1"
-  },
+  "repository": "https://github.com/velocitycareerlabs/velocitycore",
+  "engines" : { "node" : ">=20.5.1" },
   "main": "src/index.js",
   "scripts": {
     "test": "jest --config ./jest.config.js --runInBand --coverage",
@@ -20,8 +18,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@fastify/autoload": "5.10.0",
-    "@fastify/jwt": "8.0.1",
+    "@fastify/autoload": "^6.0.0",
+    "@fastify/helmet": "^13.0.0",
+    "@fastify/jwt": "^9.0.0",
+    "@fastify/sensible": "^6.0.0",
+    "@fastify/swagger": "^9.0.0",
+    "@fastify/swagger-ui": "^5.0.0",
     "@spencejs/spence-mongo-repos": "^0.10.2",
     "@velocitycareerlabs/common-functions": "0.5.0-build",
     "@velocitycareerlabs/common-schemas": "0.5.0-build",
@@ -34,18 +36,19 @@
     "@velocitycareerlabs/server-credentialagent": "0.5.0-build",
     "@velocitycareerlabs/server-provider": "0.5.0-build",
     "date-fns": "~3.6.0",
-    "dotenv": "16.4.7",
+    "dotenv": "16.5.0",
     "env-var": "~7.5.0",
+    "fastify": "^5.0.0",
+    "fastify-plugin": "^5.0.0",
     "http-errors": "^2.0.0",
     "lodash": "^4.17.21",
-    "mongodb": "~6.14.0",
+    "mongodb": "~6.16.0",
     "nanoid": "~3.3.1"
   },
   "devDependencies": {
     "@spencejs/spence-factories": "0.10.2",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
-    "canonicalize": "2.0.0",
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "8.10.0",
@@ -55,9 +58,10 @@
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-watch": "7.0.0",
+    "canonicalize": "2.1.0",
     "jest": "29.7.0",
-    "nock": "13.5.6",
-    "nodemon": "3.1.9",
+    "nock": "14.0.4",
+    "nodemon": "3.1.10",
     "prettier": "2.8.8"
   }
 }

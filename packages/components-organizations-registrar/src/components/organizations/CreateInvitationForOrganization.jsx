@@ -23,10 +23,16 @@ import InfoIcon from '@mui/icons-material/Info';
 
 import {
   LINKEDIN_ORGANIZATION_ID,
+  WEBSITE_HINT,
   SUPPORT_EMAIL_HINT,
   TECHNICAL_EMAIL_HINT,
 } from '../../utils/index.jsx';
-import { validateEmail, validateWebsite, validateName } from './CreateOrganization.utils';
+import {
+  validateEmail,
+  validateWebsite,
+  validateName,
+  validateWebsiteStrict,
+} from './CreateOrganization.utils';
 import OrganizationSubmitButton from './OrganisationSubmitButton.jsx';
 import CustomImageInput from '../common/CustomImageInput/index.jsx';
 import OrganizationRegistrationNumbersField from '../../pages/organizations/components/OrganizationRegistrationNumbersField.jsx';
@@ -38,8 +44,9 @@ import { Authorities, authorityOptions } from '../../constants/messageCodes';
 import { dataResources } from '../../utils/remoteDataProvider';
 
 const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, defaultValues }) => {
-  const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
   const dataProvider = useDataProvider();
+
+  const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
   const handleAuthoryChange = (event) => {
     setAuthority(event.target.value);
   };
@@ -96,7 +103,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
             <>
               <TextInput
                 fullWidth
-                label="Organization’s Legal Name"
+                label="Legal Name"
                 source="name"
                 validate={orgNamevalidation}
                 pb={1}
@@ -114,29 +121,26 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                   isRequired={false}
                 />
               </Stack>
-              <TextInput
-                fullWidth
-                multiline
-                label="Short Description of the Organization"
-                source="description"
-              />
-              <TextInput
-                fullWidth
-                label="Organization’s website"
-                source="website"
-                validate={validateWebsite}
-              />
-              <TextInput fullWidth label="Organization’s address" source="physicalAddress.line1" />
+              <TextInput fullWidth multiline label="Short Description" source="description" />
+              <Stack flexDirection="row" gap={1.75}>
+                <TextInput fullWidth label="Website" source="website" validate={validateWebsite} />
+                <Box mt={2}>
+                  <Tooltip title={WEBSITE_HINT}>
+                    <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                  </Tooltip>
+                </Box>
+              </Stack>
+              <TextInput fullWidth label="Address" source="physicalAddress.line1" />
               <AutocompleteInput
-                label="Organization’s country"
+                label="Country"
                 source="location.countryCode"
                 choices={countryCodes}
               />
               <TextInput
                 fullWidth
-                label="Organization’s LinkedIn Page"
+                label="LinkedIn Page"
                 source="linkedInProfile"
-                validate={validateWebsite}
+                validate={validateWebsiteStrict}
               />
               <Stack flexDirection="row" gap={1.75}>
                 <OrganizationRegistrationNumbersField
@@ -190,6 +194,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                       type="uri"
                       label="Local Country Registration Authority Website"
                       isRequired={false}
+                      source="registrationNumbers"
                     />
                   </Box>
                 </Stack>
@@ -202,6 +207,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                     type="number"
                     label={authorityOptions[authority]}
                     isRequired={false}
+                    source="registrationNumbers"
                   />
                 </Box>
               </Stack>

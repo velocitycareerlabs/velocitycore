@@ -37,7 +37,7 @@ const sxStyles = {
   menuItem: {
     py: '13px',
     color: 'secondary.light',
-
+    width: 160,
     textTransform: 'uppercase',
     fontSize: 14,
     fontWeight: 500,

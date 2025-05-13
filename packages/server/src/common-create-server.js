@@ -22,6 +22,7 @@ const {
   customFastifyQueryStringParser,
 } = require('@velocitycareerlabs/rest-queries');
 const Fastify = require('fastify');
+const { FST_ERR_LOG_INVALID_LOGGER_CONFIG } = require('fastify/lib/errors');
 const { initEvents } = require('@spencejs/spence-events');
 const {
   immutableEntitySchema,
@@ -49,13 +50,18 @@ const commonCreateServer = (config, log) => {
     keepAliveTimeout: 65000,
     genReqId: () => nanoid(10),
     ignoreTrailingSlash: true,
-    logger: log,
     trustProxy: true,
     ...customFastifyOptions,
     querystringParser: customFastifyQueryStringParser,
     ...buildAjvOptions(config),
     ...buildHttpOptions(config),
   };
+
+  if (FST_ERR_LOG_INVALID_LOGGER_CONFIG == null) {
+    fastifyOptions.logger = log;
+  } else {
+    fastifyOptions.loggerInstance = log;
+  }
 
   const server = Fastify(fastifyOptions);
 

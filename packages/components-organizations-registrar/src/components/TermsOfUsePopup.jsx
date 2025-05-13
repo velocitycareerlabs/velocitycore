@@ -17,7 +17,7 @@
 
 import PropTypes from 'prop-types';
 import { Button, Typography, Stack, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { Download } from '@mui/icons-material';
 import Popup from './common/Popup.jsx';

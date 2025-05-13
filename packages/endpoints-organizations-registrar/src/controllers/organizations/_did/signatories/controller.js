@@ -34,23 +34,27 @@ const signatoriesController = async (fastify) => {
           },
           required: ['authCode'],
         },
-        response: { 200: {}, 401: { $ref: 'error#' }, 400: { $ref: 'error#' } },
+        response: {
+          200: { type: 'null' },
+          401: { $ref: 'error#' },
+          400: { $ref: 'error#' },
+        },
       }),
     },
     async (req) => {
       const { repos, params, query } = req;
       const { did, response } = params;
       const { authCode } = query;
-      const reminderMap = {
-        approve: approveReminder,
-        reject: rejectReminder,
-      };
       const organization = await repos.organizations.findOneByDid(did);
-      await validateAuthCode(did, authCode, req);
+      await validateAuthCode(organization, authCode, req);
       await sendEmail(
         signatoryApproveOrganizationEmail({ organization, response }, req)
       );
-      await reminderMap[response](organization, req);
+      if (response === 'approve') {
+        await approveReminder(organization, req);
+      } else {
+        await rejectReminder(organization, req);
+      }
       return {};
     }
   );

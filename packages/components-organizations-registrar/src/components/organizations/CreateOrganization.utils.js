@@ -20,6 +20,7 @@ import {
   secureUrlRegexp,
   webSiteRegexp,
   webSiteHttpsRegexp,
+  webSiteCleanPathRegexp,
 } from '../../utils/index.jsx';
 
 const urlValidation = (value) => {
@@ -36,6 +37,11 @@ export const validateWebsite = [
   regex(webSiteRegexp, 'Please type in a valid URL'),
   regex(webSiteHttpsRegexp, 'Https is required'),
   maxLength(1024),
+];
+
+export const validateWebsiteStrict = [
+  ...validateWebsite,
+  regex(webSiteCleanPathRegexp, 'Website must not contain a path after domain'),
 ];
 export const validateName = [required(), maxLength(100)];
 export const validateServiceEndpoint = [urlValidation, maxLength(1024)];

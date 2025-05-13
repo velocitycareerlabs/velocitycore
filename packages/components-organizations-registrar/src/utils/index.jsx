@@ -16,7 +16,7 @@
 
 /* eslint-disable */
 import { Link } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 function fallbackCopyTextToClipboard(text, cb) {
   const textArea = document.createElement('textarea');
@@ -71,8 +71,11 @@ export const secureUrlRegexp =
 export const webSiteRegexp =
   /^((https?:\/\/)|(www\.))[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,20}\b([-a-zA-Z0-9@:%_\+.~#?&//=]{0,752})$/;
 
-  export const webSiteHttpsRegexp =
+export const webSiteHttpsRegexp =
   /^https:\/\/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,20}\b([-a-zA-Z0-9@:%_\+.~#?&//=]{0,752})$/;
+
+export const webSiteCleanPathRegexp =
+ /^https:\/\/[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,20}$/;
 
 export const formatWebSiteUrl = (value) => {
   if(value && !value.startsWith('http')){
@@ -103,6 +106,8 @@ export const DID_HINT =
 
 export const objectToString = (data) => JSON.stringify(data, null, 2);
 
+export const WEBSITE_HINT = "The website will be the basis of the organization identifier. It must be unique, use https, and may not contain a path. For example https://www.example.com";
+export const WEBSITE_HINT_SHORT = "The website is be the basis of the organization identifier.";
 export const SUPPORT_EMAIL_HINT = "This email address will be published and will be visible to individuals using the career wallet to contact the organization.";
 export const TECHNICAL_EMAIL_HINT = "This email address will be used by the Velocity Network support team to contact the organization in the event of any technical issues concerning the organization’s registration or the services it operates on Velocity Network, such as issuing, relying party, credential agent operation, and career wallet.";
 export const ADMINISTRATOR_DETAILS_HINT = "The administrator is the person managing the organization’s registration in the Velocity Network Registrar. Typically, this would be the person filling in the details of the organization in the registrar.";
