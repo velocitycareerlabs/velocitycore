@@ -47,6 +47,9 @@ const organizationRegistrarEndpoints = async (fastify) =>
       },
       root: path.join(__dirname, 'templates'),
       includeViewExtension: true,
+    })
+    .addHook('preHandler', async (req) => {
+      req.view = fastify.view;
     });
 
 module.exports = {
