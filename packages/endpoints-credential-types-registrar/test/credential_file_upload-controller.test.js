@@ -73,19 +73,26 @@ describe(
       });
 
       try {
+        await deleteS3Object(s3Client, libS3Bucket);
         // delete in case after never was called
         await s3Client.send(new DeleteBucketCommand({ Bucket: libS3Bucket }));
       } catch (err) {
         // ignore
+        console.error(err);
       }
-      await s3Client.send(new CreateBucketCommand({ Bucket: libS3Bucket }));
+      try {
+        await s3Client.send(new CreateBucketCommand({ Bucket: libS3Bucket }));
+      } catch (err) {
+        console.error(err);
+        // ignore
+      }
 
       fastify = buildFastify((server) => {
         // eslint-disable-next-line better-mutation/no-mutation
         server.injectMultipart = async ({
           method,
           url,
-          userId,
+          user,
           payload,
           headers,
         }) => {
@@ -94,15 +101,17 @@ describe(
           for (const key in payload) {
             form.append(key, payload[key]);
           }
+          const httpHeaders = {
+            'Content-Type': `multipart/form-data; boundary=${form.getBoundary()}`,
+            'x-override-oauth-user': JSON.stringify(user),
+            ...headers,
+          };
+
           return server.inject({
             method,
             url,
             payload: form.getBuffer(),
-            headers: {
-              'Content-Type': `multipart/form-data; boundary=${form.getBoundary()}`,
-              'x-user-id': userId || '',
-              ...headers,
-            },
+            headers: httpHeaders,
           });
         };
         return server;
@@ -121,12 +130,14 @@ describe(
     after(async () => {
       await fastify.close();
       await s3Client.send(new DeleteBucketCommand({ Bucket: libS3Bucket }));
+      mock.reset();
     });
 
     it('Should return upload URL', async () => {
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'JsonSchema',
           originalFilename: 'email-v1.0.schema.json',
@@ -138,7 +149,9 @@ describe(
 
       expect(response.json()).toEqual({
         fileMetadata: {
-          url: 'http://lib.localhost.test/schemas/1234-email-v1.0.schema.json',
+          url: expect.stringMatching(
+            'http://lib.localhost.test/schemas/[A-Za-z0-9_-]+-email-v1.0.schema.json'
+          ),
           userId: testRegistrarUser.sub,
           credentialFileType: 'JsonSchema',
           createdAt: expect.any(String),
@@ -152,8 +165,12 @@ describe(
         {
           _id: expect.any(ObjectId),
           userId: testRegistrarUser.sub,
-          s3Key: 'schemas/1234-email-v1.0.schema.json',
-          url: 'http://lib.localhost.test/schemas/1234-email-v1.0.schema.json',
+          s3Key: expect.stringMatching(
+            'schemas/[A-Za-z0-9_-]+-email-v1.0.schema.json'
+          ),
+          url: expect.stringMatching(
+            'http://lib.localhost.test/schemas/[A-Za-z0-9_-]+-email-v1.0.schema.json'
+          ),
           credentialFileType: 'JsonSchema',
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
@@ -162,7 +179,7 @@ describe(
 
       const s3Obj = await getObject({
         s3Client,
-        key: 'schemas/1234-email-v1.0.schema.json',
+        key: credentialFile[0].s3Key,
         bucket: libS3Bucket,
       });
       expect(s3Obj).toBeDefined();
@@ -172,6 +189,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'DisplayDescriptor',
           originalFilename: 'email-v1.0.descriptor.json',
@@ -185,7 +203,9 @@ describe(
 
       expect(response.json()).toEqual({
         fileMetadata: {
-          url: 'http://lib.localhost.test/display-descriptors/1234-email-v1.0.descriptor.json',
+          url: expect.stringMatching(
+            'http://lib.localhost.test/display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+          ),
           userId: testRegistrarUser.sub,
           credentialFileType: 'DisplayDescriptor',
           createdAt: expect.any(String),
@@ -199,8 +219,12 @@ describe(
         {
           _id: expect.any(ObjectId),
           userId: testRegistrarUser.sub,
-          s3Key: 'display-descriptors/1234-email-v1.0.descriptor.json',
-          url: 'http://lib.localhost.test/display-descriptors/1234-email-v1.0.descriptor.json',
+          s3Key: expect.stringMatching(
+            'display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+          ),
+          url: expect.stringMatching(
+            'http://lib.localhost.test/display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+          ),
           credentialFileType: 'DisplayDescriptor',
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
@@ -209,7 +233,9 @@ describe(
 
       const s3Obj = await getObject({
         s3Client,
-        key: 'display-descriptors/1234-email-v1.0.descriptor.json',
+        key: expect.stringMatching(
+          'display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+        ),
         bucket: libS3Bucket,
       });
       expect(s3Obj).toBeDefined();
@@ -219,6 +245,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'DisplayDescriptor',
           originalFilename: 'email-v1.0.descriptor.json',
@@ -232,7 +259,9 @@ describe(
 
       expect(response.json()).toEqual({
         fileMetadata: {
-          url: 'http://lib.localhost.test/display-descriptors/1234-email-v1.0.descriptor.json',
+          url: expect.stringMatching(
+            'http://lib.localhost.test/display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+          ),
           userId: testRegistrarUser.sub,
           credentialFileType: 'DisplayDescriptor',
           createdAt: expect.any(String),
@@ -246,8 +275,12 @@ describe(
         {
           _id: expect.any(ObjectId),
           userId: testRegistrarUser.sub,
-          s3Key: 'display-descriptors/1234-email-v1.0.descriptor.json',
-          url: 'http://lib.localhost.test/display-descriptors/1234-email-v1.0.descriptor.json',
+          s3Key: expect.stringMatching(
+            'display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+          ),
+          url: expect.stringMatching(
+            'http://lib.localhost.test/display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+          ),
           credentialFileType: 'DisplayDescriptor',
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
@@ -256,7 +289,9 @@ describe(
 
       const s3Obj = await getObject({
         s3Client,
-        key: 'display-descriptors/1234-email-v1.0.descriptor.json',
+        key: expect.stringMatching(
+          'display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+        ),
         bucket: libS3Bucket,
       });
       expect(s3Obj).toBeDefined();
@@ -266,6 +301,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'DisplayDescriptor',
           originalFilename: 'email-v1.0.descriptor.json',
@@ -279,7 +315,9 @@ describe(
 
       expect(response.json()).toEqual({
         fileMetadata: {
-          url: 'http://lib.localhost.test/display-descriptors/1234-email-v1.0.descriptor.json',
+          url: expect.stringMatching(
+            'http://lib.localhost.test/display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+          ),
           userId: testRegistrarUser.sub,
           credentialFileType: 'DisplayDescriptor',
           createdAt: expect.any(String),
@@ -293,8 +331,12 @@ describe(
         {
           _id: expect.any(ObjectId),
           userId: testRegistrarUser.sub,
-          s3Key: 'display-descriptors/1234-email-v1.0.descriptor.json',
-          url: 'http://lib.localhost.test/display-descriptors/1234-email-v1.0.descriptor.json',
+          s3Key: expect.stringMatching(
+            'display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+          ),
+          url: expect.stringMatching(
+            'http://lib.localhost.test/display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+          ),
           credentialFileType: 'DisplayDescriptor',
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
@@ -303,7 +345,9 @@ describe(
 
       const s3Obj = await getObject({
         s3Client,
-        key: 'display-descriptors/1234-email-v1.0.descriptor.json',
+        key: expect.stringMatching(
+          'display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json'
+        ),
         bucket: libS3Bucket,
       });
       expect(s3Obj).toBeDefined();
@@ -313,6 +357,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'FormSchema',
           originalFilename: 'email-v1.0.form-schema.json',
@@ -324,7 +369,9 @@ describe(
 
       expect(response.json()).toEqual({
         fileMetadata: {
-          url: 'http://lib.localhost.test/form-schemas/1234-email-v1.0.form-schema.json',
+          url: expect.stringMatching(
+            'http://lib.localhost.test/form-schemas/[A-Za-z0-9_-]+-email-v1.0.form-schema.json'
+          ),
           userId: testRegistrarUser.sub,
           credentialFileType: 'FormSchema',
           createdAt: expect.any(String),
@@ -338,8 +385,12 @@ describe(
         {
           _id: expect.any(ObjectId),
           userId: testRegistrarUser.sub,
-          s3Key: 'form-schemas/1234-email-v1.0.form-schema.json',
-          url: 'http://lib.localhost.test/form-schemas/1234-email-v1.0.form-schema.json',
+          s3Key: expect.stringMatching(
+            'form-schemas/[A-Za-z0-9_-]+-email-v1.0.form-schema.json'
+          ),
+          url: expect.stringMatching(
+            'http://lib.localhost.test/form-schemas/[A-Za-z0-9_-]+-email-v1.0.form-schema.json'
+          ),
           credentialFileType: 'FormSchema',
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
@@ -348,7 +399,9 @@ describe(
 
       const s3Obj = await getObject({
         s3Client,
-        key: 'form-schemas/1234-email-v1.0.form-schema.json',
+        key: expect.stringMatching(
+          'form-schemas/[A-Za-z0-9_-]+-email-v1.0.form-schema.json'
+        ),
         bucket: libS3Bucket,
       });
       expect(s3Obj).toBeDefined();
@@ -358,6 +411,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'JsonldContext',
           originalFilename: 'email-v1.0.jsonld.json',
@@ -369,7 +423,9 @@ describe(
 
       expect(response.json()).toEqual({
         fileMetadata: {
-          url: 'http://lib.localhost.test/contexts/1234-email-v1.0.jsonld.json',
+          url: expect.stringMatching(
+            'http://lib.localhost.test/contexts/[A-Za-z0-9_-]+-email-v1.0.jsonld.json'
+          ),
           userId: testRegistrarUser.sub,
           credentialFileType: 'JsonldContext',
           createdAt: expect.any(String),
@@ -383,8 +439,12 @@ describe(
         {
           _id: expect.any(ObjectId),
           userId: testRegistrarUser.sub,
-          s3Key: 'contexts/1234-email-v1.0.jsonld.json',
-          url: 'http://lib.localhost.test/contexts/1234-email-v1.0.jsonld.json',
+          s3Key: expect.stringMatching(
+            'contexts/[A-Za-z0-9_-]+-email-v1.0.jsonld.json'
+          ),
+          url: expect.stringMatching(
+            'http://lib.localhost.test/contexts/[A-Za-z0-9_-]+-email-v1.0.jsonld.json'
+          ),
           credentialFileType: 'JsonldContext',
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
@@ -393,7 +453,9 @@ describe(
 
       const s3Obj = await getObject({
         s3Client,
-        key: 'contexts/1234-email-v1.0.jsonld.json',
+        key: expect.stringMatching(
+          'contexts/[A-Za-z0-9_-]+-email-v1.0.jsonld.json'
+        ),
         bucket: libS3Bucket,
       });
       expect(s3Obj).toBeDefined();
@@ -403,6 +465,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'not-valid',
           originalFilename: 'email-v1.0.jsonld.json',
@@ -428,6 +491,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'JsonldContext',
           file: await fs.readFile(
@@ -451,6 +515,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'JsonldContext',
           originalFilename: '',
@@ -476,6 +541,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'FormSchema',
           originalFilename: 'email-v1.0.form-schema.json',
@@ -503,6 +569,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'FormSchema',
           originalFilename: 'email-v1.0.form-schema.json',
@@ -527,6 +594,7 @@ describe(
       const response = await fastify.injectMultipart({
         method: 'POST',
         url: baseUrl,
+        user: testRegistrarUser,
         payload: {
           credentialFileType: 'DisplayDescriptor',
           originalFilename: 'email-v1.0.descriptor.json',
@@ -554,7 +622,7 @@ describe(
 
       const s3Obj = await getObject({
         s3Client,
-        s3Key: 'display-descriptors/1234-email-v1.0.descriptor.json',
+        s3Key: 'display-descriptors/[A-Za-z0-9_-]+-email-v1.0.descriptor.json',
         bucket: libS3Bucket,
       });
       expect(s3Obj).toBeNull();
