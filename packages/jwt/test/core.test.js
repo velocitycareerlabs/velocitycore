@@ -82,7 +82,7 @@ describe('JWT Tests', () => {
           iat: expect.any(Number),
         },
         protectedHeader: {
-          // alg: 'HS384',
+          alg: 'HS384',
           typ: 'JWT',
         },
       });
