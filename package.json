@@ -46,7 +46,7 @@
     "**/lerna/**/parse-path": "5.0.0",
     "**/semver": "~7.7.0",
     "**/json5": "~2.2.3",
-    "**/http-cache-semantics": "~4.1.1",
+    "**/http-cache-semantics": "~4.2.0",
     "**/migrate-mongo/mongodb": "~6.16.0",
     "**/fast-json-stringify": "6.0.1",
     "react-router": "7.5.3",
