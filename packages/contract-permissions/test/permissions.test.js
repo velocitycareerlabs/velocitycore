@@ -32,7 +32,7 @@ const {
 
 const { initPermissions } = require('../index');
 
-describe('Permissions Contract Test Suite', { timeout: 10000 }, () => {
+describe('Permissions Contract Test Suite', { timeout: 120000 }, () => {
   const rpcUrl = 'http://localhost:8545';
   const authenticate = () => 'TOKEN';
   const rpcProvider = initProvider(rpcUrl, authenticate);

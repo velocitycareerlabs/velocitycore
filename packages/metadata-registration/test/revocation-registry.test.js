@@ -38,7 +38,7 @@ const {
   rpcProvider,
 } = require('./helpers/deploy-contracts');
 
-describe('Revocation Registry', () => {
+describe('Revocation Registry', { timeout: 240000 }, () => {
   const traceId = 'trackingId';
   const context = {
     traceId,

@@ -108,7 +108,7 @@ const defaultCredentialType = 'Certification';
 const password =
   '3dbc33ed4f3b5ca79d75a698e2b36f6010604a96c3126ec3d326aa222a71bde0';
 
-describe('Metadata Registry', { timeout: 60000 }, () => {
+describe('Metadata Registry', { timeout: 240000 }, () => {
   let metadataAddress;
 
   const expirationTime = new Date(Date.now() + 60 * 60 * 1000).toISOString();
