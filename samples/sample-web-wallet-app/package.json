@@ -39,12 +39,14 @@
     "vite-plugin-svgr": "4.3.0"
   },
   "scripts": {
-    "lint": "eslint --ext .js,.ts,.tsx --format json >> eslint.json src",
+    "lint": "eslint --ext .js,.ts,.tsx src",
     "lint:fix": "eslint --fix --ext .js,.ts,.tsx src",
+    "lint:ci": "eslint --ext .js,.ts,.tsx --format json >> eslint-results.json src",
     "start": "vite",
     "build": "tsc & vite build",
     "serve": "vite preview",
-    "test": "NODE_ENV=test node --test --test-concurrency=1 --experimental-test-module-mocks --experimental-test-coverage 'test/**/*.test.js'"
+    "test": "jest",
+    "test:ci": "jest --config ./jest.config.js --coverage"
   },
   "browserslist": {
     "production": [
