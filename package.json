@@ -42,7 +42,7 @@
     "**/node-forge": "1.3.1",
     "**/node-fetch": "~2.7.0",
     "**/axios/follow-redirects": "1.15.9",
-    "**/ion-pow-sdk/cross-fetch": "3.2.0",
+    "**/ion-pow-sdk/cross-fetch": "4.1.0",
     "**/lerna/**/parse-path": "5.0.0",
     "**/semver": "~7.7.0",
     "**/json5": "~2.2.3",
