@@ -71,6 +71,7 @@
     "build:watch": "vite build --watch",
     "prepublish": "vite build",
     "test": "jest --coverage",
+    "test:ci": "jest --coverage --config ./jest.config.cjs",
     "lint": "NODE_OPTIONS=--experimental-specifier-resolution=node eslint src",
     "lint:fix": "NODE_OPTIONS=--experimental-specifier-resolution=node eslint src --fix"
   },
@@ -116,6 +117,7 @@
     "eslint-import-resolver-alias": "1.1.2",
     "globals": "15.15.0",
     "identity-obj-proxy": "3.0.0",
+    "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "jest-fetch-mock": "3.0.3",
     "vite": "6.3.5",

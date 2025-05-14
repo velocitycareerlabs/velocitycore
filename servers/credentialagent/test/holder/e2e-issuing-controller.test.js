@@ -15,6 +15,9 @@
  *
  */
 
+const { after, before, beforeEach, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const {
   mongoFactoryWrapper,
@@ -67,9 +70,7 @@ let persistOffer;
 let persistOfferExchange;
 let persistVendorUserIdMapping;
 
-describe('e2e issuing tests', () => {
-  jest.setTimeout(45000);
-
+describe('e2e issuing tests', { timeout: 45000 }, () => {
   let tenant;
   let tenantKeys;
   let disclosure;
@@ -80,7 +81,7 @@ describe('e2e issuing tests', () => {
   let keyPair;
   let operatorKeyPair;
 
-  beforeAll(async () => {
+  before(async () => {
     await mongoFactoryWrapper('test-credential-agent', {
       log: console,
     });
@@ -194,8 +195,6 @@ describe('e2e issuing tests', () => {
   });
 
   beforeEach(async () => {
-    jest.resetAllMocks();
-
     await mongoDb().collection('disclosures').deleteMany({});
     await mongoDb().collection('exchanges').deleteMany({});
     await mongoDb().collection('offers').deleteMany({});
@@ -230,7 +229,7 @@ describe('e2e issuing tests', () => {
     offer = await persistFinalizableOffer();
   });
 
-  afterAll(async () => {
+  after(async () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();

@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+const { before, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
+
 const {
   generateKeyPairInHexAndJwk,
 } = require('@velocitycareerlabs/tests-helpers');
@@ -28,9 +31,9 @@ const { CheckResults } = require('../src/check-results');
 
 describe('issuer checks', () => {
   const log = {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    info: mock.fn(),
+    warn: mock.fn(),
+    error: mock.fn(),
   };
   const jsonLdContext = {
     '@context': {
@@ -71,7 +74,7 @@ describe('issuer checks', () => {
   let defaultDependencies;
   let context;
 
-  beforeAll(async () => {
+  before(async () => {
     boundIssuerVc = await generateCredentialJwt(
       issuerCred,
       issuerKeyPair.privateJwk,
@@ -120,10 +123,6 @@ describe('issuer checks', () => {
       log,
       config,
     };
-  });
-
-  beforeEach(async () => {
-    jest.clearAllMocks();
   });
 
   it('Should FAIL when wrong kid', async () => {
@@ -343,10 +342,6 @@ describe('issuer checks', () => {
       log,
       config,
     };
-
-    beforeEach(async () => {
-      jest.clearAllMocks();
-    });
 
     it('should throw error if jsonld contexts not loaded', async () => {
       expect(() =>

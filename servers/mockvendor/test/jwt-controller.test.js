@@ -1,3 +1,6 @@
+const { after, before, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
 const { jwtVerify, jwtSign } = require('@velocitycareerlabs/jwt');
 const { getDidUriFromJwk } = require('@velocitycareerlabs/did-doc');
@@ -8,12 +11,12 @@ const { generateJwk } = require('../src/entities');
 describe('JWT Controller Test Suite', () => {
   let fastify;
 
-  beforeAll(async () => {
+  before(async () => {
     fastify = await buildFastify({});
     await fastify.ready();
   });
 
-  afterAll(async () => {
+  after(async () => {
     await fastify.close();
   });
 
