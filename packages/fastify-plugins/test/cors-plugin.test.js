@@ -39,7 +39,10 @@ describe('CORS plugin Test Suite', () => {
       routeOptions: {},
     };
     const mockCorsCallback = mock.fn();
-    fakeServer.register.mock.calls[0][1]()(mockRequest, mockCorsCallback);
+    fakeServer.register.mock.calls[0].arguments[1]()(
+      mockRequest,
+      mockCorsCallback
+    );
     expect(
       mockCorsCallback.mock.calls.map((call) => call.arguments)
     ).toContainEqual([

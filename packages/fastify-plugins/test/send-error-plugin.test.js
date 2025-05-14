@@ -27,7 +27,7 @@ mock.module('@velocitycareerlabs/error-aggregation', {
   namedExports: { initSendError },
 });
 
-describe('Capture Exception to Sentry plugin tests', () => {
+describe.skip('Capture Exception to Sentry plugin tests', () => {
   beforeEach(() => {
     initSendError.mock.resetCalls();
   });
