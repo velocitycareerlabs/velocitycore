@@ -16,7 +16,7 @@
         "build": "tsc",
         "build:watch": "tsc --watch",
         "prepublishOnly": "tsc --declaration",
-        "test": "NODE_ENV=test node --test --test-concurrency=1 --experimental-test-module-mocks --experimental-test-coverage **/*.test.js"
+        "test": "NODE_ENV=test node --test --test-concurrency=1 --experimental-test-module-mocks --experimental-test-coverage 'test/**/*.test.js'"
     },
     "engines": {
         "node": ">= 20.0.0"
