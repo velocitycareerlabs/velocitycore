@@ -26,7 +26,6 @@ const {
 const { omit } = require('lodash/fp');
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
 const { nanoid } = require('nanoid');
-const { strictEqual } = require('node:assert');
 const {
   jwtSign,
   jwtSignSymmetric,

@@ -138,7 +138,7 @@ jobs:
     - name: Build Libs
       run: yarn build:lib
     - name: Lint
-      run: yarn nx run ${{ matrix.package }}:lint
+      run: yarn nx run ${{ matrix.package }}:"lint:ci"
     - name: Create Artifact Name
       run: |
         echo ARTIFACT_NAME=$(echo ${{ matrix.package }} | sed -e 's+@+-+g; s+/+-+g') >> $GITHUB_ENV
@@ -148,7 +148,7 @@ jobs:
       with:
         name: lint${{ env.ARTIFACT_NAME }}
         path: |
-          **/eslint.json
+          **/eslint-results.json
       if: '!cancelled()'
 
   # Post Lint
@@ -168,7 +168,7 @@ jobs:
       uses: ataylorme/eslint-annotate-action@v3
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        report-json: "**/eslint.json"
+        report-json: "**/eslint-results.json"
 
   # Test
   test:
@@ -231,7 +231,7 @@ jobs:
         timeout_minutes: 10
         max_attempts: 2
         retry_on: timeout
-        command: yarn nx run ${{ matrix.package }}:test
+        command: yarn nx run ${{ matrix.package }}:"test:ci"
       env:
         IS_CI: true
         NODE_OPTIONS: "--max_old_space_size=4096"
@@ -244,9 +244,7 @@ jobs:
       with:
         name: test${{ env.ARTIFACT_NAME }}
         path: |
-          test-results/**/*.xml
-          test-results/**/*.trx
-          test-results/**/*.json
+          **/test-results.junit.xml
       if: '!cancelled()'
     - name: Upload Codecov Report
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -279,9 +277,7 @@ jobs:
         json_thousands_separator: ","
         action_fail: true
         files: |
-          test-results/**/*.xml
-          test-results/**/*.trx
-          test-results/**/*.json
+          **/test-results.junit.xml
     - name: Download All Codecov Reports
       uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
       with:

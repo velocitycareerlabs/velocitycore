@@ -11,7 +11,8 @@
   "scripts": {
     "start": "node src/index.js",
     "start:dev": "nodemon src/standalone.js",
-    "lint": "eslint . --format json >> eslint.json",
+    "lint": "eslint --ext .js .",
+    "lint:ci": "eslint . --format json >> eslint-results.json",
     "lint:fix": "eslint --fix --ext .js .",
     "migrate:status": "./node_modules/.bin/migrate-mongo status --file migrate-mongo.config.js",
     "migrate:create": "./node_modules/.bin/migrate-mongo create --file migrate-mongo.config.js",
