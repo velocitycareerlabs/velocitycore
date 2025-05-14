@@ -59,25 +59,29 @@ const dotenv = require('dotenv');
 const path = require('path');
 const { toHexString } = require('@velocitycareerlabs/blockchain-functions');
 const {
+  Authorities,
+} = require('@velocitycareerlabs/endpoints-organizations-registrar');
+const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
+const {
   sampleEducationDegreeGraduation,
 } = require('@velocitycareerlabs/sample-data');
-const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
 
 const registrarUrl = 'https://localhost:13004';
 const fineractUrl = 'http://localhost:13008';
-const cihUrl = 'http://localhost:13002';
+const caUrl = 'http://localhost:13012';
 const rpcUrl = 'http://localhost:18545';
+const mockvendorUrl = 'http://localhost:13013';
 
 const authenticate = () => 'TOKEN';
 const rpcProvider = initProvider(rpcUrl, authenticate);
 const e2eEnv = {};
 dotenv.config({
-  path: path.resolve(__dirname, '..', '..', 'oracle', '.localdev.env'),
+  path: path.resolve(__dirname, '..', '..', '..', 'samples', 'sample-registrar-server', '.localdev.env'),
   processEnv: e2eEnv,
 });
 console.dir(e2eEnv);
 
-const OPERATOR_API_TOKEN = 'foo';
+const OPERATOR_API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoidmVsb2NpdHkuYWRtaW5AZXhhbXBsZS5jb20ifQ.kmp4qjkgnVOX3eXdgNdUwYKDZ7NgEfH5qMM-7k1D1c8';
 const EDUCATION_DEGREE_CREDENTIAL_TYPE = 'EducationDegreeGraduationV1.1';
 
 describe('org registration and issuing e2e', () => {
@@ -113,7 +117,7 @@ describe('org registration and issuing e2e', () => {
       website: 'https://www.credentialagent.com',
       registrationNumbers: [
         {
-          authority: 'DunnAndBradstreet',
+          authority: Authorities.DunnAndBradstreet,
           number: '123457779',
           uri: 'https://uri.com',
         },
@@ -145,17 +149,17 @@ describe('org registration and issuing e2e', () => {
       {
         id: '#cao1',
         type: ServiceTypes.CredentialAgentOperatorType,
-        serviceEndpoint: replace('http', 'https', cihUrl),
+        serviceEndpoint: replace('http', 'https', caUrl),
       },
       {
         id: '#issuer1',
         type: ServiceTypes.CareerIssuerType,
-        serviceEndpoint: replace('http', 'https', cihUrl),
+        serviceEndpoint: replace('http', 'https', caUrl),
       },
       {
         id: '#rp1',
         type: ServiceTypes.InspectionType,
-        serviceEndpoint: replace('http', 'https', cihUrl),
+        serviceEndpoint: replace('http', 'https', caUrl),
       },
     ];
 
@@ -268,7 +272,8 @@ describe('org registration and issuing e2e', () => {
 
     // Tenant Creation
     const createTenantPayload = {
-      tenant: { did, caoDid: did },
+      did,
+      serviceIds: serviceEndpoints.map(({ id }) => `${did}${id}`),
       keys: filter(
         ({ purposes }) =>
           [
@@ -279,8 +284,11 @@ describe('org registration and issuing e2e', () => {
         keys
       ),
     };
+
+    // Create tenant
+
     const createTenantResponse = await fetch(
-      `${cihUrl}/operator/tenants/create`,
+      `${caUrl}/operator-api/v0.8/tenants`,
       {
         method: 'POST',
         body: JSON.stringify(createTenantPayload),
@@ -290,368 +298,124 @@ describe('org registration and issuing e2e', () => {
         },
       }
     );
-    expect(createTenantResponse.status).toEqual(200);
+    expect(createTenantResponse.status).toEqual(201);
     const createTenantJson = await createTenantResponse.json();
     expect(createTenantJson).toEqual({
-      tenant: expectedTenant(createTenantPayload.tenant, ids.ethereumAccount),
-      keyMetadatas: expectedKeyMetadatas(createTenantPayload.keys),
-      requestId: expect.any(String),
+      id: expect.stringMatching(OBJECT_ID_FORMAT),
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT)
     });
-    const { tenant } = createTenantJson;
-    console.dir({ msg: 'Tenant created', tenant });
+    console.dir({ msg: 'Tenant created', createTenantJson });
 
-    // Service Creation
-    const createServicePayload = {
-      tenantId: tenant.id,
-      service: {
-        velocityNetworkServiceId: serviceEndpoints[1].id,
-        description: 'issuing service',
-        termsUrl: 'http://www.example.com/terms.html',
-        authMethods: ['preauth'],
-        authMode: 'internal',
-        authTokensExpireIn: 100000,
-        challengesExpireIn: 10000,
-        credentialTypesAvailable: ['EducationDegreeGraduationV1.1'],
-        autoCleanPII: false,
+    // Create mockvendor user
+    const user = {
+      firstName: 'Adam',
+      lastName: 'Smith',
+      emails: ['adam.smith@example.com'],
+      phones: ['+44 7963587331'],
+      address: {
+        line1: 'Sunburst Lane 1',
+        line2: 'Phoenix',
+        countryCode: 'US',
+        regionCode: 'AZ',
+      }
+    };
+
+    const createUserResponse = await fetch(
+      `${mockvendorUrl}/api/users`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      }
+    );
+
+    expect(createUserResponse.status).toEqual(200);
+    const createUserJson = await createUserResponse.json();
+    expect(createUserJson).toEqual({
+      ...user,
+      id: expect.stringMatching(OBJECT_ID_FORMAT),
+      _id: expect.stringMatching(OBJECT_ID_FORMAT),
+      updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    });
+
+    // Create mockvendor offer
+    const offer = {
+      type: ['Course'],
+      issuer: {
+        id: 'did:ion:B1a3e076-8d23-4bcb-a066-6f90e161cf23',
       },
-    };
-    const createServiceResponse = await fetch(
-      `${cihUrl}/operator/issuer-services/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify(createServicePayload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    expect(createServiceResponse.status).toEqual(200);
-    const createServiceJson = await createServiceResponse.json();
-    expect(createServiceJson).toEqual({
-      service: expectedEntity(createServicePayload.service),
-      requestId: expect.any(String),
-    });
-    const { service } = createServiceJson;
-    console.dir({ msg: 'Issuer service created', service });
-
-    // Depot Creation
-    const createDepotPayload = {
-      tenantId: tenant.id,
-      serviceId: service.id,
-      depot: { userReference: 'ABC123' },
-    };
-    const createDepotResponse = await fetch(
-      `${cihUrl}/operator/depots/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify(createDepotPayload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    expect(createDepotResponse.status).toEqual(200);
-    const createDepotJson = await createDepotResponse.json();
-    expect(createDepotJson).toEqual({
-      depot: expectedEntity(createDepotPayload.depot, {
-        serviceId: createDepotPayload.serviceId,
-      }),
-      requestId: expect.any(String),
-    });
-    const { depot } = createDepotJson;
-    console.dir({ msg: 'Depot created', depot });
-
-    // Credential Creation
-    const createCredentialPayload = {
-      tenantId: tenant.id,
-      depotId: depot.id,
-      credential: {
-        credentialReference: 'cred1',
-        content: {
-          type: [EDUCATION_DEGREE_CREDENTIAL_TYPE],
-          credentialSubject: sampleEducationDegreeGraduation(
-            createFullOrganizationResponse
-          ),
-        },
-      },
-    };
-    const createCredentialResponse = await fetch(
-      `${cihUrl}/operator/credentials/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify(createCredentialPayload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    expect(createCredentialResponse.status).toEqual(200);
-    const createCredentialJson = await createCredentialResponse.json();
-    expect(createCredentialJson).toEqual({
-      credential: expectedEntity(createCredentialPayload.credential, {
-        depotId: depot.id,
-        'content.credentialSubject.alignment[0].type': 'AlignmentObject',
-        'content.credentialSubject.institution.type': 'Organization',
-        'content.credentialSubject.institution.place.type': 'Place',
-        'content.credentialSubject.school.type': 'Organization',
-        'content.credentialSubject.school.place.type': 'Place',
-        'content.credentialSubject.recipient.type': 'PersonName',
-        'content.credentialSubject.type': 'EducationDegree',
-        contentHash: (expectedCredential) =>
-          hashOffer(expectedCredential.content),
-      }),
-      requestId: expect.any(String),
-    });
-    const { credential } = createCredentialJson;
-    console.dir({
-      msg: 'Credential added',
-      credential: omit('content', credential),
-    });
-
-    // Issue Links Creation
-    const issueLinksPayload = {
-      tenantId: tenant.id,
-      serviceId: service.id,
-      depotId: depot.id,
-    };
-    const issueLinksResponse = await fetch(
-      `${cihUrl}/operator/issue-links/refresh`,
-      {
-        method: 'POST',
-        body: JSON.stringify(issueLinksPayload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    const issueLinksJson = await issueLinksResponse.json();
-    expect(issueLinksJson).toEqual({
-      vnProtocolLink: `velocity-network-devnet://issue?${expectedSearchParams(
-        tenant,
-        service,
-        depot,
-        issueLinksJson.preauthCode
-      )}`,
-      redirectUrl: `${cihUrl}/app-redirect?${expectedSearchParams(
-        tenant,
-        service,
-        depot,
-        issueLinksJson.preauthCode
-      )}&exchange_type=issue`,
-      preauthCode: expect.any(String),
-      requestId: expect.any(String),
-    });
-    console.dir({ msg: 'Issue links refreshed', issueLinksJson });
-
-    // Load redirection page
-    const redirectUriResponse = await fetch(issueLinksJson.redirectUrl);
-    expect(redirectUriResponse.status).toEqual(200);
-    console.dir({ msg: 'Landing page fetched' });
-
-    // Get Credential Manifest
-    const credentialManifestUrl = new URL(
-      issueLinksJson.vnProtocolLink
-    ).searchParams.get('request_uri');
-    const credentialManifestResponse = await fetch(credentialManifestUrl, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const credentialManifestJson = await credentialManifestResponse.json();
-    expect(credentialManifestJson).toEqual({
-      issuing_request: expect.any(String),
-    });
-    const key = find(
-      ({ purposes }) => purposes.includes(KeyPurposes.EXCHANGES),
-      keys
-    );
-    const { payload: credentialManifest } = await jwtVerify(
-      credentialManifestJson.issuing_request,
-      toJwk(key.didDocumentKey.publicKeyMultibase, false)
-    );
-    expect(credentialManifest).toEqual({
-      ...expectedCredentialManifest(profile, tenant, service),
-      exp: expect.any(Number),
-      iat: expect.any(Number),
-      nbf: expect.any(Number),
-      iss: tenant.did,
-    });
-    console.dir({ msg: 'Credential manifest retrieved', credentialManifest });
-
-    const vendorOriginContext = new URL(
-      issueLinksJson.vnProtocolLink
-    ).searchParams.get('vendorOriginContext');
-    // Authenticate Holder
-    const authenticateHolderResponse = await fetch(
-      credentialManifest.metadata.submit_presentation_uri,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          exchange_id: credentialManifest.exchange_id,
-          jwt_vp: await generatePreauthCodeAuthJwt(
-            depot,
-            vendorOriginContext,
-            holderDid,
-            holderKeyPair
-          ),
-        }),
-      }
-    );
-    expect(authenticateHolderResponse.status).toEqual(200);
-    const authenticateHolderJson = await authenticateHolderResponse.json();
-    expect(authenticateHolderJson).toEqual({
-      token: expect.any(String),
-      exchange: {
-        disclosureComplete: true,
-        exchangeComplete: false,
-        id: credentialManifest.exchange_id,
-        type: 'issuer',
-      },
-    });
-    console.dir({ msg: 'Holder authenticated' });
-
-    // Get Offers
-    const credentialOffersResponse = await fetch(
-      credentialManifest.metadata.check_offers_uri,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${authenticateHolderJson.token}`,
-        },
-        body: JSON.stringify({
-          exchange_id: credentialManifest.exchange_id,
-          jwt_vp: await generatePreauthCodeAuthJwt(
-            depot,
-            issueLinksJson.preauthCode,
-            holderDid,
-            holderKeyPair
-          ),
-        }),
-      }
-    );
-    expect(credentialOffersResponse.status).toEqual(200);
-    const credentialOffersJson = await credentialOffersResponse.json();
-    expect(credentialOffersJson).toEqual({
-      challenge: expect.any(String),
-      offers: map(
-        ({ content, id, contentHash }) => ({
-          ...content,
-          id,
-          hash: contentHash,
-          issuer: { id: did },
-        }),
-        [credential]
-      ),
-    });
-    console.dir({
-      msg: 'Offers received',
-      offers: credentialOffersJson.offers,
-    });
-
-    // Issue Credentials
-    const issueCredentialsResponse = await fetch(
-      credentialManifest.metadata.finalize_offers_uri,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${authenticateHolderJson.token}`,
-        },
-        body: JSON.stringify({
-          approvedOfferIds: map('id', credentialOffersJson.offers),
-          proof: await buildProof(
-            cihUrl,
-            holderDid,
-            holderKeyPair,
-            credentialOffersJson.challenge
-          ),
-        }),
-      }
-    );
-
-    expect(issueCredentialsResponse.status).toEqual(200);
-    const vcs = await issueCredentialsResponse.json();
-    const decodedVcs = map(jwtDecode, vcs);
-    expect(decodedVcs).toEqual(
-      map(
-        ({ payload: { vc, jti } }) =>
-          jwtVcExpectation({
-            tenant,
-            issuerService: service,
-            credentialId: jti,
-            subjectId: holderDid,
-            credential: find(
-              ({ content }) =>
-                isEqual(
-                  omit(['id', '@context'], vc.credentialSubject),
-                  content.credentialSubject
-                ),
-              [credential]
-            ),
-            credentialTypeMetadata: {
-              [EDUCATION_DEGREE_CREDENTIAL_TYPE]: {
-                schemaUrl:
-                  'http://libserver/schemas/education-degree-graduation-v1.1.schema.json',
-              },
-            },
-            credentialSubjectContext: [
-              'http://libserver/contexts/layer1-v1.1.jsonld.json',
-            ],
-          }),
-        decodedVcs
-      )
-    );
-    console.dir({ msg: 'VCs issued', vcs });
-    const payload = {
-      tenantId: tenant.id,
-      presentation: await generatePresentationJwt(
-        {
-          verifiableCredential: vcs,
-          issuer: holderDid,
-        },
-        holderKeyPair.privateKey,
-        `${holderDid}#key`
-      ),
-    };
-    const presentationCheckResponse = await fetch(
-      `${cihUrl}/operator/presentations/check`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPERATOR_API_TOKEN}`,
-        },
-      }
-    );
-    expect(presentationCheckResponse.status).toEqual(200);
-
-    await expect(presentationCheckResponse.json()).resolves.toEqual({
-      presentation: jwtDecode(payload.presentation).payload.vp,
-      presentationChecks: { UNTAMPERED: CheckResults.PASS },
-      credentialCheckResults: map(
-        (decodedVc) => ({
-          credential: decodedVc.payload.vc,
-          credentialChecks: {
-            UNTAMPERED: CheckResults.PASS,
-            TRUSTED_ISSUER: CheckResults.PASS,
-            TRUSTED_HOLDER: CheckResults.PASS,
-            UNREVOKED: CheckResults.PASS,
-            UNEXPIRED: CheckResults.NOT_APPLICABLE,
+      credentialSubject: {
+        vendorUserId: 'adam.smith@example.com',
+        title: {
+          localized: {
+            en: 'Azure Basics',
           },
-        }),
-        decodedVcs
-      ),
-      requestId: expect.any(String),
+        },
+        description: {
+          localized: {
+            en: 'Introduction to Microsoft Azure Cloud Services',
+          },
+        },
+        contentProvider:
+          'did:velocity:0xd4df29726d500f9b85bc6c7f1b3c021f16305692',
+        contentProviderName: {
+          localized: {
+            en: 'Microsoft Corporation',
+          },
+        },
+        type: 'Specialty Training',
+        duration: '24h',
+        score: 90.0,
+        scoreRange: '78',
+        registrationDate: {
+          day: 15.0,
+          month: 3.0,
+          year: 2019.0,
+        },
+        startDate: {
+          day: 1.0,
+          month: 4.0,
+          year: 2019.0,
+        },
+        completionDate: {
+          day: 1.0,
+          month: 5.0,
+          year: 2019.0,
+        },
+        alignment: [
+          {
+            targetName: 'Microsoft top secret course',
+            targetUrl: 'https://www.microsoft.com',
+            targetDescription: 'Test Description Data',
+          },
+        ],
+      },
+      offerId: '5539e308-6f2f-4d01-b946-5ca4ba7fee20',
+    };
+
+    const createOfferResponse = await fetch(
+      `${mockvendorUrl}/api/offers`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(offer),
+      });
+
+    expect(createOfferResponse.status).toEqual(200);
+    const createOfferJson = await createOfferResponse.json();
+    expect(first(createOfferJson)).toEqual({
+      ...expectedOffer(offer),
+      id: expect.stringMatching(OBJECT_ID_FORMAT),
+      _id: expect.stringMatching(OBJECT_ID_FORMAT),
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+      updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
     });
+
   }, 30000);
 });
 
@@ -667,6 +431,12 @@ const initMintBundle = async () => {
 
   return mint;
 };
+
+const expectedOffer = (payload, overrides = {}) =>
+  omit(['_id', 'createdAt', 'exchangeId', 'updatedAt'], {
+    ...payload,
+    ...overrides,
+  });
 
 const expectedTenant = (tenant, primaryAccount) => ({
   id: tenant._id ?? expect.stringMatching(OBJECT_ID_FORMAT),
@@ -697,7 +467,7 @@ const expectedEntity = (payload, overrides) =>
 
 const expectedSearchParams = (tenant, service, depot, preauthCode) => {
   let searchParamsString = `request_uri=${encodeURIComponent(
-    cihUrl
+    caUrl
   )}%2Fvn-api%2Fr%2F${encodeURIComponent(
     encodeURI(tenant.did)
   )}%2Fget-credential-manifest%3Fid%3D${encodeURIComponent(service.id)}`;
@@ -735,12 +505,12 @@ const expectedCredentialManifest = (
     submission_requirements:
       issuerService.disclosureRequest?.types != null
         ? [
-            {
-              from: 'A',
-              min: 1,
-              rule: 'all',
-            },
-          ]
+          {
+            from: 'A',
+            min: 1,
+            rule: 'all',
+          },
+        ]
         : [],
     ...issuerService.presentationDefinition,
   },
@@ -750,10 +520,10 @@ const expectedCredentialManifest = (
     tos_uri: issuerService.termsUrl,
     max_retention_period:
       issuerService.disclosureRequest?.retentionPeriod ?? '',
-    progress_uri: `${cihUrl}${vnUrl(tenant)}/get-exchange-progress`,
-    submit_presentation_uri: `${cihUrl}${vnUrl(tenant)}/authenticate`,
-    check_offers_uri: `${cihUrl}${vnUrl(tenant)}/credential-offers`,
-    finalize_offers_uri: `${cihUrl}${vnUrl(tenant)}/issue-credentials`,
+    progress_uri: `${caUrl}${vnUrl(tenant)}/get-exchange-progress`,
+    submit_presentation_uri: `${caUrl}${vnUrl(tenant)}/authenticate`,
+    check_offers_uri: `${caUrl}${vnUrl(tenant)}/credential-offers`,
+    finalize_offers_uri: `${caUrl}${vnUrl(tenant)}/issue-credentials`,
   },
 });
 

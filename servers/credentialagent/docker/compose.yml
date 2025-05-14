@@ -4,6 +4,7 @@ include:
   - ../../../eng/docker/services/fineract-compose.yml
   - ../../../samples/sample-registrar-server/docker/compose.yml
   - ../../../samples/sample-lib-app/docker/compose.yml
+  - ../../mockvendor/docker/compose.yml
 
 services:
   credentialagent:
@@ -30,9 +31,3 @@ services:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     ports:
       - 13012:3000
-    healthcheck:
-      test: ["CMD", "wget", "http://0.0.0.0:3000/"]
-      interval: 10s
-      retries: 5
-      start_period: 10s
-      timeout: 10s
