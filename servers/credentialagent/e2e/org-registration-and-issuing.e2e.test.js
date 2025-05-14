@@ -305,24 +305,115 @@ describe('org registration and issuing e2e', () => {
       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT)
     });
     console.dir({ msg: 'Tenant created', createTenantJson });
-    
+
     // Create mockvendor user
     const user = {
-      vendorUserId: 1,
+      firstName: 'Adam',
+      lastName: 'Smith',
+      emails: ['adam.smith@example.com'],
+      phones: ['+44 7963587331'],
+      address: {
+        line1: 'Sunburst Lane 1',
+        line2: 'Phoenix',
+        countryCode: 'US',
+        regionCode: 'AZ',
+      }
     };
-    const response = await fastify.injectJson({
-      method: 'POST',
-      url: '/api/users',
-      payload: user,
-    });
 
-    expect(response.statusCode).toEqual(200);
-    expect(response.json).toEqual({
+    const createUserResponse = await fetch(
+      `${mockvendorUrl}/api/users`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      }
+    );
+
+    expect(createUserResponse.status).toEqual(200);
+    const createUserJson = await createUserResponse.json();
+    expect(createUserJson).toEqual({
       ...user,
       id: expect.stringMatching(OBJECT_ID_FORMAT),
       _id: expect.stringMatching(OBJECT_ID_FORMAT),
       updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    });
+
+    // Create mockvendor offer
+    const offer = {
+      type: ['Course'],
+      issuer: {
+        id: 'did:ion:B1a3e076-8d23-4bcb-a066-6f90e161cf23',
+      },
+      credentialSubject: {
+        vendorUserId: 'adam.smith@example.com',
+        title: {
+          localized: {
+            en: 'Azure Basics',
+          },
+        },
+        description: {
+          localized: {
+            en: 'Introduction to Microsoft Azure Cloud Services',
+          },
+        },
+        contentProvider:
+          'did:velocity:0xd4df29726d500f9b85bc6c7f1b3c021f16305692',
+        contentProviderName: {
+          localized: {
+            en: 'Microsoft Corporation',
+          },
+        },
+        type: 'Specialty Training',
+        duration: '24h',
+        score: 90.0,
+        scoreRange: '78',
+        registrationDate: {
+          day: 15.0,
+          month: 3.0,
+          year: 2019.0,
+        },
+        startDate: {
+          day: 1.0,
+          month: 4.0,
+          year: 2019.0,
+        },
+        completionDate: {
+          day: 1.0,
+          month: 5.0,
+          year: 2019.0,
+        },
+        alignment: [
+          {
+            targetName: 'Microsoft top secret course',
+            targetUrl: 'https://www.microsoft.com',
+            targetDescription: 'Test Description Data',
+          },
+        ],
+      },
+      offerId: '5539e308-6f2f-4d01-b946-5ca4ba7fee20',
+    };
+
+    const createOfferResponse = await fetch(
+      `${mockvendorUrl}/api/offers`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(offer),
+      });
+
+    expect(createOfferResponse.status).toEqual(200);
+    const createOfferJson = await createOfferResponse.json();
+    expect(first(createOfferJson)).toEqual({
+      ...expectedOffer(offer),
+      id: expect.stringMatching(OBJECT_ID_FORMAT),
+      _id: expect.stringMatching(OBJECT_ID_FORMAT),
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+      updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
     });
 
   }, 30000);
@@ -340,6 +431,12 @@ const initMintBundle = async () => {
 
   return mint;
 };
+
+const expectedOffer = (payload, overrides = {}) =>
+  omit(['_id', 'createdAt', 'exchangeId', 'updatedAt'], {
+    ...payload,
+    ...overrides,
+  });
 
 const expectedTenant = (tenant, primaryAccount) => ({
   id: tenant._id ?? expect.stringMatching(OBJECT_ID_FORMAT),
