@@ -6,7 +6,7 @@
   "engines" : { "node" : ">=20.5.1" },
   "main": "src/index.js",
   "scripts": {
-    "test": "NODE_ENV=test node --test --test-concurrency=1 --experimental-test-module-mocks --experimental-test-coverage **/*.test.js",
+    "test": "NODE_ENV=test node --test --test-concurrency=1 --experimental-test-module-mocks --experimental-test-coverage 'test/**/*.test.js'",
     "start": "node src/main.js",
     "start:dev": "nodemon src/standalone.js",
     "lint": "eslint . --format json >> eslint.json",
