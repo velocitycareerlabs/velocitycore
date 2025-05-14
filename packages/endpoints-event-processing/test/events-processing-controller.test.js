@@ -58,6 +58,7 @@ describe('Event processing controller test suite', () => {
 
   after(async () => {
     await fastify.close();
+    mock.reset();
   });
 
   describe('credentials issued rewards type test suite', () => {

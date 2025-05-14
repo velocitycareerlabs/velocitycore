@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { describe, it, mock } = require('node:test');
+const { describe, it, mock, after } = require('node:test');
 const { expect } = require('expect');
 
 const { initGetSignerMetrics } = require('../src/ibft');
@@ -54,6 +54,10 @@ const signerMetricsResult = [
 ];
 
 describe.skip('IBFT Signer Metrics', () => {
+  after(() => {
+    mock.reset();
+  });
+
   it('Should return IBFT signer merics', async () => {
     const getSignerMetrics = await initGetSignerMetrics({
       rpcUrl,

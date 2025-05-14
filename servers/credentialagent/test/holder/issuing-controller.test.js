@@ -268,6 +268,7 @@ describe('Holder Issuing Test Suite', () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
+    mock.reset();
   });
 
   const issuingUrl = ({ did }, suffix = '') =>

@@ -148,6 +148,7 @@ describe('Credentials checking tests', () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
+    mock.reset();
   });
 
   it('Should return 400 when request is malformed', async () => {

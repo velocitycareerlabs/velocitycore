@@ -171,6 +171,7 @@ describe('submit identification disclosure', () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
+    mock.reset();
   });
 
   describe('using integrated identification', () => {

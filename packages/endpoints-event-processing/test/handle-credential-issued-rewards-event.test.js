@@ -183,6 +183,7 @@ describe('Credential issued event rewards distribution task test suite', () => {
 
   after(async () => {
     await mongoCloseWrapper();
+    mock.reset();
   });
 
   it('Should successfully distribute rewards for a given set of events read off the blockchain', async () => {

@@ -15,7 +15,7 @@
  *
  */
 // eslint-disable-next-line max-classes-per-file
-const { mock, beforeEach, describe, it } = require('node:test');
+const { mock, beforeEach, describe, it, after } = require('node:test');
 const { expect } = require('expect');
 
 const mockTwilioCreate = mock.fn();
@@ -47,6 +47,10 @@ const { initSendSmsNotification } = require('../src/sms-notifications');
 
 describe('SMS Notifications', () => {
   let sendSmsNotification;
+
+  after(() => {
+    mock.reset();
+  });
 
   beforeEach(() => {
     mockPublish.mock.resetCalls();

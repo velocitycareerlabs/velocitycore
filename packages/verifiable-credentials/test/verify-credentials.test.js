@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-const { before, beforeEach, describe, it, mock } = require('node:test');
+const { before, beforeEach, describe, it, mock, after } = require('node:test');
 const { expect } = require('expect');
 
 const resolveDidDocument = mock.fn();
@@ -135,6 +135,10 @@ describe('Verify credentials', () => {
         ),
       },
     };
+  });
+
+  after(() => {
+    mock.reset();
   });
 
   describe('full verification', () => {

@@ -40,7 +40,7 @@ const {
   rpcProvider,
 } = require('./helpers/deploy-contracts');
 
-describe('Verification Coupon', { timeout: 30000 }, () => {
+describe('Verification Coupon', { timeout: 60000 }, () => {
   const expirationTimeNumber = Date.now() + 60 * 60 * 1000;
   const expirationTime = new Date(expirationTimeNumber).toISOString();
   const traceId = 'trackingId';

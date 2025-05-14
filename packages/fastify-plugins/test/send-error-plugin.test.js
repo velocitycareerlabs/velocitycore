@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { beforeEach, describe, it, mock } = require('node:test');
+const { beforeEach, describe, it, mock, after } = require('node:test');
 const { expect } = require('expect');
 
 const { sendErrorPlugin } = require('../src/send-error-plugin');
@@ -30,6 +30,10 @@ mock.module('@velocitycareerlabs/error-aggregation', {
 describe('Capture Exception to Sentry plugin tests', () => {
   beforeEach(() => {
     initSendError.mock.resetCalls();
+  });
+
+  after(() => {
+    mock.reset();
   });
 
   it('sendErrorPlugin', async () => {

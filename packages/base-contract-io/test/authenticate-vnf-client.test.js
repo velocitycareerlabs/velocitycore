@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-const { mock, beforeEach, describe, it } = require('node:test');
+const { mock, beforeEach, describe, it, after } = require('node:test');
 const { expect } = require('expect');
 
 const initRequest = mock.fn();
@@ -54,6 +54,10 @@ describe('VNF Identity Provider Authentication', () => {
     gotMockPost.mock.resetCalls();
     fastify = createFastify();
     vnfAuthenticate = initAuthenticateVnfClient(fastify);
+  });
+
+  after(() => {
+    mock.reset();
   });
 
   describe('VNF Authenticate', () => {

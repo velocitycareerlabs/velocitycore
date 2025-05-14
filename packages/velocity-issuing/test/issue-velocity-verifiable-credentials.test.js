@@ -131,6 +131,7 @@ describe('issuing velocity verifiable credentials', () => {
 
   after(() => {
     mongoClient.close();
+    mock.reset();
   });
 
   it('should create vcs', async () => {

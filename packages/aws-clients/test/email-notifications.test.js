@@ -15,7 +15,7 @@
  *
  */
 // eslint-disable-next-line max-classes-per-file
-const { beforeEach, describe, it, mock } = require('node:test');
+const { beforeEach, describe, it, mock, after } = require('node:test');
 const { expect } = require('expect');
 
 class SESClient {}
@@ -60,6 +60,10 @@ describe('Email notifications test suite', () => {
       recipients: ['fooRecipient'],
       replyTo: 'fooReplyTo',
     };
+  });
+
+  after(() => {
+    mock.reset();
   });
 
   it('Should email with legacy client when awsEndpoint param exists', async () => {

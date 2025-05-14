@@ -169,6 +169,7 @@ describe('Coupons burned event verification task test suite', () => {
 
   after(async () => {
     await mongoCloseWrapper();
+    mock.reset();
   });
 
   it('Should successfully sync burns for a given set of events read off the blockchain', async () => {

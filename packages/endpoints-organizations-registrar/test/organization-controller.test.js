@@ -257,6 +257,7 @@ describe('Organization Registrar Test Suite', { timeout: 20000 }, () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
+    mock.reset();
   });
 
   describe('Organization Modifications', () => {

@@ -232,6 +232,7 @@ describe('presentation submission', () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
+    mock.reset();
   });
 
   const tenantUrl = ({ did }, suffix) => `/api/holder/v0.6/org/${did}${suffix}`;

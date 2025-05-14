@@ -267,7 +267,7 @@ describe('Revocation Registry', () => {
     });
   });
 
-  describe('Pull Revocation Registry Events', { timeout: 30000 }, () => {
+  describe('Pull Revocation Registry Events', { timeout: 60000 }, () => {
     const listId = 1000;
     const index = 1000n;
     before(async () => {

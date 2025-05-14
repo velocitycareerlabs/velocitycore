@@ -15,7 +15,7 @@
  *
  */
 // eslint-disable-next-line max-classes-per-file
-const { mock, describe, it } = require('node:test');
+const { after, mock, describe, it } = require('node:test');
 const { expect } = require('expect');
 
 const mockSend = mock.fn((payload) => payload);
@@ -48,6 +48,10 @@ const readDocument = initReadDocument({});
 const writeDocument = initWriteDocument({});
 
 describe('Documents Storage', () => {
+  after(() => {
+    mock.reset();
+  });
+
   it('Should read document', async () => {
     await readDocument('TABLE', 'KEY');
 

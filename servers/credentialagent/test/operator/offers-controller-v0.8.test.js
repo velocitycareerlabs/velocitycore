@@ -179,6 +179,7 @@ describe('vendor offer management', () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
+    mock.reset();
   });
 
   describe('/offers Adding offers to exchange Test Suite', () => {

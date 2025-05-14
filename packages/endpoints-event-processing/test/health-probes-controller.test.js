@@ -45,6 +45,7 @@ describe('Blockchain Health', () => {
 
   after(async () => {
     await fastify.close();
+    mock.reset();
   });
 
   describe('Consensus Health', () => {

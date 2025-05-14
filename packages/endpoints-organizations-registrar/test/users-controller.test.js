@@ -145,6 +145,7 @@ describe('Users Registrar Test Suite', () => {
 
   after(async () => {
     await fastify.close();
+    mock.reset();
   });
 
   describe('User CRUD', () => {

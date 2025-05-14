@@ -51,6 +51,7 @@ mock.module('@velocitycareerlabs/metadata-registration', {
   },
 });
 
+const { after } = require('lodash/function');
 const { burnEventsArray } = require('./data/sample-burn-events-array');
 const { handleCouponsBurnedLoggingEvent } = require('../src/handlers');
 
@@ -77,6 +78,10 @@ describe('Coupons burned event logging task test suite', () => {
     mockWriteDocument.mock.resetCalls();
     mockLogInfo.mock.resetCalls();
     mockEventCursor.mock.resetCalls();
+  });
+
+  after(() => {
+    mock.reset();
   });
 
   it('Should successfully write log entries for a given set of events read off the blockchain', async () => {

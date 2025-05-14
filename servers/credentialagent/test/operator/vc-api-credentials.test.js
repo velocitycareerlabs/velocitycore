@@ -155,6 +155,7 @@ describe('vc-api credentials endpoints', () => {
   after(() => {
     nock.cleanAll();
     nock.restore();
+    mock.reset();
   });
 
   describe('vc-api when enabled', () => {

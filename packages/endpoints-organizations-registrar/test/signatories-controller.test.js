@@ -120,6 +120,7 @@ describe('signatoriesController', () => {
 
   after(async () => {
     await fastify.close();
+    mock.reset();
   });
 
   describe('GET /:did/signatories/response/approve', () => {

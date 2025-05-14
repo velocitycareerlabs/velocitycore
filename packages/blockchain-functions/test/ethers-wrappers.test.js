@@ -23,7 +23,7 @@ const {
   toNumber,
 } = require('../src/ethers-wrappers');
 
-describe('Ehters Wrappers', () => {
+describe('Ethers Wrappers', () => {
   describe('Ethereum Addresses', () => {
     it('Should return Ethereum address from public key', () => {
       const publicKey =

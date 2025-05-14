@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-const { describe, it, mock } = require('node:test');
+const { describe, it, mock, after } = require('node:test');
 const { expect } = require('expect');
 
 const mockSentryInit = mock.fn();
@@ -33,6 +33,9 @@ mock.module('@sentry/node', {
 });
 
 describe.skip('Sentry test suite', () => {
+  after(() => {
+    mock.reset();
+  });
   it('should initialize sentry with captureException and startTransaction when dsn is provided and profiling is enabled', () => {
     const { sendError, startProfiling } = initSendError({
       dsn: 'test',

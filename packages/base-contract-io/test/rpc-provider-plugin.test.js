@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-const { describe, it, mock } = require('node:test');
+const { describe, it, mock, after } = require('node:test');
 const { expect } = require('expect');
 
 mock.module('../src/contract.js', {
@@ -29,6 +29,10 @@ const {
 } = require('../src/rpc-provider-plugin');
 
 describe('RPC Provider Plugin', () => {
+  after(() => {
+    mock.reset();
+  });
+
   it('RPC provider plugin should decorate fastify', async () => {
     const fakeServer = {
       config: { rpcUrl: 'RPC-URL' },

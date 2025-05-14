@@ -106,6 +106,7 @@ describe('Authorization Test suite', () => {
 
   after(async () => {
     await fastify.close();
+    mock.reset();
   });
 
   describe('verifyUserOrganizationWriteAuthorized test suite', () => {

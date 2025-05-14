@@ -202,6 +202,7 @@ describe('Organization invitations test suites', () => {
 
   after(async () => {
     await fastify.close();
+    mock.reset();
   });
 
   describe('Create Invitation Test Suite', () => {

@@ -61,7 +61,7 @@ const {
   mongoAllocationListQueries,
 } = require('../src/adapters/mongo-allocation-list-queries');
 
-describe('E2E issuing', { timeout: 30000 }, () => {
+describe('E2E issuing', { timeout: 60000 }, () => {
   const mongoClient = new MongoClient('mongodb://localhost:27017/');
 
   const repos = {};

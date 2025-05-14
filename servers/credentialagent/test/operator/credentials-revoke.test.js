@@ -86,6 +86,7 @@ describe('Credentials checking tests', () => {
     await fastify.close();
     nock.cleanAll();
     nock.restore();
+    mock.reset();
   });
 
   beforeEach(async () => {

@@ -51,6 +51,7 @@ mock.module('@velocitycareerlabs/metadata-registration', {
   },
 });
 
+const { after } = require('lodash/function');
 const {
   events: sampleCredentialEventsArray,
 } = require('./data/sample-credential-events-array');
@@ -79,6 +80,10 @@ describe('Credential issued event logging task test suite', () => {
     mockWriteDocument.mock.resetCalls();
     mockLogInfo.mock.resetCalls();
     mockEventCursor.mock.resetCalls();
+  });
+
+  after(() => {
+    mock.reset();
   });
 
   it('Should successfully write log entries for a given set of events read off the blockchain', async () => {

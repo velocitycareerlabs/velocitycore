@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-const { mock, beforeEach, describe, it } = require('node:test');
+const { mock, describe, it, after } = require('node:test');
 const { expect } = require('expect');
 
 const initSendEmailNotification = mock.fn(() => 'sendEmailFn');
@@ -36,8 +36,8 @@ mock.module('../src/sms-notifications.js', {
 const { sendEmailPlugin, sendSmsPlugin } = require('..');
 
 describe('Send Email and SMS Plugins', () => {
-  beforeEach(() => {
-    // mock.restoreAll();
+  after(() => {
+    mock.reset();
   });
 
   it('email plugin should decorate fastify', async () => {

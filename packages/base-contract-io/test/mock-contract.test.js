@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // eslint-disable-next-line max-classes-per-file
-const { beforeEach, describe, it, mock } = require('node:test');
+const { beforeEach, describe, it, mock, after } = require('node:test');
 const { expect } = require('expect');
 
 const mockEncodeFilterTopics = mock.fn();
@@ -66,6 +66,10 @@ describe.skip('Mocked Contract Client Test Suite', () => {
       'fooTopic1',
       'fooTopic2',
     ]);
+  });
+
+  after(() => {
+    mock.reset();
   });
 
   describe('Contract Client functions Test Suite', () => {

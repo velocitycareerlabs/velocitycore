@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-const { before, beforeEach, describe, it, mock } = require('node:test');
+const { before, beforeEach, describe, it, mock, after } = require('node:test');
 const { expect } = require('expect');
 
 const mockAuth0UpdateUser = mock.fn(({ id }, obj) =>
@@ -70,6 +70,9 @@ describe('user management test suite', () => {
     mockAuth0GetUser.mock.resetCalls();
     mockAuth0GetUserRoles.mock.resetCalls();
     mockAuth0GetUserByEmail.mock.resetCalls();
+  });
+  after(() => {
+    mock.reset();
   });
   describe('user soft delete test suite', () => {
     it('soft delete user not permitted from wrong scope', async () => {

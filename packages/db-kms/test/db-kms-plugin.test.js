@@ -14,7 +14,14 @@
  * limitations under the License.
  *
  */
-const { afterEach, beforeEach, describe, it, mock } = require('node:test');
+const {
+  afterEach,
+  beforeEach,
+  describe,
+  it,
+  mock,
+  after,
+} = require('node:test');
 const { expect } = require('expect');
 
 const mockKmsInstance = () => ({ encrypt: mock.fn(), decrypt: mock.fn() });
@@ -57,6 +64,10 @@ describe('dbKmsPlugin Fastify Plugin', () => {
 
   afterEach(async () => {
     await fastify.close();
+  });
+
+  after(() => {
+    mock.reset();
   });
 
   it('should register Fastify plugin correctly', async () => {
