@@ -46,7 +46,7 @@
     "depcheck": "1.4.7",
     "husky": "4.3.8",
     "jest-junit": "16.0.0",
-    "lerna": "6.6.2",
+    "lerna": "8.2.2",
     "nx": "19.5.3",
     "typescript": "5.8.3"
   },
