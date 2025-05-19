@@ -1,4 +1,4 @@
-const { flow, isEmpty, size, gte } = require('lodash/fp');
+const { isEmpty, size } = require('lodash/fp');
 const { nanoid } = require('nanoid');
 const { subMinutes } = require('date-fns/fp');
 const { SignatoryEventStatus } = require('../domain');
@@ -51,10 +51,7 @@ const sendReminder = async (
       return;
     }
 
-    const isMaxReminderCount = flow(size, (n) =>
-      gte(n, config.signatoryMaxReminderCount)
-    )(signatoryStatusDoc.events);
-    if (isMaxReminderCount) {
+    if (size(signatoryStatusDoc.events) >= config.signatoryMaxReminderCount) {
       await repos.signatoryStatus.addState(
         signatoryStatusDoc._id,
         SignatoryEventStatus.MAX_REACHED
