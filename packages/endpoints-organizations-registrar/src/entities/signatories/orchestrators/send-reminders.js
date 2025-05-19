@@ -58,11 +58,11 @@ const sendReminder = async (
       );
       await context.sendSupportEmail(
         await context.renderTemplate(
-          'support-signatory-max-count-reached-email-subject',
+          'support-signatory-max-reminders-reached-email-subject',
           { organization }
         ),
         await context.renderTemplate(
-          'support-signatory-max-count-reached-email-body',
+          'support-signatory-max-reminders-reached-email-body',
           {
             organization,
           }
