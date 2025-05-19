@@ -68,10 +68,6 @@ const sendReminder = async (
           }
         )
       );
-      await repos.signatoryStatus.addState(
-        signatoryStatusDoc._id,
-        SignatoryEventStatus.COMPLETED
-      );
       return;
     }
 
