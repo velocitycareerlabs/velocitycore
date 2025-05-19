@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@fastify/jwt": "^9.0.0",
+    "@fastify/jwt": "^9.1.0",
     "fastify-auth0-verify": "^3.0.0",
     "fastify-plugin": "^5.0.0",
     "http-errors": "~2.0.0",
