@@ -34,7 +34,7 @@ const sendReminder = async (
   sendEmailToSignatoryForOrganizationApproval,
   context
 ) => {
-  const { repos, config, log, sendEmail, view } = context;
+  const { repos, config, log } = context;
   try {
     const filter = { _id: signatoryStatusDoc.organizationId };
     const organization = await repos.organizations.findOne({ filter });
@@ -59,19 +59,18 @@ const sendReminder = async (
         signatoryStatusDoc._id,
         SignatoryEventStatus.MAX_REACHED
       );
-      await sendEmail({
-        subject: await view(
+      await context.sendSupportEmail(
+        await context.renderTemplate(
           'support-signatory-max-count-reached-email-subject',
           { organization }
         ),
-        message: await view('support-signatory-max-count-reached-email-body', {
-          organization,
-        }),
-        sender: config.registrarSupportEmail,
-        recipients: [config.registrarSupportEmail],
-        replyTo: config.registrarSupportEmail,
-        html: true,
-      });
+        await context.renderTemplate(
+          'support-signatory-max-count-reached-email-body',
+          {
+            organization,
+          }
+        )
+      );
       await repos.signatoryStatus.addState(
         signatoryStatusDoc._id,
         SignatoryEventStatus.COMPLETED

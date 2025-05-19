@@ -232,31 +232,16 @@ const expectedSignatoryReminderEmail = (
   messageMatcher
 ) => expectedSignatoryApprovalEmail(inviterOrg, orgForApproval, messageMatcher);
 
-const expectedSupportMaxSignatoryReminderReachedEmail = () => {
-  return {
-    Destination: {
-      ToAddresses: ['testvnfregistrar@gmail.com'],
-    },
-    ReplyToAddresses: ['testvnfregistrar@gmail.com'],
-    Source: 'testvnfregistrar@gmail.com',
-    Message: {
-      Body: {
-        Text: {
-          Data: expect.stringMatching(
-            /The Velocity Network has sent the maximum number of reminder emails to/
-          ),
-        },
-      },
-      Subject: {
-        Data: expect.stringMatching(/Maximum signatory reminder alert/),
-      },
-    },
-  };
-};
+const expectedSupportMaxSignatoryReminderReachedEmailParams = () => [
+  expect.stringMatching(/Maximum signatory reminder alert/),
+  expect.stringMatching(
+    /The Velocity Network has sent the maximum number of reminder emails to/
+  ),
+];
 
 module.exports = {
   expectedSupportEmail,
-  expectedSupportMaxSignatoryReminderReachedEmail,
+  expectedSupportMaxSignatoryReminderReachedEmailParams,
   expectedServiceActivationRequiredEmail,
   sendServicesActivatedEmailMatcher,
   sendServicesActivatedEmailToCAOsMatcher,

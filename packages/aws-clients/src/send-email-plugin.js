@@ -20,11 +20,7 @@ const { initSendEmailNotification } = require('./email-notifications');
 
 const sendEmailPlugin = async (fastify) => {
   const sendEmail = initSendEmailNotification(fastify.config);
-  fastify
-    .decorate('sendEmail', sendEmail)
-    .addHook('preHandler', async (req) => {
-      req.sendEmail = fastify.sendEmail;
-    });
+  fastify.decorate('sendEmail', sendEmail);
 };
 
 module.exports = { sendEmailPlugin: fp(sendEmailPlugin) };

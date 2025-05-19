@@ -15,6 +15,7 @@
  *
  */
 const mockSendEmail = jest.fn((payload) => payload);
+const mockSendSupportEmail = jest.fn((payload) => payload);
 
 jest.mock('@aws-sdk/client-ses', () => ({
   SendEmailCommand: jest.fn((args) => args),
@@ -36,7 +37,7 @@ const {
   expectedSignatoryApprovedEmail,
   expectedSignatoryRejectedEmail,
   expectedSignatoryReminderEmail,
-  expectedSupportMaxSignatoryReminderReachedEmail,
+  expectedSupportMaxSignatoryReminderReachedEmailParams,
 } = require('./helpers/email-matchers');
 const signatoryStatusPlugin = require('../src/entities/signatories/repos/repo');
 const organizationsPlugin = require('../src/entities/organizations/repos/repo');
@@ -105,8 +106,8 @@ describe('signatoriesController', () => {
         organizations: organizationsRepo,
         invitations: invitationsRepo,
       },
-      view: fastify.view,
-      sendEmail: fastify.sendEmail,
+      renderTemplate: fastify.view,
+      sendSupportEmail: mockSendSupportEmail,
     };
   });
 
@@ -715,8 +716,9 @@ describe('signatoriesController', () => {
         testContext
       );
 
-      expect(mockSendEmail.mock.calls).toEqual([
-        [expectedSupportMaxSignatoryReminderReachedEmail()],
+      expect(mockSendEmail.mock.calls).toEqual([]);
+      expect(mockSendSupportEmail.mock.calls).toEqual([
+        expectedSupportMaxSignatoryReminderReachedEmailParams(),
       ]);
 
       const signatoryStatusDb1 = await signatoryStatusRepo.findOne({
