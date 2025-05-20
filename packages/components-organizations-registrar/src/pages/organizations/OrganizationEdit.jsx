@@ -28,7 +28,7 @@ import {
   TextInput,
 } from 'react-admin';
 import { useParams } from 'react-router';
-import { Box, Stack, Tooltip, Typography, TextField } from '@mui/material';
+import { Box, Stack, Tooltip, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import InfoIcon from '@mui/icons-material/Info';
 import { useEffect, useState } from 'react';
@@ -60,13 +60,13 @@ import { OrganizationBrand } from './components/OrganizationBrand.jsx';
 
 const validateEmail = [required(), email()];
 
-const transform = (data) => ({
+const transform = (data, authority) => ({
   ...data,
   profile: {
     ...data.profile,
     website: formatWebSiteUrl(data.profile.website),
     linkedInProfile: formatWebSiteUrl(data.profile.linkedInProfile),
-    registrationNumbers: formatRegistrationNumbers(data.profile?.registrationNumbers),
+    registrationNumbers: formatRegistrationNumbers(data.profile?.registrationNumbers, authority),
     commercialEntities: data.profile.commercialEntities
       .filter((brand) => brand.logo)
       .map((brand) => ({
@@ -109,7 +109,7 @@ const OrganizationEdit = () => {
     }
   }, [record, setAuthority]);
 
-  const handleAuthoryChange = (event) => {
+  const handleAuthorityChange = (event) => {
     setAuthority(event.target.value);
   };
 
@@ -133,7 +133,7 @@ const OrganizationEdit = () => {
         mutationOptions={{ onError }}
         actions={false}
         sx={sx.formContainer}
-        transform={transform}
+        transform={(data) => transform(data, authority)}
       >
         <Form record={modifyRecord(record)} mode="onTouched">
           <FormDataConsumer>
@@ -143,16 +143,14 @@ const OrganizationEdit = () => {
                 <Grid container spacing={5} rowSpacing={1.25}>
                   <Grid size={{ xs: 6 }}>
                     <Stack container flex={1} flexDirection="column">
-                      <Grid size={{ xs: 12 }} mb={3}>
-                        <Stack flexDirection="row" gap={1.75}>
-                          <TextField
-                            fullWidth
-                            source="profile.name"
-                            label="Legal Name"
-                            validate={required()}
-                            disabled
-                          />
-                        </Stack>
+                      <Grid size={{ xs: 12 }}>
+                        <TextInput
+                          fullWidth
+                          source="profile.name"
+                          label="Legal Name"
+                          validate={required()}
+                          readOnly
+                        />
                       </Grid>
                       <Grid size={{ xs: 12 }}>
                         <Stack flexDirection="row" gap={1.75}>
@@ -252,7 +250,7 @@ const OrganizationEdit = () => {
                   </Grid>
                   <OrganizationAuthorityRadioGroup
                     authority={authority}
-                    handleAuthoryChange={handleAuthoryChange}
+                    handleAuthorityChange={handleAuthorityChange}
                   />
                   {authorityOptions[authority] === authorityOptions.NationalAuthority && (
                     <Grid size={{ xs: 6 }}>
