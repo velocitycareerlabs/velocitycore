@@ -239,6 +239,10 @@ const createConfig = (packageJson) => {
       .get('SIGNATORY_CONSENT_VERSION')
       .default('1')
       .asIntPositive(),
+    signatoryMaxReminderCount: env
+      .get('SIGNATORY_MAX_REMINDER_COUNT')
+      .default('10')
+      .asIntPositive(),
   };
 
   return {
