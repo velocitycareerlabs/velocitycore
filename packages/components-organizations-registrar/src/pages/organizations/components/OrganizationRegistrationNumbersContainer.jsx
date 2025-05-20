@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import OrganizationRegistrationNumbersField, {
   registrationNumbersValidation,
 } from './OrganizationRegistrationNumbersField.jsx';
 import { authorityOptions } from '../../../constants/messageCodes';
 
-/* eslint-disable react/prop-types */
 export const OrganizationRegistrationNumbers = ({
   formData,
   record = {},
@@ -16,7 +16,7 @@ export const OrganizationRegistrationNumbers = ({
   label,
   isRequired = true,
 }) => {
-  const { getFieldState } = useFormContext();
+  const { getFieldState, resetField } = useFormContext();
   const validationMsg = getFieldState(source).isTouched
     ? registrationNumbersValidation(
         formData?.registrationNumbers || formData?.profile?.registrationNumbers || [],
@@ -24,6 +24,11 @@ export const OrganizationRegistrationNumbers = ({
         type,
       )
     : '';
+
+  useEffect(() => {
+    resetField(source);
+  }, [authority, resetField, source]);
+
   return (
     <>
       <OrganizationRegistrationNumbersField
@@ -39,7 +44,17 @@ export const OrganizationRegistrationNumbers = ({
     </>
   );
 };
-/* eslint-enable */
+
+// eslint-disable-next-line better-mutation/no-mutation
+OrganizationRegistrationNumbers.propTypes = {
+  formData: PropTypes.object.isRequired,
+  record: PropTypes.object,
+  authority: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  source: PropTypes.string,
+  label: PropTypes.string,
+  isRequired: PropTypes.bool,
+};
 
 const sx = {
   errorMessage: {

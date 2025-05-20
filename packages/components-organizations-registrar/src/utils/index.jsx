@@ -17,6 +17,7 @@
 /* eslint-disable */
 import { Link } from '@mui/material';
 import { useLocation } from 'react-router';
+import { Authorities } from '../constants/messageCodes';
 
 function fallbackCopyTextToClipboard(text, cb) {
   const textArea = document.createElement('textarea');
@@ -75,25 +76,29 @@ export const webSiteHttpsRegexp =
   /^https:\/\/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,20}\b([-a-zA-Z0-9@:%_\+.~#?&//=]{0,752})$/;
 
 export const webSiteCleanPathRegexp =
- /^https:\/\/[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,20}$/;
+  /^https:\/\/[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,20}$/;
 
 export const formatWebSiteUrl = (value) => {
-  if(value && !value.startsWith('http')){
+  if (value && !value.startsWith('http')) {
     return `https://${value}`;
   }
   return value;
 };
 
-export const formatRegistrationNumbers = (value) => {
-  return value ? value.filter((item) => !!item.number).map(item => {
-    if(!!item.uri){
-      return {
-        ...item,
-        uri: formatWebSiteUrl(item.uri)
+export const formatRegistrationNumbers = (registrationNumbers = [], selectedAuthority) => {
+  return registrationNumbers
+    .filter((item) => {
+      if (!item.number) return false;
+
+      if (item.authority === Authorities.LinkedIn) return true;
+
+      if (selectedAuthority) {
+        return item.authority === selectedAuthority;
       }
-    }
-    return item;
-  }) : [];
+
+      return false;
+    })
+    .map((item) => (item.uri ? { ...item, uri: formatWebSiteUrl(item.uri) } : item));
 };
 
 export const useIsHideSidebar = () => {
@@ -106,40 +111,61 @@ export const DID_HINT =
 
 export const objectToString = (data) => JSON.stringify(data, null, 2);
 
-export const WEBSITE_HINT = "The website will be the basis of the organization identifier. It must be unique, use https, and may not contain a path. For example https://www.example.com";
-export const WEBSITE_HINT_SHORT = "The website is be the basis of the organization identifier.";
-export const SUPPORT_EMAIL_HINT = "This email address will be published and will be visible to individuals using the career wallet to contact the organization.";
-export const TECHNICAL_EMAIL_HINT = "This email address will be used by the Velocity Network support team to contact the organization in the event of any technical issues concerning the organization’s registration or the services it operates on Velocity Network, such as issuing, relying party, credential agent operation, and career wallet.";
-export const ADMINISTRATOR_DETAILS_HINT = "The administrator is the person managing the organization’s registration in the Velocity Network Registrar. Typically, this would be the person filling in the details of the organization in the registrar.";
-export const SIGNATORY_DETAILS_HINT = "The signatory is the person authorized to sign the organization’s participation agreement in the Velocity Network. Once the administrator registers the organization in the Velocity Network Registrar, an email will be sent to the signatory authority, asking them to accept the registration and confirm the participation agreement.";
-export const DUNS_HINT = <>
-  The organization’s number in the Dan & Bradstreet system.{' '}
-  <Link href="https://www.dnb.com/duns.html" target="_blank" color="inherit">
-    Click here
-  </Link>{' '}
-  for more information.
-</>;
-export const LEI_HINT = <>
-  The organization’s Legal Entity Identifier (LEI).{' '}
-  <Link href="https://www.leinumber.com/" target="_blank" color="inherit">
-    Click here
-  </Link>{' '}
-  for more information.
-</>
-export const NATIONAL_AUTHORITY_HINT = <>
-  Any other country-specific registration identifier, other than D-U-N-S® or LEI. If
-  applicable, please indicate the website of the local country’s registration
-  authority as well as the organization’s number or identifier.
-</>
+export const WEBSITE_HINT =
+  'The website will be the basis of the organization identifier. It must be unique, use https, and may not contain a path. For example https://www.example.com';
+export const WEBSITE_HINT_SHORT = 'The website is be the basis of the organization identifier.';
+export const SUPPORT_EMAIL_HINT =
+  'This email address will be published and will be visible to individuals using the career wallet to contact the organization.';
+export const TECHNICAL_EMAIL_HINT =
+  'This email address will be used by the Velocity Network support team to contact the organization in the event of any technical issues concerning the organization’s registration or the services it operates on Velocity Network, such as issuing, relying party, credential agent operation, and career wallet.';
+export const ADMINISTRATOR_DETAILS_HINT =
+  'The administrator is the person managing the organization’s registration in the Velocity Network Registrar. Typically, this would be the person filling in the details of the organization in the registrar.';
+export const SIGNATORY_DETAILS_HINT =
+  'The signatory is the person authorized to sign the organization’s participation agreement in the Velocity Network. Once the administrator registers the organization in the Velocity Network Registrar, an email will be sent to the signatory authority, asking them to accept the registration and confirm the participation agreement.';
+export const DUNS_HINT = (
+  <>
+    The organization’s number in the Dan & Bradstreet system.{' '}
+    <Link href="https://www.dnb.com/duns.html" target="_blank" color="inherit">
+      Click here
+    </Link>{' '}
+    for more information.
+  </>
+);
+export const LEI_HINT = (
+  <>
+    The organization’s Legal Entity Identifier (LEI).{' '}
+    <Link href="https://www.leinumber.com/" target="_blank" color="inherit">
+      Click here
+    </Link>{' '}
+    for more information.
+  </>
+);
+export const NATIONAL_AUTHORITY_HINT = (
+  <>
+    Any other country-specific registration identifier, other than D-U-N-S® or LEI. If applicable,
+    please indicate the website of the local country’s registration authority as well as the
+    organization’s number or identifier.
+  </>
+);
 
-export const ALSO_KNOWN_AS_HINT = "Also Known As is a list of aliases that the organization can be identified by";
+export const ALSO_KNOWN_AS_HINT =
+  'Also Known As is a list of aliases that the organization can be identified by';
 
-const linkToWebhookDocs = 'https://www.velocitynetwork.foundation/main/developers-guide-organizations#cao-secure-messages-url-management';
+const linkToWebhookDocs =
+  'https://www.velocitynetwork.foundation/main/developers-guide-organizations#cao-secure-messages-url-management';
 export const ERRORS = {
-  secureWebHook:  <>Secure webhook response doesn’t meet requirements. Follow instructions <Link href={linkToWebhookDocs} color="inherit" target="_blank">here</Link></>,
-  websiteExists: 'This organization’s website is already registered in our system. Please check and try again.',
-  default: 'Your organization profile could not be saved due to a system error. Please try again'
-}
+  secureWebHook: (
+    <>
+      Secure webhook response doesn’t meet requirements. Follow instructions{' '}
+      <Link href={linkToWebhookDocs} color="inherit" target="_blank">
+        here
+      </Link>
+    </>
+  ),
+  websiteExists:
+    'This organization’s website is already registered in our system. Please check and try again.',
+  default: 'Your organization profile could not be saved due to a system error. Please try again',
+};
 
 export const LINKEDIN_ORGANIZATION_ID = `
 To retrieve your LinkedIn Company ID, visit your company page on LinkedIn as an admin, and copy the number from the URL.\n

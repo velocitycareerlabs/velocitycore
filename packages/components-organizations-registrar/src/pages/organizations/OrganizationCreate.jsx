@@ -200,6 +200,7 @@ const OrganizationCreate = ({
         linkedInProfile: formatWebSiteUrl(organizationData?.profile?.linkedInProfile),
         registrationNumbers: formatRegistrationNumbers(
           organizationData?.profile?.registrationNumbers,
+          authority,
         ),
         commercialEntities: organizationData?.profile?.commercialEntities
           ?.filter((brand) => brand.logo)

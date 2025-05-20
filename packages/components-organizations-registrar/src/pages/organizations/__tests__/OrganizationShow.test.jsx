@@ -54,6 +54,9 @@ const hints = [
 ];
 
 describe('OrganizationShow', () => {
+  // eslint-disable-next-line react/prop-types
+  const Wrapper = ({ children }) => <MemoryRouter>{children}</MemoryRouter>;
+
   beforeEach(() => {
     jest.spyOn(Router, 'useParams').mockReturnValue({ id: '1234' });
     jest.spyOn(utils, 'copyTextToClipboard').mockReturnValue({ id: '1234' });
@@ -67,11 +70,10 @@ describe('OrganizationShow', () => {
               getOne: () => new Promise(() => {}),
             }}
           >
-            <MemoryRouter>
-              <OrganizationShow />
-            </MemoryRouter>
+            <OrganizationShow />
           </AdminContext>
         </TestAuthProvider>,
+        { wrapper: Wrapper },
       ),
     );
     const title = screen.queryByText('Organization profile');
@@ -88,11 +90,10 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <MemoryRouter>
-              <OrganizationShow />
-            </MemoryRouter>
+            <OrganizationShow />
           </AdminContext>
         </TestAuthProvider>,
+        { wrapper: Wrapper },
       ),
     );
     const title = screen.getByText('Organization profile');
@@ -109,11 +110,10 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <MemoryRouter>
-              <OrganizationShow />
-            </MemoryRouter>
+            <OrganizationShow />
           </AdminContext>
         </TestAuthProvider>,
+        { wrapper: Wrapper },
       ),
     );
     basicLables.forEach((item) => {
@@ -130,11 +130,10 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <MemoryRouter>
-              <OrganizationShow />
-            </MemoryRouter>
+            <OrganizationShow />
           </AdminContext>
         </TestAuthProvider>,
+        { wrapper: Wrapper },
       ),
     );
     hints.forEach((item) => {
@@ -152,11 +151,10 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <MemoryRouter>
-              <OrganizationShow />
-            </MemoryRouter>
+            <OrganizationShow />
           </AdminContext>
         </TestAuthProvider>,
+        { wrapper: Wrapper },
       ),
     );
     const label = screen.queryByText('COMMERCIAL NAMES');
@@ -181,11 +179,10 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecordWithCommercials, isLoading: false }),
             }}
           >
-            <MemoryRouter>
-              <OrganizationShow />
-            </MemoryRouter>
+            <OrganizationShow />
           </AdminContext>
         </TestAuthProvider>,
+        { wrapper: Wrapper },
       ),
     );
     const label = screen.queryByText('Commercial Names');
@@ -210,11 +207,10 @@ describe('OrganizationShow', () => {
               getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
             }}
           >
-            <MemoryRouter>
-              <OrganizationShow />
-            </MemoryRouter>
+            <OrganizationShow />
           </AdminContext>
         </TestAuthProvider>,
+        { wrapper: Wrapper },
       ),
     );
     const copyButton = screen.getByRole('button', { name: 'COPY' });

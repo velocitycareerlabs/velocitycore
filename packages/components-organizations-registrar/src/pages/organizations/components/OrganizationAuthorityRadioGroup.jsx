@@ -23,7 +23,7 @@ export const getDefaultAuthority = (registrationNumbers) => {
 
 const OrganizationAuthorityRadioGroup = ({
   authority,
-  handleAuthoryChange,
+  handleAuthorityChange,
   isHorizontal = true,
 }) => {
   return (
@@ -34,7 +34,7 @@ const OrganizationAuthorityRadioGroup = ({
           name="authority"
           value={authority}
           defaultValue={Authorities.DunnAndBradstreet}
-          onChange={handleAuthoryChange}
+          onChange={handleAuthorityChange}
           sx={sx.radioGroup}
           row={isHorizontal}
         >
@@ -109,6 +109,6 @@ const sx = {
 // eslint-disable-next-line better-mutation/no-mutation
 OrganizationAuthorityRadioGroup.propTypes = {
   authority: PropTypes.string.isRequired,
-  handleAuthoryChange: PropTypes.func.isRequired,
+  handleAuthorityChange: PropTypes.func.isRequired,
   isHorizontal: PropTypes.bool,
 };
