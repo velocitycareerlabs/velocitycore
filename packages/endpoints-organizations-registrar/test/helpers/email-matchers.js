@@ -113,7 +113,9 @@ const expectedInvitationAcceptanceEmail = {
 const expectedSignatoryApprovalEmail = (
   inviterOrg,
   orgForApproval,
-  messageMatcher = expect.any(String)
+  messageMatcher = expect.stringMatching(
+    /You are the authorized signatory for your organization\.[^]*<a href="\S+\/signatories\/approve[^]*<a href="\S+\/signatories\/reject/
+  )
 ) => {
   const requester = inviterOrg
     ? inviterOrg.profile.name
@@ -129,7 +131,11 @@ const expectedSignatoryApprovalEmail = (
         Text: { Data: messageMatcher },
       },
       Subject: {
-        Data: `${requester} is requesting your approval to register ${orgForApproval.profile.name} on the Velocity Network`,
+        Data: expect.stringMatching(
+          new RegExp(
+            `${requester} is requesting your approval to register ${orgForApproval.profile.name} on the Velocity Network`
+          )
+        ),
       },
     },
   };
@@ -221,29 +227,21 @@ const expectedServiceActivationRequiredEmail = {
 };
 
 const expectedSignatoryReminderEmail = (
-  organization,
-  caoOrganization,
-  messageMatcher = expect.stringMatching(
-    /You are the authorized signatory for your organization\.[^]*<a href="\S+\/signatories\/approve[^]*<a href="\S+\/signatories\/reject/
-  )
-) => ({
-  Destination: {
-    ToAddresses: ['signatory@email.com'],
-  },
-  ReplyToAddresses: ['testvnfregistrar@gmail.com'],
-  Source: 'testvnfregistrar@gmail.com',
-  Message: {
-    Body: {
-      Text: { Data: messageMatcher },
-    },
-    Subject: {
-      Data: `Reminder: ${caoOrganization.profile.name} is requesting your approval to register ${organization.profile.name} on the Velocity Network`,
-    },
-  },
-});
+  inviterOrg,
+  orgForApproval,
+  messageMatcher
+) => expectedSignatoryApprovalEmail(inviterOrg, orgForApproval, messageMatcher);
+
+const expectedSupportMaxSignatoryReminderReachedEmailParams = () => [
+  expect.stringMatching(/Maximum signatory reminder alert/),
+  expect.stringMatching(
+    /The Velocity Network has sent the maximum number of reminder emails to/
+  ),
+];
 
 module.exports = {
   expectedSupportEmail,
+  expectedSupportMaxSignatoryReminderReachedEmailParams,
   expectedServiceActivationRequiredEmail,
   sendServicesActivatedEmailMatcher,
   sendServicesActivatedEmailToCAOsMatcher,
