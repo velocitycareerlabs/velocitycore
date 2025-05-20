@@ -1,8 +1,7 @@
-const { initInvitationEmails, buildInvitationUrl } = require('../domains');
+const { buildInvitationUrl, inviteeInvitationEmail } = require('../domains');
 
 const initSendEmailInvitee = (fastify) => {
   const { sendEmail, sendError } = fastify;
-  const { emailToInvitee } = initInvitationEmails();
 
   return async (
     { ticket, inviteeEmail, inviterOrganization, code },
@@ -12,7 +11,7 @@ const initSendEmailInvitee = (fastify) => {
       const uri = buildInvitationUrl({ code, ticket }, context);
 
       await sendEmail(
-        await emailToInvitee(
+        await inviteeInvitationEmail(
           {
             inviteeEmail,
             inviterOrganization,
