@@ -96,7 +96,7 @@ const CreateOrganization = ({
         <Typography variant="pl" mb={6.5} textAlign="center">
           {subTitle}
         </Typography>
-        <Form defaultValues={defaultValues} onSubmit={onSubmit} noValidate mode="onTouched">
+        <Form defaultValues={defaultValues} onSubmit={onSubmit} noValidate mode="all">
           <FormDataConsumer>
             {({ formData }) => (
               <>
@@ -367,6 +367,7 @@ const CreateOrganization = ({
                     title={buttonTitle}
                     isLoading={isLoading}
                     styles={sxStyles.saveButton}
+                    enabled
                   />
                 </Box>
               </>
