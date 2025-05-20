@@ -120,12 +120,15 @@ const invitationsController = async (fastify) => {
         updatedBy: user.sub,
       });
 
-      const messageCode = await sendEmailToInvitee({
-        inviteeEmail,
-        inviterOrganization,
-        ticket,
-        code,
-      });
+      const messageCode = await sendEmailToInvitee(
+        {
+          inviteeEmail,
+          inviterOrganization,
+          ticket,
+          code,
+        },
+        req
+      );
       return {
         invitation,
         messageCode,

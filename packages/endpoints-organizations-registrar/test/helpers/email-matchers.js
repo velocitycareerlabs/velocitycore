@@ -59,9 +59,8 @@ const expectedInvitationSentEmail = (
   Message: {
     Body: {
       Text: {
-        /* eslint-disable */
-                Data: `
-You've received an invitation from Test Organization to join Velocity Network™.
+      /* eslint-disable */
+      Data: `You've received an invitation from Test Organization to join Velocity Network™.
 <br>
 <br>
 For more information about Velocity Network™ and self-sovereign credentials, <a href="https://www.velocitynetwork.foundation/">visit the Velocity Network Foundation® website.</a>.
@@ -73,13 +72,12 @@ Click the button below to accept the invitation and finish registering your orga
 Click the button below to accept the invitation and complete your organization’s registration. This will include setting up your account and creating your organization's profile with a logo, website, company description, LinkedIn company page ID, and more.
 <br>
 <br>
-<a href="http://localhost.test/invitations/mocknano${signupUrl}" target="_blank">ACCEPT INVITATION</a>
-    `,
-                /* eslint-enable */
+<a href="http://localhost.test/invitations/mocknano${signupUrl}" target="_blank">ACCEPT INVITATION</a>`,
+        /* eslint-enable */
       },
     },
     Subject: {
-      Data: 'Invitation by Test Organization to join Velocity network Invitation by Velocity Career Labs to Join Velocity Network™',
+      Data: 'Invitation by Test Organization to Join Velocity Network™',
     },
   },
 });
