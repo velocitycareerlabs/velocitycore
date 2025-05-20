@@ -2,18 +2,24 @@ const { initInvitationEmails, buildInvitationUrl } = require('../domains');
 
 const initSendEmailInvitee = (fastify) => {
   const { sendEmail, sendError, log, config } = fastify;
-  const { emailToInvitee } = initInvitationEmails(fastify.config);
+  const { emailToInvitee } = initInvitationEmails(fastify);
 
-  return async ({ ticket, inviteeEmail, inviterOrganization, code }) => {
+  return async (
+    { ticket, inviteeEmail, inviterOrganization, code },
+    context
+  ) => {
     try {
       const uri = buildInvitationUrl({ code, ticket }, { config });
 
       await sendEmail(
-        emailToInvitee({
-          inviteeEmail,
-          inviterOrgProfileName: inviterOrganization.profile.name,
-          uri,
-        })
+        await emailToInvitee(
+          {
+            inviteeEmail,
+            inviterOrganization,
+            uri,
+          },
+          context
+        )
       );
       return 'invitation_sent';
     } catch (error) {

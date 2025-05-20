@@ -1,9 +1,14 @@
-const initInvitationEmails = (config) => ({
-  emailToInvitee: ({ inviterOrgProfileName, inviteeEmail, uri }) => ({
-    subject: `Invitation by ${inviterOrgProfileName} to join Velocity network Invitation by Velocity Career Labs to Join Velocity Network™`,
+const initInvitationEmails = (initContext) => ({
+  emailToInvitee: async (
+    { inviterOrganization, inviteeEmail, uri },
+    context
+  ) => ({
+    subject: await context.renderTemplate('invitee-invitation-email-subject', {
+      inviterOrganization,
+    }),
     /* eslint-disable max-len */
     message: `
-You've received an invitation from ${inviterOrgProfileName} to join Velocity Network™.
+You've received an invitation from ${inviterOrganization.profile.name} to join Velocity Network™.
 <br>
 <br>
 For more information about Velocity Network™ and self-sovereign credentials, <a href="https://www.velocitynetwork.foundation/">visit the Velocity Network Foundation® website.</a>.
@@ -18,7 +23,7 @@ Click the button below to accept the invitation and complete your organization�
 <a href="${uri}" target="_blank">ACCEPT INVITATION</a>
     `,
     /* eslint-enable */
-    sender: config.registrarSupportEmail,
+    sender: initContext.config.registrarSupportEmail,
     recipients: [inviteeEmail],
     html: true,
   }),

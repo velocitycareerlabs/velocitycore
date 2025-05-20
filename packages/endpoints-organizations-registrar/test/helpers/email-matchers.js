@@ -79,7 +79,7 @@ Click the button below to accept the invitation and complete your organization�
       },
     },
     Subject: {
-      Data: 'Invitation by Test Organization to join Velocity network Invitation by Velocity Career Labs to Join Velocity Network™',
+      Data: 'Invitation by Test Organization to Join Velocity Network™',
     },
   },
 });
