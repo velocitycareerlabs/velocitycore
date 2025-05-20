@@ -16,7 +16,7 @@
 
 import { Box, Button, Stack, Tooltip, Typography } from '@mui/material';
 import { AutocompleteInput, Form, TextInput, FormDataConsumer, useDataProvider } from 'react-admin';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import InfoIcon from '@mui/icons-material/Info';
@@ -47,7 +47,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
   const dataProvider = useDataProvider();
 
   const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
-  const handleAuthoryChange = (event) => {
+  const handleAuthorityChange = (event) => {
     setAuthority(event.target.value);
   };
 
@@ -87,6 +87,13 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
     }
   }, [defaultValues]);
 
+  const handleSubmit = useCallback(
+    (data) => {
+      onSubmit(data, authority);
+    },
+    [onSubmit, authority],
+  );
+
   return (
     <Box>
       <Typography variant="h1" mb={2}>
@@ -97,7 +104,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
         information below.
       </Typography>
 
-      <Form onSubmit={onSubmit} noValidate mode="onChange" defaultValues={defaultValues}>
+      <Form onSubmit={handleSubmit} noValidate mode="onChange" defaultValues={defaultValues}>
         <FormDataConsumer>
           {({ formData }) => (
             <>
@@ -182,7 +189,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
               </Stack>
               <OrganizationAuthorityRadioGroup
                 authority={authority}
-                handleAuthoryChange={handleAuthoryChange}
+                handleAuthorityChange={handleAuthorityChange}
                 isHorizontal={false}
               />
               {authorityOptions[authority] === authorityOptions.NationalAuthority && (

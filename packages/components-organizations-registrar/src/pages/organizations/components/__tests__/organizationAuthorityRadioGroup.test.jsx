@@ -7,13 +7,13 @@ import OrganizationAuthorityRadioGroup from '../OrganizationAuthorityRadioGroup.
 const label = `D-U-N-S${String.fromCodePoint(174)} Number`;
 
 describe('OrganizationAuthorityRadioGroup', () => {
-  const handleAuthoryChange = jest.fn();
+  const handleAuthorityChange = jest.fn();
 
   it('should render three radio buttons with correct labels', () => {
     const { getAllByRole, getByLabelText, getByText } = render(
       <OrganizationAuthorityRadioGroup
         authority="DunnAndBradstreet"
-        handleAuthoryChange={handleAuthoryChange}
+        handleAuthorityChange={handleAuthorityChange}
       />,
     );
     const radioButtons = getAllByRole('radio');
@@ -28,7 +28,7 @@ describe('OrganizationAuthorityRadioGroup', () => {
     const { getByLabelText } = render(
       <OrganizationAuthorityRadioGroup
         authority="DunnAndBradstreet"
-        handleAuthoryChange={handleAuthoryChange}
+        handleAuthorityChange={handleAuthorityChange}
       />,
     );
     const duncRadioButton = getByLabelText(label);
@@ -37,15 +37,15 @@ describe('OrganizationAuthorityRadioGroup', () => {
     expect(gleifRadioButton.checked).toEqual(false);
   });
 
-  it('should call handleAuthoryChange when a radio button is clicked', () => {
+  it('should call handleAuthorityChange when a radio button is clicked', () => {
     const { getByLabelText } = render(
       <OrganizationAuthorityRadioGroup
         authority="DunnAndBradstreet"
-        handleAuthoryChange={handleAuthoryChange}
+        handleAuthorityChange={handleAuthorityChange}
       />,
     );
     const gleifRadioButton = getByLabelText('LEI');
     fireEvent.click(gleifRadioButton);
-    expect(handleAuthoryChange).toHaveBeenCalledWith(expect.any(Object), 'GLEIF');
+    expect(handleAuthorityChange).toHaveBeenCalledWith(expect.any(Object), 'GLEIF');
   });
 });

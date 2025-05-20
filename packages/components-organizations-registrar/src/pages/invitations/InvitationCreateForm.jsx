@@ -117,12 +117,12 @@ const InvitationCreateForm = () => {
     redirect,
   ]);
 
-  const goToCreateServiceStep = (data) => {
+  const goToCreateServiceStep = (data, authority) => {
     setOrganizationProfileData({
       ...data,
       website: formatWebSiteUrl(data.website),
       linkedInProfile: formatWebSiteUrl(data.linkedInProfile),
-      registrationNumbers: formatRegistrationNumbers(data.registrationNumbers),
+      registrationNumbers: formatRegistrationNumbers(data.registrationNumbers, authority),
     });
     redirect('/invitations/create/step-2');
   };

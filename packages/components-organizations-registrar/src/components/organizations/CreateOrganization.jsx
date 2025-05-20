@@ -24,7 +24,7 @@ import {
   TextInput,
   FormDataConsumer,
 } from 'react-admin';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import InfoIcon from '@mui/icons-material/Info';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
@@ -83,9 +83,16 @@ const CreateOrganization = ({
   const [authority, setAuthority] = useState(
     getDefaultAuthority(defaultValues?.registrationNumbers),
   );
-  const handleAuthoryChange = (event) => {
+  const handleAuthorityChange = (event) => {
     setAuthority(event.target.value);
   };
+
+  const handleSubmit = useCallback(
+    (data) => {
+      onSubmit(data, authority);
+    },
+    [onSubmit, authority],
+  );
 
   return (
     <Box sx={sxStyles.root}>
@@ -96,7 +103,7 @@ const CreateOrganization = ({
         <Typography variant="pl" mb={6.5} textAlign="center">
           {subTitle}
         </Typography>
-        <Form defaultValues={defaultValues} onSubmit={onSubmit} noValidate mode="all">
+        <Form defaultValues={defaultValues} onSubmit={handleSubmit} noValidate mode="all">
           <FormDataConsumer>
             {({ formData }) => (
               <>
@@ -209,7 +216,7 @@ const CreateOrganization = ({
                   </Grid>
                   <OrganizationAuthorityRadioGroup
                     authority={authority}
-                    handleAuthoryChange={handleAuthoryChange}
+                    handleAuthorityChange={handleAuthorityChange}
                   />
                   {authorityOptions[authority] === authorityOptions.NationalAuthority && (
                     <Grid size={{ xs: 6 }}>
