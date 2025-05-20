@@ -1,15 +1,15 @@
 const { initInvitationEmails, buildInvitationUrl } = require('../domains');
 
 const initSendEmailInvitee = (fastify) => {
-  const { sendEmail, sendError, log, config } = fastify;
-  const { emailToInvitee } = initInvitationEmails(fastify);
+  const { sendEmail, sendError } = fastify;
+  const { emailToInvitee } = initInvitationEmails();
 
   return async (
     { ticket, inviteeEmail, inviterOrganization, code },
     context
   ) => {
     try {
-      const uri = buildInvitationUrl({ code, ticket }, { config });
+      const uri = buildInvitationUrl({ code, ticket }, context);
 
       await sendEmail(
         await emailToInvitee(
@@ -25,7 +25,7 @@ const initSendEmailInvitee = (fastify) => {
     } catch (error) {
       const message = 'Unable to send invitation email to user';
       const messageContext = { err: error, email: inviteeEmail };
-      log.error(messageContext, message);
+      context.log.error(messageContext, message);
       sendError(error, { ...messageContext, message });
       return 'invitation_not_sent';
     }

@@ -1,4 +1,4 @@
-const initInvitationEmails = (initContext) => ({
+const initInvitationEmails = () => ({
   emailToInvitee: async (
     { inviterOrganization, inviteeEmail, uri },
     context
@@ -6,24 +6,11 @@ const initInvitationEmails = (initContext) => ({
     subject: await context.renderTemplate('invitee-invitation-email-subject', {
       inviterOrganization,
     }),
-    /* eslint-disable max-len */
-    message: `
-You've received an invitation from ${inviterOrganization.profile.name} to join Velocity Network™.
-<br>
-<br>
-For more information about Velocity Network™ and self-sovereign credentials, <a href="https://www.velocitynetwork.foundation/">visit the Velocity Network Foundation® website.</a>.
-<br>
-<br>
-Click the button below to accept the invitation and finish registering your organization.
-<br>
-<br>
-Click the button below to accept the invitation and complete your organization’s registration. This will include setting up your account and creating your organization's profile with a logo, website, company description, LinkedIn company page ID, and more.
-<br>
-<br>
-<a href="${uri}" target="_blank">ACCEPT INVITATION</a>
-    `,
-    /* eslint-enable */
-    sender: initContext.config.registrarSupportEmail,
+    message: await context.renderTemplate('invitee-invitation-email-body', {
+      inviterOrganization,
+      uri,
+    }),
+    sender: context.config.registrarSupportEmail,
     recipients: [inviteeEmail],
     html: true,
   }),
