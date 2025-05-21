@@ -41,6 +41,7 @@ const signatoryStatusStateRepoExtension = (parent) => ({
       includes(state, [
         SignatoryEventStatus.APPROVED,
         SignatoryEventStatus.REJECTED,
+        SignatoryEventStatus.MAX_REACHED,
       ])
     ) {
       eventsArr.push({

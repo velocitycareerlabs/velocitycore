@@ -47,6 +47,20 @@ const organizationRegistrarEndpoints = async (fastify) =>
       },
       root: path.join(__dirname, 'templates'),
       includeViewExtension: true,
+    })
+    .addHook('preHandler', async (req) => {
+      req.sendSupportEmail = (subject, message) =>
+        fastify.sendEmail({
+          subject,
+          message,
+          sender: fastify.config.registrarSupportEmail,
+          recipients: [fastify.config.registrarSupportEmail],
+          replyTo: fastify.config.registrarSupportEmail,
+          html: true,
+        });
+    })
+    .addHook('preHandler', async (req) => {
+      req.renderTemplate = fastify.view;
     });
 
 module.exports = {
