@@ -17,14 +17,13 @@
 const console = require('console');
 const { MongoClient } = require('mongodb');
 const { nanoid } = require('nanoid');
+const { addYears } = require('date-fns');
 const {
   filter,
   first,
-  find,
   map,
   omit,
   replace,
-  isEqual,
 } = require('lodash/fp');
 const { KeyPurposes, generateKeyPair } = require('@velocitycareerlabs/crypto');
 const {
@@ -65,6 +64,10 @@ const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
 const {
   sampleEducationDegreeGraduation,
 } = require('@velocitycareerlabs/sample-data');
+const {
+  VendorEndpoint,
+  ConfigurationType,
+} = require('../src/entities');
 
 const registrarUrl = 'https://localhost:13004';
 const fineractUrl = 'http://localhost:13008';
@@ -198,8 +201,6 @@ describe('org registration and issuing e2e', () => {
     const { id: did, ids, profile, keys } = createFullOrganizationResponse;
     console.dir({ msg: 'Organization registered', did });
 
-    await wait(500);
-
     const fineractAuthResponse = await fetch(
       'http://localhost:13000/oauth/token',
       {
@@ -304,7 +305,6 @@ describe('org registration and issuing e2e', () => {
       id: expect.stringMatching(OBJECT_ID_FORMAT),
       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT)
     });
-    console.dir({ msg: 'Tenant created', createTenantJson });
 
     // Create mockvendor user
     const user = {
@@ -412,6 +412,51 @@ describe('org registration and issuing e2e', () => {
       ...expectedOffer(offer),
       id: expect.stringMatching(OBJECT_ID_FORMAT),
       _id: expect.stringMatching(OBJECT_ID_FORMAT),
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+      updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    });
+
+    // Create disclosure
+    const disclosure = {
+      vendorDisclosureId: 'HR-PKG-USPS-CLRK',
+      purpose: 'Job Application',
+      description: 'Clerk',
+      duration: '6y',
+      sendPushOnVerification: false,
+      deactivationDate: addYears(new Date(), 10),
+      authTokensExpireIn: 10080,
+      types: [
+        { type: 'PastEmploymentPosition' },
+        { type: 'CurrentEmploymentPosition' },
+      ],
+      identificationMethods: ['preauth'],
+      configurationType: ConfigurationType.ISSUING,
+      vendorEndpoint: VendorEndpoint.ISSUING_IDENTIFICATION,
+      offerMode: 'webhook',
+      termsUrl:
+        'https://www.velocityexperiencecenter.com/terms-and-conditions-vnf',
+    }
+
+    const createDisclosureResponse = await fetch(
+      `${caUrl}/operator-api/v0.8/tenants/${createTenantJson.id}/disclosures`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${OPERATOR_API_TOKEN}`,
+        },
+        body: JSON.stringify(disclosure),
+      });
+
+    expect(createDisclosureResponse.status).toEqual(201);
+    const createDisclosureJson = await createDisclosureResponse.json();
+    expect(createDisclosureJson).toEqual({
+      ..._.omit(['setIssuingDefault'])(disclosure),
+      deactivationDate: expect.any(String),
+      identificationMethods: ['preauth'],
+      sendPushOnVerification: false,
+      feed: false,
+      id: expect.stringMatching(OBJECT_ID_FORMAT),
       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
       updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
     });
