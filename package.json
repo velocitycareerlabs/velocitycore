@@ -55,7 +55,6 @@
     "packages/*",
     "servers/*",
     "tools/*",
-    "apps/*",
     "samples/*"
   ],
   "husky": {
