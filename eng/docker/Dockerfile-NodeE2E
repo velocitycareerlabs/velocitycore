@@ -1,7 +1,6 @@
-FROM node:22.15.1-slim@sha256:ec318fe0dc46b56bcc1ca42a202738aeb4f3e347a7b4dd9f9f1df12ea7aa385a as builder
+FROM node:22.15.1-slim@sha256:ec318fe0dc46b56bcc1ca42a202738aeb4f3e347a7b4dd9f9f1df12ea7aa385a AS builder
 ARG NODE_ENV=production
 ARG SERVICE
-ARG SRC_DIR=servers/$SERVICE
 WORKDIR /app
 RUN chown -R node:node /app
 
@@ -13,12 +12,13 @@ RUN apt-get update \
 
 USER node
 
-COPY --chown=node:node package*.json yarn.lock lerna.json .npmrc ./
+COPY --chown=node:node package*.json yarn.lock lerna.json ./
 COPY --chown=node:node packages ./packages
-COPY --chown=node:node $SRC_DIR ./servers/$SERVICE
-RUN yarn --pure-lockfile
+COPY --chown=node:node servers ./servers
+RUN yarn --production --pure-lockfile
 
 FROM node:22.15.1-slim@sha256:ec318fe0dc46b56bcc1ca42a202738aeb4f3e347a7b4dd9f9f1df12ea7aa385a
+ARG SERVICE
 WORKDIR /app
 COPY --chown=node:node --from=builder /app .
 WORKDIR "/app/servers/$SERVICE"

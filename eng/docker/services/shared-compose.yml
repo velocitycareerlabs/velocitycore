@@ -5,6 +5,22 @@ services:
     restart: on-failure
     ports:
       - 18545:8545
+    healthcheck:
+      test: ["CMD", "bash", "-c", ">/dev/tcp/localhost/8545"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  contracts-deployment:
+    image: node:22.14.0-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b
+    environment:
+      - RPC_NODE_URL=http://besu:8545
+    command: npx @velocitycareerlabs/contracts-deployment@1.25.0-dev-build.1caf36412
+    depends_on:
+      besu:
+        condition: service_healthy
+    restart: on-failure
 
   localstack:
     image: localstack/localstack@sha256:0bc4495b8a204f80ee16779d968c857f570fd4ea08d3e2e898c226782fe1d74d
