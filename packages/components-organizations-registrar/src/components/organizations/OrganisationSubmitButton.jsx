@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 
 import Loading from '../Loading.jsx';
 
-const OrganizationSubmitButton = ({ title, isLoading, endIcon, styles, handleState }) => {
+const OrganizationSubmitButton = ({ title, isLoading, endIcon, styles, handleState, enabled }) => {
   const form = useFormContext();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const OrganizationSubmitButton = ({ title, isLoading, endIcon, styles, handleSta
 
   return (
     <Button
-      disabled={!form.formState.isValid}
+      disabled={!form.formState.isValid && !enabled}
       variant="outlined"
       color="primary"
       type="submit"
@@ -54,6 +54,7 @@ OrganizationSubmitButton.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   styles: PropTypes.object,
   handleState: PropTypes.func,
+  enabled: PropTypes.bool,
 };
 
 export default OrganizationSubmitButton;

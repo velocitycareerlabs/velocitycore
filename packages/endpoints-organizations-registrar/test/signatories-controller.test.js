@@ -42,6 +42,8 @@ mock.module('../src/entities/signatories/orchestrators/send-reminders.js', {
   namedExports: { mockSendReminders },
 });
 
+const mockSendSupportEmail = mock.fn((payload) => payload);
+
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { ObjectId } = require('mongodb');
 const { subDays, subMonths, subHours } = require('date-fns/fp');
@@ -58,6 +60,7 @@ const {
   expectedSignatoryApprovedEmail,
   expectedSignatoryRejectedEmail,
   expectedSignatoryReminderEmail,
+  expectedSupportMaxSignatoryReminderReachedEmailParams,
 } = require('./helpers/email-matchers');
 const signatoryStatusPlugin = require('../src/entities/signatories/repos/repo');
 const organizationsPlugin = require('../src/entities/organizations/repos/repo');
@@ -107,6 +110,8 @@ describe('signatoriesController', () => {
         organizations: organizationsRepo,
         invitations: invitationsRepo,
       },
+      renderTemplate: fastify.view,
+      sendSupportEmail: mockSendSupportEmail,
     };
   });
 
@@ -600,8 +605,8 @@ describe('signatoriesController', () => {
 
       expect(mockSESSendEmail.mock.calls.map((call) => call.arguments)).toEqual(
         [
-          [expectedSignatoryReminderEmail(organization2, inviterOrganization)],
-          [expectedSignatoryReminderEmail(organization1, inviterOrganization)],
+          [expectedSignatoryReminderEmail(inviterOrganization, organization2)],
+          [expectedSignatoryReminderEmail(inviterOrganization, organization1)],
         ]
       );
 
@@ -697,6 +702,78 @@ describe('signatoriesController', () => {
       });
     });
 
+    it('should send email to support if max reminder count is reached and mark as complete', async () => {
+      const organization = await persistOrganization({});
+
+      const signatoryStatus1 = await persistSignatoryStatus({
+        organization,
+        events: [
+          {
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: subDays(8)(new Date()),
+          },
+          {
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: subDays(8)(new Date()),
+          },
+          {
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: subDays(8)(new Date()),
+          },
+        ],
+      });
+      await sendReminders(
+        sendEmailToSignatoryForOrganizationApproval,
+        testContext
+      );
+
+      expect(mockSendEmail.mock.calls).toEqual([]);
+      expect(mockSendSupportEmail.mock.calls).toEqual([
+        expectedSupportMaxSignatoryReminderReachedEmailParams(),
+      ]);
+
+      const signatoryStatusDb1 = await signatoryStatusRepo.findOne({
+        filter: {
+          _id: new ObjectId(signatoryStatus1._id),
+        },
+      });
+      expect(signatoryStatusDb1).toEqual({
+        _id: expect.any(ObjectId),
+        organizationDid: organization.didDoc.id,
+        organizationId: new ObjectId(organization._id),
+        events: [
+          {
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: expect.any(Date),
+          },
+          {
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: expect.any(Date),
+          },
+          {
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: expect.any(Date),
+          },
+          {
+            state: SignatoryEventStatus.MAX_REACHED,
+            timestamp: expect.any(Date),
+          },
+          {
+            state: SignatoryEventStatus.COMPLETED,
+            timestamp: expect.any(Date),
+          },
+        ],
+        authCodes: [
+          {
+            code: '12345',
+            timestamp: expect.any(Date),
+          },
+        ],
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+    });
+
     it('should resend emails if enough time has passed since previous email', async () => {
       const organization = await persistOrganization();
       await persistSignatoryStatus({
@@ -717,6 +794,9 @@ describe('signatoriesController', () => {
         testContext
       );
       expect(mockSESSendEmail.mock.callCount()).toEqual(1);
+      expect(mockSESSendEmail.mock.calls[0].arguments).toEqual(
+        [expectedSignatoryReminderEmail(null, organization)],
+      );
     });
 
     it('should not send emails if there are signatory reminders with completed state', async () => {
