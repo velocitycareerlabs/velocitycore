@@ -1168,27 +1168,6 @@ describe('presentation submission', () => {
           return sendCredentialsPayload;
         });
 
-      // const mockDate = new Date('2023-10-05T12:00:00');
-      // jest
-      //   .useFakeTimers({
-      //     doNotFake: [
-      //       'hrtime',
-      //       'nextTick',
-      //       'performance',
-      //       'queueMicrotask',
-      //       'requestAnimationFrame',
-      //       'cancelAnimationFrame',
-      //       'requestIdleCallback',
-      //       'cancelIdleCallback',
-      //       'setImmediate',
-      //       'clearImmediate',
-      //       'setInterval',
-      //       'clearInterval',
-      //       'setTimeout',
-      //       'clearTimeout',
-      //     ],
-      //   })
-      //   .setSystemTime(mockDate);
       const response = await fastify.injectJson({
         method: 'POST',
         url: inspectUrl(tenant, '/submit-presentation'),

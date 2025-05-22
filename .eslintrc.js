@@ -105,7 +105,6 @@ module.exports = {
           '**/test/**/*.tsx',
           '**/setupTests.ts',
           '**/setupTests.js',
-          '**/jest.config.js',
           '**/vite.config.js',
           '**/.eslintrc.js',
         ],
