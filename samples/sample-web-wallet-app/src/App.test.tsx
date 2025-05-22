@@ -1,4 +1,3 @@
-// @ts-ignore
 import { test } from 'node:test';
 import React from 'react';
 import { expect } from 'expect';
