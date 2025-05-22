@@ -148,7 +148,8 @@ jobs:
       with:
         name: lint${{ env.ARTIFACT_NAME }}
         path: |
-          **/eslint-results.json
+          **/eslint-results.json      
+          !node_modules/**/eslint-results.json
       if: '!cancelled()'
 
   # Post Lint
@@ -245,6 +246,7 @@ jobs:
         name: test${{ env.ARTIFACT_NAME }}
         path: |
           **/test-results.junit.xml
+          !node_modules/**/test-results.junit.xml
       if: '!cancelled()'
     - name: Upload Codecov Report
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -252,7 +254,9 @@ jobs:
         name: codecov${{ env.ARTIFACT_NAME }}
         path: |
           **/lcov.info
-          !tools/**/lcov.info
+          !tools/**/lcov.info          
+          !samples/**/lcov.info
+          !node_modules/**/lcov.info
 
   # Post Test
   post-test:
