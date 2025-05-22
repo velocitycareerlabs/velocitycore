@@ -728,9 +728,9 @@ describe('signatoriesController', () => {
       );
 
       expect(mockSESSendEmail.mock.calls).toEqual([]);
-      expect(mockSendSupportEmail.mock.calls).toEqual([
-        expectedSupportMaxSignatoryReminderReachedEmailParams(),
-      ]);
+      expect(
+        mockSendSupportEmail.mock.calls.map((call) => call.arguments)
+      ).toEqual([expectedSupportMaxSignatoryReminderReachedEmailParams()]);
 
       const signatoryStatusDb1 = await signatoryStatusRepo.findOne({
         filter: {
