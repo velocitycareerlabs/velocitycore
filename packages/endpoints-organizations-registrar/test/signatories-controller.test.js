@@ -722,12 +722,12 @@ describe('signatoriesController', () => {
           },
         ],
       });
-      await sendReminders(
+      await originalSendReminders(
         sendEmailToSignatoryForOrganizationApproval,
         testContext
       );
 
-      expect(mockSendEmail.mock.calls).toEqual([]);
+      expect(mockSESSendEmail.mock.calls).toEqual([]);
       expect(mockSendSupportEmail.mock.calls).toEqual([
         expectedSupportMaxSignatoryReminderReachedEmailParams(),
       ]);
@@ -794,9 +794,9 @@ describe('signatoriesController', () => {
         testContext
       );
       expect(mockSESSendEmail.mock.callCount()).toEqual(1);
-      expect(mockSESSendEmail.mock.calls[0].arguments).toEqual(
-        [expectedSignatoryReminderEmail(null, organization)],
-      );
+      expect(mockSESSendEmail.mock.calls[0].arguments).toEqual([
+        expectedSignatoryReminderEmail(null, organization),
+      ]);
     });
 
     it('should not send emails if there are signatory reminders with completed state', async () => {
