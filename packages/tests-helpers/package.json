@@ -29,6 +29,9 @@
     "mongodb": "~6.16.0",
     "nanoid": "~5.0.9"
   },
+  "peerDependencies": {
+    "@testing-library/react": ">14.1.0"
+  },
   "devDependencies": {
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
