@@ -4,6 +4,7 @@
   "description": "Sample VNF Web Wallet App",
   "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "license": "Apache-2.0",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
@@ -13,13 +14,10 @@
     "axios": "^1.7.9"
   },
   "devDependencies": {
-    "@jest/globals": "29.7.0",
-    "@types/jest": "29.5.14",
     "@types/node": "22.15.18",
     "@types/react": "18.3.21",
     "@types/react-dom": "18.3.7",
     "@testing-library/dom": "10.4.0",
-    "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
     "@vitejs/plugin-react-swc": "3.9.0",
@@ -32,7 +30,8 @@
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
     "eslint-plugin-prettier": "4.2.1",
     "expect": "29.7.0",
-    "ts-jest": "29.3.4",
+    "global-jsdom": "26.0.0",
+    "tsx": "4.19.4",
     "typescript": "5.8.3",
     "vite": "6.3.5",
     "vite-tsconfig-paths": "5.1.4",
@@ -45,8 +44,8 @@
     "start": "vite",
     "build": "tsc & vite build",
     "serve": "vite preview",
-    "test": "jest",
-    "test:ci": "jest --config ./jest.config.js --coverage"
+    "test": "node --enable-source-maps --import=global-jsdom/register --import=tsx --import=../../packages/tests-helpers/src/setup-react-tests.mjs --test --test-reporter=spec --test-reporter-destination=stdout '**/*.test.ts' '**/*.test.tsx'",
+    "test:ci": "node --enable-source-maps --import=global-jsdom/register --import=tsx --import=../../packages/tests-helpers/src/setup-react-tests.mjs  --test --experimental-test-coverage --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=lcov.info '**/*.test.ts' '**/*.test.tsx'"
   },
   "browserslist": {
     "production": [
