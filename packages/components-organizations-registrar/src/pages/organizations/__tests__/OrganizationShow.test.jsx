@@ -82,10 +82,7 @@ describe.skip('OrganizationShow', () => {
     render(
       <AdminContext
         dataProvider={testDataProvider({
-          getOne: () => {
-            console.info('mock getOne');
-            return Promise.resolve({ data: mockRecord, isLoading: false });
-          },
+          getOne: () => Promise.resolve({ data: mockRecord, isLoading: false }),
           getList: () => Promise.resolve({ data: undefined, isLoading: false }),
         })}
         store={memoryStore()}

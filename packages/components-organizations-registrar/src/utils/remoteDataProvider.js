@@ -107,7 +107,6 @@ const remoteDataProvider = (config, auth) => {
       // eslint-disable-next-line complexity
       getOne: (resource, params) => {
         let url;
-        console.info('actual getOne');
 
         switch (resource) {
           case dataResources.ORGANIZATIONS: {
