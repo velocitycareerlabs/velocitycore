@@ -19,11 +19,11 @@
 import { TextInput } from 'react-admin';
 import PropTypes from 'prop-types';
 import { Box, Tooltip } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
+import { Info as InfoIcon } from '@mui/icons-material';
 import * as lodash from 'lodash';
-import { AuthoritiesList, Authorities } from '../../../constants/messageCodes';
-import { webSiteRegexp } from '../../../utils/index.jsx';
-import theme from '../../../theme/theme';
+import { AuthoritiesList, Authorities } from '@/constants/messageCodes';
+import { webSiteRegexp } from '@/utils/index.jsx';
+import theme from '@/theme/theme';
 
 export const registrationNumbersValidation = (
   registrationNumbers,

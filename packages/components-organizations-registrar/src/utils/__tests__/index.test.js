@@ -1,4 +1,6 @@
 import { Authorities } from '@/constants/messageCodes';
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
 import { webSiteRegexp, formatWebSiteUrl, formatRegistrationNumbers } from '../index.jsx';
 
 const validURLs = ['https://www.example.com', 'http://www.example.com', 'www.example.com'];

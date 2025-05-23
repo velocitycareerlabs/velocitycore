@@ -6,12 +6,12 @@ import {
   Box,
   Typography,
   Tooltip,
+  Grid,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import InfoIcon from '@mui/icons-material/Info';
+import { Info as InfoIcon } from '@mui/icons-material';
 import PropTypes from 'prop-types';
-import { Authorities, authorityOptions } from '../../../constants/messageCodes';
-import { DUNS_HINT, LEI_HINT, NATIONAL_AUTHORITY_HINT } from '../../../utils/index.jsx';
+import { Authorities, authorityOptions } from '@/constants/messageCodes';
+import { DUNS_HINT, LEI_HINT, NATIONAL_AUTHORITY_HINT } from '@/utils/index.jsx';
 
 export const getDefaultAuthority = (registrationNumbers) => {
   return (
