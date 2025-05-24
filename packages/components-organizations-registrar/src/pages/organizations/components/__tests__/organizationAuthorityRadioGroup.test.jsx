@@ -1,7 +1,6 @@
 import { after, describe, it, mock } from 'node:test';
 import { expect } from 'expect';
-import { render } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
+import { render, fireEvent } from '@testing-library/react';
 import OrganizationAuthorityRadioGroup from '../OrganizationAuthorityRadioGroup.jsx';
 
 const label = `D-U-N-S${String.fromCodePoint(174)} Number`;
@@ -47,7 +46,7 @@ describe('OrganizationAuthorityRadioGroup', () => {
       />,
     );
     const gleifRadioButton = getByLabelText('LEI');
-    userEvent.click(gleifRadioButton);
+    fireEvent.click(gleifRadioButton);
     expect(handleAuthorityChange.mock.calls[0].arguments).toEqual([expect.any(Object), 'GLEIF']);
   });
 });

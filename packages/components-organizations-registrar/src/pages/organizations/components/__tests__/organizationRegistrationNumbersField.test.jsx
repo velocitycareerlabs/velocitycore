@@ -135,7 +135,7 @@ describe('OrganizationRegistrationNumbersField', () => {
     expect(input.value).toBe('https://example.com');
   });
 
-  it('updates the registration number when the input changes', (t) => {
+  it('updates the registration number when the input changes', async (t) => {
     const { getByLabelText } = render(
       <AdminContext dataProvider={testDataProvider()}>
         <Form defaultValues={mockRecord} onSubmit={t.mock.fn()}>
@@ -151,8 +151,8 @@ describe('OrganizationRegistrationNumbersField', () => {
     );
 
     const input = getByLabelText(label);
-    userEvent.type(input, '789');
-
+    await userEvent.clear(input);
+    await userEvent.type(input, '789');
     expect(input.value).toBe('789');
   });
 
