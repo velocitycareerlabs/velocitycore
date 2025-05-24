@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { before, describe, it } = require('node:test');
+const { expect } = require('expect');
 
 const { generateCredentialJwt } = require('@velocitycareerlabs/jwt');
 const { credentialUnexpired } = require('@velocitycareerlabs/sample-data');
@@ -29,7 +31,7 @@ describe('tampering checks', () => {
 
   let signedCredential;
 
-  beforeAll(async () => {
+  before(async () => {
     signedCredential = await generateCredentialJwt(
       credentialUnexpired,
       keyPair.privateJwk,

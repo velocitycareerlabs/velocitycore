@@ -15,6 +15,9 @@
  *
  */
 
+const { after, before, beforeEach, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const { flow, map, kebabCase, omit, reverse, forEach } = require('lodash/fp');
 const { nanoid } = require('nanoid');
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
@@ -119,7 +122,7 @@ describe('Organizations Test Suite', () => {
     await mongoDb().collection('groups').deleteMany({});
   };
 
-  beforeAll(async () => {
+  before(async () => {
     fastify = buildFastify();
     await fastify.ready();
     ({ persistOrganization, newOrganization } =
@@ -127,17 +130,13 @@ describe('Organizations Test Suite', () => {
     ({ persistGroup } = initGroupsFactory(fastify));
   });
 
-  beforeEach(async () => {
-    jest.clearAllMocks();
-  });
-
-  afterAll(async () => {
+  after(async () => {
     await fastify.close();
   });
 
   describe('GET DID Doc of Organizations', () => {
     describe('Empty State', () => {
-      beforeAll(async () => {
+      before(async () => {
         await clearDb();
       });
 
@@ -154,7 +153,7 @@ describe('Organizations Test Suite', () => {
 
     describe('Single Organization State', () => {
       let organization;
-      beforeAll(async () => {
+      before(async () => {
         await clearDb();
         ({ organization } = await persistIndexedOrganizationWithIssuerService(
           0
@@ -174,7 +173,7 @@ describe('Organizations Test Suite', () => {
 
     describe('GET Organization Did Docs authorization filter tests', () => {
       let orgs;
-      beforeAll(async () => {
+      before(async () => {
         await clearDb();
         const result = await runSequentially([
           () => persistIndexedOrganizationWithIssuerService(0),
@@ -221,7 +220,7 @@ describe('Organizations Test Suite', () => {
 
   describe('Search Organization Profiles', () => {
     describe('Empty State', () => {
-      beforeAll(async () => {
+      before(async () => {
         await clearDb();
       });
 
@@ -985,7 +984,7 @@ describe('Organizations Test Suite', () => {
 
     describe('Organizations Retrieval Sort Tests', () => {
       let orgs;
-      beforeAll(async () => {
+      before(async () => {
         await clearDb();
 
         const serviceIssuer = {
@@ -1065,7 +1064,7 @@ describe('Organizations Test Suite', () => {
 
     describe('Organizations Size and Skip Tests', () => {
       let orgs;
-      beforeAll(async () => {
+      before(async () => {
         await clearDb();
 
         const serviceIssuer = {

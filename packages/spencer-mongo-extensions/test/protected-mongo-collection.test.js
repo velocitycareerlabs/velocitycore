@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+const { beforeEach, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
+
 const { encryptCollection } = require('@velocitycareerlabs/crypto');
 const {
   initPrepModification,
@@ -22,9 +25,7 @@ const {
 } = require('../src/protected-mongo-collection');
 
 describe('Protected mongo collection functionality test suite', () => {
-  beforeEach(async () => {
-    jest.resetAllMocks();
-  });
+  beforeEach(async () => {});
 
   describe('initFindOneAndDecryptSecret test suite', () => {
     describe('format hex', () => {
@@ -50,7 +51,7 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findOneAndDecryptSecret should error when findOne returns null', async () => {
         const mockParent = {
-          findOne: jest.fn().mockResolvedValue(null),
+          findOne: mock.fn(() => Promise.resolve(null)),
         };
 
         const findOneAndDecryptSecret = initFindOneAndDecryptSecret({
@@ -73,9 +74,7 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findOneAndDecryptSecret should error when secret prop key is not found on object', async () => {
         const mockParent = {
-          findOne: jest.fn().mockResolvedValue({
-            'not-foo': 'not-bar',
-          }),
+          findOne: mock.fn(() => Promise.resolve({ 'not-foo': 'not-bar' })),
         };
 
         const findOneAndDecryptSecret = initFindOneAndDecryptSecret({
@@ -98,9 +97,9 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findOneAndDecryptSecret should properly decrypt an encrypted property', async () => {
         const mockParent = {
-          findOne: jest
-            .fn()
-            .mockResolvedValue({ [mockSecretPropName]: encryptedValue }),
+          findOne: mock.fn(() =>
+            Promise.resolve({ [mockSecretPropName]: encryptedValue })
+          ),
         };
 
         const findOneAndDecryptSecret = initFindOneAndDecryptSecret({
@@ -147,7 +146,7 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findOneAndDecryptSecret should error when findOne returns null', async () => {
         const mockParent = {
-          findOne: jest.fn().mockResolvedValue(null),
+          findOne: mock.fn(() => Promise.resolve(null)),
         };
 
         const findOneAndDecryptSecret = initFindOneAndDecryptSecret({
@@ -169,9 +168,11 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findOneAndDecryptSecret should error when secret prop key is not found on object', async () => {
         const mockParent = {
-          findOne: jest.fn().mockResolvedValue({
-            'not-foo': 'not-bar',
-          }),
+          findOne: mock.fn(() =>
+            Promise.resolve({
+              'not-foo': 'not-bar',
+            })
+          ),
         };
 
         const findOneAndDecryptSecret = initFindOneAndDecryptSecret({
@@ -193,9 +194,9 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findOneAndDecryptSecret should properly decrypt an encrypted property', async () => {
         const mockParent = {
-          findOne: jest
-            .fn()
-            .mockResolvedValue({ [mockSecretPropName]: encryptedValue }),
+          findOne: mock.fn(() =>
+            Promise.resolve({ [mockSecretPropName]: encryptedValue })
+          ),
         };
 
         const findOneAndDecryptSecret = initFindOneAndDecryptSecret({
@@ -237,7 +238,7 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findAndDecryptSecret should return empty array', async () => {
         const mockParent = {
-          find: jest.fn().mockResolvedValue(null),
+          find: mock.fn(() => Promise.resolve(null)),
         };
 
         const findAndDecryptSecret = initFindAndDecryptSecret({
@@ -254,11 +255,13 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findAndDecryptSecret should error when secret prop key is not found on object', async () => {
         const mockParent = {
-          find: jest.fn().mockResolvedValue([
-            {
-              'not-foo': 'not-bar',
-            },
-          ]),
+          find: mock.fn(() =>
+            Promise.resolve([
+              {
+                'not-foo': 'not-bar',
+              },
+            ])
+          ),
         };
 
         const findAndDecryptSecret = initFindAndDecryptSecret({
@@ -281,9 +284,9 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findAndDecryptSecret should properly decrypt an encrypted property', async () => {
         const mockParent = {
-          find: jest
-            .fn()
-            .mockResolvedValue([{ [mockSecretPropName]: encryptedValue }]),
+          find: mock.fn(() =>
+            Promise.resolve([{ [mockSecretPropName]: encryptedValue }])
+          ),
         };
 
         const findAndDecryptSecret = initFindAndDecryptSecret({
@@ -332,7 +335,7 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findAndDecryptSecret should return empty array', async () => {
         const mockParent = {
-          find: jest.fn().mockResolvedValue(null),
+          find: mock.fn(() => Promise.resolve(null)),
         };
 
         const findAndDecryptSecret = initFindAndDecryptSecret({
@@ -348,11 +351,13 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findAndDecryptSecret should error when secret prop key is not found on object', async () => {
         const mockParent = {
-          find: jest.fn().mockResolvedValue([
-            {
-              'not-foo': 'not-bar',
-            },
-          ]),
+          find: mock.fn(() =>
+            Promise.resolve([
+              {
+                'not-foo': 'not-bar',
+              },
+            ])
+          ),
         };
 
         const findAndDecryptSecret = initFindAndDecryptSecret({
@@ -374,9 +379,9 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('findAndDecryptSecret should properly decrypt an encrypted property', async () => {
         const mockParent = {
-          find: jest
-            .fn()
-            .mockResolvedValue([{ [mockSecretPropName]: encryptedValue }]),
+          find: mock.fn(() =>
+            Promise.resolve([{ [mockSecretPropName]: encryptedValue }])
+          ),
         };
 
         const findAndDecryptSecret = initFindAndDecryptSecret({
@@ -413,9 +418,9 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('prepModification should properly decrypt an encrypted property', async () => {
         const mockParent = {
-          prepModification: jest
-            .fn()
-            .mockResolvedValue({ [mockSecretPropName]: encryptedValue }),
+          prepModification: mock.fn(() =>
+            Promise.resolve({ [mockSecretPropName]: encryptedValue })
+          ),
         };
 
         const prepModification = initPrepModification({
@@ -434,9 +439,9 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('prepModification should get proper value from provided value', async () => {
         const mockParent = {
-          prepModification: jest
-            .fn()
-            .mockResolvedValue({ [mockSecretPropName]: encryptedValue }),
+          prepModification: mock.fn(() =>
+            Promise.resolve({ [mockSecretPropName]: encryptedValue })
+          ),
         };
 
         const prepModification = initPrepModification({
@@ -476,9 +481,9 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('prepModification should properly decrypt an encrypted property', async () => {
         const mockParent = {
-          prepModification: jest
-            .fn()
-            .mockResolvedValue({ [mockSecretPropName]: encryptedValue }),
+          prepModification: mock.fn(() =>
+            Promise.resolve({ [mockSecretPropName]: encryptedValue })
+          ),
         };
 
         const prepModification = initPrepModification({
@@ -496,9 +501,9 @@ describe('Protected mongo collection functionality test suite', () => {
 
       it('prepModification should get proper value from provided value', async () => {
         const mockParent = {
-          prepModification: jest
-            .fn()
-            .mockResolvedValue({ [mockSecretPropName]: encryptedValue }),
+          prepModification: mock.fn(() =>
+            Promise.resolve({ [mockSecretPropName]: encryptedValue })
+          ),
         };
 
         const prepModification = initPrepModification({

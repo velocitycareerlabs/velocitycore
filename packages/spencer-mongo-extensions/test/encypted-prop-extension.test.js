@@ -15,6 +15,16 @@
  *
  */
 
+const { beforeEach, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
+
+const object = { a: '1', b: 2, c: true };
+const mockParent = {
+  prepModification: mock.fn((arg) => arg),
+  findOne: mock.fn(() => object),
+  insert: mock.fn((val) => ({ _id: nanoid(), ...val })),
+};
+
 const { nanoid } = require('nanoid');
 const {
   decryptCollection,
@@ -24,15 +34,10 @@ const { omit } = require('lodash/fp');
 const { initEncryptPropExtension } = require('../src/encrypted-prop-extension');
 
 describe('encrypted prop extension', () => {
-  const object = { a: '1', b: 2, c: true };
-  const mockParent = {
-    prepModification: jest.fn().mockImplementation((arg) => arg),
-    findOne: jest.fn().mockImplementation(() => object),
-    insert: jest.fn().mockImplementation((val) => ({ _id: nanoid(), ...val })),
-  };
-
   beforeEach(() => {
-    jest.clearAllMocks();
+    mockParent.findOne.mock.resetCalls();
+    mockParent.insert.mock.resetCalls();
+    mockParent.prepModification.mock.resetCalls();
   });
 
   describe('prepModification', () => {
@@ -148,7 +153,9 @@ describe('encrypted prop extension', () => {
       const insertedVal = await encryptPropExtension(mockParent).insert(val);
 
       expect(insertedVal).toEqual({ _id: expect.any(String), ...val });
-      expect(mockParent.insert.mock.calls).toEqual([[val, undefined]]);
+      expect(
+        mockParent.insert.mock.calls.map((call) => call.arguments)
+      ).toEqual([[val, undefined]]);
     });
 
     it('should be able to insert a secret and return it in the projection', async () => {
@@ -167,7 +174,9 @@ describe('encrypted prop extension', () => {
       });
 
       expect(insertedVal).toEqual({ _id: expect.any(String), ...val });
-      expect(mockParent.insert.mock.calls).toEqual([[val, { encryptedX: 1 }]]);
+      expect(
+        mockParent.insert.mock.calls.map((call) => call.arguments)
+      ).toEqual([[val, { encryptedX: 1 }]]);
     });
   });
 
@@ -184,7 +193,7 @@ describe('encrypted prop extension', () => {
         secret,
         format: 'json',
       });
-      mockParent.findOne.mockImplementation(() => Promise.resolve(val));
+      mockParent.findOne.mock.mockImplementation(() => Promise.resolve(val));
       expect(
         await encryptPropExtension(mockParent).findOneAndDecrypt(
           { filter },
@@ -193,9 +202,9 @@ describe('encrypted prop extension', () => {
       ).toEqual({
         y: 3,
       });
-      expect(mockParent.findOne.mock.calls).toEqual([
-        [{ filter }, { encryptedX: 1 }],
-      ]);
+      expect(
+        mockParent.findOne.mock.calls.map((call) => call.arguments)
+      ).toEqual([[{ filter }, { encryptedX: 1 }]]);
     });
     it('should do nothing if encrypted property is missing from projection', async () => {
       const secret = nanoid();
@@ -208,7 +217,7 @@ describe('encrypted prop extension', () => {
         secret,
         format: 'json',
       });
-      mockParent.findOne.mockImplementation(() => Promise.resolve(val));
+      mockParent.findOne.mock.mockImplementation(() => Promise.resolve(val));
       expect(
         await encryptPropExtension(mockParent).findOneAndDecrypt(
           { filter },
@@ -218,7 +227,9 @@ describe('encrypted prop extension', () => {
         y: 3,
       });
 
-      expect(mockParent.findOne.mock.calls).toEqual([[{ filter }, { y: 1 }]]);
+      expect(
+        mockParent.findOne.mock.calls.map((call) => call.arguments)
+      ).toEqual([[{ filter }, { y: 1 }]]);
     });
 
     it('should do nothing if no projection', async () => {
@@ -232,13 +243,15 @@ describe('encrypted prop extension', () => {
         secret,
         format: 'json',
       });
-      mockParent.findOne.mockImplementation(() => Promise.resolve(val));
+      mockParent.findOne.mock.mockImplementation(() => Promise.resolve(val));
       expect(
         await encryptPropExtension(mockParent).findOneAndDecrypt({ filter })
       ).toEqual({
         y: 3,
       });
-      expect(mockParent.findOne.mock.calls).toEqual([[{ filter }, undefined]]);
+      expect(
+        mockParent.findOne.mock.calls.map((call) => call.arguments)
+      ).toEqual([[{ filter }, undefined]]);
     });
     it('should do nothing if result is null', async () => {
       const secret = nanoid();
@@ -248,11 +261,13 @@ describe('encrypted prop extension', () => {
         secret,
         format: 'json',
       });
-      mockParent.findOne.mockImplementation(() => Promise.resolve(null));
+      mockParent.findOne.mock.mockImplementation(() => Promise.resolve(null));
       expect(
         await encryptPropExtension(mockParent).findOneAndDecrypt({ filter })
       ).toEqual(null);
-      expect(mockParent.findOne.mock.calls).toEqual([[{ filter }, undefined]]);
+      expect(
+        mockParent.findOne.mock.calls.map((call) => call.arguments)
+      ).toEqual([[{ filter }, undefined]]);
     });
     it('should decrypt encrypted json', async () => {
       const secret = nanoid();
@@ -266,7 +281,7 @@ describe('encrypted prop extension', () => {
         secret,
         format: 'json',
       });
-      mockParent.findOne.mockImplementation(() => Promise.resolve(val));
+      mockParent.findOne.mock.mockImplementation(() => Promise.resolve(val));
       expect(
         await encryptPropExtension(mockParent).findOneAndDecrypt(
           { filter },
@@ -276,9 +291,9 @@ describe('encrypted prop extension', () => {
         ...omit(['encryptedX'], val),
         x: { a: 3 },
       });
-      expect(mockParent.findOne.mock.calls).toEqual([
-        [{ filter }, { encryptedX: 1 }],
-      ]);
+      expect(
+        mockParent.findOne.mock.calls.map((call) => call.arguments)
+      ).toEqual([[{ filter }, { encryptedX: 1 }]]);
     });
     it('should decrypt into the same field if so configured', async () => {
       const secret = nanoid();
@@ -291,7 +306,7 @@ describe('encrypted prop extension', () => {
         secret,
         format: 'json',
       });
-      mockParent.findOne.mockImplementation(() => Promise.resolve(val));
+      mockParent.findOne.mock.mockImplementation(() => Promise.resolve(val));
       expect(
         await encryptPropExtension(mockParent).findOneAndDecrypt(
           { filter },
@@ -300,7 +315,9 @@ describe('encrypted prop extension', () => {
       ).toEqual({
         x: { a: 3 },
       });
-      expect(mockParent.findOne.mock.calls).toEqual([[{ filter }, { x: 1 }]]);
+      expect(
+        mockParent.findOne.mock.calls.map((call) => call.arguments)
+      ).toEqual([[{ filter }, { x: 1 }]]);
     });
     it('should decrypt encrypted json at deep paths', async () => {
       const secret = nanoid();
@@ -318,7 +335,7 @@ describe('encrypted prop extension', () => {
         secret,
         format: 'json',
       });
-      mockParent.findOne.mockImplementation(() => Promise.resolve(val));
+      mockParent.findOne.mock.mockImplementation(() => Promise.resolve(val));
       expect(
         await encryptPropExtension(mockParent).findOneAndDecrypt(
           { filter },
@@ -328,9 +345,9 @@ describe('encrypted prop extension', () => {
         ...omit(['a.b.encryptedC'], val),
         a: { b: { c: { a: 3 } } },
       });
-      expect(mockParent.findOne.mock.calls).toEqual([
-        [{ filter }, { 'a.b.encryptedC': 1 }],
-      ]);
+      expect(
+        mockParent.findOne.mock.calls.map((call) => call.arguments)
+      ).toEqual([[{ filter }, { 'a.b.encryptedC': 1 }]]);
     });
     it('should decrypt encrypted string', async () => {
       const secret = nanoid();
@@ -344,7 +361,7 @@ describe('encrypted prop extension', () => {
         secret,
         format: 'string',
       });
-      mockParent.findOne.mockImplementation(() => Promise.resolve(val));
+      mockParent.findOne.mock.mockImplementation(() => Promise.resolve(val));
       expect(
         await encryptPropExtension(mockParent).findOneAndDecrypt(
           { filter },
@@ -354,9 +371,9 @@ describe('encrypted prop extension', () => {
         ...omit(['encryptedX'], val),
         x: 'helloworld',
       });
-      expect(mockParent.findOne.mock.calls).toEqual([
-        [{ filter }, { encryptedX: 1 }],
-      ]);
+      expect(
+        mockParent.findOne.mock.calls.map((call) => call.arguments)
+      ).toEqual([[{ filter }, { encryptedX: 1 }]]);
     });
   });
 });

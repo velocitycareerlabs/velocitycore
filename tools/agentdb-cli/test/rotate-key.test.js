@@ -1,3 +1,6 @@
+const { after, before, beforeEach, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const { buildMongoConnection } = require('@velocitycareerlabs/tests-helpers');
 const { ObjectId } = require('mongodb');
 const {
@@ -69,7 +72,7 @@ describe('rotate-key test suite', () => {
   let persistTenant;
   let testOptions;
 
-  beforeAll(async () => {
+  before(async () => {
     client = await initMongoClient(
       buildMongoConnection('test-credentialagent')
     );
@@ -79,7 +82,7 @@ describe('rotate-key test suite', () => {
     persistTenant = persistTenantFactory(db);
   });
 
-  afterAll(async () => {
+  after(async () => {
     await client.close();
   });
 
