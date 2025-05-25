@@ -227,6 +227,10 @@ const createConfig = (packageJson) => {
   };
 
   const signatoryConfig = {
+    signatoryVnfEmail: env
+      .get('SIGNATORY_VNF_EMAIL')
+      .required()
+      .asEmailString(),
     signatoryLinkResend: env
       .get('SIGNATORY_LINK_RESEND')
       .default('1440')
