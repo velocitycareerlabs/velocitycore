@@ -122,6 +122,7 @@ const expectedSignatoryApprovalEmail = (
   return {
     Destination: {
       ToAddresses: ['signatory@email.com'],
+      BccAddresses: ['testvnf+signatory@gmail.com'],
     },
     ReplyToAddresses: ['testvnfregistrar@gmail.com'],
     Source: 'testvnfregistrar@gmail.com',

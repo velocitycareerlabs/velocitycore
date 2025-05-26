@@ -71,7 +71,7 @@ const initSendEmailNotification =
       destination.CcAddresses = ccs;
     }
 
-    if (!isEmpty(ccs)) {
+    if (!isEmpty(bccs)) {
       destination.BccAddresses = bccs;
     }
 
