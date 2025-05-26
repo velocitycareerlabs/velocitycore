@@ -15,7 +15,9 @@
  */
 
 // eslint-disable-next-line import/order
-const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
+const { after, before, beforeEach, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { getUnixTime, addDays } = require('date-fns/fp');
 const { jwtVerify } = require('@velocitycareerlabs/jwt');
@@ -28,6 +30,7 @@ const {
   generateKeyPair,
   hashAndEncodeHex,
 } = require('@velocitycareerlabs/crypto');
+const buildFastify = require('./helpers/credentialagent-holder-build-fastify');
 const {
   initDisclosureFactory,
   initTenantFactory,
@@ -46,7 +49,7 @@ describe('Holder Oauth Token Test Suite', () => {
   let persistKey;
   let keyPair;
 
-  beforeAll(async () => {
+  before(async () => {
     fastify = buildFastify({
       storeIssuerAsString: false,
     });
@@ -59,7 +62,6 @@ describe('Holder Oauth Token Test Suite', () => {
   });
 
   beforeEach(async () => {
-    jest.resetAllMocks();
     fastify.resetOverrides();
 
     await mongoDb().collection('disclosures').deleteMany({});
@@ -82,7 +84,7 @@ describe('Holder Oauth Token Test Suite', () => {
     });
   });
 
-  afterAll(async () => {
+  after(async () => {
     await fastify.close();
   });
 

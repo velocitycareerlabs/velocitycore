@@ -20,7 +20,6 @@ module.exports = {
         commonjs: true,
         es6: true,
         node: true,
-        jest: true,
     },
     extends: ['eslint:recommended'],
     globals: {
@@ -50,15 +49,9 @@ module.exports = {
                 '**/tests/**/*.js',
                 '**/tests/**/*.ts',
             ],
-            env: {
-                jest: true,
-            },
             rules: {
-                '@typescript-eslint/no-unused-vars': 'off',
                 '@typescript-eslint/no-non-null-assertion': 'off',
-                'no-undef': 'off',
                 '@typescript-eslint/no-explicit-any': 'off',
-                'unused-imports/no-unused-vars': 'error',
             },
         },
         {

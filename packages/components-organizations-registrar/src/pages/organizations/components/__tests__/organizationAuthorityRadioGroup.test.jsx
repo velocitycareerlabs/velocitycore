@@ -1,14 +1,15 @@
+import { after, describe, it, mock } from 'node:test';
+import { expect } from 'expect';
 import { render, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
-
-// eslint-disable-next-line no-unused-vars
 import OrganizationAuthorityRadioGroup from '../OrganizationAuthorityRadioGroup.jsx';
 
 const label = `D-U-N-S${String.fromCodePoint(174)} Number`;
+const handleAuthorityChange = mock.fn();
 
 describe('OrganizationAuthorityRadioGroup', () => {
-  const handleAuthorityChange = jest.fn();
-
+  after(() => {
+    mock.restoreAll();
+  });
   it('should render three radio buttons with correct labels', () => {
     const { getAllByRole, getByLabelText, getByText } = render(
       <OrganizationAuthorityRadioGroup
@@ -18,10 +19,10 @@ describe('OrganizationAuthorityRadioGroup', () => {
     );
     const radioButtons = getAllByRole('radio');
     expect(radioButtons.length).toBe(3);
-    expect(getByLabelText('LEI')).toBeInTheDocument();
-    expect(getByLabelText(label)).toBeInTheDocument();
-    expect(getByText('Local Country Registration ID')).toBeInTheDocument();
-    expect(getByText('For example, your EIN in the United States')).toBeInTheDocument();
+    expect(getByLabelText('LEI')).toBeDefined();
+    expect(getByLabelText(label)).toBeDefined();
+    expect(getByText('Local Country Registration ID')).toBeDefined();
+    expect(getByText('For example, your EIN in the United States')).toBeDefined();
   });
 
   it('should show one radio button pre-selected', () => {
@@ -46,6 +47,6 @@ describe('OrganizationAuthorityRadioGroup', () => {
     );
     const gleifRadioButton = getByLabelText('LEI');
     fireEvent.click(gleifRadioButton);
-    expect(handleAuthorityChange).toHaveBeenCalledWith(expect.any(Object), 'GLEIF');
+    expect(handleAuthorityChange.mock.calls[0].arguments).toEqual([expect.any(Object), 'GLEIF']);
   });
 });

@@ -1,12 +1,10 @@
+import { describe, test } from 'node:test';
+import { expect } from 'expect';
 import { VCLFilter, VCLOrganizationsSearchDescriptor } from '../../src';
 import { OrganizationsDescriptorMocks } from '../infrastructure/resources/valid/OrganizationsDescriptorMocks';
 
 describe('VCLOrganizationsSearchDescriptor Tests', () => {
     let subject: VCLOrganizationsSearchDescriptor;
-
-    beforeEach(() => {
-        // Setup code before each test
-    });
 
     test('testOrganizationsDescriptorAllParamsAggregationSuccess', () => {
         const organizationDescriptorQueryParamsMock =
@@ -107,9 +105,5 @@ describe('VCLOrganizationsSearchDescriptor Tests', () => {
         subject = new VCLOrganizationsSearchDescriptor();
 
         expect(subject.queryParams).toBe(organizationDescriptorQueryParamsMock);
-    });
-
-    afterEach(() => {
-        // Teardown code after each test, if necessary
     });
 });

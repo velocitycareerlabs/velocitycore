@@ -5,16 +5,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { describe, test } from 'node:test';
+import { expect } from 'expect';
 import Urls, { HeaderValues } from '../../src/impl/data/repositories/Urls';
 import GlobalConfig from '../../src/impl/GlobalConfig';
 import VCLXVnfProtocolVersion from '../../src/api/VCLXVnfProtocolVersion';
 import VCLEnvironment from '../../src/api/VCLEnvironment';
 
 describe('UrlsTest', () => {
-    beforeEach(() => {
-        // Set up any necessary preconditions here
-    });
-
     test('testProdEnvironment', () => {
         const registrarPrefix = 'https://registrar.velocitynetwork.foundation';
 
@@ -71,9 +69,5 @@ describe('UrlsTest', () => {
         GlobalConfig.XVnfProtocolVersion =
             VCLXVnfProtocolVersion.XVnfProtocolVersion2;
         expect(HeaderValues.XVnfProtocolVersion).toBe('2.0');
-    });
-
-    afterEach(() => {
-        // Clean up any necessary postconditions here
     });
 });
