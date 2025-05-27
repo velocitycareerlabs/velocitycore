@@ -34,6 +34,29 @@ const initAddService = (fastify) => {
   const addServiceToOrganization = initAddServiceToOrganization(fastify);
 
   return async (did, newService, context) => {
+    fastify.validateJSONBySchema(newService, {
+      type: 'object',
+      oneOf: [
+        {
+          properties: {
+            type: {
+              type: 'string',
+              enum: ['VlcHolderAppProvider_v1'],
+            },
+          },
+          required: ['type'],
+        },
+        {
+          properties: {
+            type: {
+              type: 'string',
+              enum: ['VlcHolderAppProvider_v1'],
+            },
+          },
+          required: ['type'],
+        },
+      ],
+    });
     const { repos } = context;
     const organization = await repos.organizations.findOneByDid(did, {
       didDoc: 1,
