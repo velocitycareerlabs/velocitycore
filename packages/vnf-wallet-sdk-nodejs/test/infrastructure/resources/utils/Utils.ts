@@ -24,9 +24,7 @@ export const generatePresentationSubmissionResult = (
         submissionId
     );
 };
-const expectedExchange = (
-    exchangeJsonObj: Dictionary<any>
-): VCLExchange => {
+const expectedExchange = (exchangeJsonObj: Dictionary<any>): VCLExchange => {
     return new VCLExchange(
         exchangeJsonObj[VCLExchange.KeyId],
         exchangeJsonObj[VCLExchange.KeyType],
