@@ -1505,6 +1505,40 @@ describe('Organization Services Test Suite', () => {
           );
         });
 
+        it('Should 400 when HolderAppProviderType service is missing supportedExchangeProtocols property', async () => {
+          const organization = await setupOrganizationWithGroup();
+          const did = organization.didDoc.id;
+          const payload = {
+            id: `${did}#holder-1`,
+            type: ServiceTypes.HolderAppProviderType,
+            serviceEndpoint: 'https://agent.samplevendor.com/acme',
+            logoUrl: 'http://example.com/1.png',
+            playStoreUrl: 'http://example.com/play-store',
+            appleAppStoreUrl: 'http://example.com/apple-app-store',
+            appleAppId: 'com.example.app',
+            googlePlayId: 'com.example.app',
+            name: 'fooAppWallet',
+          };
+
+          const response = await fastify.injectJson({
+            method: 'POST',
+            url: `${baseUrl}/${did}/services`,
+            payload,
+            headers: { 'x-auto-activate': '0' },
+          });
+
+          expect(response.statusCode).toEqual(400);
+          expect(response.json).toEqual(
+            errorResponseMatcher({
+              error: 'Bad Request',
+              errorCode: 'missing_error_code',
+              message:
+                'VlcHolderAppProvider_v1 service type requires "supportedExchangeProtocols"',
+              statusCode: 400,
+            })
+          );
+        });
+
         it('Should add organization HolderAppProviderType service', async () => {
           const organization = await setupOrganizationWithGroup();
           const did = organization.didDoc.id;
@@ -1518,6 +1552,7 @@ describe('Organization Services Test Suite', () => {
             appleAppId: 'com.example.app',
             googlePlayId: 'com.example.app',
             name: 'fooAppWallet',
+            supportedExchangeProtocols: ['VN_API'],
           };
 
           const response = await fastify.injectJson({
@@ -1564,6 +1599,7 @@ describe('Organization Services Test Suite', () => {
                 name: 'fooAppWallet',
                 serviceEndpoint: 'https://agent.samplevendor.com/acme',
                 type: 'VlcHolderAppProvider_v1',
+                supportedExchangeProtocols: ['VN_API'],
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
               },
@@ -2962,6 +2998,7 @@ describe('Organization Services Test Suite', () => {
           appleAppStoreUrl: 'http://example.com/apple-app-store',
           appleAppId: 'com.example.app',
           googlePlayId: 'com.example.app',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const response = await fastify.injectJson({
