@@ -982,6 +982,7 @@ describe('Organizations Full Test Suite', () => {
             serviceEndpoint: 'https://agent.samplevendor.com/acme',
             logoUrl: 'http://example.com/logo',
             name: 'fooWallet',
+            supportedExchangeProtocols: ['VN_API'],
           };
           const payload = {
             profile: orgProfile,

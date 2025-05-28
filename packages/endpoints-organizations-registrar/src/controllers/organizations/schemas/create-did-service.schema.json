@@ -51,6 +51,17 @@
     },
     "name": {
       "type": "string"
+    },
+    "supportedExchangeProtocols": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "VN_API",
+          "OPENID4VC"
+        ]
+      },
+      "minItems": 1
     }
   },
   "required": [
