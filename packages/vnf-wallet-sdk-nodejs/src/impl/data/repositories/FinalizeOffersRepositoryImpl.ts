@@ -21,7 +21,7 @@ export class FinalizeOffersRepositoryImpl implements FinalizeOffersRepository {
             endpoint: finalizeOffersDescriptor.finalizeOffersUri,
             body: finalizeOffersDescriptor.generateRequestBody(proof),
             headers: {
-                [HeaderKeys.HeaderKeyAuthorization]: `${HeaderKeys.HeaderValuePrefixBearer} ${sessionToken.value}`,
+                [HeaderKeys.Authorization]: `${HeaderValues.PrefixBearer} ${sessionToken.value}`,
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },

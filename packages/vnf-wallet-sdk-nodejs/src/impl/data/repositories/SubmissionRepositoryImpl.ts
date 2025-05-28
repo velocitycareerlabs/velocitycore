@@ -32,15 +32,13 @@ export default class SubmissionRepositoryImpl implements SubmissionRepository {
         );
     }
 
-    private generateHeader = (accessToken: Nullish<VCLToken>) => {
+    public generateHeader = (accessToken: Nullish<VCLToken> = null) => {
         const header = {
             [HeaderKeys.XVnfProtocolVersion]: HeaderValues.XVnfProtocolVersion,
         };
 
         if (accessToken != null) {
-            header[
-                HeaderKeys.HeaderKeyAuthorization
-            ] = `Bearer ${accessToken?.value}`;
+            header[HeaderKeys.Authorization] = `Bearer ${accessToken?.value}`;
         }
 
         return header;

@@ -4,13 +4,9 @@ import JwtServiceRepositoryImpl from '../../src/impl/data/repositories/JwtServic
 import { JwtSignServiceMock } from '../infrastructure/resources/jwt/JwtSignServiceMock';
 import { JwtVerifyServiceMock } from '../infrastructure/resources/jwt/JwtVerifyServiceMock';
 import {
-    Dictionary,
     VCLDeepLink,
-    VCLExchange,
     VCLPresentationRequest,
     VCLPresentationSubmission,
-    VCLSubmissionResult,
-    VCLToken,
     VCLVerifiedProfile,
 } from '../../src';
 import { DidJwkMocks } from '../infrastructure/resources/valid/DidJwkMocks';
@@ -18,6 +14,8 @@ import PresentationSubmissionUseCaseImpl from '../../src/impl/data/usecases/Pres
 import { PresentationSubmissionMocks } from '../infrastructure/resources/valid/PresentationSubmissionMocks';
 import SubmissionRepositoryImpl from '../../src/impl/data/repositories/SubmissionRepositoryImpl';
 import { CommonMocks } from '../infrastructure/resources/CommonMocks';
+import { generatePresentationSubmissionResult } from '../infrastructure/resources/utils/Utils';
+import TokenMocks from '../infrastructure/resources/valid/TokenMocks';
 
 describe('PresentationSubmission Tests', () => {
     const subject = new PresentationSubmissionUseCaseImpl(
@@ -34,6 +32,7 @@ describe('PresentationSubmission Tests', () => {
         )
     );
     const didJwk = DidJwkMocks.DidJwk;
+    const authToken = TokenMocks.AuthToken;
     const presentationSubmission = new VCLPresentationSubmission(
         new VCLPresentationRequest(
             CommonMocks.JWT,
@@ -44,51 +43,48 @@ describe('PresentationSubmission Tests', () => {
         ),
         []
     );
-    const expectedExchange = (
-        exchangeJsonObj: Dictionary<any>
-    ): VCLExchange => {
-        return new VCLExchange(
-            exchangeJsonObj[VCLExchange.KeyId],
-            exchangeJsonObj[VCLExchange.KeyType],
-            exchangeJsonObj[VCLExchange.KeyDisclosureComplete],
-            exchangeJsonObj[VCLExchange.KeyExchangeComplete]
-        );
-    };
-    const generatePresentationSubmissionResult = (
-        jsonObj: Dictionary<any>,
-        jti: string,
-        submissionId: string
-    ): VCLSubmissionResult => {
-        const exchangeJsonObj = jsonObj[VCLSubmissionResult.KeyExchange];
-        return new VCLSubmissionResult(
-            new VCLToken(jsonObj[VCLSubmissionResult.KeyToken]),
-            expectedExchange(exchangeJsonObj),
-            jti,
-            submissionId
-        );
-    };
-    const expectedPresentationSubmissionResult =
-        generatePresentationSubmissionResult(
-            PresentationSubmissionMocks.PresentationSubmissionResultJson,
-            presentationSubmission.jti,
-            presentationSubmission.submissionId
-        );
-    test('testGetPresentationSubmissionSuccess', async () => {
+    const expectedSubmissionResult = generatePresentationSubmissionResult(
+        PresentationSubmissionMocks.PresentationSubmissionResultJson,
+        presentationSubmission.jti,
+        presentationSubmission.submissionId
+    );
+
+    test('testSubmitPresentationSuccess', async () => {
         const presentationSubmissionResult = await subject.submit(
             presentationSubmission
         );
 
         expect(presentationSubmissionResult?.sessionToken.value).toBe(
-            expectedPresentationSubmissionResult.sessionToken.value
+            expectedSubmissionResult.sessionToken.value
         );
         expect(presentationSubmissionResult?.exchange.id).toBe(
-            expectedPresentationSubmissionResult.exchange.id
+            expectedSubmissionResult.exchange.id
         );
         expect(presentationSubmissionResult?.jti).toBe(
-            expectedPresentationSubmissionResult.jti
+            expectedSubmissionResult.jti
         );
         expect(presentationSubmissionResult?.submissionId).toBe(
-            expectedPresentationSubmissionResult.submissionId
+            expectedSubmissionResult.submissionId
+        );
+    });
+
+    test('testSubmitPresentationTypeFeedSuccess', async () => {
+        const presentationSubmissionResult = await subject.submit(
+            presentationSubmission,
+            authToken
+        );
+
+        expect(presentationSubmissionResult?.sessionToken.value).toBe(
+            expectedSubmissionResult.sessionToken.value
+        );
+        expect(presentationSubmissionResult?.exchange.id).toBe(
+            expectedSubmissionResult.exchange.id
+        );
+        expect(presentationSubmissionResult?.jti).toBe(
+            expectedSubmissionResult.jti
+        );
+        expect(presentationSubmissionResult?.submissionId).toBe(
+            expectedSubmissionResult.submissionId
         );
     });
 });

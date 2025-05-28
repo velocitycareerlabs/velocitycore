@@ -16,12 +16,11 @@ describe('AuthTokenUseCaseTest', () => {
     let subject!: AuthTokenUseCase;
 
     const expectedAuthToken = TokenMocks.AuthToken;
-    const expectedAuthTokenStr = TokenMocks.AuthTokenStr;
 
     test('testGetAuthTokenSuccess', async () => {
         subject = new AuthTokenUseCaseImpl(
             new AuthTokenRepositoryImpl(
-                new NetworkServiceSuccess(JSON.parse(expectedAuthTokenStr))
+                new NetworkServiceSuccess(expectedAuthToken.payload)
             )
         );
         try {

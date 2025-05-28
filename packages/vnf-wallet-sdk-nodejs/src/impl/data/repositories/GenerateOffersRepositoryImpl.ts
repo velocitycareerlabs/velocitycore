@@ -20,7 +20,7 @@ export default class GenerateOffersRepositoryImpl
             useCaches: false,
             endpoint: generateOffersDescriptor.checkOffersUri,
             headers: {
-                [HeaderKeys.HeaderKeyAuthorization]: `${HeaderKeys.HeaderValuePrefixBearer} ${sessionToken.value}`,
+                [HeaderKeys.Authorization]: `${HeaderValues.PrefixBearer} ${sessionToken.value}`,
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },

@@ -21,7 +21,7 @@ export default class ExchangeProgressRepositoryImpl
                 VCLExchangeDescriptor.KeyExchangeId
             }=${encodeURIComponent(exchangeDescriptor.exchangeId)}`,
             headers: {
-                [HeaderKeys.HeaderKeyAuthorization]: `${HeaderKeys.HeaderValuePrefixBearer} ${exchangeDescriptor.sessionToken.value}`,
+                [HeaderKeys.Authorization]: `${HeaderValues.PrefixBearer} ${exchangeDescriptor.sessionToken.value}`,
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
