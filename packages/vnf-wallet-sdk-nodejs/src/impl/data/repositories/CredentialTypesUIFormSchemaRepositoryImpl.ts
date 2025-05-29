@@ -1,3 +1,8 @@
+/*
+Added the bellow suppression to allow mutating methods like `push`, `pop`, etc.
+Alternatively, we could rewrite the code to avoid using mutating methods,
+ */
+/* eslint-disable better-mutation/no-mutating-methods,better-mutation/no-mutation */
 import { Dictionary, Nullish } from '../../../api/VCLTypes';
 import VCLCountries from '../../../api/entities/VCLCountries';
 import VCLCredentialTypesUIFormSchema from '../../../api/entities/VCLCredentialTypesUIFormSchema';
