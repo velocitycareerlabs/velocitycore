@@ -83,6 +83,7 @@
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
+    "@velocitycareerlabs/endpoints-organizations-registrar": "0.5.0-build",
     "cheerio": "1.0.0",
     "dotenv": "16.5.0",
     "eslint": "8.57.1",

@@ -18,17 +18,12 @@ const console = require('console');
 const { MongoClient } = require('mongodb');
 const { nanoid } = require('nanoid');
 const { addYears } = require('date-fns');
+const { filter, first, /* map, */ omit, replace } = require('lodash/fp');
 const {
-  filter,
-  first,
-  map,
-  omit,
-  replace,
-} = require('lodash/fp');
-const { KeyPurposes, generateKeyPair } = require('@velocitycareerlabs/crypto');
+  KeyPurposes /* generateKeyPair */,
+} = require('@velocitycareerlabs/crypto');
 const {
-  applyOverrides,
-  wait,
+  // applyOverrides,
   formatAsDate,
 } = require('@velocitycareerlabs/common-functions');
 const {
@@ -37,17 +32,17 @@ const {
   ISO_DATETIME_FORMAT,
 } = require('@velocitycareerlabs/test-regexes');
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
-const {
-  jwtDecode,
-  jwtVerify,
-  generateDocJwt,
-  generatePresentationJwt,
-  toJwk,
-  jwtSign,
-} = require('@velocitycareerlabs/jwt');
-const { getDidUriFromJwk } = require('@velocitycareerlabs/did-doc');
-const { hashOffer } = require('@velocitycareerlabs/velocity-issuing');
-const { CheckResults } = require('@velocitycareerlabs/vc-checks');
+// const {
+//   jwtDecode,
+//   jwtVerify,
+//   generateDocJwt,
+//   generatePresentationJwt,
+//   toJwk,
+//   jwtSign,
+// } = require('@velocitycareerlabs/jwt');
+// const { getDidUriFromJwk } = require('@velocitycareerlabs/did-doc');
+// const { hashOffer } = require('@velocitycareerlabs/velocity-issuing');
+// const { CheckResults } = require('@velocitycareerlabs/vc-checks');
 
 const { addMonths } = require('date-fns/fp');
 const {
@@ -60,14 +55,11 @@ const { toHexString } = require('@velocitycareerlabs/blockchain-functions');
 const {
   Authorities,
 } = require('@velocitycareerlabs/endpoints-organizations-registrar');
-const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
-const {
-  sampleEducationDegreeGraduation,
-} = require('@velocitycareerlabs/sample-data');
-const {
-  VendorEndpoint,
-  ConfigurationType,
-} = require('../src/entities');
+// const {
+//   sampleEducationDegreeGraduation,
+// } = require('@velocitycareerlabs/sample-data');
+// const { jwtVcExpectation } = require('../test/helpers/jwt-vc-expectation');
+const { VendorEndpoint, ConfigurationType } = require('../src/entities');
 
 const registrarUrl = 'https://localhost:13004';
 const fineractUrl = 'http://localhost:13008';
@@ -79,19 +71,28 @@ const authenticate = () => 'TOKEN';
 const rpcProvider = initProvider(rpcUrl, authenticate);
 const e2eEnv = {};
 dotenv.config({
-  path: path.resolve(__dirname, '..', '..', '..', 'samples', 'sample-registrar-server', '.localdev.env'),
+  path: path.resolve(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    'samples',
+    'sample-registrar-server',
+    '.localdev.env'
+  ),
   processEnv: e2eEnv,
 });
 console.dir(e2eEnv);
 
-const OPERATOR_API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoidmVsb2NpdHkuYWRtaW5AZXhhbXBsZS5jb20ifQ.kmp4qjkgnVOX3eXdgNdUwYKDZ7NgEfH5qMM-7k1D1c8';
-const EDUCATION_DEGREE_CREDENTIAL_TYPE = 'EducationDegreeGraduationV1.1';
+const OPERATOR_API_TOKEN =
+  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoidmVsb2NpdHkuYWRtaW5AZXhhbXBsZS5jb20ifQ.kmp4qjkgnVOX3eXdgNdUwYKDZ7NgEfH5qMM-7k1D1c8';
+// const EDUCATION_DEGREE_CREDENTIAL_TYPE = 'EducationDegreeGraduationV1.1';
 
 describe('org registration and issuing e2e', () => {
   let client;
 
-  let holderKeyPair;
-  let holderDid;
+  // let holderKeyPair;
+  // let holderDid;
 
   afterAll(async () => {
     await client.close();
@@ -100,8 +101,8 @@ describe('org registration and issuing e2e', () => {
     client = await MongoClient.connect('mongodb://localhost:17017');
 
     // Generate holder DID and key pair for fake wallet
-    holderKeyPair = generateKeyPair({ format: 'jwk' });
-    holderDid = getDidUriFromJwk(holderKeyPair.publicKey);
+    // holderKeyPair = generateKeyPair({ format: 'jwk' });
+    // holderDid = getDidUriFromJwk(holderKeyPair.publicKey);
   });
 
   it('register org, create tenant, preauth service, depot & credential and have holder claim it and finally verify a presentation', async () => {
@@ -198,7 +199,8 @@ describe('org registration and issuing e2e', () => {
 
     // json response checks
     expect(createFullOrganizationResponse.id).toMatch(DID_FORMAT);
-    const { id: did, ids, profile, keys } = createFullOrganizationResponse;
+    const { id: did, /* ids, profile, */ keys } =
+      createFullOrganizationResponse;
     console.dir({ msg: 'Organization registered', did });
 
     const fineractAuthResponse = await fetch(
@@ -303,7 +305,7 @@ describe('org registration and issuing e2e', () => {
     const createTenantJson = await createTenantResponse.json();
     expect(createTenantJson).toEqual({
       id: expect.stringMatching(OBJECT_ID_FORMAT),
-      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT)
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
     });
 
     // Create mockvendor user
@@ -317,19 +319,16 @@ describe('org registration and issuing e2e', () => {
         line2: 'Phoenix',
         countryCode: 'US',
         regionCode: 'AZ',
-      }
+      },
     };
 
-    const createUserResponse = await fetch(
-      `${mockvendorUrl}/api/users`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-      }
-    );
+    const createUserResponse = await fetch(`${mockvendorUrl}/api/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    });
 
     expect(createUserResponse.status).toEqual(200);
     const createUserJson = await createUserResponse.json();
@@ -396,15 +395,13 @@ describe('org registration and issuing e2e', () => {
       offerId: '5539e308-6f2f-4d01-b946-5ca4ba7fee20',
     };
 
-    const createOfferResponse = await fetch(
-      `${mockvendorUrl}/api/offers`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(offer),
-      });
+    const createOfferResponse = await fetch(`${mockvendorUrl}/api/offers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(offer),
+    });
 
     expect(createOfferResponse.status).toEqual(200);
     const createOfferJson = await createOfferResponse.json();
@@ -435,7 +432,7 @@ describe('org registration and issuing e2e', () => {
       offerMode: 'webhook',
       termsUrl:
         'https://www.velocityexperiencecenter.com/terms-and-conditions-vnf',
-    }
+    };
 
     const createDisclosureResponse = await fetch(
       `${caUrl}/operator-api/v0.8/tenants/${createTenantJson.id}/disclosures`,
@@ -446,12 +443,13 @@ describe('org registration and issuing e2e', () => {
           authorization: `Bearer ${OPERATOR_API_TOKEN}`,
         },
         body: JSON.stringify(disclosure),
-      });
+      }
+    );
 
     expect(createDisclosureResponse.status).toEqual(201);
     const createDisclosureJson = await createDisclosureResponse.json();
     expect(createDisclosureJson).toEqual({
-      ..._.omit(['setIssuingDefault'])(disclosure),
+      ...omit(['setIssuingDefault'])(disclosure),
       deactivationDate: expect.any(String),
       identificationMethods: ['preauth'],
       sendPushOnVerification: false,
@@ -460,7 +458,6 @@ describe('org registration and issuing e2e', () => {
       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
       updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
     });
-
   }, 30000);
 });
 
@@ -483,151 +480,151 @@ const expectedOffer = (payload, overrides = {}) =>
     ...overrides,
   });
 
-const expectedTenant = (tenant, primaryAccount) => ({
-  id: tenant._id ?? expect.stringMatching(OBJECT_ID_FORMAT),
-  createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-  updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-  hostUrl: 'http://localhost:13002',
-  primaryAccount,
-  ...omit(['_id', 'primaryAccount'], tenant),
-});
+// const expectedTenant = (tenant, primaryAccount) => ({
+//   id: tenant._id ?? expect.stringMatching(OBJECT_ID_FORMAT),
+//   createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+//   updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+//   hostUrl: 'http://localhost:13002',
+//   primaryAccount,
+//   ...omit(['_id', 'primaryAccount'], tenant),
+// });
 
-const expectedKeyMetadatas = map((key) => ({
-  ...omit(['key', 'didDocumentKey'], key),
-  id: expect.stringMatching(OBJECT_ID_FORMAT),
-  createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-  encoding: 'jwk',
-}));
+// const expectedKeyMetadatas = map((key) => ({
+//   ...omit(['key', 'didDocumentKey'], key),
+//   id: expect.stringMatching(OBJECT_ID_FORMAT),
+//   createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+//   encoding: 'jwk',
+// }));
 
-const expectedEntity = (payload, overrides) =>
-  applyOverrides(
-    {
-      ...payload,
-      id: expect.stringMatching(OBJECT_ID_FORMAT),
-      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-      updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
-    },
-    overrides
-  );
+// const expectedEntity = (payload, overrides) =>
+//   applyOverrides(
+//     {
+//       ...payload,
+//       id: expect.stringMatching(OBJECT_ID_FORMAT),
+//       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+//       updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+//     },
+//     overrides
+//   );
 
-const expectedSearchParams = (tenant, service, depot, preauthCode) => {
-  let searchParamsString = `request_uri=${encodeURIComponent(
-    caUrl
-  )}%2Fvn-api%2Fr%2F${encodeURIComponent(
-    encodeURI(tenant.did)
-  )}%2Fget-credential-manifest%3Fid%3D${encodeURIComponent(service.id)}`;
-  searchParamsString += `&issuerDid=${encodeURIComponent(tenant.did)}`;
-  if (preauthCode != null) {
-    searchParamsString += `&vendorOriginContext=${encodeURIComponent(
-      `depot:${depot.id}:${preauthCode}`
-    )}`;
-  }
-  return searchParamsString;
-};
+// const expectedSearchParams = (tenant, service, depot, preauthCode) => {
+//   let searchParamsString = `request_uri=${encodeURIComponent(
+//     caUrl
+//   )}%2Fvn-api%2Fr%2F${encodeURIComponent(
+//     encodeURI(tenant.did)
+//   )}%2Fget-credential-manifest%3Fid%3D${encodeURIComponent(service.id)}`;
+//   searchParamsString += `&issuerDid=${encodeURIComponent(tenant.did)}`;
+//   if (preauthCode != null) {
+//     searchParamsString += `&vendorOriginContext=${encodeURIComponent(
+//       `depot:${depot.id}:${preauthCode}`
+//     )}`;
+//   }
+//   return searchParamsString;
+// };
 
-const expectedCredentialManifest = (
-  profile,
-  tenant,
-  issuerService,
-  payload
-) => ({
-  exchange_id: expect.any(String),
-  output_descriptors: map(() => expect.any(Object), payload?.credential_types),
-  issuer: {
-    id: tenant.did,
-  },
-  presentation_definition: {
-    id: expect.any(String),
-    format: {
-      jwt_vp: { alg: ['secp256k1'] },
-    },
-    name: issuerService.description,
-    purpose: issuerService.disclosureRequest?.purpose ?? '',
-    input_descriptors: map(
-      () => expect.any(Object),
-      issuerService.disclosureRequest?.types
-    ),
-    submission_requirements:
-      issuerService.disclosureRequest?.types != null
-        ? [
-          {
-            from: 'A',
-            min: 1,
-            rule: 'all',
-          },
-        ]
-        : [],
-    ...issuerService.presentationDefinition,
-  },
-  metadata: {
-    client_name: issuerService.commercialEntity?.name ?? profile.name,
-    logo_uri: issuerService.commercialEntity?.logo ?? profile.logo,
-    tos_uri: issuerService.termsUrl,
-    max_retention_period:
-      issuerService.disclosureRequest?.retentionPeriod ?? '',
-    progress_uri: `${caUrl}${vnUrl(tenant)}/get-exchange-progress`,
-    submit_presentation_uri: `${caUrl}${vnUrl(tenant)}/authenticate`,
-    check_offers_uri: `${caUrl}${vnUrl(tenant)}/credential-offers`,
-    finalize_offers_uri: `${caUrl}${vnUrl(tenant)}/issue-credentials`,
-  },
-});
+// const expectedCredentialManifest = (
+//   profile,
+//   tenant,
+//   issuerService,
+//   payload
+// ) => ({
+//   exchange_id: expect.any(String),
+//   output_descriptors: map(() => expect.any(Object), payload?.credential_types),
+//   issuer: {
+//     id: tenant.did,
+//   },
+//   presentation_definition: {
+//     id: expect.any(String),
+//     format: {
+//       jwt_vp: { alg: ['secp256k1'] },
+//     },
+//     name: issuerService.description,
+//     purpose: issuerService.disclosureRequest?.purpose ?? '',
+//     input_descriptors: map(
+//       () => expect.any(Object),
+//       issuerService.disclosureRequest?.types
+//     ),
+//     submission_requirements:
+//       issuerService.disclosureRequest?.types != null
+//         ? [
+//             {
+//               from: 'A',
+//               min: 1,
+//               rule: 'all',
+//             },
+//           ]
+//         : [],
+//     ...issuerService.presentationDefinition,
+//   },
+//   metadata: {
+//     client_name: issuerService.commercialEntity?.name ?? profile.name,
+//     logo_uri: issuerService.commercialEntity?.logo ?? profile.logo,
+//     tos_uri: issuerService.termsUrl,
+//     max_retention_period:
+//       issuerService.disclosureRequest?.retentionPeriod ?? '',
+//     progress_uri: `${caUrl}${vnUrl(tenant)}/get-exchange-progress`,
+//     submit_presentation_uri: `${caUrl}${vnUrl(tenant)}/authenticate`,
+//     check_offers_uri: `${caUrl}${vnUrl(tenant)}/credential-offers`,
+//     finalize_offers_uri: `${caUrl}${vnUrl(tenant)}/issue-credentials`,
+//   },
+// });
 
-const buildProof = async (
-  url,
-  didJwk,
-  keyPair,
-  challenge,
-  { useKid = true, ...payloadOverrides } = {}
-) => {
-  const options = {
-    jwk: keyPair.publicKey,
-    alg: keyPair.publicKey.crv === 'P-256' ? 'ES256' : 'ES256K',
-  };
-  if (useKid) options.kid = `${didJwk}#0`;
-  const jwt = await jwtSign(
-    applyOverrides(
-      {
-        aud: url,
-        nonce: challenge,
-        iss: didJwk,
-      },
-      payloadOverrides
-    ),
-    keyPair.privateKey,
-    options
-  );
-  return {
-    proof_type: 'jwt',
-    jwt,
-  };
-};
+// const buildProof = async (
+//   url,
+//   didJwk,
+//   keyPair,
+//   challenge,
+//   { useKid = true, ...payloadOverrides } = {}
+// ) => {
+//   const options = {
+//     jwk: keyPair.publicKey,
+//     alg: keyPair.publicKey.crv === 'P-256' ? 'ES256' : 'ES256K',
+//   };
+//   if (useKid) options.kid = `${didJwk}#0`;
+//   const jwt = await jwtSign(
+//     applyOverrides(
+//       {
+//         aud: url,
+//         nonce: challenge,
+//         iss: didJwk,
+//       },
+//       payloadOverrides
+//     ),
+//     keyPair.privateKey,
+//     options
+//   );
+//   return {
+//     proof_type: 'jwt',
+//     jwt,
+//   };
+// };
 
-const vnUrl = ({ did }) => `/vn-api/r/${encodeURI(did)}`;
+// const vnUrl = ({ did }) => `/vn-api/r/${encodeURI(did)}`;
 
-const generatePreauthCodeAuthJwt = (
-  depot,
-  vendorOriginContext,
-  holderDid,
-  keyPair
-) => {
-  const didJwk = getDidUriFromJwk(keyPair.publicKey);
-  const options = {
-    issuer: didJwk,
-    jti: nanoid(),
-    kid: `${didJwk}#0`,
-  };
-  const payload = {
-    id: nanoid(),
-    issuer: holderDid,
-    vp: {
-      presentation_submission: {
-        id: nanoid(),
-        definition_id: nanoid(),
-      },
-    },
-  };
-  if (vendorOriginContext != null) {
-    payload.vp.vendorOriginContext = vendorOriginContext;
-  }
-  return generateDocJwt(payload, keyPair.privateKey, options);
-};
+// const generatePreauthCodeAuthJwt = (
+//   depot,
+//   vendorOriginContext,
+//   holderDid,
+//   keyPair
+// ) => {
+//   const didJwk = getDidUriFromJwk(keyPair.publicKey);
+//   const options = {
+//     issuer: didJwk,
+//     jti: nanoid(),
+//     kid: `${didJwk}#0`,
+//   };
+//   const payload = {
+//     id: nanoid(),
+//     issuer: holderDid,
+//     vp: {
+//       presentation_submission: {
+//         id: nanoid(),
+//         definition_id: nanoid(),
+//       },
+//     },
+//   };
+//   if (vendorOriginContext != null) {
+//     payload.vp.vendorOriginContext = vendorOriginContext;
+//   }
+//   return generateDocJwt(payload, keyPair.privateKey, options);
+// };
