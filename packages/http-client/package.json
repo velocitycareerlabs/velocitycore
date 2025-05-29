@@ -1,24 +1,25 @@
 {
-  "name": "@velocitycareerlabs/logger",
+  "name": "@velocitycareerlabs/http-client",
   "version": "0.5.0-build",
-  "description": "Logger for velocity foundation network",
+  "description": "HTTP client for velocity foundation network",
   "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "test": "jest --config ./jest.config.js --runInBand --coverage --passWithNoTests",
+    "test": "jest --config ./jest.config.js --runInBand --coverage",
     "lint": "eslint . --format json >> eslint.json",
     "lint:fix": "eslint --fix --ext .js ."
   },
-  "author": "Yauheni Pozdnyakov",
+  "author": "Itay Podhajcer",
   "license": "Apache-2.0",
   "dependencies": {
-    "pino": "~9.7.0",
-    "pino-pretty": "~13.0.0",
+    "date-fns": "^3.0.0",
+    "http-errors": "^2.0.0",
     "lodash": "^4.17.21",
-    "@velocitycareerlabs/jwt": "0.5.0-build"
+    "nanoid": "~3.3.1",
+    "undici": "^7.0.0"
   },
   "devDependencies": {
     "eslint": "8.57.1",
@@ -31,6 +32,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-watch": "7.0.0",
     "jest": "29.7.0",
+    "nodemon": "3.1.10",
     "prettier": "2.8.8"
   },
   "nx": {

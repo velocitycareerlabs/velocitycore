@@ -1,5 +1,5 @@
 #!/bin/bash
-CURR_VERSION="1.25.0"
+CURR_VERSION="1.27.0"
 REGISTRY_URL="https://npm.pkg.github.com/"
 TARGET_ORG="velocitycareerlabs"
 

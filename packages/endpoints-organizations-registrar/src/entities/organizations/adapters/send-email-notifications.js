@@ -180,7 +180,7 @@ const initSendEmailNotifications = (initCtx) => {
       message: html,
       sender: config.registrarSupportEmail,
       recipients: [organization.profile.signatoryEmail],
-      bccs: [config.registrarSupportEmail],
+      bccs: [config.signatoryVnfEmail],
       replyTo: config.registrarSupportEmail,
       html: true,
     });
