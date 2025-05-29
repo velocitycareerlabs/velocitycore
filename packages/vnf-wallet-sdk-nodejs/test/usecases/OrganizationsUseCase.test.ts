@@ -24,16 +24,16 @@ describe('OrganizationsUseCase Tests', () => {
         expect(serviceCredentialAgentIssuer.payload).toStrictEqual(
             serviceJsonMock
         );
-        expect(serviceCredentialAgentIssuer.id).toBe(
+        expect(serviceCredentialAgentIssuer.id).toEqual(
             serviceJsonMock[VCLService.KeyId]
         );
-        expect(serviceCredentialAgentIssuer.type).toBe(
+        expect(serviceCredentialAgentIssuer.type).toEqual(
             serviceJsonMock[VCLService.KeyType]
         );
         expect(serviceCredentialAgentIssuer.credentialTypes).toStrictEqual(
             serviceJsonMock[VCLService.KeyCredentialTypes]
         );
-        expect(serviceCredentialAgentIssuer.serviceEndpoint).toBe(
+        expect(serviceCredentialAgentIssuer.serviceEndpoint).toEqual(
             OrganizationsMocks.ServiceEndpoint
         );
     });

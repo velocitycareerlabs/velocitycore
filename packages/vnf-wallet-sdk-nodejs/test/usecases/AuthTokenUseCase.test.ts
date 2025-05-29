@@ -59,7 +59,7 @@ describe('AuthTokenUseCaseTest', () => {
             await subject.getAuthToken(new VCLAuthTokenDescriptor(''));
             expect(true).toBeFalsy();
         } catch (error: any) {
-            expect(error?.errorCode).toBe(VCLErrorCode.SdkError.toString());
+            expect(error?.errorCode).toEqual(VCLErrorCode.SdkError.toString());
         }
     });
 });

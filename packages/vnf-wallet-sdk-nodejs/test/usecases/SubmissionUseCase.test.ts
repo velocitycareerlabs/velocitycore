@@ -16,21 +16,15 @@ import SubmissionRepositoryImpl from '../../src/impl/data/repositories/Submissio
 import { CommonMocks } from '../infrastructure/resources/CommonMocks';
 import { generatePresentationSubmissionResult } from '../infrastructure/resources/utils/Utils';
 import TokenMocks from '../infrastructure/resources/valid/TokenMocks';
+import PresentationSubmissionUseCase from '../../src/impl/domain/usecases/PresentationSubmissionUseCase';
+import {
+    HeaderKeys,
+    HeaderValues,
+} from '../../src/impl/data/repositories/Urls';
 
 describe('PresentationSubmission Tests', () => {
-    const subject = new PresentationSubmissionUseCaseImpl(
-        new SubmissionRepositoryImpl(
-            new NetworkServiceSuccess(
-                PresentationSubmissionMocks.PresentationSubmissionResultJson
-            )
-        ),
-        new JwtServiceRepositoryImpl(
-            new JwtSignServiceMock(
-                PresentationSubmissionMocks.JwtEncodedSubmission
-            ),
-            new JwtVerifyServiceMock()
-        )
-    );
+    let subject: PresentationSubmissionUseCase;
+    let networkServiceSuccess: NetworkServiceSuccess;
     const didJwk = DidJwkMocks.DidJwk;
     const authToken = TokenMocks.AuthToken;
     const presentationSubmission = new VCLPresentationSubmission(
@@ -49,22 +43,51 @@ describe('PresentationSubmission Tests', () => {
         presentationSubmission.submissionId
     );
 
+    const expectedHeadersWithoutAccessToken = {
+        [HeaderKeys.XVnfProtocolVersion]: HeaderValues.XVnfProtocolVersion,
+    };
+    const expectedHeadersWithAccessToken = {
+        [HeaderKeys.XVnfProtocolVersion]: HeaderValues.XVnfProtocolVersion,
+        [HeaderKeys.Authorization]: `Bearer ${authToken.accessToken?.value}`,
+    };
+
+    beforeEach(() => {
+        networkServiceSuccess = new NetworkServiceSuccess(
+            PresentationSubmissionMocks.PresentationSubmissionResultJson
+        );
+        subject = new PresentationSubmissionUseCaseImpl(
+            new SubmissionRepositoryImpl(networkServiceSuccess),
+            new JwtServiceRepositoryImpl(
+                new JwtSignServiceMock(
+                    PresentationSubmissionMocks.JwtEncodedSubmission
+                ),
+                new JwtVerifyServiceMock()
+            )
+        );
+    });
+
     test('testSubmitPresentationSuccess', async () => {
         const presentationSubmissionResult = await subject.submit(
             presentationSubmission
         );
 
-        expect(presentationSubmissionResult?.sessionToken.value).toBe(
+        expect(presentationSubmissionResult?.sessionToken.value).toEqual(
             expectedSubmissionResult.sessionToken.value
         );
-        expect(presentationSubmissionResult?.exchange.id).toBe(
+        expect(presentationSubmissionResult?.exchange.id).toEqual(
             expectedSubmissionResult.exchange.id
         );
-        expect(presentationSubmissionResult?.jti).toBe(
+        expect(presentationSubmissionResult?.jti).toEqual(
             expectedSubmissionResult.jti
         );
-        expect(presentationSubmissionResult?.submissionId).toBe(
+        expect(presentationSubmissionResult?.submissionId).toEqual(
             expectedSubmissionResult.submissionId
+        );
+
+        expect(networkServiceSuccess.sendRequestCalled).toEqual(true);
+        expect(networkServiceSuccess.request).toBeDefined();
+        expect(networkServiceSuccess.request!.headers).toEqual(
+            expectedHeadersWithoutAccessToken
         );
     });
 
@@ -74,17 +97,23 @@ describe('PresentationSubmission Tests', () => {
             authToken
         );
 
-        expect(presentationSubmissionResult?.sessionToken.value).toBe(
+        expect(presentationSubmissionResult?.sessionToken.value).toEqual(
             expectedSubmissionResult.sessionToken.value
         );
-        expect(presentationSubmissionResult?.exchange.id).toBe(
+        expect(presentationSubmissionResult?.exchange.id).toEqual(
             expectedSubmissionResult.exchange.id
         );
-        expect(presentationSubmissionResult?.jti).toBe(
+        expect(presentationSubmissionResult?.jti).toEqual(
             expectedSubmissionResult.jti
         );
-        expect(presentationSubmissionResult?.submissionId).toBe(
+        expect(presentationSubmissionResult?.submissionId).toEqual(
             expectedSubmissionResult.submissionId
+        );
+
+        expect(networkServiceSuccess.sendRequestCalled).toEqual(true);
+        expect(networkServiceSuccess.request).toBeDefined();
+        expect(networkServiceSuccess.request!.headers!).toEqual(
+            expectedHeadersWithAccessToken
         );
     });
 });

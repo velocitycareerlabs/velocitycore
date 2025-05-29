@@ -6,8 +6,8 @@ import VCLSubmissionResult from '../../../api/entities/VCLSubmissionResult';
 import VCLToken from '../../../api/entities/VCLToken';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import SubmissionRepository from '../../domain/repositories/SubmissionRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class SubmissionRepositoryImpl implements SubmissionRepository {
     constructor(private networkService: NetworkService) {}

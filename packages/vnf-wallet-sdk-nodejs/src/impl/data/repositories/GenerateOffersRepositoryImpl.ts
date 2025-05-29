@@ -4,8 +4,8 @@ import VCLOffers from '../../../api/entities/VCLOffers';
 import VCLToken from '../../../api/entities/VCLToken';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import GenerateOffersRepository from '../../domain/repositories/GenerateOffersRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class GenerateOffersRepositoryImpl
     implements GenerateOffersRepository

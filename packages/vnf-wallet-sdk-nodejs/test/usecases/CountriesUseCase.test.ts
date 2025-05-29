@@ -17,25 +17,29 @@ describe('CredentialManifestUseCase Tests', () => {
         const afghanistanCountry = countries.countryByCode(VCLCountryCodes.AF);
         const afghanistanRegions = afghanistanCountry?.regions;
 
-        expect(afghanistanCountry?.code).toBe(CountriesMocks.AfghanistanCode);
-        expect(afghanistanCountry?.name).toBe(CountriesMocks.AfghanistanName);
+        expect(afghanistanCountry?.code).toEqual(
+            CountriesMocks.AfghanistanCode
+        );
+        expect(afghanistanCountry?.name).toEqual(
+            CountriesMocks.AfghanistanName
+        );
 
-        expect(afghanistanRegions?.all[0].name).toBe(
+        expect(afghanistanRegions?.all[0].name).toEqual(
             CountriesMocks.AfghanistanRegion1Name
         );
-        expect(afghanistanRegions?.all[0].code).toBe(
+        expect(afghanistanRegions?.all[0].code).toEqual(
             CountriesMocks.AfghanistanRegion1Code
         );
-        expect(afghanistanRegions?.all[1].name).toBe(
+        expect(afghanistanRegions?.all[1].name).toEqual(
             CountriesMocks.AfghanistanRegion2Name
         );
-        expect(afghanistanRegions?.all[1].code).toBe(
+        expect(afghanistanRegions?.all[1].code).toEqual(
             CountriesMocks.AfghanistanRegion2Code
         );
-        expect(afghanistanRegions?.all[2].name).toBe(
+        expect(afghanistanRegions?.all[2].name).toEqual(
             CountriesMocks.AfghanistanRegion3Name
         );
-        expect(afghanistanRegions?.all[2].code).toBe(
+        expect(afghanistanRegions?.all[2].code).toEqual(
             CountriesMocks.AfghanistanRegion3Code
         );
     });

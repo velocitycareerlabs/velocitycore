@@ -105,16 +105,16 @@ describe('PresentationSubmission Tests', () => {
             identificationSubmission.remoteCryptoServicesToken
         );
 
-        expect(identificationSubmissionResult?.sessionToken.value).toBe(
+        expect(identificationSubmissionResult?.sessionToken.value).toEqual(
             expectedPresentationSubmissionResult.sessionToken.value
         );
-        expect(identificationSubmissionResult?.exchange.id).toBe(
+        expect(identificationSubmissionResult?.exchange.id).toEqual(
             expectedPresentationSubmissionResult.exchange.id
         );
-        expect(identificationSubmissionResult?.jti).toBe(
+        expect(identificationSubmissionResult?.jti).toEqual(
             expectedPresentationSubmissionResult.jti
         );
-        expect(identificationSubmissionResult?.submissionId).toBe(
+        expect(identificationSubmissionResult?.submissionId).toEqual(
             expectedPresentationSubmissionResult.submissionId
         );
     });
