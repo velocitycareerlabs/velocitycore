@@ -70,8 +70,8 @@ describe('CredentialTypesUseCaseImpl Tests', () => {
     });
 
     const compareVerifiedProfile = (verifiedProfile: VCLVerifiedProfile) => {
-        expect(verifiedProfile.id).toBe(VerifiedProfileMocks.ExpectedId);
-        expect(verifiedProfile.logo).toBe(VerifiedProfileMocks.ExpectedLogo);
-        expect(verifiedProfile.name).toBe(VerifiedProfileMocks.ExpectedName);
+        expect(verifiedProfile.id).toEqual(VerifiedProfileMocks.ExpectedId);
+        expect(verifiedProfile.logo).toEqual(VerifiedProfileMocks.ExpectedLogo);
+        expect(verifiedProfile.name).toEqual(VerifiedProfileMocks.ExpectedName);
     };
 });

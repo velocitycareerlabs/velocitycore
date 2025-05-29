@@ -40,10 +40,10 @@ describe('ExchangeProgressUseCase Tests', () => {
     test('testGetExchangeProgressFailure', async () => {
         const exchange = await subject2.getExchangeProgress(exchangeDescriptor);
 
-        expect(exchange.id).toBe(undefined);
-        expect(exchange.type).toBe(undefined);
-        expect(exchange.disclosureComplete).toBe(undefined);
-        expect(exchange.exchangeComplete).toBe(undefined);
+        expect(exchange.id).toEqual(undefined);
+        expect(exchange.type).toEqual(undefined);
+        expect(exchange.disclosureComplete).toEqual(undefined);
+        expect(exchange.exchangeComplete).toEqual(undefined);
     });
 
     const expectedExchange = (

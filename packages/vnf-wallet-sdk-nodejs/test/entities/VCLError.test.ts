@@ -5,11 +5,11 @@ describe('VCLError Tests', () => {
     test('testErrorFromPayload', () => {
         const error = VCLError.fromPayload(ErrorMocks.Payload);
 
-        expect(error.payload).toBe(ErrorMocks.Payload);
-        expect(error.error).toBe(ErrorMocks.Error);
-        expect(error.errorCode).toBe(ErrorMocks.ErrorCode);
-        expect(error.message).toBe(ErrorMocks.Message);
-        expect(error.statusCode).toBe(ErrorMocks.StatusCode);
+        expect(error.payload).toEqual(ErrorMocks.Payload);
+        expect(error.error).toEqual(ErrorMocks.Error);
+        expect(error.errorCode).toEqual(ErrorMocks.ErrorCode);
+        expect(error.message).toEqual(ErrorMocks.Message);
+        expect(error.statusCode).toEqual(ErrorMocks.StatusCode);
     });
 
     test('testErrorFromProperties', () => {
@@ -21,27 +21,31 @@ describe('VCLError Tests', () => {
             ErrorMocks.StatusCode
         );
 
-        expect(error.error).toBe(ErrorMocks.Error);
-        expect(error.errorCode).toBe(ErrorMocks.ErrorCode);
-        expect(error.requestId).toBe(ErrorMocks.RequestId);
-        expect(error.message).toBe(ErrorMocks.Message);
-        expect(error.statusCode).toBe(ErrorMocks.StatusCode);
+        expect(error.error).toEqual(ErrorMocks.Error);
+        expect(error.errorCode).toEqual(ErrorMocks.ErrorCode);
+        expect(error.requestId).toEqual(ErrorMocks.RequestId);
+        expect(error.message).toEqual(ErrorMocks.Message);
+        expect(error.statusCode).toEqual(ErrorMocks.StatusCode);
     });
 
     test('testErrorToJsonFromPayload', () => {
         const error = VCLError.fromPayload(ErrorMocks.Payload);
         const errorJsonObject = error.jsonObject;
 
-        expect(errorJsonObject[VCLError.KeyPayload]).toBe(ErrorMocks.Payload);
-        expect(errorJsonObject[VCLError.KeyError]).toBe(ErrorMocks.Error);
-        expect(errorJsonObject[VCLError.KeyErrorCode]).toBe(
+        expect(errorJsonObject[VCLError.KeyPayload]).toEqual(
+            ErrorMocks.Payload
+        );
+        expect(errorJsonObject[VCLError.KeyError]).toEqual(ErrorMocks.Error);
+        expect(errorJsonObject[VCLError.KeyErrorCode]).toEqual(
             ErrorMocks.ErrorCode
         );
-        expect(errorJsonObject[VCLError.KeyRequestId]).toBe(
+        expect(errorJsonObject[VCLError.KeyRequestId]).toEqual(
             ErrorMocks.RequestId
         );
-        expect(errorJsonObject[VCLError.KeyMessage]).toBe(ErrorMocks.Message);
-        expect(errorJsonObject[VCLError.KeyStatusCode]).toBe(
+        expect(errorJsonObject[VCLError.KeyMessage]).toEqual(
+            ErrorMocks.Message
+        );
+        expect(errorJsonObject[VCLError.KeyStatusCode]).toEqual(
             ErrorMocks.StatusCode
         );
     });
@@ -56,15 +60,17 @@ describe('VCLError Tests', () => {
         );
         const errorJsonObject = error.jsonObject;
 
-        expect(errorJsonObject[VCLError.KeyError]).toBe(ErrorMocks.Error);
-        expect(errorJsonObject[VCLError.KeyErrorCode]).toBe(
+        expect(errorJsonObject[VCLError.KeyError]).toEqual(ErrorMocks.Error);
+        expect(errorJsonObject[VCLError.KeyErrorCode]).toEqual(
             ErrorMocks.ErrorCode
         );
-        expect(errorJsonObject[VCLError.KeyRequestId]).toBe(
+        expect(errorJsonObject[VCLError.KeyRequestId]).toEqual(
             ErrorMocks.RequestId
         );
-        expect(errorJsonObject[VCLError.KeyMessage]).toBe(ErrorMocks.Message);
-        expect(errorJsonObject[VCLError.KeyStatusCode]).toBe(
+        expect(errorJsonObject[VCLError.KeyMessage]).toEqual(
+            ErrorMocks.Message
+        );
+        expect(errorJsonObject[VCLError.KeyStatusCode]).toEqual(
             ErrorMocks.StatusCode
         );
     });
@@ -75,10 +81,10 @@ describe('VCLError Tests', () => {
         expect(JSON.parse(error.payload ?? '{}')).toStrictEqual(
             ErrorMocks.SomeErrorJson
         );
-        expect(error.error).toBe(ErrorMocks.SomeErrorJson.error);
-        expect(error.errorCode).toBe(ErrorMocks.SomeErrorJson.errorCode);
-        expect(error.requestId).toBe(ErrorMocks.SomeErrorJson.requestId);
-        expect(error.message).toBe(ErrorMocks.SomeErrorJson.message);
-        expect(error.statusCode).toBe(ErrorMocks.SomeErrorJson.statusCode);
+        expect(error.error).toEqual(ErrorMocks.SomeErrorJson.error);
+        expect(error.errorCode).toEqual(ErrorMocks.SomeErrorJson.errorCode);
+        expect(error.requestId).toEqual(ErrorMocks.SomeErrorJson.requestId);
+        expect(error.message).toEqual(ErrorMocks.SomeErrorJson.message);
+        expect(error.statusCode).toEqual(ErrorMocks.SomeErrorJson.statusCode);
     });
 });

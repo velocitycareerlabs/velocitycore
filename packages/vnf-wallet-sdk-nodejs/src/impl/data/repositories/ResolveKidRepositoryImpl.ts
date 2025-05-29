@@ -1,8 +1,8 @@
 import VCLPublicJwk from '../../../api/entities/VCLPublicJwk';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import ResolveKidRepository from '../../domain/repositories/ResolveKidRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import Urls, { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class ResolveKidRepositoryImpl implements ResolveKidRepository {
     constructor(private readonly networkService: NetworkService) {}

@@ -4,79 +4,79 @@ import VCLServiceType, {
 
 describe('VCLServiceType Tests', () => {
     test('testFromExactString', () => {
-        expect(serviceTypeFromString('Inspector')).toBe(
+        expect(serviceTypeFromString('Inspector')).toEqual(
             VCLServiceType.Inspector
         );
-        expect(serviceTypeFromString('CareerIssuer')).toBe(
+        expect(serviceTypeFromString('CareerIssuer')).toEqual(
             VCLServiceType.CareerIssuer
         );
-        expect(serviceTypeFromString('NotaryIssuer')).toBe(
+        expect(serviceTypeFromString('NotaryIssuer')).toEqual(
             VCLServiceType.NotaryIssuer
         );
-        expect(serviceTypeFromString('IdentityIssuer')).toBe(
+        expect(serviceTypeFromString('IdentityIssuer')).toEqual(
             VCLServiceType.IdentityIssuer
         );
-        expect(serviceTypeFromString('CareerIssuer')).toBe(
+        expect(serviceTypeFromString('CareerIssuer')).toEqual(
             VCLServiceType.CareerIssuer
         );
-        expect(serviceTypeFromString('IdDocumentIssuer')).toBe(
+        expect(serviceTypeFromString('IdDocumentIssuer')).toEqual(
             VCLServiceType.IdDocumentIssuer
         );
-        expect(serviceTypeFromString('NotaryIdDocumentIssuer')).toBe(
+        expect(serviceTypeFromString('NotaryIdDocumentIssuer')).toEqual(
             VCLServiceType.NotaryIdDocumentIssuer
         );
-        expect(serviceTypeFromString('NotaryContactIssuer')).toBe(
+        expect(serviceTypeFromString('NotaryContactIssuer')).toEqual(
             VCLServiceType.NotaryContactIssuer
         );
-        expect(serviceTypeFromString('ContactIssuer')).toBe(
+        expect(serviceTypeFromString('ContactIssuer')).toEqual(
             VCLServiceType.ContactIssuer
         );
-        expect(serviceTypeFromString('Issuer')).toBe(VCLServiceType.Issuer);
-        expect(serviceTypeFromString('OtherService')).toBe(
+        expect(serviceTypeFromString('Issuer')).toEqual(VCLServiceType.Issuer);
+        expect(serviceTypeFromString('OtherService')).toEqual(
             VCLServiceType.Undefined
         );
-        expect(serviceTypeFromString('Undefined')).toBe(
+        expect(serviceTypeFromString('Undefined')).toEqual(
             VCLServiceType.Undefined
         );
     });
 
     test('testFromNonExactString', () => {
-        expect(serviceTypeFromString(',dfm%InspectorGH*(T')).toBe(
+        expect(serviceTypeFromString(',dfm%InspectorGH*(T')).toEqual(
             VCLServiceType.Inspector
         );
-        expect(serviceTypeFromString('234CareerIssuer95R')).toBe(
+        expect(serviceTypeFromString('234CareerIssuer95R')).toEqual(
             VCLServiceType.CareerIssuer
         );
-        expect(serviceTypeFromString('*%$NotaryIssuer3k42j2n4')).toBe(
+        expect(serviceTypeFromString('*%$NotaryIssuer3k42j2n4')).toEqual(
             VCLServiceType.NotaryIssuer
         );
-        expect(serviceTypeFromString('9834RFIdentityIssuer^3&^')).toBe(
+        expect(serviceTypeFromString('9834RFIdentityIssuer^3&^')).toEqual(
             VCLServiceType.IdentityIssuer
         );
-        expect(serviceTypeFromString('iu34CareerIssuer^#4f')).toBe(
+        expect(serviceTypeFromString('iu34CareerIssuer^#4f')).toEqual(
             VCLServiceType.CareerIssuer
         );
-        expect(serviceTypeFromString('398%IdDocumentIssuer^DDd3')).toBe(
+        expect(serviceTypeFromString('398%IdDocumentIssuer^DDd3')).toEqual(
             VCLServiceType.IdDocumentIssuer
         );
-        expect(serviceTypeFromString('3kjnke9@NotaryIdDocumentIssuer@%^')).toBe(
-            VCLServiceType.NotaryIdDocumentIssuer
-        );
-        expect(serviceTypeFromString('03fNotaryContactIssuer04gvd')).toBe(
+        expect(
+            serviceTypeFromString('3kjnke9@NotaryIdDocumentIssuer@%^')
+        ).toEqual(VCLServiceType.NotaryIdDocumentIssuer);
+        expect(serviceTypeFromString('03fNotaryContactIssuer04gvd')).toEqual(
             VCLServiceType.NotaryContactIssuer
         );
-        expect(serviceTypeFromString('0fhe3ContactIssuer43f')).toBe(
+        expect(serviceTypeFromString('0fhe3ContactIssuer43f')).toEqual(
             VCLServiceType.ContactIssuer
         );
-        expect(serviceTypeFromString('eskld#Issuerdkdf')).toBe(
+        expect(serviceTypeFromString('eskld#Issuerdkdf')).toEqual(
             VCLServiceType.Issuer
         );
-        expect(serviceTypeFromString('ksdjhkD#OtherService959)%')).toBe(
+        expect(serviceTypeFromString('ksdjhkD#OtherService959)%')).toEqual(
             VCLServiceType.Undefined
         );
-        expect(serviceTypeFromString('#Wfg85$Undefined)%dgsc')).toBe(
+        expect(serviceTypeFromString('#Wfg85$Undefined)%dgsc')).toEqual(
             VCLServiceType.Undefined
         );
-        expect(serviceTypeFromString('')).toBe(VCLServiceType.Undefined);
+        expect(serviceTypeFromString('')).toEqual(VCLServiceType.Undefined);
     });
 });

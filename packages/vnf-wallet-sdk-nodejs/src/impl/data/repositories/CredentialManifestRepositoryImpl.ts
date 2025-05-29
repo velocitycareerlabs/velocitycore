@@ -3,8 +3,8 @@ import VCLCredentialManifestDescriptor from '../../../api/entities/VCLCredential
 import VCLError from '../../../api/entities/error/VCLError';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import CredentialManifestRepository from '../../domain/repositories/CredentialManifestRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class CredentialManifestRepositoryImpl
     implements CredentialManifestRepository

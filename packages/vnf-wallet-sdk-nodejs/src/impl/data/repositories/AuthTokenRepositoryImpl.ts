@@ -9,10 +9,11 @@ import VCLAuthTokenDescriptor from '../../../api/entities/VCLAuthTokenDescriptor
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import AuthTokenRepository from '../../domain/repositories/AuthTokenRepository';
 import VCLLog from '../../utils/VCLLog';
-import Request, { HttpMethod } from '../infrastructure/network/Request';
+import Request from '../infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from './Urls';
 import VCLError from '../../../api/entities/error/VCLError';
 import { Dictionary } from '../../../api/VCLTypes';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class AuthTokenRepositoryImpl implements AuthTokenRepository {
     constructor(private readonly networkService: NetworkService) {}

@@ -15,12 +15,12 @@ describe('VCLSubmissionResult Tests', () => {
     });
 
     test('testProps', () => {
-        expect(subject.sessionToken.value).toBe('token123');
-        expect(subject.exchange.id).toBe('id123');
-        expect(subject.exchange.type).toBe('type123');
+        expect(subject.sessionToken.value).toEqual('token123');
+        expect(subject.exchange.id).toEqual('id123');
+        expect(subject.exchange.type).toEqual('type123');
         expect(subject.exchange.exchangeComplete).toBeTruthy();
         expect(subject.exchange.disclosureComplete).toBeTruthy();
-        expect(subject.jti).toBe('jti123');
-        expect(subject.submissionId).toBe('submissionId123');
+        expect(subject.jti).toEqual('jti123');
+        expect(subject.submissionId).toEqual('submissionId123');
     });
 });

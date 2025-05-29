@@ -2,21 +2,22 @@ import axios, { AxiosResponse } from 'axios';
 import { Nullish } from '../../../../api/VCLTypes';
 import NetworkService from '../../../domain/infrastructure/network/NetworkService';
 import VCLLog from '../../../utils/VCLLog';
-import Request, { HttpMethod } from './Request';
 import Response from './Response';
+import Request from './Request';
+import { HttpMethod } from './HttpMethod';
 // TODO: implement response caching
 
 export default class NetworkServiceImpl implements NetworkService {
-    async sendRequestRaw(params: Request): Promise<Response> {
+    async sendRequestRaw(request: Request): Promise<Response> {
         let handler: () => Nullish<Promise<AxiosResponse<any, any>>> = () => {
             return null;
         };
-        switch (params.method) {
+        switch (request.method) {
             case HttpMethod.GET:
                 handler = () =>
-                    axios.create({ ...axios.defaults }).get(params.endpoint, {
+                    axios.create({ ...axios.defaults }).get(request.endpoint, {
                         headers: {
-                            ...params.headers,
+                            ...request.headers,
                         },
                     });
                 break;
@@ -24,10 +25,10 @@ export default class NetworkServiceImpl implements NetworkService {
                 handler = () =>
                     axios
                         .create({ ...axios.defaults })
-                        .post(params.endpoint, params.body, {
+                        .post(request.endpoint, request.body, {
                             headers: {
-                                ...params.headers,
-                                'Content-Type': params.contentType,
+                                ...request.headers,
+                                'Content-Type': request.contentType,
                             },
                         });
                 break;
@@ -42,9 +43,9 @@ export default class NetworkServiceImpl implements NetworkService {
         }
     }
 
-    async sendRequest(params: Request): Promise<Response> {
-        this.logRequest(params);
-        return this.sendRequestRaw(params);
+    async sendRequest(request: Request): Promise<Response> {
+        this.logRequest(request);
+        return this.sendRequestRaw(request);
     }
 
     logRequest(request: Request) {

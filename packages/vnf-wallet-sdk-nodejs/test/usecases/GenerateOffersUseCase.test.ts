@@ -54,7 +54,7 @@ describe('GenerateOffersUseCaseTest', () => {
         expect(offers.all.map((offer) => offer.payload)).toStrictEqual(
             JSON.parse(GenerateOffersMocks.Offers)
         );
-        expect(offers.challenge).toBe(GenerateOffersMocks.Challenge);
+        expect(offers.challenge).toEqual(GenerateOffersMocks.Challenge);
         expect(offers?.sessionToken).toStrictEqual(CommonMocks.Token);
     });
 

@@ -7,11 +7,12 @@
 
 import { isArray } from 'lodash/fp';
 import VCLLog from './VCLLog';
-import Request, { HttpMethod } from '../data/infrastructure/network/Request';
+import Request from '../data/infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from '../data/repositories/Urls';
 import { Dictionary } from '../../api/VCLTypes';
 import VCLError from '../../api/entities/error/VCLError';
 import VCLErrorCode from '../../api/entities/error/VCLErrorCode';
+import { HttpMethod } from '../data/infrastructure/network/HttpMethod';
 
 export interface NetworkService {
     sendRequest: (request: Request) => Promise<any>;

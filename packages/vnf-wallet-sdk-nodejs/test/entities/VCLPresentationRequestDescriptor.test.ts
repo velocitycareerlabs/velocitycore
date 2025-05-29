@@ -27,14 +27,14 @@ describe('VCLPresentationRequestDescriptor Tests', () => {
             PresentationRequestDescriptorMocks.RequestUri
         )}?${queryParams}`;
 
-        expect(subject.endpoint).toBe(mockEndpoint);
-        expect(subject.pushDelegate?.pushUrl).toBe(
+        expect(subject.endpoint).toEqual(mockEndpoint);
+        expect(subject.pushDelegate?.pushUrl).toEqual(
             PresentationRequestDescriptorMocks.PushDelegate.pushUrl
         );
-        expect(subject.pushDelegate?.pushToken).toBe(
+        expect(subject.pushDelegate?.pushToken).toEqual(
             PresentationRequestDescriptorMocks.PushDelegate.pushToken
         );
-        expect(subject.did).toBe(
+        expect(subject.did).toEqual(
             PresentationRequestDescriptorMocks.InspectorDid
         );
     });
@@ -46,11 +46,11 @@ describe('VCLPresentationRequestDescriptor Tests', () => {
             DidJwkMocks.DidJwk
         );
 
-        expect(subject.endpoint).toBe(
+        expect(subject.endpoint).toEqual(
             decodeURIComponent(PresentationRequestDescriptorMocks.RequestUri)
         );
         expect(subject.pushDelegate).toBeNull();
-        expect(subject.did).toBe(
+        expect(subject.did).toEqual(
             PresentationRequestDescriptorMocks.InspectorDid
         );
     });
@@ -77,14 +77,14 @@ describe('VCLPresentationRequestDescriptor Tests', () => {
             PresentationRequestDescriptorMocks.RequestUri
         )}?${PresentationRequestDescriptorMocks.QParms}&${queryParams}`;
 
-        expect(subject.endpoint).toBe(mockEndpoint);
-        expect(subject.pushDelegate?.pushUrl).toBe(
+        expect(subject.endpoint).toEqual(mockEndpoint);
+        expect(subject.pushDelegate?.pushUrl).toEqual(
             PresentationRequestDescriptorMocks.PushDelegate.pushUrl
         );
-        expect(subject.pushDelegate?.pushToken).toBe(
+        expect(subject.pushDelegate?.pushToken).toEqual(
             PresentationRequestDescriptorMocks.PushDelegate.pushToken
         );
-        expect(subject.did).toBe(
+        expect(subject.did).toEqual(
             PresentationRequestDescriptorMocks.InspectorDid
         );
     });
@@ -100,9 +100,9 @@ describe('VCLPresentationRequestDescriptor Tests', () => {
             PresentationRequestDescriptorMocks.RequestUri
         )}?${PresentationRequestDescriptorMocks.QParms}`;
 
-        expect(subject.endpoint).toBe(mockEndpoint);
+        expect(subject.endpoint).toEqual(mockEndpoint);
         expect(subject.pushDelegate).toBeNull();
-        expect(subject.did).toBe(
+        expect(subject.did).toEqual(
             PresentationRequestDescriptorMocks.InspectorDid
         );
     });
