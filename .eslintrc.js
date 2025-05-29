@@ -16,6 +16,9 @@ module.exports = {
   },
   plugins: ['prettier', 'better-mutation', 'prefer-arrow-functions', 'autofix'],
   rules: {
+    'no-useless-constructor': 'off',
+    'no-empty-function': 'off',
+    'no-plusplus': 'off',
     'autofix/no-debugger': 'error',
     'better-mutation/no-mutation': [
       'error',
