@@ -34,8 +34,8 @@ services:
         condition: service_started
       velocity-mongo:
         condition: service_started
-      fineract-server:
-        condition: service_started
+      fineract-probe:
+        condition: service_healthy
       auth0:
         condition: service_started
     image: velocitycore/sample-registrar-server:local
@@ -54,7 +54,7 @@ services:
       - httpscert:/certs
     command: npx nodemon --exec "cd servers/registrar && yarn start"
     env_file:
-      - ../.localdev.auth0.env
+      - ../.localdev.env
     environment:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     ports:
@@ -63,6 +63,9 @@ services:
   registrar-proxy:
     image: nginx:alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
     restart: on-failure
+    depends_on:
+      - registrar
+      - certfix
     ports:
       - "13003:80"
       - "13004:443"

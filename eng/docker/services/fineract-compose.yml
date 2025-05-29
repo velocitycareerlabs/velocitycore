@@ -54,3 +54,16 @@ services:
       - "-Duser.timezone=UTC"
       - "-jar"
       - "/app/fineract-provider.jar"
+
+  fineract-probe:
+    image: bash:5.2.37
+    restart: on-failure
+    command: sleep infinity
+    depends_on:
+      - fineract-server
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "fineract-server", "8080"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
