@@ -10,8 +10,8 @@ const mockLoggerService = {
 describe('VCLLog', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        VCLLog.LoggerService = mockLoggerService;
-        GlobalConfig.IsDebugOn = true;
+        VCLLog.setLoggerService(mockLoggerService);
+        GlobalConfig.setIsDebugOn(true);
     });
 
     describe('LoggerService', () => {
@@ -47,7 +47,7 @@ describe('VCLLog', () => {
         });
 
         it('should not call LoggerService.warn if IsLoggerOn is false', () => {
-            GlobalConfig.IsDebugOn = false;
+            GlobalConfig.setIsDebugOn(false);
             VCLLog.warn({ warn: 'obj' }, 'Warn message', 'arg1', 'arg2');
             expect(mockLoggerService.warn).not.toHaveBeenCalled();
         });
@@ -66,7 +66,7 @@ describe('VCLLog', () => {
         });
 
         it('should not call LoggerService.info if IsLoggerOn is false', () => {
-            GlobalConfig.IsDebugOn = false;
+            GlobalConfig.setIsDebugOn(false);
             VCLLog.info({ info: 'obj' }, 'Info message', 'arg1', 'arg2');
             expect(mockLoggerService.info).not.toHaveBeenCalled();
         });
