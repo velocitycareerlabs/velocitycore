@@ -64,12 +64,14 @@ describe('UrlsTest', () => {
     };
 
     test('testXVnfProtocolVersion', () => {
-        GlobalConfig.XVnfProtocolVersion =
-            VCLXVnfProtocolVersion.XVnfProtocolVersion1;
+        GlobalConfig.setXVnfProtocolVersion(
+            VCLXVnfProtocolVersion.XVnfProtocolVersion1
+        );
         expect(HeaderValues.XVnfProtocolVersion).toEqual('1.0');
 
-        GlobalConfig.XVnfProtocolVersion =
-            VCLXVnfProtocolVersion.XVnfProtocolVersion2;
+        GlobalConfig.setXVnfProtocolVersion(
+            VCLXVnfProtocolVersion.XVnfProtocolVersion2
+        );
         expect(HeaderValues.XVnfProtocolVersion).toEqual('2.0');
     });
 

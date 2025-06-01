@@ -16,7 +16,7 @@ describe('VCLLog', () => {
 
     describe('LoggerService', () => {
         it('should set and get the LoggerService correctly', () => {
-            VCLLog.LoggerService = mockLoggerService;
+            VCLLog.setLoggerService(mockLoggerService);
             expect(VCLLog.LoggerService).toEqual(mockLoggerService);
         });
     });

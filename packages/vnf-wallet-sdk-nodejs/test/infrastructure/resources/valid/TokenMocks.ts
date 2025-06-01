@@ -18,8 +18,9 @@ export default class TokenMocks {
         payload: {
             access_token: TokenMocks.TokenStr1,
             refresh_token: TokenMocks.TokenStr2,
+            token_type: 'Bearer',
         },
-        authTokenUri: 'auth token uri',
+        authTokenUri: 'token uri',
         walletDid: 'wallet did',
         relyingPartyDid: 'relying party did',
         accessToken: new VCLToken(TokenMocks.TokenJwt1),

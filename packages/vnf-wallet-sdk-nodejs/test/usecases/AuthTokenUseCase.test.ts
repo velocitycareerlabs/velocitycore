@@ -32,17 +32,7 @@ describe('AuthTokenUseCaseTest', () => {
                     'relying party did'
                 )
             );
-            expect(authToken.payload).toEqual(TokenMocks.AuthToken.payload);
-            expect(authToken.accessToken.value).toEqual(
-                expectedAuthToken.accessToken.value
-            );
-            expect(authToken.refreshToken.value).toEqual(
-                expectedAuthToken.refreshToken.value
-            );
-            expect(authToken.walletDid).toEqual(expectedAuthToken.walletDid);
-            expect(authToken.relyingPartyDid).toEqual(
-                expectedAuthToken.relyingPartyDid
-            );
+            expect(authToken).toEqual(expectedAuthToken);
         } catch (error) {
             expect(true).toBeFalsy();
         }

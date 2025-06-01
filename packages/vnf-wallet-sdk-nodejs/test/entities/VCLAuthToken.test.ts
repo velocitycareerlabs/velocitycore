@@ -30,11 +30,13 @@ describe('VCLAuthToken', () => {
         expect(token.authTokenUri).toEqual('https://default.uri');
         expect(token.walletDid).toEqual('did:wallet:default');
         expect(token.relyingPartyDid).toEqual('did:party:default');
+        expect(token.payload).toEqual(payload);
     });
 
     it('should override authTokenUri if passed in constructor', () => {
         const token = new VCLAuthToken(payload, 'https://override.uri');
         expect(token.authTokenUri).toEqual('https://override.uri');
+        expect(token.payload).toEqual(payload);
     });
 
     it('should override walletDid if passed in constructor', () => {
@@ -44,6 +46,7 @@ describe('VCLAuthToken', () => {
             'did:wallet:override'
         );
         expect(token.walletDid).toEqual('did:wallet:override');
+        expect(token.payload).toEqual(payload);
     });
 
     it('should override relyingPartyDid if passed in constructor', () => {
@@ -54,5 +57,6 @@ describe('VCLAuthToken', () => {
             'did:party:override'
         );
         expect(token.relyingPartyDid).toEqual('did:party:override');
+        expect(token.payload).toEqual(payload);
     });
 });

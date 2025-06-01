@@ -71,18 +71,7 @@ describe('PresentationSubmission Tests', () => {
             presentationSubmission
         );
 
-        expect(presentationSubmissionResult?.sessionToken.value).toEqual(
-            expectedSubmissionResult.sessionToken.value
-        );
-        expect(presentationSubmissionResult?.exchange.id).toEqual(
-            expectedSubmissionResult.exchange.id
-        );
-        expect(presentationSubmissionResult?.jti).toEqual(
-            expectedSubmissionResult.jti
-        );
-        expect(presentationSubmissionResult?.submissionId).toEqual(
-            expectedSubmissionResult.submissionId
-        );
+        expect(presentationSubmissionResult).toEqual(expectedSubmissionResult);
 
         expect(networkServiceSuccess.sendRequestCalled).toEqual(true);
         expect(networkServiceSuccess.request).toBeDefined();
@@ -97,18 +86,7 @@ describe('PresentationSubmission Tests', () => {
             authToken
         );
 
-        expect(presentationSubmissionResult?.sessionToken.value).toEqual(
-            expectedSubmissionResult.sessionToken.value
-        );
-        expect(presentationSubmissionResult?.exchange.id).toEqual(
-            expectedSubmissionResult.exchange.id
-        );
-        expect(presentationSubmissionResult?.jti).toEqual(
-            expectedSubmissionResult.jti
-        );
-        expect(presentationSubmissionResult?.submissionId).toEqual(
-            expectedSubmissionResult.submissionId
-        );
+        expect(presentationSubmissionResult).toEqual(expectedSubmissionResult);
 
         expect(networkServiceSuccess.sendRequestCalled).toEqual(true);
         expect(networkServiceSuccess.request).toBeDefined();

@@ -78,9 +78,7 @@ describe('FinalizeOffersUseCase Tests', () => {
         );
         const offers = await new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(
-                new NetworkServiceSuccess(
-                    JSON.parse(GenerateOffersMocks.GeneratedOffers)
-                )
+                new NetworkServiceSuccess(GenerateOffersMocks.GeneratedOffers)
             ),
             new OffersByDeepLinkVerifierImpl()
         ).generateOffers(generateOffersDescriptor, new VCLToken(''));
