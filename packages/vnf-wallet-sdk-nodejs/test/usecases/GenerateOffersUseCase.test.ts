@@ -26,9 +26,7 @@ describe('GenerateOffersUseCaseTest', () => {
     it('testGenerateOffers', async () => {
         subject1 = new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(
-                new NetworkServiceSuccess(
-                    JSON.parse(GenerateOffersMocks.GeneratedOffers)
-                )
+                new NetworkServiceSuccess(GenerateOffersMocks.GeneratedOffers)
             ),
             new OffersByDeepLinkVerifierImpl()
         );
@@ -51,10 +49,11 @@ describe('GenerateOffersUseCaseTest', () => {
             generateOffersDescriptor,
             CommonMocks.Token
         );
+        expect(offers.payload).toEqual(GenerateOffersMocks.GeneratedOffers);
         expect(offers.all.map((offer) => offer.payload)).toStrictEqual(
-            JSON.parse(GenerateOffersMocks.Offers)
+            GenerateOffersMocks.Offers
         );
-        expect(offers.challenge).toBe(GenerateOffersMocks.Challenge);
+        expect(offers.challenge).toEqual(GenerateOffersMocks.Challenge);
         expect(offers?.sessionToken).toStrictEqual(CommonMocks.Token);
     });
 
@@ -62,7 +61,7 @@ describe('GenerateOffersUseCaseTest', () => {
         subject2 = new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(
                 new NetworkServiceSuccess(
-                    JSON.parse(GenerateOffersMocks.GeneratedOffersEmptyJsonObj)
+                    GenerateOffersMocks.GeneratedOffersEmptyJsonObj
                 )
             ),
             new OffersByDeepLinkVerifierImpl()
@@ -94,7 +93,7 @@ describe('GenerateOffersUseCaseTest', () => {
         subject3 = new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(
                 new NetworkServiceSuccess(
-                    JSON.parse(GenerateOffersMocks.GeneratedOffersEmptyJsonArr)
+                    GenerateOffersMocks.GeneratedOffersEmptyJsonArr
                 )
             ),
             new OffersByDeepLinkVerifierImpl()

@@ -23,9 +23,9 @@ describe('VCLDidJwk Tests', () => {
         subject = VCLDidJwk.fromString(DidJwkMocks.DidJwkStr);
 
         expect(subject.payload).toStrictEqual(expectedPayload);
-        expect(subject.did).toBe(expectedDid);
-        expect(subject.kid).toBe(expectedKid);
-        expect(subject.keyId).toBe(expectedKeyId);
+        expect(subject.did).toEqual(expectedDid);
+        expect(subject.kid).toEqual(expectedKid);
+        expect(subject.keyId).toEqual(expectedKeyId);
         expect(subject.publicJwk.valueJson).toStrictEqual(expectedPublicJwk);
     });
 
@@ -33,9 +33,9 @@ describe('VCLDidJwk Tests', () => {
         subject = VCLDidJwk.fromJSON(DidJwkMocks.DidJwkJson);
 
         expect(subject.payload).toStrictEqual(expectedPayload);
-        expect(subject.did).toBe(expectedDid);
-        expect(subject.kid).toBe(expectedKid);
-        expect(subject.keyId).toBe(expectedKeyId);
+        expect(subject.did).toEqual(expectedDid);
+        expect(subject.kid).toEqual(expectedKid);
+        expect(subject.keyId).toEqual(expectedKeyId);
         expect(subject.publicJwk.valueJson).toStrictEqual(expectedPublicJwk);
     });
 });

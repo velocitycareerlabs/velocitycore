@@ -105,17 +105,8 @@ describe('PresentationSubmission Tests', () => {
             identificationSubmission.remoteCryptoServicesToken
         );
 
-        expect(identificationSubmissionResult?.sessionToken.value).toBe(
-            expectedPresentationSubmissionResult.sessionToken.value
-        );
-        expect(identificationSubmissionResult?.exchange.id).toBe(
-            expectedPresentationSubmissionResult.exchange.id
-        );
-        expect(identificationSubmissionResult?.jti).toBe(
-            expectedPresentationSubmissionResult.jti
-        );
-        expect(identificationSubmissionResult?.submissionId).toBe(
-            expectedPresentationSubmissionResult.submissionId
+        expect(identificationSubmissionResult).toEqual(
+            expectedPresentationSubmissionResult
         );
     });
 });
