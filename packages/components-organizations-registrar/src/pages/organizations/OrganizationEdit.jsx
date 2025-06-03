@@ -85,7 +85,6 @@ const OrganizationEdit = () => {
   const { id } = useParams();
   const { data: countryCodes, isLoading: isCodesLoading } = useCountryCodes();
   const [errorMessage, setErrorMessage] = useState('');
-  // const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
   const { record, isLoading } = useEditController({
     resource: 'organizations',
     id,
