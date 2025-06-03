@@ -16,17 +16,12 @@
 
 import { Box, Button, Stack, Tooltip, Typography } from '@mui/material';
 import { AutocompleteInput, Form, TextInput, FormDataConsumer, useDataProvider } from 'react-admin';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import InfoIcon from '@mui/icons-material/Info';
 
-import {
-  LINKEDIN_ORGANIZATION_ID,
-  WEBSITE_HINT,
-  SUPPORT_EMAIL_HINT,
-  TECHNICAL_EMAIL_HINT,
-} from '../../utils/index.jsx';
+import { WEBSITE_HINT, SUPPORT_EMAIL_HINT, TECHNICAL_EMAIL_HINT } from '../../utils/index.jsx';
 import {
   validateEmail,
   validateWebsite,
@@ -35,21 +30,12 @@ import {
 } from './CreateOrganization.utils';
 import OrganizationSubmitButton from './OrganisationSubmitButton.jsx';
 import CustomImageInput from '../common/CustomImageInput/index.jsx';
-import OrganizationRegistrationNumbersField from '../../pages/organizations/components/OrganizationRegistrationNumbersField.jsx';
-import OrganizationAuthorityRadioGroup, {
-  getDefaultAuthority,
-} from '../../pages/organizations/components/OrganizationAuthorityRadioGroup.jsx';
-import { OrganizationRegistrationNumbers } from '../../pages/organizations/components/OrganizationRegistrationNumbersContainer.jsx';
-import { Authorities, authorityOptions } from '../../constants/messageCodes';
+import AuthorityRegistrationNumbersInput from '../../pages/organizations/components/AuthorityRegistrationInput.jsx';
+import LinkedInRegistrationInput from '../../pages/organizations/components/LinkedInRegistrationInput.jsx';
 import { dataResources } from '../../utils/remoteDataProvider';
 
 const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, defaultValues }) => {
   const dataProvider = useDataProvider();
-
-  const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
-  const handleAuthorityChange = (event) => {
-    setAuthority(event.target.value);
-  };
 
   const timeout = useRef(null);
 
@@ -81,17 +67,11 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
 
   const orgNamevalidation = [...validateName, debouncedValidation];
 
-  useEffect(() => {
-    if (defaultValues?.registrationNumbers) {
-      setAuthority(getDefaultAuthority(defaultValues.registrationNumbers));
-    }
-  }, [defaultValues]);
-
   const handleSubmit = useCallback(
     (data) => {
-      onSubmit(data, authority);
+      onSubmit(data);
     },
-    [onSubmit, authority],
+    [onSubmit],
   );
 
   return (
@@ -149,18 +129,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                 source="linkedInProfile"
                 validate={validateWebsiteStrict}
               />
-              <Stack flexDirection="row" gap={1.75}>
-                <OrganizationRegistrationNumbersField
-                  record={formData}
-                  fieldType="LinkedIn"
-                  label="LinkedIn Company Page ID"
-                  tooltip={LINKEDIN_ORGANIZATION_ID}
-                  type="number"
-                  source="registrationNumbers"
-                  isRequired={false}
-                />
-              </Stack>
-              <Typography sx={sxStyles.errorMessage} />
+              <LinkedInRegistrationInput formData={formData} source="registrationNumbers" />
               <Stack flexDirection="row" gap={1.75}>
                 <TextInput
                   fullWidth
@@ -187,38 +156,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                   </Tooltip>
                 </Box>
               </Stack>
-              <OrganizationAuthorityRadioGroup
-                authority={authority}
-                handleAuthorityChange={handleAuthorityChange}
-                isHorizontal={false}
-              />
-              {authorityOptions[authority] === authorityOptions.NationalAuthority && (
-                <Stack flexDirection="row" gap={1.75}>
-                  <Box sx={sxStyles.fullWidth}>
-                    <OrganizationRegistrationNumbers
-                      formData={formData}
-                      authority={authority}
-                      type="uri"
-                      label="Local Country Registration Authority Website"
-                      isRequired={false}
-                      source="registrationNumbers"
-                    />
-                  </Box>
-                </Stack>
-              )}
-              <Stack flexDirection="row" gap={1.75}>
-                <Box sx={sxStyles.fullWidth}>
-                  <OrganizationRegistrationNumbers
-                    formData={formData}
-                    authority={authority}
-                    type="number"
-                    label={authorityOptions[authority]}
-                    isRequired={false}
-                    source="registrationNumbers"
-                  />
-                </Box>
-              </Stack>
-
+              <AuthorityRegistrationNumbersInput orientation="vertical" />
               <Box display="flex" justifyContent="center" pt={4}>
                 <Button
                   variant="outlined"
