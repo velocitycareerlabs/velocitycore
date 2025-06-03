@@ -16,12 +16,11 @@ describe('AuthTokenUseCaseTest', () => {
     let subject!: AuthTokenUseCase;
 
     const expectedAuthToken = TokenMocks.AuthToken;
-    const expectedAuthTokenStr = TokenMocks.AuthTokenStr;
 
     test('testGetAuthTokenSuccess', async () => {
         subject = new AuthTokenUseCaseImpl(
             new AuthTokenRepositoryImpl(
-                new NetworkServiceSuccess(JSON.parse(expectedAuthTokenStr))
+                new NetworkServiceSuccess(expectedAuthToken.payload)
             )
         );
         try {
@@ -33,17 +32,7 @@ describe('AuthTokenUseCaseTest', () => {
                     'relying party did'
                 )
             );
-            expect(authToken.payload).toEqual(TokenMocks.AuthToken.payload);
-            expect(authToken.accessToken.value).toEqual(
-                expectedAuthToken.accessToken.value
-            );
-            expect(authToken.refreshToken.value).toEqual(
-                expectedAuthToken.refreshToken.value
-            );
-            expect(authToken.walletDid).toEqual(expectedAuthToken.walletDid);
-            expect(authToken.relyingPartyDid).toEqual(
-                expectedAuthToken.relyingPartyDid
-            );
+            expect(authToken).toEqual(expectedAuthToken);
         } catch (error) {
             expect(true).toBeFalsy();
         }
@@ -60,7 +49,7 @@ describe('AuthTokenUseCaseTest', () => {
             await subject.getAuthToken(new VCLAuthTokenDescriptor(''));
             expect(true).toBeFalsy();
         } catch (error: any) {
-            expect(error?.errorCode).toBe(VCLErrorCode.SdkError.toString());
+            expect(error?.errorCode).toEqual(VCLErrorCode.SdkError.toString());
         }
     });
 });

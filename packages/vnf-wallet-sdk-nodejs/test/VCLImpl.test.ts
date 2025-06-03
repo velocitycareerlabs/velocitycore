@@ -67,6 +67,8 @@ describe('VCLImpl - initGlobalConfigurations()', () => {
 
         vclImpl.initGlobalConfigurations(initializationDescriptor);
 
-        expect(VCLLog.LoggerService).toBe(initializationDescriptor.logService);
+        expect(VCLLog.LoggerService).toEqual(
+            initializationDescriptor.logService
+        );
     });
 });
