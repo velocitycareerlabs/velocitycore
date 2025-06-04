@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { useState } from 'react';
 import {
   Form,
   Edit,
@@ -25,9 +26,10 @@ import {
   email,
 } from 'react-admin';
 import { useParams } from 'react-router';
-import { Grid, Stack, Typography, Box, Tooltip } from '@mui/material';
+import { Stack, Typography, Box, Tooltip } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import InfoIcon from '@mui/icons-material/Info';
-import { useState } from 'react';
+import { omit } from 'lodash/fp';
 import Loading from '../../components/Loading.jsx';
 import { ERRORS, ADMINISTRATOR_DETAILS_HINT, SIGNATORY_DETAILS_HINT } from '../../utils/index.jsx';
 
@@ -63,13 +65,14 @@ const IndividualsEdit = () => {
         sx={sx.formContainer}
         resource="organizations"
         redirect={() => `individuals/${id}/show`}
+        transform={(data) => ({ ...data, ...{ profile: omit(['website'], data.profile) } })}
       >
         <Form mode="onTouched">
           <FormDataConsumer>
             {() => (
               <>
                 <Grid container spacing={5} rowSpacing={1.25}>
-                  <Grid item xs={6}>
+                  <Grid size={{ xs: 6 }}>
                     <Stack container flex={1} flexDirection="column">
                       <Stack flexDirection="row" gap={1.75}>
                         <Typography component="div" variant="h4" sx={sx.headingContainer}>
@@ -81,7 +84,7 @@ const IndividualsEdit = () => {
                           </Tooltip>
                         </Box>
                       </Stack>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
                           label="First name"
@@ -89,7 +92,7 @@ const IndividualsEdit = () => {
                           validate={required()}
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
                           label="Last name"
@@ -97,7 +100,7 @@ const IndividualsEdit = () => {
                           validate={required()}
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
                           label="Job Title"
@@ -105,7 +108,7 @@ const IndividualsEdit = () => {
                           validate={required()}
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
                           label="Email"
@@ -115,7 +118,7 @@ const IndividualsEdit = () => {
                       </Grid>
                     </Stack>
                   </Grid>
-                  <Grid item xs={6} p={1}>
+                  <Grid size={{ xs: 6 }} p={1}>
                     <Stack container flex={1} flexDirection="column">
                       <Stack flexDirection="row" gap={1.75}>
                         <Typography component="div" variant="h4" sx={sx.headingContainer}>
@@ -127,7 +130,7 @@ const IndividualsEdit = () => {
                           </Tooltip>
                         </Box>
                       </Stack>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
                           label="First name"
@@ -135,7 +138,7 @@ const IndividualsEdit = () => {
                           validate={required()}
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
                           label="Last name"
@@ -143,7 +146,7 @@ const IndividualsEdit = () => {
                           validate={required()}
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
                           label="Job Title"
@@ -151,7 +154,7 @@ const IndividualsEdit = () => {
                           validate={required()}
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <TextInput
                           fullWidth
                           label="Email"
@@ -170,7 +173,7 @@ const IndividualsEdit = () => {
                   sx={{ mt: 3, fontWeight: 600 }}
                   label="Update details"
                 />
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Stack flexDirection="row" mt={2}>
                     <Typography variant="subtitle2" sx={{ color: 'primary.main' }}>
                       {errorMessage}
