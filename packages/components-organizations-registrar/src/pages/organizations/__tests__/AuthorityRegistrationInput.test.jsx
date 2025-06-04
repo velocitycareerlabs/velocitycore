@@ -2,7 +2,8 @@ import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useForm, FormProvider } from 'react-hook-form';
-import AuthorityRegistrationInput, {
+import {
+  AuthorityRegistrationInput,
   registrationNumbers,
 } from '../components/AuthorityRegistrationInput.jsx';
 
