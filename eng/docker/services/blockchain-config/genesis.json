@@ -1,6 +1,6 @@
 {
   "config": {
-    "chainId": 1337,
+    "chainId": 2020,
     "contractSizeLimit": 2147483647,
     "constantinoplefixblock": 0,
     "ibft2": {
