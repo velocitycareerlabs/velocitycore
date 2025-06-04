@@ -56,14 +56,6 @@ export const getUrlSubPathFromString = (
 export const randomString = (length: number): string =>
     randomBytes(length).toString('hex');
 
-export const arrayToJsonArray = <T>(srcArr: Array<T>): T[] => {
-    const retVal: T[] = [];
-    srcArr.forEach((item: T) => {
-        retVal.push(item);
-    });
-    return retVal;
-};
-
 export const addDaysToNowDate = (srcDate: Date, days: number): Date => {
     srcDate.setUTCDate(srcDate.getUTCDate() + days);
     return srcDate;

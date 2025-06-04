@@ -1,10 +1,5 @@
 import { Nullish } from '../../../../api/VCLTypes';
-
-// eslint-disable-next-line no-shadow
-export enum HttpMethod {
-    GET = 'GET',
-    POST = 'POST',
-}
+import { HttpMethod } from './HttpMethod';
 
 export default class Request {
     constructor(

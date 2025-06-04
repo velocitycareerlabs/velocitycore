@@ -8,7 +8,7 @@ describe('VCLPublicJwk Tests', () => {
     test('testPublicJwkFromStr', () => {
         subject = VCLPublicJwk.fromString(JwtMocks.JWK);
 
-        expect(subject.valueStr).toBe(JwtMocks.JWK);
+        expect(subject.valueStr).toEqual(JwtMocks.JWK);
     });
 
     test('testPublicJwkFromJson', () => {
