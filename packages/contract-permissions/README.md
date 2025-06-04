@@ -1,4 +1,4 @@
-Example of the usage on your localhost with the blockchain-dev container.
+Example of the usage on your localhost with a Go Ethereum container.
 
 ```
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');

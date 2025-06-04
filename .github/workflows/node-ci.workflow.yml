@@ -194,7 +194,7 @@ jobs:
         username: $GITHUB_ACTOR
         password: ${{ secrets.VNF_GITHUB_TOKEN }}
     - name: Start Velocity Blockchain Node
-      run: docker run --name blockchain -p 8545:8545 -d ghcr.io/velocitynetworkfoundation/blockchain-dev
+      run: docker run --name blockchain -p 8545:8545 -d ethereum/client-go:v1.15.11@sha256:798b7eb1bcef6d4be7576232beea63bf291450f48b025dc8fb5c6e37840e4364 # v1.15.11
     - name: Start AWS localstack
       run: docker run --name localstack -p 4566:4566 -p 4571:4571 -e SERVICES=sns,ses,kms,s3 -d localstack/localstack:2.3.2
     - name: Wait for SES to launch
