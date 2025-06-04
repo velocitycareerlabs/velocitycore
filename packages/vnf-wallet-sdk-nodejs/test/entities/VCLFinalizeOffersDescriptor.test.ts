@@ -50,15 +50,15 @@ describe('VCLCredentialManifest Tests', () => {
     });
 
     test('test props', async () => {
-        expect(subject.finalizeOffersUri).toBe(
+        expect(subject.finalizeOffersUri).toEqual(
             'https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA/issue/finalize-offers'
         );
         expect(subject.approvedOfferIds).toStrictEqual(approvedOfferIds);
         expect(subject.rejectedOfferIds).toStrictEqual(rejectedOfferIds);
-        expect(subject.aud).toBe(
+        expect(subject.aud).toEqual(
             'https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA'
         );
-        expect(subject.issuerId).toBe(
+        expect(subject.issuerId).toEqual(
             'did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA'
         );
     });
@@ -68,13 +68,13 @@ describe('VCLCredentialManifest Tests', () => {
 
         expect(requestBody).toStrictEqual(JSON.parse(expectedRequestBodyStr));
 
-        expect(requestBody.exchangeId).toBe('645e315309237c760ac022b1');
+        expect(requestBody.exchangeId).toEqual('645e315309237c760ac022b1');
         expect(requestBody.approvedOfferIds).toStrictEqual(approvedOfferIds);
         expect(requestBody.rejectedOfferIds).toStrictEqual(rejectedOfferIds);
         const { proof } = requestBody;
-        expect(proof.proof_type).toBe('jwt');
-        expect(proof.jwt).toBe(jwtProof.encodedJwt);
+        expect(proof.proof_type).toEqual('jwt');
+        expect(proof.jwt).toEqual(jwtProof.encodedJwt);
         //        equivalent to checking nonce in proof jwt
-        expect(jwtProof.payload.nonce).toBe(nonceMock);
+        expect(jwtProof.payload.nonce).toEqual(nonceMock);
     });
 });

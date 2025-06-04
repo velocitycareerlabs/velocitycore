@@ -29,11 +29,13 @@ describe('VCLAuthTokenDescriptor', () => {
                 refreshToken
             );
 
-            expect((descriptor as any).authTokenUri).toBe(authTokenUri);
-            expect((descriptor as any).walletDid).toBe(walletDid);
-            expect((descriptor as any).relyingPartyDid).toBe(relyingPartyDid);
+            expect((descriptor as any).authTokenUri).toEqual(authTokenUri);
+            expect((descriptor as any).walletDid).toEqual(walletDid);
+            expect((descriptor as any).relyingPartyDid).toEqual(
+                relyingPartyDid
+            );
             expect((descriptor as any).vendorOriginContext).toBeUndefined();
-            expect((descriptor as any).refreshToken).toBe(refreshToken);
+            expect((descriptor as any).refreshToken).toEqual(refreshToken);
         });
 
         it('should correctly assign properties when constructed with a VCLPresentationRequest without optional parameters', () => {
@@ -41,9 +43,11 @@ describe('VCLAuthTokenDescriptor', () => {
                 PresentationRequestMocks.PresentationRequestFeed
             );
 
-            expect((descriptor as any).authTokenUri).toBe(authTokenUri);
-            expect((descriptor as any).walletDid).toBe(walletDid);
-            expect((descriptor as any).relyingPartyDid).toBe(relyingPartyDid);
+            expect((descriptor as any).authTokenUri).toEqual(authTokenUri);
+            expect((descriptor as any).walletDid).toEqual(walletDid);
+            expect((descriptor as any).relyingPartyDid).toEqual(
+                relyingPartyDid
+            );
             expect((descriptor as any).vendorOriginContext).toBeUndefined();
             expect((descriptor as any).refreshToken).toBeUndefined();
         });
@@ -58,13 +62,15 @@ describe('VCLAuthTokenDescriptor', () => {
                 authorizationCode
             );
 
-            expect((descriptor as any).authTokenUri).toBe(authTokenUri);
-            expect((descriptor as any).walletDid).toBe(walletDid);
-            expect((descriptor as any).relyingPartyDid).toBe(relyingPartyDid);
-            expect((descriptor as any).authorizationCode).toBe(
+            expect((descriptor as any).authTokenUri).toEqual(authTokenUri);
+            expect((descriptor as any).walletDid).toEqual(walletDid);
+            expect((descriptor as any).relyingPartyDid).toEqual(
+                relyingPartyDid
+            );
+            expect((descriptor as any).authorizationCode).toEqual(
                 authorizationCode
             );
-            expect((descriptor as any).refreshToken).toBe(refreshToken);
+            expect((descriptor as any).refreshToken).toEqual(refreshToken);
         });
     });
 

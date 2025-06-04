@@ -11,8 +11,10 @@ export default class InitializationWatcher {
         error: VCLError | null,
         enforceFailure = false
     ): boolean {
-        this.initCount++;
-        if (error) this.errors.push(error);
+        this.initCount += 1;
+        if (error) {
+            this.errors = [...this.errors, error]; // Immutable update
+        }
         return this.isInitializationComplete(enforceFailure);
     }
 

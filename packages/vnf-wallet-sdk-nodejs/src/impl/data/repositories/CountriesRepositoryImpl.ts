@@ -5,8 +5,9 @@ import VCLRegion from '../../../api/entities/VCLRegion';
 import VCLRegions from '../../../api/entities/VCLRegions';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import CountriesRepository from '../../domain/repositories/CountriesRepository';
-import Request, { HttpMethod } from '../infrastructure/network/Request';
+import Request from '../infrastructure/network/Request';
 import Urls, { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class CountriesRepositoryImpl implements CountriesRepository {
     constructor(private readonly networkService: NetworkService) {}

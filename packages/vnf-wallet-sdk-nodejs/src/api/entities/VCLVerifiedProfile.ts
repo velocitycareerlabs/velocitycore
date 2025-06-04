@@ -33,18 +33,10 @@ export default class VCLVerifiedProfile {
     }
 
     retrieveServiceTypes(serviceCategoriesJsonArr: any[]) {
-        const result: VCLServiceType[] = [];
-        if (serviceCategoriesJsonArr) {
-            for (let i = 0; i < serviceCategoriesJsonArr.length; i++) {
-                result.push(
-                    VCLServiceType[
-                        serviceCategoriesJsonArr[
-                            i
-                        ] as keyof typeof VCLServiceType
-                    ]
-                );
-            }
-        }
+        const result = (serviceCategoriesJsonArr ?? []).map(
+            (category) =>
+                VCLServiceType[category as keyof typeof VCLServiceType]
+        );
         return new VCLServiceTypes(result);
     }
 

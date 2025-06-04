@@ -47,13 +47,14 @@ export default class VCLFinalizeOffersDescriptor {
     };
 
     generateRequestBody(proof: Nullish<VCLJwt> = null): Dictionary<any> {
-        const retVal = this.payload;
-        const proofJson: any = {};
+        const retVal = { ...this.payload };
+
         if (proof) {
-            proofJson[VCLFinalizeOffersDescriptor.KeyProofType] =
-                VCLFinalizeOffersDescriptor.KeyJwt;
-            proofJson[VCLFinalizeOffersDescriptor.KeyJwt] = proof.encodedJwt;
-            retVal[VCLFinalizeOffersDescriptor.KeyProof] = proofJson;
+            retVal[VCLFinalizeOffersDescriptor.KeyProof] = {
+                [VCLFinalizeOffersDescriptor.KeyProofType]:
+                    VCLFinalizeOffersDescriptor.KeyJwt,
+                [VCLFinalizeOffersDescriptor.KeyJwt]: proof.encodedJwt,
+            };
         }
         return retVal;
     }

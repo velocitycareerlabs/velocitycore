@@ -28,7 +28,7 @@ describe('VCLOffers tests', () => {
             JSON.parse(OffersMocks.offersJsonArrayStr)
         );
         testExpectations(subject1);
-        expect(subject1.challenge).toBe(null);
+        expect(subject1.challenge).toEqual(null);
         expect(subject1.all.map((offer) => offer.payload)).toStrictEqual(
             JSON.parse(OffersMocks.offersJsonArrayStr)
         );
@@ -39,7 +39,7 @@ describe('VCLOffers tests', () => {
             JSON.parse(OffersMocks.offersJsonObjectStr)
         );
         testExpectations(subject2);
-        expect(subject2.challenge).toBe(OffersMocks.challenge);
+        expect(subject2.challenge).toEqual(OffersMocks.challenge);
         expect(subject2.all.map((offer) => offer.payload)).toStrictEqual(
             JSON.parse(OffersMocks.offersJsonArrayStr)
         );
@@ -50,7 +50,7 @@ describe('VCLOffers tests', () => {
             JSON.parse(OffersMocks.offersJsonEmptyArrayStr)
         );
         testExpectations(subject1);
-        expect(subject3.challenge).toBe(null);
+        expect(subject3.challenge).toEqual(null);
         expect(subject3.all.map((offer) => offer.payload)).toStrictEqual(
             JSON.parse(OffersMocks.offersJsonEmptyArrayStr)
         );
@@ -61,15 +61,15 @@ describe('VCLOffers tests', () => {
             JSON.parse(OffersMocks.offersJsonEmptyObjectStr)
         );
         testExpectations(subject2);
-        expect(subject4.challenge).toBe(OffersMocks.challenge);
+        expect(subject4.challenge).toEqual(OffersMocks.challenge);
         expect(subject4.all.map((offer) => offer.payload)).toStrictEqual(
             JSON.parse(OffersMocks.offersJsonEmptyArrayStr)
         );
     });
 
     const testExpectations = (subject: VCLOffers) => {
-        expect(subject.responseCode).toBe(123);
+        expect(subject.responseCode).toEqual(123);
         expect(subject.sessionToken).toStrictEqual(new VCLToken('some token'));
-        expect(subject.all.length).toBe(11);
+        expect(subject.all.length).toEqual(11);
     };
 });
