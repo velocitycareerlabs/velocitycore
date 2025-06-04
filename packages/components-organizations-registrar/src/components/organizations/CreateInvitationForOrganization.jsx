@@ -31,7 +31,7 @@ import {
 import OrganizationSubmitButton from './OrganisationSubmitButton.jsx';
 import CustomImageInput from '../common/CustomImageInput/index.jsx';
 import AuthorityRegistrationNumbersInput from '../../pages/organizations/components/AuthorityRegistrationInput.jsx';
-import LinkedInRegistrationInput from '../../pages/organizations/components/LinkedInRegistrationInput.jsx';
+import { LinkedInRegistrationInput } from '../../pages/organizations/components/LinkedInRegistrationInput.jsx';
 import { dataResources } from '../../utils/remoteDataProvider';
 
 const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, defaultValues }) => {
@@ -156,7 +156,7 @@ const CreateInvitationForOrganization = ({ onSubmit, countryCodes, onCancel, def
                   </Tooltip>
                 </Box>
               </Stack>
-              <AuthorityRegistrationNumbersInput orientation="vertical" />
+              <AuthorityRegistrationNumbersInput orientation="vertical" isRequired={false} />
               <Box display="flex" justifyContent="center" pt={4}>
                 <Button
                   variant="outlined"

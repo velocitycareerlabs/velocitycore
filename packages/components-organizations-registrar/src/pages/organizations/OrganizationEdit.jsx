@@ -51,7 +51,7 @@ import { defaultBrandValue, allBrandsFilled, isAddBrandDisabled } from './Organi
 import PlusButtonBlock from '../../components/common/PlusButtonBlock.jsx';
 import { OrganizationBrand } from './components/OrganizationBrand.jsx';
 import AuthorityRegistrationNumbersInput from './components/AuthorityRegistrationInput.jsx';
-import LinkedInRegistrationInput from './components/LinkedInRegistrationInput.jsx';
+import { LinkedInRegistrationInput } from './components/LinkedInRegistrationInput.jsx';
 
 const validateEmail = [required(), email()];
 

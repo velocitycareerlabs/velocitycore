@@ -60,6 +60,7 @@ const getInitialAuthority = (values, source) => {
 export const AuthorityRegistrationInput = ({
   orientation = 'horizontal',
   source = 'registrationNumbers',
+  isRequired = true,
 }) => {
   const { watch, setValue } = useFormContext();
   const formValues = watch();
@@ -160,7 +161,7 @@ export const AuthorityRegistrationInput = ({
                         <TextInput
                           source="uri"
                           label="Local Country Registration Authority Website"
-                          validate={[required(), ...validateWebsite]}
+                          validate={[isRequired && required(), ...validateWebsite]}
                           fullWidth
                         />
                       )}
@@ -168,7 +169,7 @@ export const AuthorityRegistrationInput = ({
                       <TextInput
                         source="number"
                         label={`${registrationNumbers[selectedAuthority].label}`}
-                        validate={required()}
+                        validate={isRequired && required()}
                         fullWidth
                       />
                     </>
@@ -207,6 +208,7 @@ const styles = {
 AuthorityRegistrationInput.propTypes = {
   orientation: PropTypes.oneOf(['horizontal', 'vertical']),
   source: PropTypes.string,
+  isRequired: PropTypes.bool,
 };
 
 export default AuthorityRegistrationInput;
