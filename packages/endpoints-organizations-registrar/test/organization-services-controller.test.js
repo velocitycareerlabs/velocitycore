@@ -4405,6 +4405,7 @@ describe('Organization Services Test Suite', () => {
             appleAppStoreUrl: 'http://example.com/apple-app-store',
             appleAppId: 'com.example.app',
             googlePlayId: 'com.example.app',
+            supportedExchangeProtocols: ['VN_API'],
           };
 
           const response = await fastify.injectJson({
@@ -4456,6 +4457,7 @@ describe('Organization Services Test Suite', () => {
             appleAppStoreUrl: 'http://example.com/apple-app-store',
             appleAppId: 'com.example.app',
             googlePlayId: 'com.example.app',
+            supportedExchangeProtocols: ['VN_API'],
           };
 
           const response = await fastify.injectJson({
