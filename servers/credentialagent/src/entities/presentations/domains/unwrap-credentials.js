@@ -15,35 +15,10 @@
  *
  */
 
-const { flow, map, pick, omit } = require('lodash/fp');
-const { mapValuesByKey } = require('@velocitycareerlabs/common-functions');
-
-const selectedFields = [
-  'credentialSubject',
-  'type',
-  'issuer',
-  'issued',
-  'issuanceDate',
-  'expirationDate',
-  'validUntil',
-  'validFrom',
-  'credentialSchema',
-  'id',
-  'credentialChecks',
-  'paymentRequired',
-  'relatedResource',
-];
+const { flow, map, omit } = require('lodash/fp');
 
 const unwrapCredentials = map(
-  flow(
-    pick(selectedFields),
-    mapValuesByKey((v, k) => {
-      if (k === 'credentialSubject') {
-        return omit(['vendorUserId', '_id'], v);
-      }
-      return v;
-    })
-  )
+  flow(omit(['credentialSubject.vendorUserId', 'credentialSubject._id']))
 );
 
 module.exports = { unwrapCredentials };
