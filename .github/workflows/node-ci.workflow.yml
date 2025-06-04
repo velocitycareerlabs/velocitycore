@@ -182,6 +182,10 @@ jobs:
         node-version: ${{ fromJson(needs.prepare.outputs.node-versions) }}
         mongodb-version: ['8.0']
     steps:
+    - name: Checkout repo
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      with:
+        fetch-depth: 0
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@90004df786821b6308fb02299e5835d0dae05d0d # 1.12.0
       with:
@@ -213,10 +217,6 @@ jobs:
       run: docker run --name localstack -p 4566:4566 -p 4571:4571 -e SERVICES=sns,ses,kms,s3 -d localstack/localstack:2.3.2
     - name: Wait for SES to launch
       run: while ! nc -z localhost 4566; do echo "Waiting for SES to launch on port 4566..."; sleep 2; done;
-    - name: Checkout repo
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      with:
-        fetch-depth: 0
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
       with:
