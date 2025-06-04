@@ -3,6 +3,7 @@ services:
   blockchain:
     image: ethereum/client-go:v1.15.11@sha256:798b7eb1bcef6d4be7576232beea63bf291450f48b025dc8fb5c6e37840e4364
     restart: on-failure
+    command: --dev --http --http.addr 0.0.0.0
     ports:
       - 18545:8545
     healthcheck:
