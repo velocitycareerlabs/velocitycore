@@ -1,13 +1,5 @@
-# Usage
+# Configuration
 
-- Start a container instance of `blockchain-dev`
-`docker run --name blockchain -p 8545:8545 -d ghcr.io/velocitynetworkfoundation/blockchain-dev`
-- Run the `deploy` script from the root of the repo and save the addresses printed at the end
-`yarn nx run @velocitycareerlabs/contracts-deployment:deploy`
-- Stop the container
-`docker stop blockchain`
-- Copy the data from the container to the `./eng/docker/blockchain-dev/data/` directory
-`docker cp blockchain:/opt/besu/data/. ./eng/docker/blockchain-dev/data`
-- Remove the stopped container
-`docker rm blockchain`
-- Update the `./eng/docker/blockchain-dev/README.md` file with the new addresses and any environment or docker compose files that need those addresses.
+The following is a list of environment variables that can be used to configure the tool before it is called:
+- `RPC_NODE_URL`: The URL of the node, defaults to `http://localhost:8545`.
+- `PRIVATE_KEY`: The private key to use when deploying the contracts, defaults to `e090d2f5ba3f22f818190f6f0380e68a1608f307461a8db6066e3d64b57c9f0c` (private key used in tests).
