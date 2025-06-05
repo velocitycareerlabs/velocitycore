@@ -34,7 +34,7 @@ const {
 } = require('@velocitycareerlabs/sample-data');
 const { errorResponseMatcher } = require('@velocitycareerlabs/tests-helpers');
 const { VnfProtocolVersions } = require('@velocitycareerlabs/vc-checks');
-const { map, omit, isString } = require('lodash/fp');
+const { map, isString } = require('lodash/fp');
 const { nanoid } = require('nanoid');
 const nock = require('nock');
 const metadataRegistration = require('@velocitycareerlabs/metadata-registration');
@@ -393,7 +393,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
           }),
@@ -487,7 +487,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
           }),
@@ -642,7 +642,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             ...checkResult,
@@ -718,7 +718,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             ...checkResult,
@@ -802,7 +802,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             ...checkResult,
@@ -872,7 +872,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             ...checkResult,
@@ -1104,7 +1104,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             ...checkResult,
@@ -1402,7 +1402,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             ...checkResultPaymentRequired,
@@ -1468,7 +1468,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             credentialChecks,
@@ -1534,7 +1534,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             credentialChecks,
@@ -1614,7 +1614,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             ...checkResult,
@@ -1870,7 +1870,7 @@ describe('presentation submission', () => {
         ),
         credentials: map(
           ({ vc }) => ({
-            ...omit(['@context', 'credentialStatus', 'issuer'], vc),
+            ...vc,
             issuer: isString(vc.issuer) ? { id: vc.issuer } : vc.issuer,
             issuanceDate: expect.stringMatching(ISO_DATETIME_FORMAT),
             ...checkResult,
