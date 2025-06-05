@@ -17,6 +17,8 @@ import { DeepLinkMocks } from '../infrastructure/resources/valid/DeepLinkMocks';
 import { DidJwkMocks } from '../infrastructure/resources/valid/DidJwkMocks';
 import PresentationRequestUseCase from '../../src/impl/domain/usecases/PresentationRequestUseCase';
 import { PresentationRequestByDeepLinkVerifierImpl } from '../../src/impl/data/verifiers';
+import ResolveDidDocumentRepositoryImpl from '../../src/impl/data/repositories/ResolveDidDocumentRepositoryImpl';
+import { DidDocumentMocks } from '../infrastructure/resources/valid/DidDocumentMocks';
 
 describe('PresentationRequestUseCase Tests', () => {
     let subject1: PresentationRequestUseCase;
@@ -42,7 +44,11 @@ describe('PresentationRequestUseCase Tests', () => {
                 new JwtSignServiceMock(''),
                 new JwtVerifyServiceMock()
             ),
-            new PresentationRequestByDeepLinkVerifierImpl()
+            new PresentationRequestByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const presentationRequest = await subject1.getPresentationRequest(
@@ -81,7 +87,11 @@ describe('PresentationRequestUseCase Tests', () => {
                 new JwtSignServiceMock(''),
                 new JwtVerifyServiceMock()
             ),
-            new PresentationRequestByDeepLinkVerifierImpl()
+            new PresentationRequestByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
         try {
             await subject2.getPresentationRequest(
