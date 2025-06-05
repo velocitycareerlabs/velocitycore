@@ -1,8 +1,19 @@
 name: shared_services
 services:
-  besu:
-    image: ghcr.io/velocitynetworkfoundation/blockchain-dev@sha256:596ccbfd5b6153741001428d34946d4294160d323992bd1f05ebdc11953c2fef
+  blockchain:
+    image: hyperledger/besu:25.4.1@sha256:00468488df234ead7c0e450ffcd5bc1ac3ed62f458a0de42ba029155ecdf5331
     restart: on-failure
+    command: |
+        --genesis-file=/opt/besu/config/genesis.json
+        --node-private-key-file=/opt/besu/config/key
+        --rpc-http-enabled
+        --rpc-http-api=ETH,NET,WEB3
+        --host-allowlist=*
+        --rpc-http-cors-origins=all
+        --min-gas-price=0
+        --profile=enterprise
+    volumes:
+      - ./blockchain-config:/opt/besu/config
     ports:
       - 18545:8545
     healthcheck:
@@ -15,10 +26,10 @@ services:
   contracts-deployment:
     image: node:22.14.0-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b
     environment:
-      - RPC_NODE_URL=http://besu:8545
+      - RPC_NODE_URL=http://blockchain:8545
     command: npx @velocitycareerlabs/contracts-deployment@1.25.0-dev-build.1caf36412
     depends_on:
-      besu:
+      blockchain:
         condition: service_healthy
     restart: on-failure
 
@@ -27,8 +38,6 @@ services:
     environment:
       - SERVICES=kms,sns,ses,s3
       - PERSISTENCE=1
-    volumes:
-      - "${LOCALSTACK_VOLUME_DIR:-./localstack.vol}:/var/lib/localstack"
     ports:
       - 14566:4566
       - 14510-14559:4510-4559
@@ -38,8 +47,6 @@ services:
     restart: on-failure
     ports:
       - 17017:27017
-    volumes:
-      - ./mongo-data.vol:/opt/besu/data
 
   certgen:
     image: alpine/openssl@sha256:f4dead2cc05e01fb683f04ef5573da53ecf2004c8d7603e1c65f6994d8d38313
