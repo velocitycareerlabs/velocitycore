@@ -35,7 +35,6 @@ const {
   buildVendorData,
   checkPaymentRequirement,
   mergeCredentialCheckResults,
-  unwrapCredentials,
   validatePresentation,
 } = require('../domains');
 const {
@@ -127,7 +126,7 @@ const doSharePresentation = async (
       {
         ...buildVendorData(disclosure, vendorOriginContext, context),
         presentationId,
-        credentials: unwrapCredentials(uncheckedCredentials),
+        credentials: uncheckedCredentials,
         rawCredentials,
       },
       context
@@ -173,7 +172,7 @@ const doSharePresentation = async (
     {
       ...buildVendorData(disclosure, vendorOriginContext, context),
       presentationId,
-      credentials: unwrapCredentials(mergedCredentials),
+      credentials: mergedCredentials,
       rawCredentials,
       paymentRequired: checkPaymentRequirement(checkedCredentials),
     },
