@@ -137,13 +137,13 @@ const CreateOrganizationFromInvitation = ({ InterceptOnCreate }) => {
   }, [InterceptOnCreate, secretKeys]);
 
   const handleSubmit = useCallback(
-    async (formData, authority) => {
+    async (formData) => {
       await save({
         profile: {
           ...formData,
           website: formatWebSiteUrl(formData.website),
           linkedInProfile: formatWebSiteUrl(formData.linkedInProfile),
-          registrationNumbers: formatRegistrationNumbers(formData.registrationNumbers, authority),
+          registrationNumbers: formatRegistrationNumbers(formData.registrationNumbers),
         },
         serviceEndpoints: invitationData?.inviteeService,
         invitationCode: code,

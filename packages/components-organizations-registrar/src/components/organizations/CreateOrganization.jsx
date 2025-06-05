@@ -24,7 +24,7 @@ import {
   TextInput,
   FormDataConsumer,
 } from 'react-admin';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import InfoIcon from '@mui/icons-material/Info';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
@@ -37,34 +37,16 @@ import {
 } from './CreateOrganization.utils';
 import OrganizationSubmitButton from './OrganisationSubmitButton.jsx';
 import CustomImageInput from '../common/CustomImageInput/index.jsx';
-import OrganizationRegistrationNumbersField from '../../pages/organizations/components/OrganizationRegistrationNumbersField.jsx';
 import {
   ADMINISTRATOR_DETAILS_HINT,
-  LINKEDIN_ORGANIZATION_ID,
   SIGNATORY_DETAILS_HINT,
   SUPPORT_EMAIL_HINT,
   TECHNICAL_EMAIL_HINT,
   WEBSITE_HINT,
 } from '../../utils/index.jsx';
-import OrganizationAuthorityRadioGroup from '../../pages/organizations/components/OrganizationAuthorityRadioGroup.jsx';
-import { OrganizationRegistrationNumbers } from '../../pages/organizations/components/OrganizationRegistrationNumbersContainer.jsx';
-import { Authorities, authorityOptions } from '../../constants/messageCodes';
+import AuthorityRegistrationNumbersInput from '../../pages/organizations/components/AuthorityRegistrationInput.jsx';
+import { LinkedInRegistrationInput } from '../../pages/organizations/components/LinkedInRegistrationInput.jsx';
 import { useAuth } from '../../utils/auth/AuthContext';
-
-const getSellSizeIfLocalAuthority = (authority) => {
-  if (authorityOptions[authority] === authorityOptions.NationalAuthority) {
-    return 6;
-  }
-  return 12;
-};
-
-const getDefaultAuthority = (registrationNumbers) => {
-  return (
-    registrationNumbers?.find(
-      (item) => item.authority !== Authorities.LinkedIn && item.number && item.number !== '',
-    )?.authority || Authorities.DunnAndBradstreet
-  );
-};
 
 const CreateOrganization = ({
   children,
@@ -80,18 +62,12 @@ const CreateOrganization = ({
 }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const [authority, setAuthority] = useState(
-    getDefaultAuthority(defaultValues?.registrationNumbers),
-  );
-  const handleAuthorityChange = (event) => {
-    setAuthority(event.target.value);
-  };
 
   const handleSubmit = useCallback(
     (data) => {
-      onSubmit(data, authority);
+      onSubmit(data);
     },
-    [onSubmit, authority],
+    [onSubmit],
   );
 
   return (
@@ -171,17 +147,7 @@ const CreateOrganization = ({
                     </Stack>
                   </Grid>
                   <Grid size={{ xs: 6 }}>
-                    <Stack flexDirection="row" gap={1.75}>
-                      <OrganizationRegistrationNumbersField
-                        record={{ ...formData, ...defaultValues }}
-                        fieldType="LinkedIn"
-                        label="LinkedIn Company Page ID"
-                        tooltip={LINKEDIN_ORGANIZATION_ID}
-                        source="registrationNumbers"
-                        type="number"
-                        isRequired={false}
-                      />
-                    </Stack>
+                    <LinkedInRegistrationInput formData={{ ...formData, ...defaultValues }} />
                   </Grid>
 
                   <Grid size={{ xs: 6 }}>
@@ -214,37 +180,10 @@ const CreateOrganization = ({
                       </Box>
                     </Stack>
                   </Grid>
-                  <OrganizationAuthorityRadioGroup
-                    authority={authority}
-                    handleAuthorityChange={handleAuthorityChange}
+                  <AuthorityRegistrationNumbersInput
+                    source="registrationNumbers"
+                    orientation="horizontal"
                   />
-                  {authorityOptions[authority] === authorityOptions.NationalAuthority && (
-                    <Grid size={{ xs: 6 }}>
-                      <Stack flexDirection="row">
-                        <Box sx={sxStyles.fullWidth}>
-                          <OrganizationRegistrationNumbers
-                            formData={{ ...defaultValues, ...formData }}
-                            authority={authority}
-                            type="uri"
-                            label="Local Country Registration Authority Website"
-                            source="registrationNumbers"
-                          />
-                        </Box>
-                      </Stack>
-                    </Grid>
-                  )}
-                  <Grid size={{ xs: getSellSizeIfLocalAuthority(authority) }}>
-                    <Stack flexDirection="row">
-                      <Box sx={sxStyles.fullWidth}>
-                        <OrganizationRegistrationNumbers
-                          formData={{ ...defaultValues, ...formData }}
-                          authority={authority}
-                          type="number"
-                          source="registrationNumbers"
-                        />
-                      </Box>
-                    </Stack>
-                  </Grid>
                   <Grid size={{ xs: 12 }}>
                     <TextInput
                       fullWidth

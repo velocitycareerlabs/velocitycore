@@ -85,19 +85,9 @@ export const formatWebSiteUrl = (value) => {
   return value;
 };
 
-export const formatRegistrationNumbers = (registrationNumbers = [], selectedAuthority) => {
+export const formatRegistrationNumbers = (registrationNumbers = []) => {
   return registrationNumbers
-    .filter((item) => {
-      if (!item.number) return false;
-
-      if (item.authority === Authorities.LinkedIn) return true;
-
-      if (selectedAuthority) {
-        return item.authority === selectedAuthority;
-      }
-
-      return false;
-    })
+    .filter((item) => !!item.number)
     .map((item) => (item.uri ? { ...item, uri: formatWebSiteUrl(item.uri) } : item));
 };
 
