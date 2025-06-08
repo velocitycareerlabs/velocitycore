@@ -1561,7 +1561,7 @@ describe('Organization Registrar Test Suite', () => {
                 id: '#credentialagent-999',
                 type: ServiceTypes.HolderAppProviderType,
                 serviceEndpoint: 'https://agent.samplevendor.com',
-                supportedExchangeProtocols: ['VN_API', 'foo'],
+                supportedExchangeProtocols: ['VN_API'],
               },
             ],
           });

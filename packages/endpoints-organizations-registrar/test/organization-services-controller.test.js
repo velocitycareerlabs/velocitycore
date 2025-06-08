@@ -3976,7 +3976,7 @@ describe('Organization Services Test Suite', () => {
             serviceEndpoint: 'https://agent.samplevendor.com',
             logoUrl: 'http://example.com/logo',
             name: 'fooWallet',
-            supportedExchangeProtocols: ['VN_API', 'foo'],
+            supportedExchangeProtocols: ['VN_API'],
           };
           const org = await persistOrganization({
             service: [serviceFoo],
