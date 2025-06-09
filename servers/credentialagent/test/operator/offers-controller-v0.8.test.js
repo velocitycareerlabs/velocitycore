@@ -2655,13 +2655,12 @@ describe('vendor offer management', () => {
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toEqual(
-          `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${encodeURIComponent(
-            tenant.did
-          )}%2Fissue%2Fget-credential-manifest%3Fexchange_id%3D${
+          `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${
+            tenant._id
+          }%2Fissue%2Fget-credential-manifest%3Fexchange_id%3D${
             receivedExchange._id
-          }%26credential_types%3DPastEmploymentPosition&issuerDid=${tenant.did.replace(
-            /:/g,
-            '%3A'
+          }%26credential_types%3DPastEmploymentPosition&issuerDid=${encodeURIComponent(
+            tenant.did
           )}`
         );
       });
@@ -2680,13 +2679,12 @@ describe('vendor offer management', () => {
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toEqual(
-          `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${encodeURIComponent(
-            tenant.did
-          )}%2Fissue%2Fget-credential-manifest%3Fexchange_id%3D${
+          `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${
+            tenant._id
+          }%2Fissue%2Fget-credential-manifest%3Fexchange_id%3D${
             receivedExchange._id
-          }%26credential_types%3DPastEmploymentPosition&issuerDid=${tenant.did.replace(
-            /:/g,
-            '%3A'
+          }%26credential_types%3DPastEmploymentPosition&issuerDid=${encodeURIComponent(
+            tenant.did
           )}&vendorOriginContext=123`
         );
       });
@@ -2711,13 +2709,12 @@ describe('vendor offer management', () => {
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toEqual(
-          `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${encodeURIComponent(
-            tenant.did
-          )}%2Fissue%2Fget-credential-manifest%3Fexchange_id%3D${
+          `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${
+            tenant._id
+          }%2Fissue%2Fget-credential-manifest%3Fexchange_id%3D${
             receivedExchange._id
-          }%26credential_types%3DCurrentEmploymentPosition%26credential_types%3DPastEmploymentPosition&issuerDid=${tenant.did.replace(
-            /:/g,
-            '%3A'
+          }%26credential_types%3DCurrentEmploymentPosition%26credential_types%3DPastEmploymentPosition&issuerDid=${encodeURIComponent(
+            tenant.did
           )}`
         );
       });
@@ -2740,13 +2737,12 @@ describe('vendor offer management', () => {
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toEqual(
-          `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${encodeURIComponent(
-            tenant.did
-          )}%2Fissue%2Fget-credential-manifest%3Fexchange_id%3D${
+          `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${
+            tenant._id
+          }%2Fissue%2Fget-credential-manifest%3Fexchange_id%3D${
             receivedExchange._id
-          }%26credential_types%3DPastEmploymentPosition&issuerDid=${tenant.did.replace(
-            /:/g,
-            '%3A'
+          }%26credential_types%3DPastEmploymentPosition&issuerDid=${encodeURIComponent(
+            tenant.did
           )}`
         );
       });
