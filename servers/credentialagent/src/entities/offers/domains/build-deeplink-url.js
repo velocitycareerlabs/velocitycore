@@ -24,7 +24,7 @@ const { VendorEndpointCategory } = require('../../disclosures');
 const createPresentationRequestUrl = (
   suffix,
   { tenant, config: { hostUrl } }
-) => new URL(`${hostUrl}/api/holder/v0.6/org/${tenant.did}/${suffix}`);
+) => new URL(`${hostUrl}/api/holder/v0.6/org/${tenant._id}/${suffix}`);
 
 const createDeepLinkUrl = (suffix, { config: { deepLinkProtocol } }) =>
   new URL(`${deepLinkProtocol}${suffix}`);
