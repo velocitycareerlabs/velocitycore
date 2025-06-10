@@ -50,15 +50,17 @@ const initHttpClient = (options) => {
       interceptors.dns({ maxTTL: 300000, maxItems: 2000, dualStack: false }),
       interceptors.responseError(),
       interceptors.cache({ store, methods: ['GET'] }),
-      createOidcInterceptor({
-        idpTokenUrl: tokensEndpoint,
-        clientId,
-        clientSecret,
-        retryOnStatusCodes: [401],
-        scopes,
-        audience,
-        urls: map((url) => url.origin, registeredPrefixUrls.values()),
-      }),
+      ...tokensEndpoint ? [
+        createOidcInterceptor({
+          idpTokenUrl: tokensEndpoint,
+          clientId,
+          clientSecret,
+          retryOnStatusCodes: [401],
+          scopes,
+          audience,
+          urls: map((url) => url.origin, registeredPrefixUrls.values()),
+        }),
+      ] : [],
     ]);
 
   const request = async (url, reqOptions, method, host, { traceId, log }, body) => {
@@ -82,12 +84,12 @@ const initHttpClient = (options) => {
       headers: reqHeaders,
       ...body ? { body } : {},
     });
-    const { statusCode, headers: resHeaders, body } = httpResponse;
+    const { statusCode, headers: resHeaders, body: resBody } = httpResponse;
     return {
       statusCode,
       resHeaders,
       json: async () => {
-        const bodyJson = await body.json();
+        const bodyJson = await resBody.json();
         log.info(
           { origin, url, reqId, statusCode, resHeaders, body: bodyJson },
           'HttpClient response'
@@ -95,7 +97,7 @@ const initHttpClient = (options) => {
         return bodyJson;
       },
       text: async () => {
-        const bodyText = await body.text();
+        const bodyText = await resBody.text();
         log.info(
           { origin, url, reqId, statusCode, resHeaders, body: bodyText },
           'HttpClient response'
