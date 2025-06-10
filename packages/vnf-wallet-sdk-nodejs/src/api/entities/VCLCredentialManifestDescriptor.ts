@@ -23,7 +23,7 @@ export default class VCLCredentialManifestDescriptor {
         public readonly remoteCryptoServicesToken: Nullish<VCLToken> = null
     ) {
         this.did =
-            deepLink?.did ??
+            this.deepLink?.did ??
             getUrlSubPathFromString(
                 uri,
                 VCLCredentialManifestDescriptor.KeyDidPrefix
