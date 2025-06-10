@@ -82,7 +82,7 @@ describe('Http Client Package', () => {
     });
   });
 
-  describe('Http client get', () => {
+  describe('Http client requests', () => {
     const origin = 'https://www.example.com';
     let mockAgent;
 
@@ -104,12 +104,17 @@ describe('Http Client Package', () => {
           traceId: 'TRACE-ID',
         });
       });
-      it('Should throw NotFoundError', async () => {
+      it('Should throw NotFoundError for get', async () => {
         const result = () => httpClient.get('404');
         await expect(result).rejects.toThrow(NotFoundError);
       });
 
-      it('Should throw BadRequestError', async () => {
+      it('Should throw NotFoundError for post', async () => {
+        const result = () => httpClient.post('404');
+        await expect(result).rejects.toThrow(NotFoundError);
+      });
+
+      it('Should throw BadRequestError for get', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/bad_request', method: 'GET' })
@@ -119,7 +124,17 @@ describe('Http Client Package', () => {
         await expect(result).rejects.toThrow(ResponseStatusCodeError);
       });
 
-      it('Should throw InternalServerError', async () => {
+      it('Should throw BadRequestError for post', async () => {
+        mockAgent
+          .get(origin)
+          .intercept({ path: '/bad_request', method: 'POST' })
+          .reply(400, { error: true });
+        const result = () => httpClient.post('bad_request');
+
+        await expect(result).rejects.toThrow(ResponseStatusCodeError);
+      });
+
+      it('Should throw InternalServerError for get', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/internal_server_error', method: 'GET' })
@@ -129,13 +144,39 @@ describe('Http Client Package', () => {
         await expect(result).rejects.toThrow(ResponseStatusCodeError);
       });
 
-      it('Should handle empty body in 204 response', async () => {
+      it('Should throw InternalServerError for post', async () => {
+        mockAgent
+          .get(origin)
+          .intercept({ path: '/internal_server_error', method: 'POST' })
+          .reply(500);
+        const result = () => httpClient.post('internal_server_error');
+
+        await expect(result).rejects.toThrow(ResponseStatusCodeError);
+      });
+
+      it('Should handle empty body in 204 response for get', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/empty_body_response', method: 'GET' })
           .reply(204);
 
         const response = await httpClient.get('empty_body_response');
+        expect(response).toEqual({
+          statusCode: 204,
+          resHeaders: {},
+          json: expect.any(Function),
+          text: expect.any(Function),
+        });
+        await expect(response.text()).resolves.toEqual('');
+      });
+
+      it('Should handle empty body in 204 response for post', async () => {
+        mockAgent
+          .get(origin)
+          .intercept({ path: '/empty_body_response', method: 'POST' })
+          .reply(204);
+
+        const response = await httpClient.post('empty_body_response');
         expect(response).toEqual({
           statusCode: 204,
           resHeaders: {},
