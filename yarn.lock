@@ -3093,9 +3093,9 @@
     fast-uri "^3.0.0"
 
 "@fastify/autoload@^6.0.0":
-  version "6.3.0"
-  resolved "https://registry.npmjs.org/@fastify/autoload/-/autoload-6.3.0.tgz#850bed2bc07a6dcf5a778e2e2bb60df6f910a814"
-  integrity sha512-VBYApgvqX5e+M2BAWKCxrYk9yTo8z127xsSzsSePQZlxt97tbQay74n//NDFK4ovFMgyhKSjoWtHTbdGw/RDvQ==
+  version "6.3.1"
+  resolved "https://registry.npmjs.org/@fastify/autoload/-/autoload-6.3.1.tgz#a0cd54a82e71be9456f80611ff8e9beefd7b84ed"
+  integrity sha512-0fsG+lO3m5yEZVjXKpltCe+2eHhM6rfAPQhvlGUgLUFTw/N2wA9WqPTObMtrF3oUCUrxbSDv60HlUIoh+aFM1A==
 
 "@fastify/basic-auth@^6.0.0":
   version "6.2.0"
@@ -3237,9 +3237,9 @@
     glob "^11.0.0"
 
 "@fastify/swagger-ui@^5.0.0":
-  version "5.2.2"
-  resolved "https://registry.npmjs.org/@fastify/swagger-ui/-/swagger-ui-5.2.2.tgz#98d6856ae1795c5e53fdc8374235b0df425aa972"
-  integrity sha512-jf8xe+D8Xjc8TqrZhtlJImOWihd8iYFu8dhM01mGg+F04CKUM0zGB9aADE9nxzRUszyWp3wn+uWk89nbAoBMCw==
+  version "5.2.3"
+  resolved "https://registry.npmjs.org/@fastify/swagger-ui/-/swagger-ui-5.2.3.tgz#3dc7f5ed3c226f55d894cdc2d45490efd22f3c4a"
+  integrity sha512-e7ivEJi9EpFcxTONqICx4llbpB2jmlI+LI1NQ/mR7QGQnyDOqZybPK572zJtcdHZW4YyYTBHcP3a03f1pOh0SA==
   dependencies:
     "@fastify/static" "^8.0.0"
     fastify-plugin "^5.0.0"
