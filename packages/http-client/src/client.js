@@ -30,7 +30,7 @@ const initHttpClient = (options) => {
     traceIdHeader,
     customHeaders,
     prefixUrls,
-    overrideAgent,
+    agentOverride,
     clientId,
     clientSecret,
     tokensEndpoint,
@@ -45,7 +45,7 @@ const initHttpClient = (options) => {
   }
 
   const agent =
-    overrideAgent ??
+    agentOverride ??
     new Agent(clientOptions).compose([
       interceptors.dns({ maxTTL: 300000, maxItems: 2000, dualStack: false }),
       interceptors.responseError(),

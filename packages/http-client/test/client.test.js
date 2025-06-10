@@ -97,24 +97,24 @@ describe('Http Client Package', () => {
       beforeAll(() => {
         httpClient = initHttpClient({
           rejectUnauthorized: false,
-          agent: mockAgent,
+          agentOverride: mockAgent,
           prefixUrls: [origin],
         })(origin, {
           log: console,
           traceId: 'TRACE-ID',
         });
       });
-      it('Should throw NotFoundError for get', async () => {
+      it('Should throw NotFoundError for get()', async () => {
         const result = () => httpClient.get('404');
         await expect(result).rejects.toThrow(NotFoundError);
       });
 
-      it('Should throw NotFoundError for post', async () => {
+      it('Should throw NotFoundError for post()', async () => {
         const result = () => httpClient.post('404');
         await expect(result).rejects.toThrow(NotFoundError);
       });
 
-      it('Should throw BadRequestError for get', async () => {
+      it('Should throw BadRequestError for get()', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/bad_request', method: 'GET' })
@@ -124,7 +124,7 @@ describe('Http Client Package', () => {
         await expect(result).rejects.toThrow(ResponseStatusCodeError);
       });
 
-      it('Should throw BadRequestError for post', async () => {
+      it('Should throw BadRequestError for post()', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/bad_request', method: 'POST' })
@@ -134,7 +134,7 @@ describe('Http Client Package', () => {
         await expect(result).rejects.toThrow(ResponseStatusCodeError);
       });
 
-      it('Should throw InternalServerError for get', async () => {
+      it('Should throw InternalServerError for get()', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/internal_server_error', method: 'GET' })
@@ -144,7 +144,7 @@ describe('Http Client Package', () => {
         await expect(result).rejects.toThrow(ResponseStatusCodeError);
       });
 
-      it('Should throw InternalServerError for post', async () => {
+      it('Should throw InternalServerError for post()', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/internal_server_error', method: 'POST' })
@@ -154,7 +154,7 @@ describe('Http Client Package', () => {
         await expect(result).rejects.toThrow(ResponseStatusCodeError);
       });
 
-      it('Should handle empty body in 204 response for get', async () => {
+      it('Should handle empty body in 204 response for get()', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/empty_body_response', method: 'GET' })
@@ -170,7 +170,7 @@ describe('Http Client Package', () => {
         await expect(response.text()).resolves.toEqual('');
       });
 
-      it('Should handle empty body in 204 response for post', async () => {
+      it('Should handle empty body in 204 response for post()', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/empty_body_response', method: 'POST' })
@@ -186,7 +186,7 @@ describe('Http Client Package', () => {
         await expect(response.text()).resolves.toEqual('');
       });
 
-      it('Should parse text', async () => {
+      it('Should parse text for get()', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/text', method: 'GET' })
@@ -201,13 +201,46 @@ describe('Http Client Package', () => {
         await expect(response.text()).resolves.toEqual('Hello world!');
       });
 
-      it('should parse json', async () => {
+      it('Should parse text for post()', async () => {
+        mockAgent
+          .get(origin)
+          .intercept({ path: '/text', method: 'POST' })
+          .reply(200, 'Hello world!');
+        const response = await httpClient.post('text');
+        expect(response).toEqual({
+          statusCode: 200,
+          resHeaders: {},
+          json: expect.any(Function),
+          text: expect.any(Function),
+        });
+        await expect(response.text()).resolves.toEqual('Hello world!');
+      });
+
+      it('should parse json for get()', async () => {
         mockAgent
           .get(origin)
           .intercept({ path: '/json', method: 'GET' })
           .reply(202, { message: 'Not Yet!' });
 
         const response = await httpClient.get('json');
+        expect(response).toEqual({
+          statusCode: 202,
+          resHeaders: {},
+          json: expect.any(Function),
+          text: expect.any(Function),
+        });
+        await expect(response.json()).resolves.toEqual({
+          message: 'Not Yet!',
+        });
+      });
+
+      it('should parse json for post()', async () => {
+        mockAgent
+          .get(origin)
+          .intercept({ path: '/json', method: 'POST' })
+          .reply(202, { message: 'Not Yet!' });
+
+        const response = await httpClient.post('json');
         expect(response).toEqual({
           statusCode: 202,
           resHeaders: {},
@@ -243,6 +276,30 @@ describe('Http Client Package', () => {
         });
       });
 
+      it('should handle post() with no prefixUrl params', async () => {
+        mockAgent
+          .get(origin)
+          .intercept({ path: '/json', method: 'POST' })
+          .reply(200, { message: 'matched' });
+        const httpClient2 = initHttpClient({
+          rejectUnauthorized: false,
+          agentOverride: mockAgent,
+        })({
+          log: console,
+          traceId: 'TRACE-ID',
+        });
+        const response = await httpClient2.post(`${origin}/json`);
+        expect(response).toEqual({
+          statusCode: 200,
+          resHeaders: {},
+          json: expect.any(Function),
+          text: expect.any(Function),
+        });
+        await expect(response.json()).resolves.toEqual({
+          message: 'matched',
+        });
+      });
+
       it('should handle get() with options.searchParams', async () => {
         mockAgent
           .get(origin)
@@ -253,6 +310,24 @@ describe('Http Client Package', () => {
         const response = await httpClient.get('json', { searchParams });
         expect(response).toEqual({
           statusCode: 200,
+          resHeaders: {},
+          json: expect.any(Function),
+          text: expect.any(Function),
+        });
+        await expect(response.json()).resolves.toEqual({
+          message: 'matched',
+        });
+      });
+
+      it('should handle post() with JSON body', async () => {
+        mockAgent
+          .get(origin)
+          .intercept({ path: '/json', method: 'POST', body: JSON.stringify({ foo: 'bar' }) })
+          .reply(202, { message: 'matched' });
+
+        const response = await httpClient.post('json', { foo: 'bar' });
+        expect(response).toEqual({
+          statusCode: 202,
           resHeaders: {},
           json: expect.any(Function),
           text: expect.any(Function),
