@@ -22,7 +22,6 @@ const { map } = require('lodash/fp');
 
 const USER_AGENT_HEADER = `${pkg.name}/${pkg.version}`;
 const registeredPrefixUrls = new Map();
-const store = new cacheStores.MemoryCacheStore();
 
 const initHttpClient = (options) => {
   const {
@@ -36,6 +35,7 @@ const initHttpClient = (options) => {
     tokensEndpoint,
     scopes,
     audience,
+    cache,
   } = parseOptions(options);
 
   // register prefixUrls
@@ -49,7 +49,7 @@ const initHttpClient = (options) => {
     new Agent(clientOptions).compose([
       interceptors.dns({ maxTTL: 300000, maxItems: 2000, dualStack: false }),
       interceptors.responseError(),
-      interceptors.cache({ store, methods: ['GET'] }),
+      interceptors.cache({ cache, methods: ['GET'] }),
       ...tokensEndpoint ? [
         createOidcInterceptor({
           idpTokenUrl: tokensEndpoint,
