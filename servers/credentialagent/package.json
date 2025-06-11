@@ -53,7 +53,7 @@
     "@velocitycareerlabs/jwt": "0.5.0-build",
     "@velocitycareerlabs/metadata-registration": "0.5.0-build",
     "@velocitycareerlabs/organizations-registry": "0.5.0-build",
-    "@velocitycareerlabs/request": "0.5.0-build",
+    "@velocitycareerlabs/http-client": "0.5.0-build",
     "@velocitycareerlabs/rest-queries": "0.5.0-build",
     "@velocitycareerlabs/server-provider": "0.5.0-build",
     "@velocitycareerlabs/spencer-mongo-extensions": "0.5.0-build",

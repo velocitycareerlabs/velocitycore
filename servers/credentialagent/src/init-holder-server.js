@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-const initRequest = require('@velocitycareerlabs/request');
+const { initHttpClient } = require('@velocitycareerlabs/http-client');
 const Static = require('@fastify/static');
 const fastifyRoutes = require('@fastify/routes');
 const { pick, omit } = require('lodash/fp');
 const {
   vnfProtocolVersionPlugin,
+  cachePlugin
 } = require('@velocitycareerlabs/fastify-plugins');
 const { rpcProviderPlugin } = require('@velocitycareerlabs/base-contract-io');
 const { validationPlugin } = require('@velocitycareerlabs/validation');
@@ -64,39 +65,45 @@ const initHolderServer = (fastify) => {
     .register(autoloadRepos, { path: `${__dirname}/entities` })
     .register(autoloadHolderApiControllers)
     .register(autoloadRootApiController)
+    .register(cachePlugin)
     .decorate(
       'baseVendorFetch',
-      initRequest({
+      initHttpClient({
         ...omit(['bearerToken'], fastify.config),
         mapUrl: initMapVendorUrl(fastify.config),
         prefixUrl: fastify.config.vendorUrl,
+        cache: fastify.cache,
       })
     )
     .decorate(
       'baseRegistrarFetch',
-      initRequest({
+      initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], fastify.config),
         prefixUrl: fastify.config.oracleUrl,
+        cache: fastify.cache,
       })
     )
     .decorate(
       'baseUniversalResolverFetch',
-      initRequest({
+      initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], fastify.config),
         prefixUrl: fastify.config.universalResolverUrl,
+        cache: fastify.cache,
       })
     )
     .decorate(
       'baseFetch',
-      initRequest({
+      initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], fastify.config),
+        cache: fastify.cache,
       })
     )
     .decorate(
       'baseLibFetch',
-      initRequest({
+      initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], fastify.config),
         prefixUrl: fastify.config.libUrl,
+        cache: fastify.cache,
       })
     )
     .register(Static, {

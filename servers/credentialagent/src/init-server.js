@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-const initRequest = require('@velocitycareerlabs/request');
+const { initHttpClient } = require('@velocitycareerlabs/http-client');
 const Static = require('@fastify/static');
 const fastifyRoutes = require('@fastify/routes');
 const { adminJwtAuthPlugin } = require('@velocitycareerlabs/auth');
 const {
   vnfProtocolVersionPlugin,
+  cachePlugin
 } = require('@velocitycareerlabs/fastify-plugins');
 const {
   authenticateVnfClientPlugin,
@@ -76,39 +77,45 @@ const initServer = (server) => {
     .register(autoloadHolderApiControllers)
     .register(autoloadRootApiController)
     .register(autoloadSaasoperatorApiControllers)
+    .register(cachePlugin)
     .decorate(
       'baseVendorFetch',
-      initRequest({
+      initHttpClient({
         ...omit(['bearerToken'], server.config),
         mapUrl: initMapVendorUrl(server.config),
         prefixUrl: server.config.vendorUrl,
+        cache: server.cache,
       })
     )
     .decorate(
       'baseRegistrarFetch',
-      initRequest({
+      initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], server.config),
         prefixUrl: server.config.oracleUrl,
+        cache: server.cache,
       })
     )
     .decorate(
       'baseUniversalResolverFetch',
-      initRequest({
+      initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], server.config),
         prefixUrl: server.config.universalResolverUrl,
+        cache: server.cache,
       })
     )
     .decorate(
       'baseFetch',
-      initRequest({
+      initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], server.config),
+        cache: server.cache,
       })
     )
     .decorate(
       'baseLibFetch',
-      initRequest({
+      initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], server.config),
         prefixUrl: server.config.libUrl,
+        cache: server.cache,
       })
     )
     .register(Static, {
