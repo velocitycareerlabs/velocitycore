@@ -22,10 +22,12 @@ export default class VCLCredentialManifestDescriptor {
         public readonly didJwk: VCLDidJwk,
         public readonly remoteCryptoServicesToken: Nullish<VCLToken> = null
     ) {
-        this.did = getUrlSubPathFromString(
-            uri,
-            VCLCredentialManifestDescriptor.KeyDidPrefix
-        );
+        this.did =
+            this.deepLink?.did ??
+            getUrlSubPathFromString(
+                uri,
+                VCLCredentialManifestDescriptor.KeyDidPrefix
+            );
     }
 
     get endpoint(): Nullish<string> {

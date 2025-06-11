@@ -278,16 +278,16 @@ describe('presentation request', () => {
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant.did,
+            tenant._id,
             '/submit-presentation'
           )}`,
         },
@@ -365,16 +365,16 @@ describe('presentation request', () => {
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant.did,
+            tenant._id,
             '/submit-presentation'
           )}`,
         },
@@ -538,16 +538,16 @@ describe('presentation request', () => {
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant.did,
+            tenant._id,
             '/submit-presentation'
           )}`,
         },
@@ -647,16 +647,16 @@ describe('presentation request', () => {
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant.did,
+            tenant._id,
             '/submit-presentation'
           )}`,
         },
@@ -736,16 +736,16 @@ describe('presentation request', () => {
           logo_uri: 'fooCommercialEntityLogo',
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant.did,
+            tenant._id,
             '/submit-presentation'
           )}`,
         },
@@ -821,16 +821,16 @@ describe('presentation request', () => {
           logo_uri: 'https://example.com/logo.png',
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${inspectUrl(
-            tenant.did,
+            tenant._id,
             '/submit-presentation'
           )}`,
           feed: true,

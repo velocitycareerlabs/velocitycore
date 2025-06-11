@@ -90,7 +90,7 @@ const buildMetadata = (
   orgProfile,
   { config: { hostUrl }, tenant }
 ) => {
-  const baseUrl = `${hostUrl}/api/holder/v0.6/org/${encodeURI(tenant.did)}`;
+  const baseUrl = `${hostUrl}/api/holder/v0.6/org/${tenant._id}`;
 
   const clientName = disclosure.commercialEntityName ?? orgProfile?.name;
   const logoUri = disclosure.commercialEntityLogo ?? orgProfile?.logo;

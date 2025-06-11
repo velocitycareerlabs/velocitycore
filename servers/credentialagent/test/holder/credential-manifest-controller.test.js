@@ -664,24 +664,24 @@ describe('get credential manifests', () => {
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -833,24 +833,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -997,24 +997,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -1144,24 +1144,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: customTenant.did },
+            { tenantId: customTenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: customTenant.did },
+            { tenantId: customTenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            customTenant.did,
+            customTenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            customTenant.did,
+            customTenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            customTenant.did,
+            customTenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -1328,24 +1328,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -1515,24 +1515,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -1639,24 +1639,24 @@ describe('get credential manifests', () => {
           logo_uri: 'fooCommercialEntityLogo',
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -1785,24 +1785,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: customTenant.did },
+            { tenantId: customTenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: customTenant.did },
+            { tenantId: customTenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            customTenant.did,
+            customTenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            customTenant.did,
+            customTenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            customTenant.did,
+            customTenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -1915,24 +1915,24 @@ describe('get credential manifests', () => {
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -2031,24 +2031,24 @@ describe('get credential manifests', () => {
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -2195,24 +2195,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -2359,24 +2359,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -2517,24 +2517,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -2864,24 +2864,24 @@ describe('get credential manifests', () => {
           logo_uri: sampleOrganizationProfile1.logo,
           tos_uri: disclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: disclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
@@ -3152,24 +3152,24 @@ describe('get credential manifests', () => {
           logo_uri: orgDidDoc.service[0].logo,
           tos_uri: customDisclosure.termsUrl,
           auth_token_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/oauth/token'
           )}`,
           max_retention_period: customDisclosure.duration,
           progress_uri: `${agentUrl}${tenantUrl(
-            { tenantId: tenant.did },
+            { tenantId: tenant._id },
             '/get-exchange-progress'
           )}`,
           submit_presentation_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/submit-identification'
           )}`,
           check_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/credential-offers'
           )}`,
           finalize_offers_uri: `${agentUrl}${issuingUrl(
-            tenant.did,
+            tenant._id,
             '/finalize-offers'
           )}`,
         },
