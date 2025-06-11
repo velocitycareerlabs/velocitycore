@@ -4,7 +4,7 @@ import { useAuth } from '@/utils/auth/AuthContext';
 import { dataResources } from '@/utils/remoteDataProvider';
 import useSelectedOrganization from '@/state/selectedOrganizationState';
 
-export const useIsUserHasGroup = () => {
+export const useCheckUserHasGroup = () => {
   const { user, getAccessTokenWithPopup } = useAuth();
   const redirect = useRedirect();
   const [, setDid] = useSelectedOrganization();

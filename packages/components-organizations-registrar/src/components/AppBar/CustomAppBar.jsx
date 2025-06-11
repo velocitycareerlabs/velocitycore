@@ -19,10 +19,10 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { Box } from '@mui/material';
 import AppBarOrganization from './AppBarOrganization.jsx';
-import { useIsUserHasGroup } from './hooks/useIsUserHasGroup.jsx';
+import { useCheckUserHasGroup } from './hooks/useCheckUserHasGroup.jsx';
 
 const CustomAppBar = (props) => {
-  const { hasOrganisations, isLoading } = useIsUserHasGroup();
+  const { hasOrganisations, isLoading } = useCheckUserHasGroup();
   const isLogoDisabled = isLoading || !hasOrganisations;
 
   return (
