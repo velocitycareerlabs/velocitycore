@@ -14,62 +14,15 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link } from 'react-router';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { Box } from '@mui/material';
-import { useRedirect } from 'react-admin';
 import AppBarOrganization from './AppBarOrganization.jsx';
-import useSelectedOrganization from '../../state/selectedOrganizationState';
-import { parseJwt } from '../../utils/index.jsx';
-import { chainNames } from '../../utils/chainNames';
-import { useAuth } from '../../utils/auth/AuthContext';
-import { useConfig } from '../../utils/ConfigContext';
+import { useIsUserHasGroup } from './hooks/useIsUserHasGroup.jsx';
 
 const CustomAppBar = (props) => {
-  const { getAccessTokenWithPopup, getAccessToken } = useAuth();
-  const { chainName } = useConfig();
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasOrganisations, setHasOrganisations] = useState(false);
-  const [, setDid] = useSelectedOrganization();
-  const redirect = useRedirect();
-  const location = useLocation();
-
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const token = await getAccessToken();
-        const userHasGroup = Boolean(doesUserHaveGroup(parseJwt(token), chainName));
-        setHasOrganisations(userHasGroup);
-        if (userHasGroup) {
-          return;
-        }
-
-        setDid('');
-        if (!/organizations\/create/.test(location.pathname)) {
-          redirect('create', 'organizations', undefined, undefined, { userHasGroup });
-        }
-      } catch (e) {
-        if (e.error === 'consent_required') {
-          await getAccessTokenWithPopup();
-        }
-        throw e;
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [
-    getAccessToken,
-    getAccessTokenWithPopup,
-    location,
-    redirect,
-    setDid,
-    chainName,
-    setIsLoading,
-  ]);
-
+  const { hasOrganisations, isLoading } = useIsUserHasGroup();
   const isLogoDisabled = isLoading || !hasOrganisations;
 
   return (
@@ -90,10 +43,5 @@ const CustomAppBar = (props) => {
     </AppBar>
   );
 };
-
-const doesUserHaveGroup = (decodedToken, chainName) =>
-  decodedToken['http://velocitynetwork.foundation/groupId'] ||
-  decodedToken.scope.includes('admin') ||
-  chainName === chainNames.localnet;
 
 export default CustomAppBar;
