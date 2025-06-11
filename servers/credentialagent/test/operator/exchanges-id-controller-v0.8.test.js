@@ -122,7 +122,7 @@ describe('Exchange of specific Id Controller Test Suite', () => {
     expect(response.json()).toEqual({
       deepLink:
         // eslint-disable-next-line max-len
-        `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${tenant._id}%2Fissue%2Fget-credential-manifest%3Fid%3D${exchange.disclosureId}%26exchange_id%3D${exchange._id}&issuerDid=${urlEncodedDid}&exchange_type=issue`,
+        `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Fissue%2Fget-credential-manifest%3Fid%3D${exchange.disclosureId}%26exchange_id%3D${exchange._id}&issuerDid=${urlEncodedDid}&exchange_type=issue`,
     });
   });
 
