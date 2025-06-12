@@ -17,7 +17,7 @@ export default class ResolveDidDocumentRepositoryImpl
     constructor(private readonly networkService: NetworkService) {}
 
     async resolveDidDocument(did: string): Promise<VCLDidDocument> {
-        const publicKeyResponse = await this.networkService.sendRequest({
+        const didDocumentResponse = await this.networkService.sendRequest({
             endpoint: `${Urls.ResolveDid + did}`,
             method: HttpMethod.GET,
             headers: {
@@ -26,8 +26,8 @@ export default class ResolveDidDocumentRepositoryImpl
             },
             body: null,
             contentType: null,
-            useCaches: false,
+            useCaches: true,
         });
-        return new VCLDidDocument(publicKeyResponse.payload);
+        return new VCLDidDocument(didDocumentResponse.payload);
     }
 }

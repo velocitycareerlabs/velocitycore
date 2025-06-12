@@ -17,9 +17,6 @@ export default class ResolveKidRepositoryImpl implements ResolveKidRepository {
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
-            body: null,
-            contentType: null,
-            useCaches: false,
         });
         return VCLPublicJwk.fromJSON(publicKeyResponse.payload);
     }
