@@ -36,7 +36,6 @@ const {
   autoloadRootApiController,
   autoloadSaasoperatorApiControllers,
 } = require('./controllers');
-const { cache } = require('react');
 
 const initOperatorServer = (fastify) => {
   if (!fastify.config.isTest) {
@@ -89,7 +88,7 @@ const initOperatorServer = (fastify) => {
       'baseFetch',
       initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], fastify.config),
-        cache: fastify.cache, 
+        cache: fastify.cache,
       })
     )
     .decorate(
@@ -97,7 +96,7 @@ const initOperatorServer = (fastify) => {
       initHttpClient({
         ...pick(['nodeEnv', 'requestTimeout', 'traceIdHeader'], fastify.config),
         prefixUrl: fastify.config.libUrl,
-        cache: fastify.cache, 
+        cache: fastify.cache,
       })
     )
     .register(Static, {

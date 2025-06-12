@@ -16,12 +16,14 @@
 
 const { nanoid } = require('nanoid/non-secure');
 const { Agent, interceptors, cacheStores } = require('undici');
-const { createOidcInterceptor } = require('undici-oidc-interceptor')
-const pkg = require('../package.json');
+const { createOidcInterceptor } = require('undici-oidc-interceptor');
 const { map } = require('lodash/fp');
+const pkg = require('../package.json');
 
 const USER_AGENT_HEADER = `${pkg.name}/${pkg.version}`;
 const registeredPrefixUrls = new Map();
+
+const initCache = () => new cacheStores.MemoryCacheStore();
 
 const initHttpClient = (options) => {
   const {
@@ -50,20 +52,29 @@ const initHttpClient = (options) => {
       interceptors.dns({ maxTTL: 300000, maxItems: 2000, dualStack: false }),
       interceptors.responseError(),
       interceptors.cache({ cache, methods: ['GET'] }),
-      ...tokensEndpoint ? [
-        createOidcInterceptor({
-          idpTokenUrl: tokensEndpoint,
-          clientId,
-          clientSecret,
-          retryOnStatusCodes: [401],
-          scopes,
-          audience,
-          urls: map((url) => url.origin, registeredPrefixUrls.values()),
-        }),
-      ] : [],
+      ...(tokensEndpoint
+        ? [
+            createOidcInterceptor({
+              idpTokenUrl: tokensEndpoint,
+              clientId,
+              clientSecret,
+              retryOnStatusCodes: [401],
+              scopes,
+              audience,
+              urls: map((url) => url.origin, registeredPrefixUrls.values()),
+            }),
+          ]
+        : []),
     ]);
 
-  const request = async (url, reqOptions, method, host, { traceId, log }, body) => {
+  const request = async (
+    url,
+    reqOptions,
+    method,
+    host,
+    { traceId, log },
+    body
+  ) => {
     const reqId = nanoid();
     const reqHeaders = {
       'user-agent': USER_AGENT_HEADER,
@@ -82,7 +93,7 @@ const initHttpClient = (options) => {
       path,
       method,
       headers: reqHeaders,
-      ...body ? { body } : {},
+      ...(body ? { body } : {}),
     });
     const { statusCode, headers: resHeaders, body: resBody } = httpResponse;
     return {
@@ -119,7 +130,14 @@ const initHttpClient = (options) => {
       get: (url, reqOptions) =>
         request(url, reqOptions, HTTP_VERBS.GET, host, context),
       post: (url, payload, reqOptions) =>
-        request(url, reqOptions, HTTP_VERBS.POST, host, context, JSON.stringify(payload)),
+        request(
+          url,
+          reqOptions,
+          HTTP_VERBS.POST,
+          host,
+          context,
+          JSON.stringify(payload)
+        ),
       responseType: 'promise',
     };
   };
@@ -171,4 +189,4 @@ const HTTP_VERBS = {
   POST: 'POST',
 };
 
-module.exports = { initHttpClient, parseOptions, parsePrefixUrl };
+module.exports = { initHttpClient, parseOptions, parsePrefixUrl, initCache };

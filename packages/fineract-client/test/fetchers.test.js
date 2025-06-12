@@ -909,7 +909,7 @@ describe('fineract client test suite', () => {
       const func = () => {
         return getCreditsAccountTransactions(payload, {
           fineractFetch,
-          log: { info: () => { } },
+          log: { info: () => {} },
         });
       };
       await expect(func()).resolves.toEqual({
@@ -930,7 +930,8 @@ describe('fineract client test suite', () => {
       searchParams.append('description', description2);
 
       expect(uriCalled).toEqual(
-        `/fineract-provider/api/v1/savingsaccounts/${payload.accountId
+        `/fineract-provider/api/v1/savingsaccounts/${
+          payload.accountId
         }/transactions?${searchParams.toString()}`
       );
     });
@@ -960,7 +961,7 @@ describe('fineract client test suite', () => {
       const func = () => {
         return getCreditsAccountTransactions(payload, {
           fineractFetch,
-          log: { info: () => { } },
+          log: { info: () => {} },
         });
       };
       await expect(func()).resolves.toEqual({
@@ -979,7 +980,8 @@ describe('fineract client test suite', () => {
       searchParams.append('description', description2);
 
       expect(uriCalled).toEqual(
-        `/fineract-provider/api/v1/savingsaccounts/${payload.accountId
+        `/fineract-provider/api/v1/savingsaccounts/${
+          payload.accountId
         }/transactions?${searchParams.toString()}`
       );
     });

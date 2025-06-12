@@ -32,7 +32,7 @@
     "@velocitycareerlabs/did-doc": "0.5.0-build",
     "@velocitycareerlabs/fastify-plugins": "0.5.0-build",
     "@velocitycareerlabs/jwt": "0.5.0-build",
-    "@velocitycareerlabs/requhttp-client": "0.5.0-build",
+    "@velocitycareerlabs/http-client": "0.5.0-build",
     "@velocitycareerlabs/server-credentialagent": "0.5.0-build",
     "@velocitycareerlabs/server-provider": "0.5.0-build",
     "date-fns": "~3.6.0",

@@ -15,11 +15,17 @@
  */
 const { NotFoundError } = require('http-errors');
 const { entries, set } = require('lodash/fp');
-const { MockAgent, interceptors, ResponseStatusCodeError } = require('undici');
+const {
+  MockAgent,
+  interceptors,
+  ResponseStatusCodeError,
+  cacheStores,
+} = require('undici');
 const {
   initHttpClient,
   parseOptions,
   parsePrefixUrl,
+  initCache,
 } = require('../src/client');
 
 describe('Http Client Package', () => {
@@ -52,6 +58,10 @@ describe('Http Client Package', () => {
         origin: `${origin}:8443`,
         rootPath: '/some_path/to_nowhere',
       });
+    });
+    it('should create a memory cache store', () => {
+      const cache = initCache();
+      expect(cache).toBeInstanceOf(cacheStores.MemoryCacheStore);
     });
   });
 
@@ -322,7 +332,11 @@ describe('Http Client Package', () => {
       it('should handle post() with JSON body', async () => {
         mockAgent
           .get(origin)
-          .intercept({ path: '/json', method: 'POST', body: JSON.stringify({ foo: 'bar' }) })
+          .intercept({
+            path: '/json',
+            method: 'POST',
+            body: JSON.stringify({ foo: 'bar' }),
+          })
           .reply(202, { message: 'matched' });
 
         const response = await httpClient.post('json', { foo: 'bar' });

@@ -15,9 +15,9 @@
  */
 
 const fp = require('fastify-plugin');
-const { cacheStores } = require('undici');
+const { initCache } = require('@velocitycareerlabs/http-client');
 
-const store = new cacheStores.MemoryCacheStore();
+const store = initCache();
 
 const cachePlugin = (fastify, options, done) => {
   fastify.decorate('cache', store);

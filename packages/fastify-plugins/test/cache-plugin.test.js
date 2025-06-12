@@ -24,7 +24,9 @@ const buildFastify = () => {
   const { initHttpClient } = require('@velocitycareerlabs/http-client');
   const fastify = require('fastify')()
     .register(cachePlugin)
-    .decorate('baseRequest', () => initHttpClient({ cache: fastify.cache }), ['cache'])
+    .decorate('baseRequest', () => initHttpClient({ cache: fastify.cache }), [
+      'cache',
+    ])
     .addHook('preValidation', async (req) => {
       req.fetch = fastify.baseRequest(req);
     });
@@ -61,7 +63,7 @@ describe('cache-plugin test suite', () => {
       decorate: mockDecorate,
       addHook: mockAddHook,
     };
-    cachePlugin(fakeServer, {}, () => { });
+    cachePlugin(fakeServer, {}, () => {});
     expect(mockDecorate).toHaveBeenCalledTimes(1);
     expect(mockAddHook).toHaveBeenCalledTimes(1);
     expect(mockDecorate).toHaveBeenCalledWith('cache', expect.any(Object));

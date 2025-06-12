@@ -20,7 +20,7 @@ const fastifyRoutes = require('@fastify/routes');
 const { adminJwtAuthPlugin } = require('@velocitycareerlabs/auth');
 const {
   vnfProtocolVersionPlugin,
-  cachePlugin
+  cachePlugin,
 } = require('@velocitycareerlabs/fastify-plugins');
 const {
   authenticateVnfClientPlugin,

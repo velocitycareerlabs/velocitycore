@@ -20,7 +20,7 @@ const fastifyRoutes = require('@fastify/routes');
 const { pick, omit } = require('lodash/fp');
 const {
   vnfProtocolVersionPlugin,
-  cachePlugin
+  cachePlugin,
 } = require('@velocitycareerlabs/fastify-plugins');
 const { rpcProviderPlugin } = require('@velocitycareerlabs/base-contract-io');
 const { validationPlugin } = require('@velocitycareerlabs/validation');
