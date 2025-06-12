@@ -10,24 +10,57 @@ import OffersByDeepLinkVerifier from '../../domain/verifiers/OffersByDeepLinkVer
 import VCLErrorCode from '../../../api/entities/error/VCLErrorCode';
 import VCLError from '../../../api/entities/error/VCLError';
 import VCLLog from '../../utils/VCLLog';
+import VCLDidDocument from '../../../api/entities/VCLDidDocument';
+import ResolveDidDocumentRepository from '../../domain/repositories/ResolveDidDocumentRepository';
 
 export default class OffersByDeepLinkVerifierImpl
     implements OffersByDeepLinkVerifier
 {
+    constructor(
+        private readonly resolveDidDocumentRepository: ResolveDidDocumentRepository
+    ) {}
+
     async verifyOffers(
         offers: VCLOffers,
         deepLink: VCLDeepLink
     ): Promise<boolean> {
+        if (deepLink.did === null) {
+            await this.onError(`DID not found in deep link: ${deepLink.value}`);
+            return false;
+        }
+        const didDocument =
+            await this.resolveDidDocumentRepository.resolveDidDocument(
+                deepLink.did!
+            );
+        return this.verify(offers, didDocument);
+    }
+
+    private async verify(
+        offers: VCLOffers,
+        didDocument: VCLDidDocument
+    ): Promise<boolean> {
         const mismatchedOffer = offers.all.find(
-            (offer) => offer.issuerId !== deepLink.did
+            (offer) =>
+                didDocument.id !== offer.issuerId &&
+                !didDocument.alsoKnownAs.includes(offer.issuerId ?? '')
         );
 
         if (mismatchedOffer) {
-            const errorMsg = `mismatched offer: ${mismatchedOffer.payload} \ndeepLink: ${deepLink.value}`;
-            VCLLog.error(errorMsg);
-            throw new VCLError(errorMsg, VCLErrorCode.MismatchedOfferIssuerDid);
+            await this.onError(
+                `mismatched credential: ${mismatchedOffer} \ndidDocument: ${didDocument}`,
+                VCLErrorCode.MismatchedOfferIssuerDid
+            );
         } else {
             return true;
         }
+        return false;
+    }
+
+    private async onError(
+        errorMessage: string,
+        errorCode: VCLErrorCode = VCLErrorCode.SdkError
+    ) {
+        VCLLog.error(errorMessage);
+        throw new VCLError(null, errorCode, null, errorMessage);
     }
 }

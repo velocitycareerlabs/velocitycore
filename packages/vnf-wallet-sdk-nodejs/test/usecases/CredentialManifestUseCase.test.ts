@@ -19,6 +19,8 @@ import { DeepLinkMocks } from '../infrastructure/resources/valid/DeepLinkMocks';
 import { VerifiedProfileMocks } from '../infrastructure/resources/valid/VerifiedProfileMocks';
 import { DidJwkMocks } from '../infrastructure/resources/valid/DidJwkMocks';
 import { CredentialManifestByDeepLinkVerifierImpl } from '../../src/impl/data/verifiers';
+import ResolveDidDocumentRepositoryImpl from '../../src/impl/data/repositories/ResolveDidDocumentRepositoryImpl';
+import { DidDocumentMocks } from '../infrastructure/resources/valid/DidDocumentMocks';
 
 describe('CredentialManifestUseCase Tests', () => {
     let subject1: CredentialManifestUseCase;
@@ -38,7 +40,11 @@ describe('CredentialManifestUseCase Tests', () => {
                 new JwtSignServiceMock(''),
                 new JwtVerifyServiceMock()
             ),
-            new CredentialManifestByDeepLinkVerifierImpl()
+            new CredentialManifestByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         try {
@@ -91,7 +97,11 @@ describe('CredentialManifestUseCase Tests', () => {
                 new JwtSignServiceMock(''),
                 new JwtVerifyServiceMock()
             ),
-            new CredentialManifestByDeepLinkVerifierImpl()
+            new CredentialManifestByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         try {

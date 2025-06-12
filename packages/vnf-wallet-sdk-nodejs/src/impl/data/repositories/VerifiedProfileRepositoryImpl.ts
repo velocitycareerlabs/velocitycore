@@ -24,8 +24,6 @@ export default class VerifiedProfileRepositoryImpl
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
-            contentType: null,
-            useCaches: false,
         });
         return new VCLVerifiedProfile(verifiedProfileResponse.payload);
     }
