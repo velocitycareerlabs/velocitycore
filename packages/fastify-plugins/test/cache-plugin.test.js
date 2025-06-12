@@ -21,10 +21,12 @@ const mockDecorate = jest.fn();
 const mockAddHook = jest.fn();
 
 const buildFastify = () => {
-  const initRequest = require('@velocitycareerlabs/request');
+  const { initHttpClient } = require('@velocitycareerlabs/http-client');
   const fastify = require('fastify')()
     .register(cachePlugin)
-    .decorate('baseRequest', initRequest({}))
+    .decorate('baseRequest', () => initHttpClient({ cache: fastify.cache }), [
+      'cache',
+    ])
     .addHook('preValidation', async (req) => {
       req.fetch = fastify.baseRequest(req);
     });

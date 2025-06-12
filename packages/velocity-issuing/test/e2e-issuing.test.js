@@ -39,7 +39,7 @@ const {
   jwtSign,
   jwtDecode,
 } = require('@velocitycareerlabs/jwt');
-const initRequest = require('@velocitycareerlabs/request');
+const { initHttpClient } = require('@velocitycareerlabs/http-client');
 const { MongoClient } = require('mongodb');
 const { map } = require('lodash/fp');
 const { collectionClient } = require('./helpers/collection-client');
@@ -251,7 +251,7 @@ const buildContext = ({
       'https://lib.test/contexts/credential-extensions-2022.jsonld.json',
   },
   db,
-  registrarFetch: initRequest({
+  registrarFetch: initHttpClient({
     prefixUrl: 'http://oracle.localhost.test',
   })({ log: console }),
   log: console,
