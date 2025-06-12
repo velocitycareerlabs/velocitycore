@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "jest": "29.7.0",
-    "nock": "14.0.4"
+    "nock": "14.0.5"
   },
   "nx": {
     "tags": ["lib"]

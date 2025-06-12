@@ -47,9 +47,7 @@ import {
 } from '@/components/organizations/CreateOrganization.utils';
 import CustomImageInput from '@/components/common/CustomImageInput/index.jsx';
 import PlusButtonBlock from '@/components/common/PlusButtonBlock.jsx';
-import { authorityOptions, Authorities } from '@/constants/messageCodes';
 import {
-  LINKEDIN_ORGANIZATION_ID,
   formatWebSiteUrl,
   formatRegistrationNumbers,
   SUPPORT_EMAIL_HINT,
@@ -65,20 +63,13 @@ import { useAuth } from '@/utils/auth/AuthContext';
 import { dataResources } from '@/utils/remoteDataProvider';
 import { credentialTypesByServiceTypes } from '@/utils/serviceTypes';
 
-import OrganizationRegistrationNumbersField from './components/OrganizationRegistrationNumbersField.jsx';
-import OrganizationAuthorityRadioGroup from './components/OrganizationAuthorityRadioGroup.jsx';
-import { OrganizationRegistrationNumbers } from './components/OrganizationRegistrationNumbersContainer.jsx';
+import AuthorityRegistrationNumbersInput from './components/AuthorityRegistrationInput.jsx';
+import { LinkedInRegistrationInput } from './components/LinkedInRegistrationInput.jsx';
 import { OrganizationBrand } from './components/OrganizationBrand.jsx';
 import { OrganizationSubmitButton } from './components/OrganizationSubmitButton.jsx';
 import { OrganizationCreateTitle } from './components/OrganizationCreateTitle.jsx';
 import ServiceCreateFormContainer from './OrganizationAddService.jsx';
-import {
-  requestOptions,
-  organizationPlaceholder,
-  validateName,
-  validateEmail,
-  getSellSizeIfLocalAuthority,
-} from './utils';
+import { requestOptions, organizationPlaceholder, validateName, validateEmail } from './utils';
 
 export const defaultBrandValue = [
   {
@@ -109,7 +100,6 @@ const OrganizationCreate = ({
   const [isServiceCreated, setServiceCreated] = useState(false);
   const [secretKeys, setSecretKeys] = useState(null);
   const [isCreateRequestLoading, setCreateRequestLoading] = useState(false);
-  const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
   const [hasOrganisations, setHasOrganisations] = useState(false);
   const [serviceType, setServiceType] = useState('');
   const [selectedCAO, setSelectedCAO] = useState('');
@@ -145,10 +135,6 @@ const OrganizationCreate = ({
       }
     })();
   }, [getAccessToken, setHasOrganisations]);
-
-  const handleAuthorityChange = (event) => {
-    setAuthority(event.target.value);
-  };
 
   const { save } = useCreateController({
     resource: 'organizations',
@@ -200,7 +186,6 @@ const OrganizationCreate = ({
         linkedInProfile: formatWebSiteUrl(organizationData?.profile?.linkedInProfile),
         registrationNumbers: formatRegistrationNumbers(
           organizationData?.profile?.registrationNumbers,
-          authority,
         ),
         commercialEntities: organizationData?.profile?.commercialEntities
           ?.filter((brand) => brand.logo)
@@ -297,15 +282,10 @@ const OrganizationCreate = ({
                     />
                   </Grid>
                   <Grid size={{ xs: 6 }}>
-                    <Stack flexDirection="row" gap={1.75}>
-                      <OrganizationRegistrationNumbersField
-                        record={{ ...initialRecord, ...formData }}
-                        fieldType="LinkedIn"
-                        label="LinkedIn Company Page ID"
-                        tooltip={LINKEDIN_ORGANIZATION_ID}
-                        isRequired={false}
-                      />
-                    </Stack>
+                    <LinkedInRegistrationInput
+                      formData={formData.profile}
+                      source="profile.registrationNumbers"
+                    />
                   </Grid>
                   <Grid size={{ xs: 6 }}>
                     <Stack flexDirection="row" gap={1.75}>
@@ -337,35 +317,10 @@ const OrganizationCreate = ({
                       </Box>
                     </Stack>
                   </Grid>
-                  <OrganizationAuthorityRadioGroup
-                    authority={authority}
-                    handleAuthorityChange={handleAuthorityChange}
+                  <AuthorityRegistrationNumbersInput
+                    source="profile.registrationNumbers"
+                    orientation="horizontal"
                   />
-                  {authorityOptions[authority] === authorityOptions.NationalAuthority && (
-                    <Grid size={{ xs: 6 }}>
-                      <Stack flexDirection="row">
-                        <Box sx={sx.fullWidth}>
-                          <OrganizationRegistrationNumbers
-                            formData={formData}
-                            authority={authority}
-                            type="uri"
-                            label="Local Country Registration Authority Website"
-                          />
-                        </Box>
-                      </Stack>
-                    </Grid>
-                  )}
-                  <Grid size={{ xs: getSellSizeIfLocalAuthority(authority) }}>
-                    <Stack flexDirection="row">
-                      <Box sx={sx.fullWidth}>
-                        <OrganizationRegistrationNumbers
-                          formData={formData}
-                          authority={authority}
-                          type="number"
-                        />
-                      </Box>
-                    </Stack>
-                  </Grid>
                   <Grid size={{ xs: 12 }}>
                     <TextInput
                       fullWidth

@@ -3801,7 +3801,7 @@ describe('disclosures management', () => {
       expect(response.statusCode).toEqual(200);
       expect(response.body).toEqual(
         // eslint-disable-next-line max-len
-        `velocity-test://inspect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${tenant._id}%2Finspect%2Fget-presentation-request%3Fid%3D${createResponse.json.id}&inspectorDid=${urlEncodedDid}`
+        `velocity-test://inspect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Finspect%2Fget-presentation-request%3Fid%3D${createResponse.json.id}&inspectorDid=${urlEncodedDid}`
       );
     });
 
@@ -3829,7 +3829,7 @@ describe('disclosures management', () => {
       const urlEncodedDid = encodeURIComponent(tenant.did);
       expect(response.body).toEqual(
         // eslint-disable-next-line max-len
-        `velocity-test://inspect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${tenant._id}%2Finspect%2Fget-presentation-request%3Fid%3D${createResponse.json.id}&inspectorDid=${urlEncodedDid}&vendorOriginContext=${vendorOriginContext}`
+        `velocity-test://inspect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Finspect%2Fget-presentation-request%3Fid%3D${createResponse.json.id}&inspectorDid=${urlEncodedDid}&vendorOriginContext=${vendorOriginContext}`
       );
     });
 
@@ -3862,11 +3862,10 @@ describe('disclosures management', () => {
       });
 
       expect(response.statusCode).toEqual(200);
+      const urlEncodedDid = encodeURIComponent(tenant.did);
       expect(response.body).toEqual(
         // eslint-disable-next-line max-len
-        `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${
-          tenant._id
-        }%2Fissue%2Fget-credential-manifest%3Fid%3D${
+        `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Fissue%2Fget-credential-manifest%3Fid%3D${
           createResponse.json.id
         }&issuerDid=${encodeURIComponent(tenant.did)}`
       );
@@ -3903,11 +3902,10 @@ describe('disclosures management', () => {
       });
 
       expect(response.statusCode).toEqual(200);
+      const urlEncodedDid = encodeURIComponent(tenant.did);
       expect(response.body).toEqual(
         // eslint-disable-next-line max-len
-        `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${
-          tenant._id
-        }%2Fissue%2Fget-credential-manifest%3Fid%3D${
+        `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Fissue%2Fget-credential-manifest%3Fid%3D${
           createResponse.json.id
         }&issuerDid=${encodeURIComponent(tenant.did)}&vendorOriginContext=123`
       );
@@ -3953,11 +3951,10 @@ describe('disclosures management', () => {
       });
 
       expect(response.statusCode).toEqual(200);
+      const urlEncodedDid = encodeURIComponent(tenant.did);
       expect(response.body).toEqual(
         // eslint-disable-next-line max-len
-        `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${
-          tenant._id
-        }%2Fissue%2Fget-credential-manifest%3Fid%3D${
+        `velocity-test://issue?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Fissue%2Fget-credential-manifest%3Fid%3D${
           createResponse.json.id
         }&issuerDid=${encodeURIComponent(tenant.did)}`
       );
@@ -4000,7 +3997,7 @@ describe('disclosures management', () => {
       expect(response.json).toEqual({
         deepLink:
           // eslint-disable-next-line max-len
-          `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${tenant._id}%2Finspect%2Fget-presentation-request%3Fid%3D${payload._id}&inspectorDid=${urlEncodedDid}&exchange_type=inspect`,
+          `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Finspect%2Fget-presentation-request%3Fid%3D${payload._id}&inspectorDid=${urlEncodedDid}&exchange_type=inspect`,
       });
     });
 
@@ -4019,7 +4016,7 @@ describe('disclosures management', () => {
       expect(response.json).toEqual({
         deepLink:
           // eslint-disable-next-line max-len
-          `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${tenant._id}%2Finspect%2Fget-presentation-request%3Fid%3D${payload._id}&inspectorDid=${urlEncodedDid}&vendorOriginContext=123&exchange_type=inspect`,
+          `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Finspect%2Fget-presentation-request%3Fid%3D${payload._id}&inspectorDid=${urlEncodedDid}&vendorOriginContext=123&exchange_type=inspect`,
       });
     });
 
@@ -4039,7 +4036,7 @@ describe('disclosures management', () => {
       expect(response.json).toEqual({
         deepLink:
           // eslint-disable-next-line max-len
-          `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${tenant._id}%2Fissue%2Fget-credential-manifest%3Fid%3D${payload._id}&issuerDid=${urlEncodedDid}&exchange_type=issue`,
+          `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Fissue%2Fget-credential-manifest%3Fid%3D${payload._id}&issuerDid=${urlEncodedDid}&exchange_type=issue`,
       });
     });
 
@@ -4061,7 +4058,7 @@ describe('disclosures management', () => {
       expect(response.json).toEqual({
         deepLink:
           // eslint-disable-next-line max-len
-          `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${tenant._id}%2Fissue%2Fget-credential-manifest%3Fid%3D${payload._id}&issuerDid=${urlEncodedDid}&vendorOriginContext=123&exchange_type=issue`,
+          `http://localhost.test/app-redirect?request_uri=http%3A%2F%2Flocalhost.test%2Fapi%2Fholder%2Fv0.6%2Forg%2F${urlEncodedDid}%2Fissue%2Fget-credential-manifest%3Fid%3D${payload._id}&issuerDid=${urlEncodedDid}&vendorOriginContext=123&exchange_type=issue`,
       });
     });
   });

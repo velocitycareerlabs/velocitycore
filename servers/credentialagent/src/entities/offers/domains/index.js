@@ -21,6 +21,7 @@ module.exports = {
   ...require('./post-validation-offers-handler'),
   ...require('./validate-offer'),
   ...require('./build-deeplink-url'),
+  ...require('./build-qr-code-url'),
   ...require('./generate-link-code'),
   ...require('./filter-object-ids'),
   ...require('./generate-issuing-challenge'),
