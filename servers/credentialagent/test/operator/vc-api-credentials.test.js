@@ -21,7 +21,10 @@ const {
   errorResponseMatcher,
 } = require('@velocitycareerlabs/tests-helpers');
 const nock = require('nock');
-const { generateKeyPair } = require('@velocitycareerlabs/crypto');
+const {
+  generateKeyPair,
+  KeyAlgorithms,
+} = require('@velocitycareerlabs/crypto');
 const { getDidUriFromJwk } = require('@velocitycareerlabs/did-doc');
 const { jwtDecode } = require('@velocitycareerlabs/jwt');
 const { BASE64_FORMAT } = require('@velocitycareerlabs/test-regexes');
@@ -65,6 +68,7 @@ const mockAddRevocationListSigned = jest.fn();
 const mockGetRevokeUrl = jest.fn();
 
 jest.mock('@velocitycareerlabs/metadata-registration', () => ({
+  ...jest.requireActual('@velocitycareerlabs/metadata-registration'),
   initRevocationRegistry: () => ({
     addRevocationListSigned: mockAddRevocationListSigned,
   }),
@@ -334,7 +338,12 @@ describe('vc-api credentials endpoints', () => {
           })
         );
         expect(mockAddCredentialMetadataEntry.mock.calls).toEqual([
-          [expect.any(Object), expect.any(String), 'did:ion:cao'],
+          [
+            expect.any(Object),
+            expect.any(String),
+            'did:ion:cao',
+            'jwk-base64:aes-256-gcm',
+          ],
         ]);
       });
 
@@ -729,8 +738,8 @@ describe('vc-api credentials endpoints', () => {
               'payload.vc.credentialSubject.type': 'AchievementSubject',
               'payload.vc.credentialSubject.@context': undefined,
               'payload.vc.credentialSchema': {
-                id: 'https://imsglobal.org/schemas/open-badge-v3.0-schema.json',
-                type: 'JsonSchemaValidator2018',
+                type: '1EdTechJsonSchemaValidator2019',
+                id: 'http://example.com/schema.json',
               },
             },
           })
@@ -826,7 +835,7 @@ const jwtVcExpectation = ({
 }) => {
   let expectation = {
     header: {
-      alg: 'ES256K',
+      alg: KeyAlgorithms.ES256,
       kid: `${credentialId}#key-1`,
       typ: 'JWT',
     },

@@ -19,19 +19,13 @@ const { toLower } = require('lodash/fp');
 const { MongoClient } = require('mongodb');
 const { publicJwkMatcher } = require('@velocitycareerlabs/tests-helpers');
 const initRequest = require('@velocitycareerlabs/request');
-const {
-  jwtDecode,
-  jwtVerify,
-  jwtSign,
-  jwkFromSecp256k1Key,
-} = require('@velocitycareerlabs/jwt');
+const { jwtDecode, jwtVerify, jwtSign } = require('@velocitycareerlabs/jwt');
 const { first, map } = require('lodash/fp');
 const { getUnixTime } = require('date-fns/fp');
-const {
-  toEthereumAddress,
-} = require('@velocitycareerlabs/blockchain-functions');
 const { nanoid } = require('nanoid');
 const { ISO_DATETIME_FORMAT } = require('@velocitycareerlabs/test-regexes');
+const { ALG_TYPE } = require('@velocitycareerlabs/metadata-registration');
+const { KeyAlgorithms } = require('@velocitycareerlabs/crypto/src/constants');
 const { hashOffer } = require('../src/domain/hash-offer');
 const {
   issueVelocityVerifiableCredentials,
@@ -59,6 +53,7 @@ const mockCreateCredentialMetadataList = jest.fn();
 const mockAddRevocationListSigned = jest.fn();
 
 jest.mock('@velocitycareerlabs/metadata-registration', () => ({
+  ...jest.requireActual('@velocitycareerlabs/metadata-registration'),
   initRevocationRegistry: () => ({
     addRevocationListSigned: mockAddRevocationListSigned,
   }),
@@ -85,7 +80,7 @@ describe('issuing velocity verifiable credentials', () => {
     });
     metadataListCollection = await collectionClient({
       mongoClient,
-      name: 'metadataListAllocations',
+      name: 'base64JwkMetadataListAllocations',
     });
     issuerEntity = entityFactory({ service: [{ id: '#issuer-1' }] });
     caoEntity = entityFactory({ service: [{ id: '#cao-1' }] });
@@ -95,7 +90,7 @@ describe('issuing velocity verifiable credentials', () => {
       issuingServiceId: issuerEntity.service[1]?.id,
       issuingServiceKMSKeyId: issuerEntity.kmsKeyId,
       issuingServiceDIDKeyId: issuerEntity.key[0].id,
-      dltOperatorAddress: toEthereumAddress(issuerEntity.keyPair.publicKey),
+      dltOperatorAddress: issuerEntity.primaryAddress,
       dltOperatorKMSKeyId: issuerEntity.kmsKeyId,
       dltOperatorDLTKeyId: issuerEntity.key[0].id,
       dltPrimaryAddress: issuerEntity.primaryAddress,
@@ -146,6 +141,12 @@ describe('issuing velocity verifiable credentials', () => {
         type: '1EdtechCLR2.0',
         issuerId: issuerEntity.did,
         credentialSubject: require('./clrSubject.json'),
+        credentialSchema: [
+          {
+            type: 'ImsGlobalValidator2019',
+            id: 'https://imsglobal.org/schemas/clr-v2.0-schema.json',
+          },
+        ],
       },
     ]);
     const userId = createExampleDid();
@@ -275,7 +276,7 @@ describe('issuing velocity verifiable credentials', () => {
         { issuerEntity, caoEntity, offer: offers[i], userId }
       );
     }
-    verifyCreateMetadataListCalledOnce(
+    await verifyCreateMetadataListCalledOnce(
       issuer,
       mockAddCredentialMetadataEntry.mock.calls[0][0].listId,
       mockCreateCredentialMetadataList,
@@ -329,7 +330,7 @@ describe('issuing velocity verifiable credentials', () => {
         { issuerEntity, caoEntity, offer: offers[i], userId }
       );
     }
-    verifyCreateMetadataListCalledOnce(
+    await verifyCreateMetadataListCalledOnce(
       issuer,
       mockAddCredentialMetadataEntry.mock.calls[0][0].listId,
       mockCreateCredentialMetadataList,
@@ -348,7 +349,7 @@ const buildContext = ({ issuerEntity, caoEntity, ...args }) => ({
         throw new Error('KeyNotFound');
       }
       return Promise.resolve({
-        privateJwk: jwkFromSecp256k1Key(issuerEntity.keyPair.privateKey),
+        privateJwk: issuerEntity.keyPair.privateKey,
         id: issuerEntity.kmsKeyId,
       });
     },
@@ -383,12 +384,13 @@ const verifyCreateMetadataListCalledOnce = async (
     listId,
     expect.any(String),
     caoEntity.did,
+    ALG_TYPE.JWK_BASE64_AES_256,
   ]);
 
   const issuerAttestationJwtVc = args[2];
   const { header, payload } = await jwtVerify(
     issuerAttestationJwtVc,
-    jwkFromSecp256k1Key(issuerEntity.keyPair.publicKey, false)
+    issuerEntity.keyPair.publicKey
   );
   expect(header).toEqual({
     alg: 'ES256K',
@@ -444,12 +446,16 @@ const verifyCredentialAndAddEntryExpectations = async (
   expect(credentialMetadataCall).toEqual([
     expect.objectContaining({
       credentialType: extractOfferType(offer),
-      publicKey: publicJwkMatcher,
+      publicKey: publicJwkMatcher(
+        credentialTypeMetadata[extractOfferType(offer)]
+          .defaultSignatureAlgorithm ?? KeyAlgorithms.SECP256K1
+      ),
       listId: expect.any(Number),
       index: expect.any(Number),
     }),
     hashOffer(offer),
     caoEntity.did,
+    ALG_TYPE.JWK_BASE64_AES_256,
   ]);
 
   const { publicKey } = first(credentialMetadataCall);

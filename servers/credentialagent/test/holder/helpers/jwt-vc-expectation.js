@@ -31,6 +31,7 @@ const {
 const { VelocityRevocationListType } = require('@velocitycareerlabs/vc-checks');
 const { ISO_DATETIME_FORMAT } = require('@velocitycareerlabs/test-regexes');
 const { castArray } = require('lodash');
+const { KeyAlgorithms } = require('@velocitycareerlabs/crypto');
 const { credentialTypeMetadata } = require('./credential-type-metadata');
 
 const jwtVcExpectation = ({
@@ -53,7 +54,7 @@ const jwtVcExpectation = ({
   );
   return {
     header: {
-      alg: 'ES256K',
+      alg: KeyAlgorithms.ES256,
       kid: `${credentialId}#key-1`,
       typ: 'JWT',
     },

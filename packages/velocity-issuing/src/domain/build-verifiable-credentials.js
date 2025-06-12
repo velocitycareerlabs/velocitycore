@@ -18,8 +18,9 @@
 const { toLower } = require('lodash/fp');
 const { mapWithIndex } = require('@velocitycareerlabs/common-functions');
 const {
-  generateKeyPair,
+  generateJWAKeyPair,
   get2BytesHash,
+  KeyAlgorithms,
 } = require('@velocitycareerlabs/crypto');
 const {
   jsonLdToUnsignedVcJwtContent,
@@ -55,8 +56,13 @@ const buildVerifiableCredentials = async (
   return Promise.all(
     mapWithIndex(async (offer, i) => {
       const metadataEntry = metadataEntries[i];
-      const keyPair = generateKeyPair({ format: 'jwk' });
       const credentialType = extractCredentialType(offer);
+      const digitalSignatureAlgorithm =
+        credentialTypesMap[credentialType].defaultSignatureAlgorithm ??
+        KeyAlgorithms.SECP256K1;
+
+      const keyPair = generateJWAKeyPair(digitalSignatureAlgorithm);
+
       const metadata = {
         ...metadataEntry,
         credentialType,
@@ -87,6 +93,7 @@ const buildVerifiableCredentials = async (
 
       const { header, payload } = jsonLdToUnsignedVcJwtContent(
         jsonLdCredential,
+        digitalSignatureAlgorithm,
         `${credentialId}#key-1`
       );
       const vcJwt = await jwtSign(payload, keyPair.privateKey, header);

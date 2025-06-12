@@ -200,7 +200,9 @@ describe('e2e issuing tests', () => {
     await mongoDb().collection('exchanges').deleteMany({});
     await mongoDb().collection('offers').deleteMany({});
     await mongoDb().collection('vendorUserIdMappings').deleteMany({});
-    await mongoDb().collection('metadataListAllocations').deleteMany({});
+    await mongoDb()
+      .collection('base64JwkMetadataListAllocations')
+      .deleteMany({});
     await mongoDb().collection('revocationListAllocations').deleteMany({});
 
     disclosure = await persistDisclosure({
@@ -278,7 +280,7 @@ describe('e2e issuing tests', () => {
     );
 
     const metadataListAllocation = await mongoDb()
-      .collection('metadataListAllocations')
+      .collection('base64JwkMetadataListAllocations')
       .findOne();
     expect(metadataListAllocation).toEqual({
       _id: expect.any(ObjectId),
