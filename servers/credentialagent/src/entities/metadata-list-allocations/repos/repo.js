@@ -26,8 +26,8 @@ module.exports = (app, options, next = () => {}) => {
   next();
   return repoFactory(
     {
-      name: 'metadataListAllocations',
-      entityName: 'metadataListAllocation',
+      name: 'base64JwkMetadataListAllocations',
+      entityName: 'base64JwkMetadataListAllocation',
       defaultProjection: {
         _id: 1,
         currentListId: 1,

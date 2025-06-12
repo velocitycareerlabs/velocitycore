@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-// eslint-disable-next-line import/order
 const nock = require('nock');
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { ObjectId } = require('mongodb');
@@ -32,7 +30,11 @@ const { rootPrivateKey } = require('@velocitycareerlabs/sample-data');
 const {
   toEthereumAddress,
 } = require('@velocitycareerlabs/blockchain-functions');
-const { KeyPurposes, generateKeyPair } = require('@velocitycareerlabs/crypto');
+const {
+  KeyPurposes,
+  KeyEncodings,
+  generateKeyPair,
+} = require('@velocitycareerlabs/crypto');
 const {
   deployTestPermissionsContract,
 } = require('@velocitycareerlabs/contract-permissions/test/helpers/deploy-test-permissions-contract');
@@ -45,7 +47,6 @@ const {
   initTenantFactory,
   initKeysFactory,
   tenantRepoPlugin,
-  KeyEncodings,
 } = require('../../src/entities');
 const {
   generatePrimaryAndAddOperatorToPrimary,

@@ -16,7 +16,7 @@
 
 const { last } = require('lodash/fp');
 const { HEX_FORMAT } = require('@velocitycareerlabs/test-regexes');
-const { publicKeyMatcher } = require('./matchers');
+const { publicKeyMatcher } = require('./jwk-matchers');
 
 const generateOrganizationKeyMatcher = ({
   kid,
@@ -43,7 +43,7 @@ const generateOrganizationKeyMatcher = ({
       controller: expect.any(String),
       ...(type === 'JsonWebKey2020'
         ? {
-            publicKeyJwk: publicKeyMatcher,
+            publicKeyJwk: publicKeyMatcher(),
           }
         : {
             publicKeyMultibase: expect.stringMatching(HEX_FORMAT),
