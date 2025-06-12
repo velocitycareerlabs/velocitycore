@@ -406,6 +406,7 @@ describe('credential types endpoints', () => {
         formSchemaUrls: {
           en: 'https://example.com/schema.json',
         },
+        defaultSignatureAlgorithm: KeyAlgorithms.RS256,
       };
 
       const response = await fastify.injectJson({
@@ -422,7 +423,7 @@ describe('credential types endpoints', () => {
         id: expect.stringMatching(OBJECT_ID_FORMAT),
         ...omit(['schema'], payload),
         issuerCategory: 'RegularIssuer',
-        defaultSignatureAlgorithm: KeyAlgorithms.SECP256K1,
+        defaultSignatureAlgorithm: KeyAlgorithms.RS256,
         updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
       });
