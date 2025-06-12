@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@velocitycareerlabs/contract-permissions": "0.5.0-build",
-    "@velocitycareerlabs/request": "0.5.0-build",
+    "@velocitycareerlabs/http-client": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
     "date-fns": "3.6.0",

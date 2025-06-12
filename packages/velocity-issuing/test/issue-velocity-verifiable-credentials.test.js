@@ -18,7 +18,7 @@ const console = require('console');
 const { toLower } = require('lodash/fp');
 const { MongoClient } = require('mongodb');
 const { publicJwkMatcher } = require('@velocitycareerlabs/tests-helpers');
-const initRequest = require('@velocitycareerlabs/request');
+const { initHttpClient } = require('@velocitycareerlabs/http-client');
 const {
   jwtDecode,
   jwtVerify,
@@ -364,7 +364,7 @@ const buildContext = ({ issuerEntity, caoEntity, ...args }) => ({
     credentialExtensionsContextUrl:
       'https://lib.test/contexts/credential-extensions-2022.jsonld.json',
   },
-  registrarFetch: initRequest({
+  registrarFetch: initHttpClient({
     prefixUrl: 'http://oracle.localhost.test',
   })({ log: console }),
   ...args,

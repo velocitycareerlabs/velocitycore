@@ -17,7 +17,7 @@
 const nock = require('nock');
 const { startOfDay, subDays } = require('date-fns/fp');
 const { formatAsDate } = require('@velocitycareerlabs/common-functions');
-const initRequest = require('@velocitycareerlabs/request');
+const { initHttpClient } = require('@velocitycareerlabs/http-client');
 const {
   ISO_DATETIME_FORMAT_ONLY_DATE_SECTION,
 } = require('@velocitycareerlabs/test-regexes');
@@ -46,7 +46,7 @@ describe('fineract client test suite', () => {
   let fineractFetch;
 
   beforeAll(async () => {
-    fineractFetch = initRequest({
+    fineractFetch = initHttpClient({
       prefixUrl: testHost,
     })({ log: console });
   });
@@ -909,7 +909,7 @@ describe('fineract client test suite', () => {
       const func = () => {
         return getCreditsAccountTransactions(payload, {
           fineractFetch,
-          log: { info: () => {} },
+          log: { info: () => { } },
         });
       };
       await expect(func()).resolves.toEqual({
@@ -930,8 +930,7 @@ describe('fineract client test suite', () => {
       searchParams.append('description', description2);
 
       expect(uriCalled).toEqual(
-        `/fineract-provider/api/v1/savingsaccounts/${
-          payload.accountId
+        `/fineract-provider/api/v1/savingsaccounts/${payload.accountId
         }/transactions?${searchParams.toString()}`
       );
     });
@@ -961,7 +960,7 @@ describe('fineract client test suite', () => {
       const func = () => {
         return getCreditsAccountTransactions(payload, {
           fineractFetch,
-          log: { info: () => {} },
+          log: { info: () => { } },
         });
       };
       await expect(func()).resolves.toEqual({
@@ -980,8 +979,7 @@ describe('fineract client test suite', () => {
       searchParams.append('description', description2);
 
       expect(uriCalled).toEqual(
-        `/fineract-provider/api/v1/savingsaccounts/${
-          payload.accountId
+        `/fineract-provider/api/v1/savingsaccounts/${payload.accountId
         }/transactions?${searchParams.toString()}`
       );
     });
