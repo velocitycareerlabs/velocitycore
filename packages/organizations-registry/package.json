@@ -23,7 +23,7 @@
   "devDependencies": {
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
-    "jest": "29.7.0"
+    "jest": "30.0.0"
   },
   "nx": {
     "tags": ["lib"]
