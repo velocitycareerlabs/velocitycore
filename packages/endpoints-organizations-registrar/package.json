@@ -49,7 +49,7 @@
     "@velocitycareerlabs/validation": "0.5.0-build",
     "@velocitycareerlabs/vc-checks": "0.5.0-build",
     "@velocitycareerlabs/verifiable-credentials": "0.5.0-build",
-    "auth0": "3.7.2",
+    "auth0": "4.25.0",
     "bs58": "~6.0.0",
     "date-fns": "~3.6.0",
     "env-var": "^7.0.0",
