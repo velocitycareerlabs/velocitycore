@@ -5,7 +5,7 @@ import { dataResources } from '@/utils/remoteDataProvider';
 import useSelectedOrganization from '@/state/selectedOrganizationState';
 
 export const useCheckUserHasGroup = () => {
-  const { user, getAccessTokenWithPopup } = useAuth();
+  const { user, getAccessTokenWithPopup, getAccessToken } = useAuth();
   const redirect = useRedirect();
   const [, setDid] = useSelectedOrganization();
   const {
@@ -22,6 +22,7 @@ export const useCheckUserHasGroup = () => {
     const checkUserGroup = async () => {
       setIsLoading(true);
       try {
+        await getAccessToken({ cacheMode: 'off' });
         const userHasGroup = !!userData?.groupId;
         if (userHasGroup) {
           setHasOrganisations(true);
