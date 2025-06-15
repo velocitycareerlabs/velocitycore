@@ -17,7 +17,7 @@
 const nock = require('nock');
 const { startOfDay, subDays } = require('date-fns/fp');
 const { formatAsDate } = require('@velocitycareerlabs/common-functions');
-const initRequest = require('@velocitycareerlabs/request');
+const { initHttpClient } = require('@velocitycareerlabs/http-client');
 const {
   ISO_DATETIME_FORMAT_ONLY_DATE_SECTION,
 } = require('@velocitycareerlabs/test-regexes');
@@ -46,7 +46,7 @@ describe('fineract client test suite', () => {
   let fineractFetch;
 
   beforeAll(async () => {
-    fineractFetch = initRequest({
+    fineractFetch = initHttpClient({
       prefixUrl: testHost,
     })({ log: console });
   });

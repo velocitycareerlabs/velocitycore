@@ -15,7 +15,7 @@
  */
 
 const nock = require('nock');
-const initRequest = require('@velocitycareerlabs/request');
+const { initHttpClient } = require('@velocitycareerlabs/http-client');
 const {
   ProductIds,
   createStakesAccount,
@@ -30,7 +30,7 @@ describe('create client accounts', () => {
 
   beforeAll(async () => {
     const baseContext = { log: console };
-    const fineractFetch = initRequest({ prefixUrl: testHost })(baseContext);
+    const fineractFetch = initHttpClient({ prefixUrl: testHost })(baseContext);
     context = { ...baseContext, fineractFetch };
   });
 
