@@ -385,7 +385,7 @@ describe('Organizations Test Suite', () => {
         expect(response.json.result[0].id).toEqual(organization.didDoc.id);
       });
 
-      it('Should not retrieve deleted organiztion', async () => {
+      it('Should not retrieve deleted organization', async () => {
         await persistOrganization({ deletedAt: Date('2023-02-27T14:40:18') });
         const response = await fastify.injectJson({
           method: 'GET',
@@ -528,6 +528,7 @@ describe('Organizations Test Suite', () => {
           googlePlayId: 'com.example.app',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
         const result = await runSequentially([
           () => persistIndexedOrganizationWithServices(0, [serviceIssuer]),
