@@ -22,6 +22,7 @@ const randomNumber = require('random-number-csprng');
 const multihash = require('multihashing');
 const keyto = require('@trust/keyto');
 const { HEX_FORMAT } = require('@velocitycareerlabs/test-regexes');
+const { KeyAlgorithms } = require('./constants');
 
 const secp256k1 = new EC('secp256k1');
 
@@ -35,14 +36,33 @@ const createCommitment = (val) => {
   return Buffer.from(hash).toString('base64');
 };
 
-const generateJWAKeyPair = (config) =>
-  config.algorithm === 'rsa'
+const generateJWAKeyPair = (dsaOrConfig) => {
+  const jwaConfig = isString(dsaOrConfig)
+    ? dsaJwaConfigMap[dsaOrConfig]
+    : dsaOrConfig;
+
+  return jwaConfig.algorithm === 'rsa'
     ? generateKeyPair({ type: 'rsa', format: 'jwk', modulusLength: 2048 })
     : generateKeyPair({
         type: 'ec',
         format: 'jwk',
-        curve: config.curve,
+        curve: jwaConfig.curve,
       });
+};
+
+const dsaJwaConfigMap = {
+  [KeyAlgorithms.SECP256K1]: {
+    algorithm: 'ec',
+    curve: 'secp256k1',
+  },
+  [KeyAlgorithms.ES256]: {
+    algorithm: 'ec',
+    curve: 'ES256',
+  },
+  [KeyAlgorithms.RS256]: {
+    algorithm: 'rsa',
+  },
+};
 
 const generateKeyPair = (options = {}) => {
   const { format = 'hex', type = 'ec' } = options;

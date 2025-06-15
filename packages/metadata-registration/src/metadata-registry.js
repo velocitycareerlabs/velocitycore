@@ -26,14 +26,24 @@ const {
   get2BytesHash,
   deriveEncryptionSecretFromPassword,
 } = require('@velocitycareerlabs/crypto');
-const { jwkFromSecp256k1Key, hexFromJwk } = require('@velocitycareerlabs/jwt');
-const { find, flow, isEmpty, last, map, partition } = require('lodash/fp');
+const {
+  jwkFromSecp256k1Key,
+  hexFromJwk,
+  base64UrlToJwk,
+  jwkToPublicBase64Url,
+} = require('@velocitycareerlabs/jwt');
+const {
+  find,
+  flow,
+  isEmpty,
+  join,
+  last,
+  map,
+  partition,
+} = require('lodash/fp');
 
 const contractAbi = require('./contracts/metadata-registry.json');
-const { RESOLUTION_METADATA_ERROR } = require('./constants');
-
-const VERSION = '1';
-const ALG_TYPE = 'aes-256-gcm';
+const { RESOLUTION_METADATA_ERROR, VERSION, ALG_TYPE } = require('./constants');
 
 const initMetadataRegistry = async (
   { privateKey, contractAddress, rpcProvider },
@@ -158,7 +168,7 @@ const initMetadataRegistry = async (
     listId,
     issuerVC,
     caoDid,
-    algType = ALG_TYPE,
+    algType = ALG_TYPE.HEX_AES_256,
     version = VERSION
   ) => {
     log.info(
@@ -199,15 +209,20 @@ const initMetadataRegistry = async (
   const addCredentialMetadataEntry = async (
     { listId, index, credentialTypeEncoded, publicKey },
     password,
-    caoDid
+    caoDid,
+    algType = ALG_TYPE.HEX_AES_256
   ) => {
     log.info(
-      { listId, index, credentialTypeEncoded, caoDid, publicKey },
+      { listId, index, credentialTypeEncoded, caoDid, publicKey, algType },
       'addCredentialMetadataEntry'
     );
     const secret = await deriveEncryptionSecretFromPassword(password);
+    const encodedJwk =
+      algType === ALG_TYPE.JWK_BASE64_AES_256
+        ? jwkToPublicBase64Url(publicKey)
+        : hexFromJwk(publicKey, false);
     const encryptedPK = `0x${Buffer.from(
-      encrypt(hexFromJwk(publicKey, false), secret),
+      encrypt(encodedJwk, secret),
       'base64'
     ).toString('hex')}`;
 
@@ -266,12 +281,16 @@ const initMetadataRegistry = async (
   const resolvePublicKey = ({ id, entry, secret }) => {
     log.info({ id, entry, secret }, 'resolvePublicKey');
     const { algType, version } = entry;
-    if (
-      version !== get2BytesHash(VERSION) ||
-      algType !== get2BytesHash(ALG_TYPE)
-    ) {
+
+    if (version !== get2BytesHash(VERSION)) {
+      throw new Error(`Unsupported version "${version}"`);
+    }
+    if (!Object.values(ALG_TYPE).map(get2BytesHash).includes(algType)) {
       throw new Error(
-        `Unsupported encryption algorithm "${ALG_TYPE}" or version "${VERSION}"`
+        `Unsupported algorithm "${algType}". Valid values are ${flow(
+          map((type) => `${type} (${get2BytesHash(type)})`),
+          join
+        )(Object.values(ALG_TYPE))}`
       );
     }
 
@@ -281,10 +300,8 @@ const initMetadataRegistry = async (
     ).toString('base64');
 
     try {
-      const publicKeyJwk = jwkFromSecp256k1Key(
-        decrypt(encryptedPublicKey, secret),
-        false
-      );
+      const rawKey = decrypt(encryptedPublicKey, secret);
+      const publicKeyJwk = buildJwk(algType, rawKey);
       return {
         id: `${id}#key-1`,
         publicKeyJwk,
@@ -481,5 +498,10 @@ const deriveEncryptionSecret = async (credential) => {
   }
   return deriveEncryptionSecretFromPassword(contentHash);
 };
+
+const buildJwk = (algType, rawKey) =>
+  algType === get2BytesHash(ALG_TYPE.JWK_BASE64_AES_256)
+    ? base64UrlToJwk(rawKey)
+    : jwkFromSecp256k1Key(rawKey, false);
 
 module.exports = initMetadataRegistry;
