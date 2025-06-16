@@ -62,7 +62,6 @@ const CreateOrganizationFromInvitation = ({ InterceptOnCreate }) => {
         refresh();
         setDid(resp.id);
         setSecretKeys({ keys: resp.keys, authClients: resp.authClients });
-        await getAccessToken({ cacheMode: 'off' });
       },
     },
   });
@@ -209,6 +208,7 @@ const CreateOrganizationFromInvitation = ({ InterceptOnCreate }) => {
           secretKeys={secretKeys}
           onClose={() => {
             setIsOpenSecretPopup(false);
+            getAccessToken({ cacheMode: 'off' });
             redirect('/');
           }}
           wording={{
