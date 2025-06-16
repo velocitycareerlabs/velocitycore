@@ -51,8 +51,8 @@ jest.mock('auth0', () => ({
       update: mockAuth0UpdateUser,
       get: mockAuth0GetUser,
       getByEmail: mockAuth0GetUserByEmail,
+      getRoles: mockAuth0GetUserRoles,
     },
-    getUserRoles: mockAuth0GetUserRoles,
   })),
 }));
 
@@ -144,11 +144,15 @@ describe('user management test suite', () => {
       );
       expect(mockAuth0GetUser).toHaveBeenLastCalledWith({ id: 'foo' });
       expect(mockAuth0GetUser).toHaveBeenCalledTimes(1);
-      expect(mockAuth0GetUserRoles).toHaveBeenLastCalledWith({
-        id: 'foo',
-        page: 0,
-        per_page: 10,
-      });
+      expect(mockAuth0GetUserRoles).toHaveBeenLastCalledWith(
+        {
+          id: 'foo',
+        },
+        {
+          page: 0,
+          per_page: 10,
+        }
+      );
       expect(mockAuth0GetUserRoles).toHaveBeenCalledTimes(1);
     });
     it('get user with superuser role', async () => {
