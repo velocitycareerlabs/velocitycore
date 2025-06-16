@@ -105,8 +105,8 @@ jest.mock('auth0', () => ({
       assignRoles: mockAuth0AddRoleToUser,
       update: mockAuth0UpdateUser,
       get: mockAuth0GetUser,
+      getRoles: mockAuth0GetUserRoles,
     },
-    getUserRoles: mockAuth0GetUserRoles,
     tickets: {
       changePassword: mockAuth0CreatePasswordChangeTicket,
     },

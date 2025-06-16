@@ -122,13 +122,17 @@ const initUserManagement = ({
   };
 
   const getRolesOfUser = async ({ id, page, perPage }) => {
-    const { data: roles } = await managementClient.getUserRoles({
-      id,
-      page,
-      per_page: perPage,
-      // sort: 'date:-1',
-      // include_totals: true,
-    });
+    const { data: roles } = await managementClient.users.getRoles(
+      {
+        id,
+      },
+      {
+        page,
+        per_page: perPage,
+        // sort: 'date:-1',
+        // include_totals: true,
+      }
+    );
     return roles;
   };
 
