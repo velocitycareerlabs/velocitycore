@@ -30,7 +30,7 @@ describe('create client accounts', () => {
 
   beforeAll(async () => {
     const baseContext = { log: console };
-    const fineractFetch = initHttpClient({ prefixUrl: testHost })(baseContext);
+    const fineractFetch = initHttpClient({ prefixUrls: [testHost] })(testHost, baseContext);
     context = { ...baseContext, fineractFetch };
   });
 
