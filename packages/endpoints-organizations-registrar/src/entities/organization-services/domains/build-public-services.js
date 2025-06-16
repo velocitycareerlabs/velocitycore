@@ -11,6 +11,7 @@ const buildPublicService = pick([
   'appleAppId',
   'googlePlayId',
   'name',
+  'supportedExchangeProtocols',
 ]);
 
 const buildPublicServices = map(buildPublicService);

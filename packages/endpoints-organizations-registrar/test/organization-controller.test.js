@@ -62,7 +62,6 @@ const {
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
 const { ObjectId } = require('mongodb');
 
-require('auth0');
 const console = require('console');
 
 const nock = require('nock');
@@ -98,22 +97,24 @@ const mockAuth0ClientGrantDelete = jest
 const mockAuth0ClientCreate = jest.fn().mockImplementation(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 client ${id}`);
-  return { client_id: id, client_secret: nanoid(), ...obj };
+  return { data: { client_id: id, client_secret: nanoid(), ...obj } };
 });
 const mockAuth0ClientGrantCreate = jest.fn().mockImplementation(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 clientGrant ${id}`);
-  return { id: nanoid(), ...obj };
+  return { data: { id: nanoid(), ...obj } };
 });
 const mockAuth0UserUpdate = jest
   .fn()
   .mockImplementation(async ({ id }, obj) => {
     console.log(`update auth0 user ${id}`);
-    return { id, ...obj };
+    return { data: { id, ...obj } };
   });
 const mockAuth0GetUsers = jest
   .fn()
-  .mockResolvedValue(times((id) => ({ email: `${id}@localhost.test` }), 2));
+  .mockResolvedValue(
+    times((id) => ({ data: { email: `${id}@localhost.test` } }), 2)
+  );
 
 jest.mock('auth0', () => ({
   ManagementClient: jest.fn().mockImplementation(() => ({
@@ -1561,6 +1562,7 @@ describe('Organization Registrar Test Suite', () => {
                 id: '#credentialagent-999',
                 type: ServiceTypes.HolderAppProviderType,
                 serviceEndpoint: 'https://agent.samplevendor.com',
+                supportedExchangeProtocols: ['VN_API'],
               },
             ],
           });
@@ -1585,6 +1587,7 @@ describe('Organization Registrar Test Suite', () => {
                 serviceEndpoint: 'https://agent.samplevendor.com',
                 logoUrl: 'http://example.com/logo',
                 name: 'fooWallet',
+                supportedExchangeProtocols: ['VN_API'],
               },
             ],
           });
