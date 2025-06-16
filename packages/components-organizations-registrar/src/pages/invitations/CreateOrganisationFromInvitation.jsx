@@ -62,7 +62,6 @@ const CreateOrganizationFromInvitation = ({ InterceptOnCreate }) => {
         refresh();
         setDid(resp.id);
         setSecretKeys({ keys: resp.keys, authClients: resp.authClients });
-        getAccessToken({ cacheMode: 'off' });
       },
     },
   });
@@ -137,13 +136,13 @@ const CreateOrganizationFromInvitation = ({ InterceptOnCreate }) => {
   }, [InterceptOnCreate, secretKeys]);
 
   const handleSubmit = useCallback(
-    async (formData, authority) => {
+    async (formData) => {
       await save({
         profile: {
           ...formData,
           website: formatWebSiteUrl(formData.website),
           linkedInProfile: formatWebSiteUrl(formData.linkedInProfile),
-          registrationNumbers: formatRegistrationNumbers(formData.registrationNumbers, authority),
+          registrationNumbers: formatRegistrationNumbers(formData.registrationNumbers),
         },
         serviceEndpoints: invitationData?.inviteeService,
         invitationCode: code,
@@ -209,6 +208,7 @@ const CreateOrganizationFromInvitation = ({ InterceptOnCreate }) => {
           secretKeys={secretKeys}
           onClose={() => {
             setIsOpenSecretPopup(false);
+            getAccessToken({ cacheMode: 'off' });
             redirect('/');
           }}
           wording={{
