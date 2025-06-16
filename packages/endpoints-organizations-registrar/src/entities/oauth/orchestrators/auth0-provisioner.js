@@ -138,10 +138,9 @@ const initAuth0Provisioner = ({
       await auth0ManagementClient.clientGrants.delete({ id: clientGrantId });
     }
 
-    const { data: updatedClient } = await auth0ManagementClient.clients.delete({
+    await auth0ManagementClient.clients.delete({
       client_id: authClient.clientId,
     });
-    return updatedClient;
   };
 
   const removeAuth0Grants = async (authClient) => {
