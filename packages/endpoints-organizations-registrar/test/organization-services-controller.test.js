@@ -1553,7 +1553,7 @@ describe('Organization Services Test Suite', () => {
             appleAppId: 'com.example.app',
             googlePlayId: 'com.example.app',
             name: 'fooAppWallet',
-            supportedExchangeProtocols: ['VN_API'],
+            supportedExchangeProtocols: ['OPENID4VC'],
           };
 
           const response = await fastify.injectJson({
@@ -1600,7 +1600,7 @@ describe('Organization Services Test Suite', () => {
                 name: 'fooAppWallet',
                 serviceEndpoint: 'https://agent.samplevendor.com/acme',
                 type: 'VlcHolderAppProvider_v1',
-                supportedExchangeProtocols: ['VN_API'],
+                supportedExchangeProtocols: ['OPENID4VC'],
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
               },
