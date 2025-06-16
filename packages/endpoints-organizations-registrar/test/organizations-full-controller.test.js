@@ -981,6 +981,7 @@ describe('Organizations Full Test Suite', () => {
             serviceEndpoint: 'https://agent.samplevendor.com/acme',
             logoUrl: 'http://example.com/logo',
             name: 'fooWallet',
+            supportedExchangeProtocols: ['VN_API'],
           };
           const payload = {
             profile: orgProfile,
@@ -4444,6 +4445,7 @@ describe('Organizations Full Test Suite', () => {
           googlePlayId: 'com.example.app',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const holderAppServiceMissingFields = {
@@ -4453,6 +4455,7 @@ describe('Organizations Full Test Suite', () => {
           appleAppId: 'com.example.app',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const webWalletServiceAllFields = {
@@ -4460,12 +4463,14 @@ describe('Organizations Full Test Suite', () => {
           serviceEndpoint: 'https://agent.samplevendor.com/acme',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const webWalletServiceMissingFields = {
           type: ServiceTypes.WebWalletProviderType,
           serviceEndpoint: 'https://agent.samplevendor.com/acme',
           logoUrl: 'http://example.com/logo',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const result = await runSequentially([
