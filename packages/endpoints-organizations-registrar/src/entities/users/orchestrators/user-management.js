@@ -28,19 +28,12 @@ const {
 } = require('lodash/fp');
 const { initAuth0RoleArrToRolesObj } = require('../../oauth');
 
-const initManagementClient = ({
-  domain,
-  clientId,
-  clientSecret,
-  scope,
-  audience,
-}) => {
+const initManagementClient = ({ domain, clientId, clientSecret, audience }) => {
   return new ManagementClient({
     audience,
     domain,
     clientId,
     clientSecret,
-    scope,
   });
 };
 
@@ -49,7 +42,6 @@ const initUserManagement = ({
   auth0Domain,
   auth0ClientId,
   auth0ClientSecret,
-  auth0Scope,
   auth0SuperuserRoleId,
   auth0ClientAdminRoleId,
   auth0ClientFinanceAdminRoleId,
@@ -60,7 +52,6 @@ const initUserManagement = ({
     domain: auth0Domain,
     clientId: auth0ClientId,
     clientSecret: auth0ClientSecret,
-    scope: auth0Scope,
   });
 
   const auth0RolesArrToRolesObj = initAuth0RoleArrToRolesObj({
@@ -71,7 +62,7 @@ const initUserManagement = ({
   });
 
   const softDeleteUser = async ({ id }, context) => {
-    const user = await managementClient.users.get({ id });
+    const { data: user } = await managementClient.users.get({ id });
     if (isUserAccessPermitted(mapUser(user), context)) {
       await managementClient.users.update(
         { id },
@@ -89,12 +80,12 @@ const initUserManagement = ({
   };
 
   const getUser = async ({ id }, context) => {
-    const user = await managementClient.users.get({ id });
+    const { data: user } = await managementClient.users.get({ id });
     return scopeUser(mapUser(user), context);
   };
 
   const getUserWithRoles = async ({ id }, context) => {
-    const [user, roles] = await Promise.all([
+    const [{ data: user }, roles] = await Promise.all([
       managementClient.users.get({ id }),
       getRolesOfUser({ id, page: 0, perPage: 10 }),
     ]);
@@ -103,7 +94,7 @@ const initUserManagement = ({
   };
 
   const getUserByEmail = async (email, context) => {
-    const users = await managementClient.users.getByEmail(email);
+    const { data: users } = await managementClient.users.getByEmail(email);
     return map((user) => scopeUser(mapUser(user), context), users);
   };
 
@@ -131,13 +122,14 @@ const initUserManagement = ({
   };
 
   const getRolesOfUser = async ({ id, page, perPage }) => {
-    return managementClient.getUserRoles({
+    const { data: roles } = await managementClient.getUserRoles({
       id,
       page,
       per_page: perPage,
       // sort: 'date:-1',
       // include_totals: true,
     });
+    return roles;
   };
 
   return {

@@ -7,9 +7,6 @@ const {
 } = require('@velocitycareerlabs/organizations-registry');
 const { AuthClientTypes, RoleNames } = require('../domain');
 
-const AUTH0_MANAGEMENT_SCOPES =
-  'read:users update:users create:users delete:users read:clients update:clients create:clients delete:clients read:client_keys';
-
 const initRoleNameToRoleId = ({
   auth0SuperuserRoleId,
   auth0ClientAdminRoleId,
@@ -48,7 +45,6 @@ const initAuth0Provisioner = ({
     audience: auth0ManagementApiAudience,
     clientId: auth0ClientId,
     clientSecret: auth0ClientSecret,
-    scope: AUTH0_MANAGEMENT_SCOPES,
   });
 
   const roleNameToRoleId = initRoleNameToRoleId({
@@ -80,7 +76,7 @@ const initAuth0Provisioner = ({
 
     const { name, description, clientType } = clientDetails;
 
-    const auth0Client = await auth0ManagementClient.clients.create({
+    const { data: auth0Client } = await auth0ManagementClient.clients.create({
       name,
       description,
       logo_uri: trim(profile.logo),
@@ -127,11 +123,13 @@ const initAuth0Provisioner = ({
     }
 
     const { audience, scope } = clientGrantDetails;
-    return auth0ManagementClient.clientGrants.create({
-      client_id: clientId,
-      audience,
-      scope,
-    });
+    const { data: clientGrant } =
+      await auth0ManagementClient.clientGrants.create({
+        client_id: clientId,
+        audience,
+        scope,
+      });
+    return clientGrant;
   };
 
   const removeAuth0Client = async (authClient) => {
@@ -140,9 +138,10 @@ const initAuth0Provisioner = ({
       await auth0ManagementClient.clientGrants.delete({ id: clientGrantId });
     }
 
-    return auth0ManagementClient.clients.delete({
+    const { data: updatedClient } = await auth0ManagementClient.clients.delete({
       client_id: authClient.clientId,
     });
+    return updatedClient;
   };
 
   const removeAuth0Grants = async (authClient) => {
@@ -153,18 +152,20 @@ const initAuth0Provisioner = ({
   };
 
   const createAuth0User = async ({ user }) => {
-    const createUserResult = await auth0ManagementClient.users.create({
-      email: user.email,
-      given_name: user.givenName,
-      family_name: user.familyName,
-      password: nanoid(28),
-      verify_email: false,
-      email_verified: false,
-      connection: auth0Connection,
-      app_metadata: {
-        groupId: user.groupId,
-      },
-    });
+    const { data: createUserResult } = await auth0ManagementClient.users.create(
+      {
+        email: user.email,
+        given_name: user.givenName,
+        family_name: user.familyName,
+        password: nanoid(28),
+        verify_email: false,
+        email_verified: false,
+        connection: auth0Connection,
+        app_metadata: {
+          groupId: user.groupId,
+        },
+      }
+    );
     return {
       ...user,
       id: createUserResult.user_id,
@@ -176,17 +177,18 @@ const initAuth0Provisioner = ({
       ' OR ',
       map((userId) => `user_id:${userId}`, userIds)
     );
-    return auth0ManagementClient.getUsers({
+    const { data: users } = await auth0ManagementClient.getUsers({
       search_engine: 'v3',
       q: query,
       fields: fields.join(','),
       per_page: 25,
       page: 0,
     });
+    return users;
   };
 
   const addRoleToAuth0User = async ({ user, roleName }) => {
-    return auth0ManagementClient.users.assignRoles(
+    const { data: roles } = await auth0ManagementClient.users.assignRoles(
       {
         id: user.id,
       },
@@ -194,18 +196,23 @@ const initAuth0Provisioner = ({
         roles: [roleNameToRoleId(roleName)],
       }
     );
+    return roles;
   };
 
   const createPasswordChangeTicket = async ({
     user,
     resultUrl = registrarAppUiUrl,
-  }) =>
-    auth0ManagementClient.tickets.changePassword({
-      user_id: user.id,
-      result_url: resultUrl,
-      mark_email_as_verified: true,
-      ttl_sec: 604800,
-    });
+  }) => {
+    const { data: ticket } = await auth0ManagementClient.tickets.changePassword(
+      {
+        user_id: user.id,
+        result_url: resultUrl,
+        mark_email_as_verified: true,
+        ttl_sec: 604800,
+      }
+    );
+    return ticket;
+  };
 
   // See https://velocitycareerlabs.visualstudio.com/velocity/_wiki/wikis/velocity.wiki/171/Authentication?anchor=org-signup-instructions&_a=edit
   const buildClientDetails = (did, profile, service) => {
