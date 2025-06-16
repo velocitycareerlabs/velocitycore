@@ -39,8 +39,6 @@ const {
   mongoify,
 } = require('@velocitycareerlabs/tests-helpers');
 
-require('auth0');
-
 const console = require('console');
 const { nanoid } = require('nanoid');
 const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');

@@ -34,11 +34,9 @@ jobs:
       # Checkout Repository
       - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      # Set Slug
-      - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@797d68864753cbceedc271349d402da4590e6302 # v4
-        with:
-          short-length: 8
+      # Generate Sequence Number
+      - name: Generate Sequence Number
+        run: echo VER_SEQ_NUM=$(date +%s) >> $GITHUB_ENV
       # Set Common Variables
       - name: Set Common Variables
         run: bash ./eng/environments/common.sh

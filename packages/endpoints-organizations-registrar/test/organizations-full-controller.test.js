@@ -96,7 +96,6 @@ const {
   ServiceTypeToCategoryMap,
 } = require('@velocitycareerlabs/organizations-registry');
 
-require('auth0');
 const console = require('console');
 
 const nock = require('nock');
@@ -145,25 +144,25 @@ const mockAuth0ClientGrantDelete = jest
 const mockAuth0ClientCreate = jest.fn().mockImplementation(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 client ${id}`);
-  return { client_id: id, client_secret: nanoid(), ...obj };
+  return { data: { client_id: id, client_secret: nanoid(), ...obj } };
 });
 const mockAuth0ClientGrantCreate = jest.fn().mockImplementation(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 clientGrant ${id}`);
-  return { id: nanoid(), ...obj };
+  return { data: { id: nanoid(), ...obj } };
 });
 const mockAuth0UserUpdate = jest
   .fn()
   .mockImplementation(async ({ id }, obj) => {
     console.log(`update auth0 user ${id}`);
-    return { id, ...obj };
+    return { data: { id, ...obj } };
   });
-const mockAuth0GetUsers = jest
-  .fn()
-  .mockResolvedValue(times((id) => ({ email: `${id}@localhost.test` }), 2));
-const mockAuth0GetUser = jest
-  .fn()
-  .mockResolvedValue(times((id) => ({ email: `${id}@localhost.test` }), 2));
+const mockAuth0GetUsers = jest.fn().mockResolvedValue({
+  data: times((id) => ({ email: `${id}@localhost.test` }), 2),
+});
+const mockAuth0GetUser = jest.fn().mockResolvedValue({
+  data: times((id) => ({ email: `${id}@localhost.test` }), 2),
+});
 
 jest.mock('auth0', () => ({
   ManagementClient: jest.fn().mockImplementation(() => ({
@@ -982,6 +981,7 @@ describe('Organizations Full Test Suite', () => {
             serviceEndpoint: 'https://agent.samplevendor.com/acme',
             logoUrl: 'http://example.com/logo',
             name: 'fooWallet',
+            supportedExchangeProtocols: ['VN_API'],
           };
           const payload = {
             profile: orgProfile,
@@ -4445,6 +4445,7 @@ describe('Organizations Full Test Suite', () => {
           googlePlayId: 'com.example.app',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const holderAppServiceMissingFields = {
@@ -4454,6 +4455,7 @@ describe('Organizations Full Test Suite', () => {
           appleAppId: 'com.example.app',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const webWalletServiceAllFields = {
@@ -4461,12 +4463,14 @@ describe('Organizations Full Test Suite', () => {
           serviceEndpoint: 'https://agent.samplevendor.com/acme',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const webWalletServiceMissingFields = {
           type: ServiceTypes.WebWalletProviderType,
           serviceEndpoint: 'https://agent.samplevendor.com/acme',
           logoUrl: 'http://example.com/logo',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const result = await runSequentially([

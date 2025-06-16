@@ -12,8 +12,13 @@ const serviceTypeToRequiredFieldsMap = {
     'googlePlayId',
     'logoUrl',
     'name',
+    'supportedExchangeProtocols',
   ],
-  [ServiceTypes.WebWalletProviderType]: ['logoUrl', 'name'],
+  [ServiceTypes.WebWalletProviderType]: [
+    'logoUrl',
+    'name',
+    'supportedExchangeProtocols',
+  ],
 };
 
 const validateServiceFieldsByServiceType = (service = {}) => {

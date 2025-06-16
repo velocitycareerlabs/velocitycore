@@ -11,26 +11,6 @@
           "items": {
             "type": "string"
           }
-        },
-        "logoUrl": {
-          "type": "string"
-        },
-        "playStoreUrl": {
-          "type": "string",
-          "format": "uri"
-        },
-        "appleAppStoreUrl": {
-          "type": "string",
-          "format": "uri"
-        },
-        "appleAppId": {
-          "type": "string"
-        },
-        "googlePlayId": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
         }
       }
     },
