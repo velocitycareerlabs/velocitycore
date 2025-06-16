@@ -28,9 +28,6 @@ export default class CredentialManifestRepositoryImpl
                     [HeaderKeys.XVnfProtocolVersion]:
                         HeaderValues.XVnfProtocolVersion,
                 },
-
-                contentType: null,
-                useCaches: false,
             });
         return credentialManifestResponse.payload[
             VCLCredentialManifest.KeyIssuingRequest
