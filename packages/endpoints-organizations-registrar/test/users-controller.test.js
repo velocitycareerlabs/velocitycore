@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-require('auth0');
 const { nanoid } = require('nanoid');
 const { omit } = require('lodash/fp');
 const newError = require('http-errors');
@@ -56,7 +55,7 @@ const baseCreateUserPayload = {
 const mockAuth0CreateUser = jest.fn().mockImplementation(async () => {
   const id = nanoid();
   console.log(`create auth0 user ${id}`);
-  return { user_id: id };
+  return { data: { user_id: id } };
 });
 const mockUser = {
   id: 'auth0|1',
@@ -70,7 +69,7 @@ const mockAuth0AddRoleToUser = jest
   .fn()
   .mockImplementation(async (params, payload) => {
     console.log(`adding auth0 role ${payload.roles} to user ${params.id}`);
-    return undefined;
+    return { data: undefined };
   });
 
 const mockAuth0CreatePasswordChangeTicket = jest
@@ -80,22 +79,24 @@ const mockAuth0CreatePasswordChangeTicket = jest
       `creating auth0 password change ticket for user ${payload.user_id}`
     );
     return {
-      ticket: ticketUrl,
+      data: {
+        ticket: ticketUrl,
+      },
     };
   });
 
-const mockAuth0GetUser = jest.fn().mockResolvedValue(mockUser);
+const mockAuth0GetUser = jest.fn().mockResolvedValue({ data: mockUser });
 
 const mockAuth0UpdateUser = jest
   .fn()
   .mockImplementation(async ({ id }, obj) => {
     console.log(`update auth0 user ${id}`);
-    return { user_id: id, ...obj };
+    return { data: { user_id: id, ...obj } };
   });
 
 const mockAuth0GetUserRoles = jest
   .fn()
-  .mockResolvedValue([{ id: 'rol_sQZLrbwBEblVBNDj' }]); // clientAdminRoleId
+  .mockResolvedValue({ data: [{ id: 'rol_sQZLrbwBEblVBNDj' }] }); // clientAdminRoleId
 
 jest.mock('auth0', () => ({
   ManagementClient: jest.fn().mockImplementation(() => ({
@@ -763,8 +764,10 @@ describe('Users Registrar Test Suite', () => {
 
       it("Should 404 if user does not exist in user's group", async () => {
         mockAuth0GetUser.mockImplementationOnce(async () => ({
-          ...mockUser,
-          groupId: 'otherGroup',
+          data: {
+            ...mockUser,
+            groupId: 'otherGroup',
+          },
         }));
         const response = await fastify.injectJson({
           method: 'GET',
