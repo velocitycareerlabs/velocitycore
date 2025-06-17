@@ -69,8 +69,10 @@ jest.mock('auth0', () => ({
   ManagementClient: jest.fn().mockImplementation(() => ({
     users: {
       create: mockAuth0UserCreate,
-      getByEmail: mockAuth0UserGetByEmail,
       assignRoles: mockAuth0ClientAssignRole,
+    },
+    usersByEmail: {
+      getByEmail: mockAuth0UserGetByEmail,
     },
     tickets: { changePassword: mockAuth0TicketChange },
   })),
