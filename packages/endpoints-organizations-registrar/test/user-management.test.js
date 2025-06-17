@@ -194,9 +194,9 @@ describe('user management test suite', () => {
           scope: { userId: auth0User.user_id },
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
+      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
     });
 
@@ -207,9 +207,9 @@ describe('user management test suite', () => {
           scope: { groupId: auth0User.app_metadata.groupId },
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
+      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
     });
 
@@ -220,9 +220,9 @@ describe('user management test suite', () => {
           pick(['user_id', 'family_name', 'email'], minimalAuth0User)
         ),
       ]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
+      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
     });
   });
