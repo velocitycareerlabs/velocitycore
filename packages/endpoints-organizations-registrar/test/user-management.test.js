@@ -50,8 +50,10 @@ jest.mock('auth0', () => ({
     users: {
       update: mockAuth0UpdateUser,
       get: mockAuth0GetUser,
-      getByEmail: mockAuth0GetUserByEmail,
       getRoles: mockAuth0GetUserRoles,
+    },
+    usersByEmail: {
+      getByEmail: mockAuth0GetUserByEmail,
     },
   })),
 }));
