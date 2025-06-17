@@ -5,36 +5,45 @@ import VCLLog from '../../../utils/VCLLog';
 import Response from './Response';
 import Request from './Request';
 import { HttpMethod } from './HttpMethod';
-// TODO: implement response caching
 
 export default class NetworkServiceImpl implements NetworkService {
     async sendRequestRaw(request: Request): Promise<Response> {
-        let handler: () => Nullish<Promise<AxiosResponse<any, any>>> = () => {
-            return null;
-        };
+        const MAX_AGE = 60 * 60 * 24; // 24 hours
+
+        let handler: () => Nullish<Promise<AxiosResponse>> = () => null;
+
+        let commonHeaders = request.headers;
+        if (request.useCaches) {
+            commonHeaders = {
+                ...request.headers,
+                'Cache-Control': `public, max-age=${MAX_AGE}`,
+            };
+        }
+
         switch (request.method) {
             case HttpMethod.GET:
                 handler = () =>
                     axios.create({ ...axios.defaults }).get(request.endpoint, {
-                        headers: {
-                            ...request.headers,
-                        },
+                        headers: commonHeaders,
                     });
                 break;
+
             case HttpMethod.POST:
                 handler = () =>
                     axios
                         .create({ ...axios.defaults })
                         .post(request.endpoint, request.body, {
                             headers: {
-                                ...request.headers,
+                                ...commonHeaders,
                                 'Content-Type': request.contentType,
                             },
                         });
                 break;
+
             default:
                 break;
         }
+
         try {
             const r = await handler();
             return new Response(r!.data, r!.status);

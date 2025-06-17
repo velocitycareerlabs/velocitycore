@@ -10,19 +10,53 @@ import CredentialManifestByDeepLinkVerifier from '../../domain/verifiers/Credent
 import VCLLog from '../../utils/VCLLog';
 import VCLError from '../../../api/entities/error/VCLError';
 import VCLErrorCode from '../../../api/entities/error/VCLErrorCode';
+import ResolveDidDocumentRepository from '../../domain/repositories/ResolveDidDocumentRepository';
+import VCLDidDocument from '../../../api/entities/VCLDidDocument';
 
 export default class CredentialManifestByDeepLinkVerifierImpl
     implements CredentialManifestByDeepLinkVerifier
 {
+    constructor(
+        private readonly resolveDidDocumentRepository: ResolveDidDocumentRepository
+    ) {}
+
     async verifyCredentialManifest(
         credentialManifest: VCLCredentialManifest,
         deepLink: VCLDeepLink
     ): Promise<boolean> {
-        if (credentialManifest.issuerId === deepLink.did) {
+        if (deepLink.did === null) {
+            await this.onError(`DID not found in deep link: ${deepLink.value}`);
+            return false;
+        }
+        const didDocument =
+            await this.resolveDidDocumentRepository.resolveDidDocument(
+                deepLink.did!
+            );
+        return this.verify(credentialManifest, didDocument);
+    }
+
+    private async verify(
+        credentialManifest: VCLCredentialManifest,
+        didDocument: VCLDidDocument
+    ): Promise<boolean> {
+        if (
+            didDocument.id === credentialManifest.issuerId ||
+            didDocument.alsoKnownAs.includes(credentialManifest.issuerId)
+        ) {
             return true;
         }
-        const errorMsg = `mismatched credential manifest: ${credentialManifest.jwt.encodedJwt} \ndeepLink: ${deepLink.value}`;
-        VCLLog.error(errorMsg);
-        throw new VCLError(errorMsg, VCLErrorCode.MismatchedRequestIssuerDid);
+        await this.onError(
+            `credential manifest: ${credentialManifest.jwt.encodedJwt} \ndidDocument: ${didDocument}`,
+            VCLErrorCode.MismatchedRequestIssuerDid
+        );
+        return false;
+    }
+
+    private async onError(
+        errorMessage: string,
+        errorCode: VCLErrorCode = VCLErrorCode.SdkError
+    ) {
+        VCLLog.error(errorMessage);
+        throw new VCLError(null, errorCode, null, errorMessage);
     }
 }

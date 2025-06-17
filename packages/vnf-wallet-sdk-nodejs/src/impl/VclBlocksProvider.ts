@@ -69,6 +69,7 @@ import CredentialIssuerVerifier from './domain/verifiers/CredentialIssuerVerifie
 import AuthTokenRepositoryImpl from './data/repositories/AuthTokenRepositoryImpl';
 import AuthTokenUseCaseImpl from './data/usecases/AuthTokenUseCaseImpl';
 import AuthTokenUseCase from './domain/usecases/AuthTokenUseCase';
+import ResolveDidDocumentRepositoryImpl from './data/repositories/ResolveDidDocumentRepositoryImpl';
 
 export default class VclBlocksProvider {
     static providePresentationRequestUseCase(
@@ -81,7 +82,9 @@ export default class VclBlocksProvider {
                 cryptoServicesDescriptor.jwtSignService,
                 cryptoServicesDescriptor.jwtVerifyService
             ),
-            new PresentationRequestByDeepLinkVerifierImpl()
+            new PresentationRequestByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl())
+            )
         );
     }
 
@@ -112,7 +115,9 @@ export default class VclBlocksProvider {
                 cryptoServicesDescriptor.jwtSignService,
                 cryptoServicesDescriptor.jwtVerifyService
             ),
-            new CredentialManifestByDeepLinkVerifierImpl()
+            new CredentialManifestByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl())
+            )
         );
     }
 
@@ -133,7 +138,9 @@ export default class VclBlocksProvider {
     static provideGenerateOffersUseCase(): GenerateOffersUseCase {
         return new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(new NetworkServiceImpl()),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl())
+            )
         );
     }
 
@@ -158,7 +165,9 @@ export default class VclBlocksProvider {
             ),
             credentialIssuerVerifier,
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl())
+            )
         );
     }
 
