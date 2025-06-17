@@ -721,7 +721,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith('test@email.com');
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0UserCreate).toHaveBeenCalledWith({
         app_metadata: { groupId: undefined },
         connection: undefined,
@@ -797,7 +799,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith('test@email.com');
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0UserCreate).toHaveBeenCalledWith({
         app_metadata: { groupId: undefined },
         connection: undefined,
@@ -870,7 +874,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith('test@email.com');
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0UserCreate).toHaveBeenCalledWith({
         app_metadata: { groupId: undefined },
         connection: undefined,
@@ -1133,14 +1139,12 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(2);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenNthCalledWith(
-        1,
-        'test@email.com'
-      );
-      expect(mockAuth0UserGetByEmail).toHaveBeenNthCalledWith(
-        2,
-        'test@email.com'
-      );
+      expect(mockAuth0UserGetByEmail).toHaveBeenNthCalledWith(1, {
+        email: 'test@email.com',
+      });
+      expect(mockAuth0UserGetByEmail).toHaveBeenNthCalledWith(2, {
+        email: 'test@email.com',
+      });
       expect(mockAuth0UserCreate).toHaveBeenCalledWith({
         app_metadata: { groupId: undefined },
         connection: undefined,
@@ -1870,9 +1874,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith(
-        'email123@email.com'
-      );
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'email123@email.com',
+      });
       expect(mockAuth0ClientAssignRole.mock.calls).toEqual([
         [{ id: 'user_id_123' }, { roles: ['rol_sQZLrbwBEblVBNDj'] }],
         [{ id: 'user_id_123' }, { roles: ['rol_xxx'] }],
@@ -1999,9 +2003,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0ClientAssignRole).toBeCalledTimes(0);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith(
-        'email123@email.com'
-      );
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'email123@email.com',
+      });
       expect(mockSendEmail.mock.calls[0][0]).toEqual(
         expectedInvitationSentEmail(
           `?signup_url=${encodeURIComponent(ticket)}`,

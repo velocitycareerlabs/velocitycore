@@ -94,9 +94,9 @@ const initUserManagement = ({
   };
 
   const getUserByEmail = async (email, context) => {
-    const { data: users } = await managementClient.usersByEmail.getByEmail(
-      email
-    );
+    const { data: users } = await managementClient.usersByEmail.getByEmail({
+      email,
+    });
     return map((user) => scopeUser(mapUser(user), context), users);
   };
 
