@@ -1,6 +1,7 @@
 import VCLPresentationRequestDescriptor from '../../src/api/entities/VCLPresentationRequestDescriptor';
 import { PresentationRequestDescriptorMocks } from '../infrastructure/resources/valid/PresentationRequestDescriptorMocks';
 import { DidJwkMocks } from '../infrastructure/resources/valid/DidJwkMocks';
+import { DeepLinkMocks } from '../infrastructure/resources/valid/DeepLinkMocks';
 
 describe('VCLPresentationRequestDescriptor Tests', () => {
     let subject: VCLPresentationRequestDescriptor;
@@ -102,6 +103,24 @@ describe('VCLPresentationRequestDescriptor Tests', () => {
 
         expect(subject.endpoint).toEqual(mockEndpoint);
         expect(subject.pushDelegate).toBeNull();
+        expect(subject.did).toEqual(
+            PresentationRequestDescriptorMocks.InspectorDid
+        );
+    });
+
+    test('testPresentationRequestDescriptorWithInspectorIdSuccess', () => {
+        subject = new VCLPresentationRequestDescriptor(
+            DeepLinkMocks.PresentationRequestDeepLinkMainNetWithId,
+            null,
+            DidJwkMocks.DidJwk
+        );
+
+        const mockEndpoint =
+            DeepLinkMocks.PresentationRequestRequestDecodedUriWithIdStr;
+
+        expect(decodeURIComponent(subject.endpoint!)).toEqual(mockEndpoint);
+
+        expect(subject.pushDelegate).toEqual(null);
         expect(subject.did).toEqual(
             PresentationRequestDescriptorMocks.InspectorDid
         );
