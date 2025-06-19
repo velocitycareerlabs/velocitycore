@@ -20,6 +20,10 @@ const createConfig = (packageJson) => {
     ],
     components: {
       securitySchemes: {
+        BasicAuth: {
+          type: 'http',
+          scheme: 'basic',
+        },
         RegistrarOAuth2: {
           type: 'oauth2',
           description: 'Login to the registrar',
