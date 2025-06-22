@@ -16,14 +16,13 @@ export const useCheckUserHasGroup = () => {
     id: user.sub,
   });
   const [isLoading, setIsLoading] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [hasOrganisations, setHasOrganisations] = useState(false);
 
   useEffect(() => {
     const checkUserGroup = async () => {
       setIsLoading(true);
       try {
-        const userHasGroup = true; // !!userData?.groupId;
+        const userHasGroup = !!userData?.groupId;
         if (userHasGroup) {
           setHasOrganisations(true);
           return;
