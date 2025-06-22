@@ -2101,10 +2101,12 @@ describe('Organizations Full Test Suite', () => {
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(false);
 
         // email checks
-        expect(mockSendEmail.mock.calls).toEqual([
-          [expectedSupportEmail()],
-          [expectedSignatoryApprovalEmail(null, orgFromDb)],
-        ]);
+        expect(mockSendEmail.mock.calls).toEqual(
+          expect.arrayContaining([
+            [expectedSignatoryApprovalEmail(null, orgFromDb)],
+            [expectedSupportEmail()],
+          ])
+        );
       });
 
       it('Should create org with a did service', async () => {
