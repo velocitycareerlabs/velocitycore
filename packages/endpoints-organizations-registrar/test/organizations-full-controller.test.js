@@ -130,6 +130,7 @@ const {
   VNF_GROUP_ID_CLAIM,
   getServiceConsentType,
 } = require('../src/entities');
+const { Authorities } = require('../src');
 
 const fullUrl = '/api/v0.6/organizations/full';
 
@@ -2027,7 +2028,21 @@ describe('Organizations Full Test Suite', () => {
       it('Should create organization, DID & ethereum accounts with default type even if no services or invitation', async () => {
         const monitorNockScope = setMonitorEventsNock();
         const payload = {
-          profile: omit(['type'], orgProfile),
+          profile: {
+            ...omit(['type'], orgProfile),
+            registrationNumbers: [
+              // {
+              //   authority: Authorities.DunnAndBradstreet,
+              //   number: '1',
+              //   uri: 'uri://uri',
+              // },
+              {
+                authority: Authorities.GLEIF,
+                number: '1',
+                uri: 'uri://uri',
+              },
+            ],
+          },
         };
         const response = await fastify.injectJson({
           method: 'POST',
