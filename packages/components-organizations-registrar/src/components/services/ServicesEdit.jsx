@@ -41,6 +41,11 @@ const ServicesEdit = ({ onClose, onSave, selectedService, InterceptOnCreate }) =
     [onSave, InterceptOnCreate],
   );
 
+  const handleOnClose = useCallback(() => {
+    setIsInterceptOnCreateOpen(false);
+    onClose();
+  }, [onClose]);
+
   const isModifyingServiceEnabled = !!InterceptOnCreate;
 
   return (
@@ -65,10 +70,7 @@ const ServicesEdit = ({ onClose, onSave, selectedService, InterceptOnCreate }) =
         isInterceptOnCreateOpen={isInterceptOnCreateOpen}
         serviceId={selectedService?.id}
         onNext={() => onClose()}
-        onClose={() => {
-          setIsInterceptOnCreateOpen(false);
-          onClose();
-        }}
+        onClose={handleOnClose}
         isIssueOrInspection={isIssuingOrInspection}
         selectedCAO={selectedCAO}
         isCAO={isCAO}
