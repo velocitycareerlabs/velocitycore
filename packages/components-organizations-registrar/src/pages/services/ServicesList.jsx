@@ -43,6 +43,7 @@ const ServicesList = ({
   EditComponent = ServicesEdit,
   CreateComponent = ServiceCreateForm,
   DeleteComponent = ServicesDelete,
+  AdditionalServiceProperties = {},
 }) => {
   const [params, setParams] = useSearchParams();
   const currentlyEditableServiceId = params.get('id');
@@ -81,7 +82,6 @@ const ServicesList = ({
 
   const [updateService] = useUpdate(undefined, undefined, {
     onSuccess: () => {
-      setParams({});
       setParticipantAgreementApproved(true);
 
       refetchOrganizationServices();
@@ -196,6 +196,14 @@ const ServicesList = ({
                       },
                     ]
                   : []),
+                ...(AdditionalServiceProperties && AdditionalServiceProperties[service.type]
+                  ? [
+                      {
+                        name: AdditionalServiceProperties[service.type]?.name,
+                        value: AdditionalServiceProperties[service.type]?.value,
+                      },
+                    ]
+                  : []),
               ],
             ]}
           />
@@ -220,6 +228,7 @@ ServicesList.propTypes = {
   EditComponent: PropTypes.elementType,
   CreateComponent: PropTypes.elementType,
   DeleteComponent: PropTypes.elementType,
+  AdditionalServiceProperties: PropTypes.object,
 };
 
 export default ServicesList;
