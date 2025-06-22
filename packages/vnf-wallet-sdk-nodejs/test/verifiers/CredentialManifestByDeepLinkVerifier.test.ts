@@ -37,31 +37,23 @@ describe('CredentialManifestByDeepLinkVerifier', () => {
     );
 
     test('testVerifyCredentialManifestSuccess', async () => {
-        subject = new CredentialManifestByDeepLinkVerifierImpl(
-            new ResolveDidDocumentRepositoryImpl(
-                new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
-            )
-        );
+        subject = new CredentialManifestByDeepLinkVerifierImpl();
 
         const isVerified = await subject.verifyCredentialManifest(
             credentialManifest,
-            deepLink
+            deepLink,
+            DidDocumentMocks.DidDocumentMock
         );
         expect(isVerified).toBeTruthy();
     });
 
     test('testVerifyCredentialManifestError', async () => {
-        subject = new CredentialManifestByDeepLinkVerifierImpl(
-            new ResolveDidDocumentRepositoryImpl(
-                new NetworkServiceSuccess(
-                    DidDocumentMocks.DidDocumentWithWrongDidMock
-                )
-            )
-        );
+        subject = new CredentialManifestByDeepLinkVerifierImpl();
         try {
             const isVerified = await subject.verifyCredentialManifest(
                 credentialManifest,
-                deepLink
+                deepLink,
+                DidDocumentMocks.DidDocumentWithWrongDidMock
             );
             expect(isVerified).toBeFalsy();
         } catch (error: any) {

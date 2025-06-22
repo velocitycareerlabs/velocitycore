@@ -33,18 +33,16 @@ describe('CredentialManifestUseCase Tests', () => {
                     JSON.parse(CredentialManifestMocks.CredentialManifest1)
                 )
             ),
-            new ResolveKidRepositoryImpl(
-                new NetworkServiceSuccess(CredentialManifestMocks.JWK)
+            new ResolveDidDocumentRepositoryImpl(
+                new NetworkServiceSuccess(
+                    DidDocumentMocks.DidDocumentMock.payload
+                )
             ),
             new JwtServiceRepositoryImpl(
                 new JwtSignServiceMock(''),
                 new JwtVerifyServiceMock()
             ),
-            new CredentialManifestByDeepLinkVerifierImpl(
-                new ResolveDidDocumentRepositoryImpl(
-                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
-                )
-            )
+            new CredentialManifestByDeepLinkVerifierImpl()
         );
 
         try {
@@ -90,18 +88,16 @@ describe('CredentialManifestUseCase Tests', () => {
             new CredentialManifestRepositoryImpl(
                 new NetworkServiceSuccess(JSON.parse('{"wrong": "payload"}'))
             ),
-            new ResolveKidRepositoryImpl(
-                new NetworkServiceSuccess(CredentialManifestMocks.JWK)
+            new ResolveDidDocumentRepositoryImpl(
+                new NetworkServiceSuccess(
+                    DidDocumentMocks.DidDocumentMock.payload
+                )
             ),
             new JwtServiceRepositoryImpl(
                 new JwtSignServiceMock(''),
                 new JwtVerifyServiceMock()
             ),
-            new CredentialManifestByDeepLinkVerifierImpl(
-                new ResolveDidDocumentRepositoryImpl(
-                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
-                )
-            )
+            new CredentialManifestByDeepLinkVerifierImpl()
         );
 
         try {

@@ -16,32 +16,20 @@ import VCLDidDocument from '../../../api/entities/VCLDidDocument';
 export default class CredentialManifestByDeepLinkVerifierImpl
     implements CredentialManifestByDeepLinkVerifier
 {
-    constructor(
-        private readonly resolveDidDocumentRepository: ResolveDidDocumentRepository
-    ) {}
-
     async verifyCredentialManifest(
         credentialManifest: VCLCredentialManifest,
-        deepLink: VCLDeepLink
+        deepLink: VCLDeepLink,
+        didDocument: VCLDidDocument
     ): Promise<boolean> {
         if (deepLink.did === null) {
             await this.onError(`DID not found in deep link: ${deepLink.value}`);
             return false;
         }
-        const didDocument =
-            await this.resolveDidDocumentRepository.resolveDidDocument(
-                deepLink.did!
-            );
-        return this.verify(credentialManifest, didDocument);
-    }
-
-    private async verify(
-        credentialManifest: VCLCredentialManifest,
-        didDocument: VCLDidDocument
-    ): Promise<boolean> {
         if (
-            didDocument.id === credentialManifest.issuerId ||
-            didDocument.alsoKnownAs.includes(credentialManifest.issuerId)
+            (didDocument.id === credentialManifest.issuerId &&
+                didDocument.id === deepLink.did) ||
+            (didDocument.alsoKnownAs.includes(credentialManifest.issuerId) &&
+                didDocument.alsoKnownAs.includes(deepLink.did!))
         ) {
             return true;
         }

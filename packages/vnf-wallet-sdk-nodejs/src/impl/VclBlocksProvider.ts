@@ -77,14 +77,12 @@ export default class VclBlocksProvider {
     ): PresentationRequestUseCase {
         return new PresentationRequestUseCaseImpl(
             new PresentationRequestRepositoryImpl(new NetworkServiceImpl()),
-            new ResolveKidRepositoryImpl(new NetworkServiceImpl()),
+            new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl()),
             new JwtServiceRepositoryImpl(
                 cryptoServicesDescriptor.jwtSignService,
                 cryptoServicesDescriptor.jwtVerifyService
             ),
-            new PresentationRequestByDeepLinkVerifierImpl(
-                new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl())
-            )
+            new PresentationRequestByDeepLinkVerifierImpl()
         );
     }
 
@@ -110,14 +108,12 @@ export default class VclBlocksProvider {
     ): CredentialManifestUseCase {
         return new CredentialManifestUseCaseImpl(
             new CredentialManifestRepositoryImpl(new NetworkServiceImpl()),
-            new ResolveKidRepositoryImpl(new NetworkServiceImpl()),
+            new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl()),
             new JwtServiceRepositoryImpl(
                 cryptoServicesDescriptor.jwtSignService,
                 cryptoServicesDescriptor.jwtVerifyService
             ),
-            new CredentialManifestByDeepLinkVerifierImpl(
-                new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl())
-            )
+            new CredentialManifestByDeepLinkVerifierImpl()
         );
     }
 

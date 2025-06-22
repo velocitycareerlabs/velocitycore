@@ -2,7 +2,6 @@ import PresentationRequestUseCaseImpl from '../../src/impl/data/usecases/Present
 import PresentationRequestRepositoryImpl from '../../src/impl/data/repositories/PresentationRequestRepositoryImpl';
 import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import { PresentationRequestMocks } from '../infrastructure/resources/valid/PresentationRequestMocks';
-import ResolveKidRepositoryImpl from '../../src/impl/data/repositories/ResolveKidRepositoryImpl';
 import JwtServiceRepositoryImpl from '../../src/impl/data/repositories/JwtServiceRepositoryImpl';
 import { JwtSignServiceMock } from '../infrastructure/resources/jwt/JwtSignServiceMock';
 import { JwtVerifyServiceMock } from '../infrastructure/resources/jwt/JwtVerifyServiceMock';
@@ -35,20 +34,16 @@ describe('PresentationRequestUseCase Tests', () => {
                     )
                 )
             ),
-            new ResolveKidRepositoryImpl(
+            new ResolveDidDocumentRepositoryImpl(
                 new NetworkServiceSuccess(
-                    JSON.parse(PresentationRequestMocks.JWK)
+                    DidDocumentMocks.DidDocumentMock.payload
                 )
             ),
             new JwtServiceRepositoryImpl(
                 new JwtSignServiceMock(''),
                 new JwtVerifyServiceMock()
             ),
-            new PresentationRequestByDeepLinkVerifierImpl(
-                new ResolveDidDocumentRepositoryImpl(
-                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
-                )
-            )
+            new PresentationRequestByDeepLinkVerifierImpl()
         );
 
         const presentationRequest = await subject1.getPresentationRequest(
@@ -78,20 +73,16 @@ describe('PresentationRequestUseCase Tests', () => {
             new PresentationRequestRepositoryImpl(
                 new NetworkServiceSuccess(JSON.parse('{"wrong": "payload"}'))
             ),
-            new ResolveKidRepositoryImpl(
+            new ResolveDidDocumentRepositoryImpl(
                 new NetworkServiceSuccess(
-                    JSON.parse(PresentationRequestMocks.JWK)
+                    DidDocumentMocks.DidDocumentMock.payload
                 )
             ),
             new JwtServiceRepositoryImpl(
                 new JwtSignServiceMock(''),
                 new JwtVerifyServiceMock()
             ),
-            new PresentationRequestByDeepLinkVerifierImpl(
-                new ResolveDidDocumentRepositoryImpl(
-                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
-                )
-            )
+            new PresentationRequestByDeepLinkVerifierImpl()
         );
         try {
             await subject2.getPresentationRequest(

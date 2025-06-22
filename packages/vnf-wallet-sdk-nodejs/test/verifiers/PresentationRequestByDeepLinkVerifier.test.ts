@@ -22,31 +22,23 @@ describe('CredentialManifestByDeepLinkVerifier', () => {
     const deepLink = DeepLinkMocks.PresentationRequestDeepLinkDevNet;
 
     test('testVerifyPresentationRequestSuccess', async () => {
-        subject = new PresentationRequestByDeepLinkVerifierImpl(
-            new ResolveDidDocumentRepositoryImpl(
-                new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
-            )
-        );
+        subject = new PresentationRequestByDeepLinkVerifierImpl();
 
         const isVerified = await subject.verifyPresentationRequest(
             presentationRequest,
-            deepLink
+            deepLink,
+            DidDocumentMocks.DidDocumentMock
         );
         expect(isVerified).toBeTruthy();
     });
 
     test('testVerifyPresentationRequestError', async () => {
-        subject = new PresentationRequestByDeepLinkVerifierImpl(
-            new ResolveDidDocumentRepositoryImpl(
-                new NetworkServiceSuccess(
-                    DidDocumentMocks.DidDocumentWithWrongDidMock
-                )
-            )
-        );
+        subject = new PresentationRequestByDeepLinkVerifierImpl();
         try {
             const isVerified = await subject.verifyPresentationRequest(
                 presentationRequest,
-                deepLink
+                deepLink,
+                DidDocumentMocks.DidDocumentWithWrongDidMock
             );
             expect(isVerified).toBeFalsy();
         } catch (error: any) {

@@ -11,37 +11,24 @@ import VCLLog from '../../utils/VCLLog';
 import VCLErrorCode from '../../../api/entities/error/VCLErrorCode';
 import VCLError from '../../../api/entities/error/VCLError';
 import VCLDidDocument from '../../../api/entities/VCLDidDocument';
-import ResolveDidDocumentRepository from '../../domain/repositories/ResolveDidDocumentRepository';
 
 export default class PresentationRequestByDeepLinkVerifierImpl
     implements PresentationRequestByDeepLinkVerifier
 {
-    constructor(
-        private readonly resolveDidDocumentRepository: ResolveDidDocumentRepository
-    ) {}
-
     async verifyPresentationRequest(
         presentationRequest: VCLPresentationRequest,
-        deepLink: VCLDeepLink
+        deepLink: VCLDeepLink,
+        didDocument: VCLDidDocument
     ): Promise<boolean> {
         if (deepLink.did === null) {
             await this.onError(`DID not found in deep link: ${deepLink.value}`);
             return false;
         }
-        const didDocument =
-            await this.resolveDidDocumentRepository.resolveDidDocument(
-                deepLink.did!
-            );
-        return this.verify(presentationRequest, didDocument);
-    }
-
-    private async verify(
-        presentationRequest: VCLPresentationRequest,
-        didDocument: VCLDidDocument
-    ): Promise<boolean> {
         if (
-            didDocument.id === presentationRequest.iss ||
-            didDocument.alsoKnownAs.includes(presentationRequest.iss)
+            (didDocument.id === presentationRequest.iss &&
+                didDocument.id === deepLink.did) ||
+            (didDocument.alsoKnownAs.includes(presentationRequest.iss) &&
+                didDocument.alsoKnownAs.includes(deepLink.did!))
         ) {
             return true;
         }

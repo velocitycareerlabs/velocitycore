@@ -1,4 +1,5 @@
 import { Dictionary } from '../VCLTypes';
+import VCLPublicJwk from './VCLPublicJwk';
 
 /**
  * Created by Michael Avoyan on 04/06/2025.
@@ -26,6 +27,26 @@ export default class VCLDidDocument {
         }
     }
 
+    getPublicJwk(kid: string): VCLPublicJwk | null {
+        if (!kid.includes('#')) return null;
+
+        const publicJwkId = `#${kid.split('#')[1]}`;
+        const verificationMethod =
+            (this.payload?.[
+                VCLDidDocument.KeyVerificationMethod
+            ] as Dictionary<any>[]) ?? [];
+
+        const publicJwkPayload = verificationMethod
+            .filter(
+                (item): item is Record<string, any> =>
+                    typeof item === 'object' && item !== null
+            )
+            .find((method) => method[VCLDidDocument.KeyId] === publicJwkId);
+
+        const publicJwk = publicJwkPayload?.[VCLDidDocument.KeyPublicKeyJwk];
+        return publicJwk ? VCLPublicJwk.fromJSON(publicJwk) : null;
+    }
+
     get id(): string {
         return this.payload[VCLDidDocument.KeyId] || '';
     }
@@ -38,4 +59,8 @@ export default class VCLDidDocument {
     static KeyId = 'id';
 
     static KeyAlsoKnownAs = 'alsoKnownAs';
+
+    static KeyVerificationMethod = 'verificationMethod';
+
+    static KeyPublicKeyJwk = 'publicKeyJwk';
 }
