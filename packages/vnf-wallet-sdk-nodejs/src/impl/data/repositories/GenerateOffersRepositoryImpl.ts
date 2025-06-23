@@ -17,7 +17,6 @@ export default class GenerateOffersRepositoryImpl
         sessionToken: VCLToken
     ): Promise<VCLOffers> {
         const offersResponse = await this.networkService.sendRequest({
-            useCaches: false,
             endpoint: generateOffersDescriptor.checkOffersUri,
             headers: {
                 [HeaderKeys.HeaderKeyAuthorization]: `${HeaderKeys.HeaderValuePrefixBearer} ${sessionToken.value}`,
@@ -26,7 +25,6 @@ export default class GenerateOffersRepositoryImpl
             },
             body: generateOffersDescriptor.payload,
             method: HttpMethod.POST,
-            contentType: 'application/json',
         });
         if (offersResponse) {
             return VCLOffers.fromPayload(

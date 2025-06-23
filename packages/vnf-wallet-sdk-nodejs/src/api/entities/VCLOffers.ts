@@ -38,7 +38,7 @@ export default class VCLOffers {
         return new VCLOffers({}, [], responseCode, sessionToken);
     };
 
-    private static readonly offersFromJsonArray = (
+    static readonly offersFromJsonArray = (
         offersJsonArray: Dictionary<any>[]
     ): VCLOffer[] => {
         const allOffers: VCLOffer[] = [];

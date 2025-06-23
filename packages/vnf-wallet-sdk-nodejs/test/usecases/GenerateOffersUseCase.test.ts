@@ -13,6 +13,8 @@ import { VerifiedProfileMocks } from '../infrastructure/resources/valid/Verified
 import { DidJwkMocks } from '../infrastructure/resources/valid/DidJwkMocks';
 import { CommonMocks } from '../infrastructure/resources/CommonMocks';
 import { OffersByDeepLinkVerifierImpl } from '../../src/impl/data/verifiers';
+import ResolveDidDocumentRepositoryImpl from '../../src/impl/data/repositories/ResolveDidDocumentRepositoryImpl';
+import { DidDocumentMocks } from '../infrastructure/resources/valid/DidDocumentMocks';
 
 describe('GenerateOffersUseCaseTest', () => {
     let subject1: GenerateOffersUseCase;
@@ -30,7 +32,11 @@ describe('GenerateOffersUseCaseTest', () => {
                     JSON.parse(GenerateOffersMocks.GeneratedOffers)
                 )
             ),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const generateOffersDescriptor = new VCLGenerateOffersDescriptor(
@@ -65,7 +71,11 @@ describe('GenerateOffersUseCaseTest', () => {
                     JSON.parse(GenerateOffersMocks.GeneratedOffersEmptyJsonObj)
                 )
             ),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const generateOffersDescriptor = new VCLGenerateOffersDescriptor(
@@ -97,7 +107,11 @@ describe('GenerateOffersUseCaseTest', () => {
                     JSON.parse(GenerateOffersMocks.GeneratedOffersEmptyJsonArr)
                 )
             ),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const generateOffersDescriptor = new VCLGenerateOffersDescriptor(

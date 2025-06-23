@@ -2,7 +2,6 @@ import PresentationRequestUseCaseImpl from '../../src/impl/data/usecases/Present
 import PresentationRequestRepositoryImpl from '../../src/impl/data/repositories/PresentationRequestRepositoryImpl';
 import NetworkServiceSuccess from '../infrastructure/resources/network/NetworkServiceSuccess';
 import { PresentationRequestMocks } from '../infrastructure/resources/valid/PresentationRequestMocks';
-import ResolveKidRepositoryImpl from '../../src/impl/data/repositories/ResolveKidRepositoryImpl';
 import JwtServiceRepositoryImpl from '../../src/impl/data/repositories/JwtServiceRepositoryImpl';
 import { JwtSignServiceMock } from '../infrastructure/resources/jwt/JwtSignServiceMock';
 import { JwtVerifyServiceMock } from '../infrastructure/resources/jwt/JwtVerifyServiceMock';
@@ -17,6 +16,8 @@ import { DeepLinkMocks } from '../infrastructure/resources/valid/DeepLinkMocks';
 import { DidJwkMocks } from '../infrastructure/resources/valid/DidJwkMocks';
 import PresentationRequestUseCase from '../../src/impl/domain/usecases/PresentationRequestUseCase';
 import { PresentationRequestByDeepLinkVerifierImpl } from '../../src/impl/data/verifiers';
+import ResolveDidDocumentRepositoryImpl from '../../src/impl/data/repositories/ResolveDidDocumentRepositoryImpl';
+import { DidDocumentMocks } from '../infrastructure/resources/valid/DidDocumentMocks';
 
 describe('PresentationRequestUseCase Tests', () => {
     let subject1: PresentationRequestUseCase;
@@ -33,9 +34,9 @@ describe('PresentationRequestUseCase Tests', () => {
                     )
                 )
             ),
-            new ResolveKidRepositoryImpl(
+            new ResolveDidDocumentRepositoryImpl(
                 new NetworkServiceSuccess(
-                    JSON.parse(PresentationRequestMocks.JWK)
+                    DidDocumentMocks.DidDocumentMock.payload
                 )
             ),
             new JwtServiceRepositoryImpl(
@@ -72,9 +73,9 @@ describe('PresentationRequestUseCase Tests', () => {
             new PresentationRequestRepositoryImpl(
                 new NetworkServiceSuccess(JSON.parse('{"wrong": "payload"}'))
             ),
-            new ResolveKidRepositoryImpl(
+            new ResolveDidDocumentRepositoryImpl(
                 new NetworkServiceSuccess(
-                    JSON.parse(PresentationRequestMocks.JWK)
+                    DidDocumentMocks.DidDocumentMock.payload
                 )
             ),
             new JwtServiceRepositoryImpl(
