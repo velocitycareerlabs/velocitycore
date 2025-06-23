@@ -16,7 +16,8 @@ describe('VCLCredentialManifestDescriptorRefresh Tests', () => {
                 CredentialManifestDescriptorMocks.CredentialId1,
                 CredentialManifestDescriptorMocks.CredentialId2,
             ],
-            DidJwkMocks.DidJwk
+            DidJwkMocks.DidJwk,
+            '123'
         );
 
         const credentialTypesQuery = `${
@@ -32,8 +33,8 @@ describe('VCLCredentialManifestDescriptorRefresh Tests', () => {
         )}`;
         const mockEndpoint = `${CredentialManifestDescriptorMocks.IssuingServiceEndPoint}?${credentialTypesQuery}`;
 
-        expect(subject.endpoint).toBe(mockEndpoint);
-        expect(subject.did).toBe(CredentialManifestDescriptorMocks.IssuerDid);
+        expect(subject.endpoint).toEqual(mockEndpoint);
+        expect(subject.did).toEqual('123');
     });
 
     test('testCredentialManifestDescriptorWith1CredentialIdsSuccess', () => {
@@ -43,7 +44,8 @@ describe('VCLCredentialManifestDescriptorRefresh Tests', () => {
         subject = new VCLCredentialManifestDescriptorRefresh(
             service,
             [CredentialManifestDescriptorMocks.CredentialId1],
-            DidJwkMocks.DidJwk
+            DidJwkMocks.DidJwk,
+            '123'
         );
 
         const credentialTypesQuery = `${
@@ -55,8 +57,8 @@ describe('VCLCredentialManifestDescriptorRefresh Tests', () => {
         )}`;
         const mockEndpoint = `${CredentialManifestDescriptorMocks.IssuingServiceEndPoint}?${credentialTypesQuery}`;
 
-        expect(subject.endpoint).toBe(mockEndpoint);
-        expect(subject.did).toBe(CredentialManifestDescriptorMocks.IssuerDid);
+        expect(subject.endpoint).toEqual(mockEndpoint);
+        expect(subject.did).toEqual('123');
     });
 
     test('testCredentialManifestDescriptorWith0CredentialIdsSuccess', () => {
@@ -66,13 +68,14 @@ describe('VCLCredentialManifestDescriptorRefresh Tests', () => {
         subject = new VCLCredentialManifestDescriptorRefresh(
             service,
             [],
-            DidJwkMocks.DidJwk
+            DidJwkMocks.DidJwk,
+            '123'
         );
 
         const credentialTypesQuery = `${VCLCredentialManifestDescriptorRefresh.KeyRefresh}=true`;
         const mockEndpoint = `${CredentialManifestDescriptorMocks.IssuingServiceEndPoint}?${credentialTypesQuery}`;
 
-        expect(subject.endpoint).toBe(mockEndpoint);
-        expect(subject.did).toBe(CredentialManifestDescriptorMocks.IssuerDid);
+        expect(subject.endpoint).toEqual(mockEndpoint);
+        expect(subject.did).toEqual('123');
     });
 });

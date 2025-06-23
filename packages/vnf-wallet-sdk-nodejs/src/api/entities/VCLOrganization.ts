@@ -3,13 +3,17 @@ import VCLService from './VCLService';
 import VCLLog from '../../impl/utils/VCLLog';
 
 export default class VCLOrganization {
-    TAG = VCLOrganization.name;
+    public readonly did: string;
 
     get serviceCredentialAgentIssuers(): VCLService[] {
         return this.parseServiceCredentialAgentIssuers();
     }
 
-    constructor(public readonly payload: Dictionary<any>) {}
+    constructor(public readonly payload: Dictionary<any>) {
+        this.did =
+            this.payload[VCLOrganization.KeyAlsoKnownAs]?.[0] ??
+            this.payload[VCLOrganization.KeyId];
+    }
 
     private parseServiceCredentialAgentIssuers(): VCLService[] {
         const result: VCLService[] = [];
@@ -38,4 +42,8 @@ export default class VCLOrganization {
     }
 
     static readonly KeyService = 'service';
+
+    static readonly KeyAlsoKnownAs = 'knownAs';
+
+    static readonly KeyId = 'id';
 }
