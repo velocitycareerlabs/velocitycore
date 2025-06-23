@@ -60,7 +60,7 @@ const ServiceCreateForm = ({ onServiceCreated, services, InterceptOnCreate }) =>
   const [isInterceptOnCreateOpen, setIsInterceptOnCreateOpen] = useState(false);
   const [isKeysPopupOpened, setIsKeysPopupOpened] = useState(false);
 
-  const isIssueOrInspection = useIsIssuingInspection(selectedServiceType);
+  const { isIssuingOrInspection, isCAO } = useIsIssuingInspection(selectedServiceType);
 
   const onClose = useCallback(() => {
     navigate(-1);
@@ -142,7 +142,7 @@ const ServiceCreateForm = ({ onServiceCreated, services, InterceptOnCreate }) =>
         {selectedStep === 2 && (
           <ServiceEndpointSelection
             credentialAgentOperators={credentialAgentOperators}
-            isIssueOrInspection={isIssueOrInspection}
+            isIssueOrInspection={isIssuingOrInspection}
             inProgress={createServiceInProgress}
             onCreate={onCreateService}
             handleBack={() => setSelectedStep(1)}
@@ -157,8 +157,9 @@ const ServiceCreateForm = ({ onServiceCreated, services, InterceptOnCreate }) =>
         onClose={() => {
           redirect('list', 'services');
         }}
-        isIssueOrInspection={isIssueOrInspection}
+        isIssueOrInspection={isIssuingOrInspection}
         selectedCAO={selectedCAO}
+        isCAO={isCAO}
       />
 
       <SecretKeysPopup

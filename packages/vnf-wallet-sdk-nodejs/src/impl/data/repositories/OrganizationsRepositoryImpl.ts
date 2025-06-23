@@ -20,15 +20,12 @@ export default class OrganizationsRepositoryImpl
             : Urls.Organizations;
 
         const organizationsResponse = await this.networkService.sendRequest({
-            useCaches: false,
             endpoint,
             headers: {
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
-            body: null,
             method: HttpMethod.GET,
-            contentType: null,
         });
         return this.parse(organizationsResponse.payload);
     }
