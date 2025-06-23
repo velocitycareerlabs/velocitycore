@@ -15,7 +15,6 @@ export default class ExchangeProgressRepositoryImpl
         exchangeDescriptor: VCLExchangeDescriptor
     ): Promise<VCLExchange> {
         const exchangeProgressResponse = await this.networkService.sendRequest({
-            useCaches: false,
             method: HttpMethod.GET,
             endpoint: `${exchangeDescriptor.processUri}?${
                 VCLExchangeDescriptor.KeyExchangeId
@@ -25,8 +24,6 @@ export default class ExchangeProgressRepositoryImpl
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
-            body: null,
-            contentType: null,
         });
 
         return this.parseExchange(exchangeProgressResponse.payload);

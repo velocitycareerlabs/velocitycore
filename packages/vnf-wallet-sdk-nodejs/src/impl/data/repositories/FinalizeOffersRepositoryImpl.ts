@@ -17,7 +17,6 @@ export class FinalizeOffersRepositoryImpl implements FinalizeOffersRepository {
         proof: Nullish<VCLJwt> = null
     ): Promise<VCLJwt[]> {
         const finalizedOffersResponse = await this.networkService.sendRequest({
-            useCaches: false,
             endpoint: finalizeOffersDescriptor.finalizeOffersUri,
             body: finalizeOffersDescriptor.generateRequestBody(proof),
             headers: {
@@ -25,7 +24,6 @@ export class FinalizeOffersRepositoryImpl implements FinalizeOffersRepository {
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
-            contentType: 'application/json',
             method: HttpMethod.POST,
         });
 

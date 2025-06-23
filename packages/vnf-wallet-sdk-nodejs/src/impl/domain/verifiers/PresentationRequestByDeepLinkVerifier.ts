@@ -6,10 +6,12 @@
  */
 import VCLDeepLink from '../../../api/entities/VCLDeepLink';
 import VCLPresentationRequest from '../../../api/entities/VCLPresentationRequest';
+import VCLDidDocument from '../../../api/entities/VCLDidDocument';
 
 export default interface PresentationRequestByDeepLinkVerifier {
     verifyPresentationRequest(
         presentationRequest: VCLPresentationRequest,
-        deepLink: VCLDeepLink
+        deepLink: VCLDeepLink,
+        didDocument: VCLDidDocument
     ): Promise<boolean>;
 }
