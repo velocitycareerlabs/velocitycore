@@ -31,6 +31,7 @@ const mockAddPrimary = jest.fn().mockResolvedValue(undefined);
 const mockAddOperator = jest.fn().mockResolvedValue(undefined);
 const mockRemoveOperator = jest.fn().mockResolvedValue(undefined);
 const mockUpdateAddressScopes = jest.fn().mockResolvedValue(undefined);
+const csvParser = require('@velocitycareerlabs/csv-parser');
 
 const mockInitPermission = jest.fn().mockResolvedValue({
   addPrimary: mockAddPrimary,
@@ -56,6 +57,7 @@ const {
   isEmpty,
   pick,
   forEach,
+  reject,
   without,
 } = require('lodash/fp');
 const { nanoid } = require('nanoid');
@@ -182,6 +184,13 @@ jest.mock('auth0', () => ({
     getUsers: mockAuth0GetUsers,
   })),
 }));
+
+jest.mock('@velocitycareerlabs/csv-parser', () => {
+  const originalModule = jest.requireActual('@velocitycareerlabs/csv-parser');
+  return {
+    parseToCsv: jest.fn().mockImplementation(originalModule.parseToCsv),
+  };
+});
 
 const mockCreateFineractClientReturnValue = {
   fineractClientId: '11',
@@ -2027,21 +2036,21 @@ describe('Organizations Full Test Suite', () => {
 
       it('Should create organization, DID & ethereum accounts with default type even if no services or invitation', async () => {
         const monitorNockScope = setMonitorEventsNock();
+        const registrationNumbers = [
+          {
+            authority: Authorities.LinkedIn,
+            number: 'foo',
+          },
+          {
+            authority: Authorities.GLEIF,
+            number: '1',
+            uri: 'uri://uri',
+          },
+        ];
         const payload = {
           profile: {
             ...omit(['type'], orgProfile),
-            registrationNumbers: [
-              // {
-              //   authority: Authorities.DunnAndBradstreet,
-              //   number: '1',
-              //   uri: 'uri://uri',
-              // },
-              {
-                authority: Authorities.GLEIF,
-                number: '1',
-                uri: 'uri://uri',
-              },
-            ],
+            registrationNumbers,
           },
         };
         const response = await fastify.injectJson({
@@ -2061,18 +2070,23 @@ describe('Organizations Full Test Suite', () => {
         // json response checks
         expect(did).toMatch(DID_FORMAT);
         expect(response.json).toEqual(
-          expectedCreateFullOrganizationResponse(response.json.id, orgProfile)
+          expectedCreateFullOrganizationResponse(response.json.id, {
+            ...orgProfile,
+            registrationNumbers,
+          })
         );
 
         // organization entity checks
         const orgFromDb = await getOrganizationFromDb(did);
-        expect(orgFromDb).toEqual(expectedOrganization(did, orgProfile));
+        expect(orgFromDb).toEqual(
+          expectedOrganization(did, { ...orgProfile, registrationNumbers })
+        );
         const credentialPayload = decodeCredentialJwt(
           orgFromDb.signedProfileVcJwt.signedCredential
         );
         expect(credentialPayload).toEqual({
           credentialSubject: {
-            ...publicProfileMatcher(orgProfile),
+            ...publicProfileMatcher({ ...orgProfile, registrationNumbers }),
             id: did,
             permittedVelocityServiceCategory: [],
           },
@@ -2122,6 +2136,21 @@ describe('Organizations Full Test Suite', () => {
             [expectedSupportEmail()],
           ])
         );
+        expect(csvParser.parseToCsv.mock.calls).toEqual([
+          [
+            [
+              expect.objectContaining({
+                registrationNumbers: reject(
+                  {
+                    authority: Authorities.LinkedIn,
+                  },
+                  registrationNumbers
+                ),
+              }),
+            ],
+            expect.any(Array),
+          ],
+        ]);
       });
 
       it('Should create org with a did service', async () => {
