@@ -6,12 +6,16 @@ import VCLDidJwk from './VCLDidJwk';
 import { appendQueryParamsToString } from '../../impl/utils/HelperFunctions';
 
 export default class VCLPresentationRequestDescriptor {
+    readonly did: Nullish<string>;
+
     constructor(
         public readonly deepLink: VCLDeepLink,
         public readonly pushDelegate: Nullish<VCLPushDelegate> = null,
         public readonly didJwk: VCLDidJwk,
         public readonly remoteCryptoServicesToken: Nullish<VCLToken> = null
-    ) {}
+    ) {
+        this.did = this.deepLink.did;
+    }
 
     get endpoint() {
         const queryParams = this.generateQueryParams();
@@ -22,10 +26,6 @@ export default class VCLPresentationRequestDescriptor {
             );
         }
         return this.deepLink.requestUri;
-    }
-
-    get did() {
-        return this.deepLink.did;
     }
 
     generateQueryParams() {
