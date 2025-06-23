@@ -69,6 +69,7 @@ import CredentialIssuerVerifier from './domain/verifiers/CredentialIssuerVerifie
 import AuthTokenRepositoryImpl from './data/repositories/AuthTokenRepositoryImpl';
 import AuthTokenUseCaseImpl from './data/usecases/AuthTokenUseCaseImpl';
 import AuthTokenUseCase from './domain/usecases/AuthTokenUseCase';
+import ResolveDidDocumentRepositoryImpl from './data/repositories/ResolveDidDocumentRepositoryImpl';
 
 export default class VclBlocksProvider {
     static providePresentationRequestUseCase(
@@ -76,7 +77,7 @@ export default class VclBlocksProvider {
     ): PresentationRequestUseCase {
         return new PresentationRequestUseCaseImpl(
             new PresentationRequestRepositoryImpl(new NetworkServiceImpl()),
-            new ResolveKidRepositoryImpl(new NetworkServiceImpl()),
+            new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl()),
             new JwtServiceRepositoryImpl(
                 cryptoServicesDescriptor.jwtSignService,
                 cryptoServicesDescriptor.jwtVerifyService
@@ -107,7 +108,7 @@ export default class VclBlocksProvider {
     ): CredentialManifestUseCase {
         return new CredentialManifestUseCaseImpl(
             new CredentialManifestRepositoryImpl(new NetworkServiceImpl()),
-            new ResolveKidRepositoryImpl(new NetworkServiceImpl()),
+            new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl()),
             new JwtServiceRepositoryImpl(
                 cryptoServicesDescriptor.jwtSignService,
                 cryptoServicesDescriptor.jwtVerifyService
@@ -133,7 +134,9 @@ export default class VclBlocksProvider {
     static provideGenerateOffersUseCase(): GenerateOffersUseCase {
         return new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(new NetworkServiceImpl()),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl())
+            )
         );
     }
 
@@ -158,7 +161,9 @@ export default class VclBlocksProvider {
             ),
             credentialIssuerVerifier,
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(new NetworkServiceImpl())
+            )
         );
     }
 
