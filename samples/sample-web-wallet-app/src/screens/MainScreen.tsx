@@ -191,13 +191,14 @@ const onGetOrganizationsThenCredentialManifestByService = async () => {
   )
     .then((organizations) => {
       console.log('organizations: ', organizations);
-      const serviceCredentialAgentIssuer =
-        organizations.all[0].payload.service[0];
+      const organization = organizations.all[0];
+      const serviceCredentialAgentIssuer = organization.payload.service[0];
       getCredentialManifestByService({
         service: serviceCredentialAgentIssuer,
         issuingType: 'Career',
         credentialTypes: serviceCredentialAgentIssuer.credentialTypes, // Can come from anywhere
         didJwk,
+        did: organization.did,
       })
         .then((credentialManifest) => {
           console.log('credential manifest: ', credentialManifest);

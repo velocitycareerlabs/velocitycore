@@ -10,8 +10,6 @@ import {
 } from '../../impl/utils/HelperFunctions';
 
 export default class VCLCredentialManifestDescriptor {
-    readonly did: Nullish<string>;
-
     constructor(
         public readonly uri: Nullish<string> = null,
         public readonly issuingType: VCLIssuingType = VCLIssuingType.Career,
@@ -21,13 +19,10 @@ export default class VCLCredentialManifestDescriptor {
         public readonly deepLink: Nullish<VCLDeepLink>,
         public readonly didJwk: VCLDidJwk,
         public readonly remoteCryptoServicesToken: Nullish<VCLToken> = null
-    ) {
-        this.did =
-            deepLink?.did ??
-            getUrlSubPathFromString(
-                uri,
-                VCLCredentialManifestDescriptor.KeyDidPrefix
-            );
+    ) {}
+
+    get did() {
+        return this.deepLink?.did;
     }
 
     get endpoint(): Nullish<string> {
