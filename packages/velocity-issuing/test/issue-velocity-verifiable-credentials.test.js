@@ -434,12 +434,12 @@ const verifyCredentialAndAddEntryExpectations = async (
   expect(jwtVc.payload.jti).toEqual(
     `did:velocity:v2:${toLower(issuerEntity.primaryAddress)}:${
       credentialMetadataCall[0].listId
-    }:${credentialMetadataCall[0].index}`
+    }:${credentialMetadataCall[0].index}:${hashOffer(offer)}`
   );
   expect(jwtVc.header.kid).toEqual(
     `did:velocity:v2:${toLower(issuerEntity.primaryAddress)}:${
       credentialMetadataCall[0].listId
-    }:${credentialMetadataCall[0].index}#key-1`
+    }:${credentialMetadataCall[0].index}:${hashOffer(offer)}#key-1`
   );
   expect(credentialMetadataCall).toEqual([
     expect.objectContaining({
