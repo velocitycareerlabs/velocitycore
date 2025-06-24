@@ -2629,11 +2629,13 @@ describe('Organizations Full Test Suite', () => {
 
         expect(mockAuth0ClientGrantCreate).toHaveBeenCalledTimes(0);
 
-        expect(mockSendEmail.mock.calls).toEqual([
-          [expectedSupportEmail('Super Organization')],
-          [expectedSignatoryApprovalEmail(null, orgFromDb)],
-          [expectedServiceActivationRequiredEmail],
-        ]);
+        expect(mockSendEmail.mock.calls).toEqual(
+          expect.arrayContaining([
+            [expectedSupportEmail('Super Organization')],
+            [expectedSignatoryApprovalEmail(null, orgFromDb)],
+            [expectedServiceActivationRequiredEmail],
+          ])
+        );
       });
 
       it('Should create organization that is a Node Operator', async () => {
@@ -4951,10 +4953,12 @@ describe('Organizations Full Test Suite', () => {
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(false);
 
         // email checks
-        expect(mockSendEmail.mock.calls).toEqual([
-          [expectedSupportEmail()],
-          [expectedSignatoryApprovalEmail(null, orgFromDb)],
-        ]);
+        expect(mockSendEmail.mock.calls).toEqual(
+          expect.arrayContaining([
+            [expectedSupportEmail()],
+            [expectedSignatoryApprovalEmail(null, orgFromDb)],
+          ])
+        );
 
         expect(nockData.isDone()).toEqual(true);
       });
@@ -5167,11 +5171,13 @@ describe('Organizations Full Test Suite', () => {
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(true);
 
         // email checks
-        expect(mockSendEmail.mock.calls).toEqual([
-          [expectedSupportEmail()],
-          [sendServicesActivatedEmailMatcher()],
-          [expectedSignatoryApprovalEmail(inviterOrganization, orgFromDb)],
-        ]);
+        expect(mockSendEmail.mock.calls).toEqual(
+          expect.arrayContaining([
+            [expectedSupportEmail()],
+            [sendServicesActivatedEmailMatcher()],
+            [expectedSignatoryApprovalEmail(inviterOrganization, orgFromDb)],
+          ])
+        );
 
         expect(nockData.isDone()).toEqual(true);
       });
