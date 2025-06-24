@@ -6,10 +6,12 @@
  */
 import VCLCredentialManifest from '../../../api/entities/VCLCredentialManifest';
 import VCLDeepLink from '../../../api/entities/VCLDeepLink';
+import VCLDidDocument from '../../../api/entities/VCLDidDocument';
 
 export default interface CredentialManifestByDeepLinkVerifier {
     verifyCredentialManifest(
         credentialManifest: VCLCredentialManifest,
-        deepLink: VCLDeepLink
+        deepLink: VCLDeepLink,
+        didDocument: VCLDidDocument
     ): Promise<boolean>;
 }
