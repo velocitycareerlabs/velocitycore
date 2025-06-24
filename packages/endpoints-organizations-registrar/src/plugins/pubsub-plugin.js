@@ -30,6 +30,7 @@ const pubsubPlugin = async (fastify) => {
     'serviceVersionFetch',
     'getDocValidator',
     'headers',
+    'renderTemplate',
   ]);
 
   const baseContext = {
@@ -59,6 +60,7 @@ const pubsubPlugin = async (fastify) => {
         context.secureMessagesFetch = event.meta.secureMessagesFetch;
         context.betterUptimeFetch = event.meta.betterUptimeFetch;
         context.getDocValidator = event.meta.getDocValidator;
+        context.renderTemplate = event.meta.renderTemplate;
         context.headers = event.meta.headers;
         context.kms = event.meta.kms;
 
