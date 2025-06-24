@@ -47,7 +47,7 @@ describe('ServicesEdit', () => {
     const input = screen.getByLabelText(/Service endpoint URL/i);
     fireEvent.change(input, { target: { value: 'https://changed.com' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /Modify/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Save/i }));
 
     await waitFor(() =>
       expect(mockOnSave).toHaveBeenCalledWith({
@@ -71,7 +71,7 @@ describe('ServicesEdit', () => {
     const input = screen.getByLabelText(/Service endpoint URL/i);
     fireEvent.change(input, { target: { value: 'https://changed.com' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /Modify/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Save/i }));
 
     await screen.findByTestId('intercept-popup');
   });
@@ -91,7 +91,7 @@ describe('ServicesEdit', () => {
     const input = screen.getByLabelText(/Service endpoint URL/i);
     fireEvent.change(input, { target: { value: '' } });
     fireEvent.blur(input);
-    fireEvent.click(screen.getByRole('button', { name: /Modify/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Save/i }));
 
     await waitFor(() => screen.findByText('Service endpoint URL field is required'));
   });
@@ -115,7 +115,7 @@ describe('ServicesEdit', () => {
     const input = screen.getByLabelText(/Service endpoint URL/i);
     fireEvent.change(input, { target: { value: 'not-a-valid-url' } });
     fireEvent.blur(input);
-    fireEvent.click(screen.getByRole('button', { name: /Modify/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Save/i }));
 
     const error = await screen.findByText('Please type in a valid URL');
     expect(error).toBeInTheDocument();

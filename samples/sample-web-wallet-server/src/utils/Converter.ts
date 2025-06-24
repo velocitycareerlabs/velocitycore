@@ -148,7 +148,7 @@ const credentialManifestDescriptorByServiceFrom = (
     json.credentialTypes,
     null,
     didJwkFrom(json.didJwk),
-    null
+    json.did
   );
 };
 
