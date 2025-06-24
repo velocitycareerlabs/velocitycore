@@ -6,7 +6,14 @@ const DataItem = ({ title, value, hint, sxValue }) => {
   return (
     <Box>
       {hint ? (
-        <Typography component="div" display="flex" mb={1} textTransform="" variant="pm">
+        <Typography
+          component="div"
+          display="flex"
+          mb={1}
+          textTransform=""
+          variant="pm"
+          sx={sx.title}
+        >
           <Box component="span" mr={0.5}>
             {title}
           </Box>

@@ -55,6 +55,7 @@ import {
   ADMINISTRATOR_DETAILS_HINT,
   SIGNATORY_DETAILS_HINT,
   WEBSITE_HINT,
+  SIGNATORY_EMAIL_HINT,
   parseJwt,
   ERRORS,
 } from '@/utils/index.jsx';
@@ -435,6 +436,11 @@ const OrganizationCreate = ({
                         source="profile.signatoryEmail"
                         validate={validateEmail}
                       />
+                      <Box mt={2}>
+                        <Tooltip title={SIGNATORY_EMAIL_HINT}>
+                          <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                        </Tooltip>
+                      </Box>
                     </Stack>
                   </Grid>
                   <Grid size={{ xs: 12 }}>
