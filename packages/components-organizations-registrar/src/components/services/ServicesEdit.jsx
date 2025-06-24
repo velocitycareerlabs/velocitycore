@@ -95,7 +95,7 @@ const FormContent = ({ isIssuingOrInspection, isModifyingServiceEnabled }) => {
       <SaveButton
         variant="outlined"
         icon={null}
-        label="Modify"
+        label="Save"
         sx={sx.saveButton}
         alwaysEnable={isModifyingServiceEnabled}
       />
