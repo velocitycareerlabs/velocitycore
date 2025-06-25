@@ -184,21 +184,11 @@ const expectedSupportEmail = (orgName = 'Test Organization') => ({
   Message: {
     Body: {
       Raw: {
-        Data: expect.stringContaining(`
-Organization ${orgName} was created by Admin Given Name Admin Family Name and an approval request was sent to Signatory Given Name Signatory Family Name. 
-
-The organization was registered by: 
-Given name: Admin Given Name
-Family name: Admin Family Name
-Job title: Admin Title
-Email: admin@email.com
-
-Signatory details: 
-Given name: Signatory Given Name
-Family name: Signatory Family Name
-Job title: Signatory Title
-Email: signatory@email.com
-`),
+        Data: expect.stringMatching(
+          new RegExp(
+            `Organization ${orgName} was created by[\\S\\s]*and an approval request was sent to`
+          )
+        ),
       },
     },
     Subject: {

@@ -1,21 +1,22 @@
 import VCLError from '../../../api/entities/error/VCLError';
 import VCLPublicJwk from '../../../api/entities/VCLPublicJwk';
-import VCLJwt from '../../../api/entities/VCLJwt';
 import VCLPresentationRequest from '../../../api/entities/VCLPresentationRequest';
 import VCLPresentationRequestDescriptor from '../../../api/entities/VCLPresentationRequestDescriptor';
 import JwtServiceRepository from '../../domain/repositories/JwtServiceRepository';
 import PresentationRequestRepository from '../../domain/repositories/PresentationRequestRepository';
-import ResolveKidRepository from '../../domain/repositories/ResolveKidRepository';
 import PresentationRequestUseCase from '../../domain/usecases/PresentationRequestUseCase';
 import VCLVerifiedProfile from '../../../api/entities/VCLVerifiedProfile';
 import PresentationRequestByDeepLinkVerifier from '../../domain/verifiers/PresentationRequestByDeepLinkVerifier';
+import ResolveDidDocumentRepository from '../../domain/repositories/ResolveDidDocumentRepository';
+import VCLDidDocument from '../../../api/entities/VCLDidDocument';
+import VCLLog from '../../utils/VCLLog';
 
 export default class PresentationRequestUseCaseImpl
     implements PresentationRequestUseCase
 {
     constructor(
         private presentationRequestRepository: PresentationRequestRepository,
-        private resolveKidRepository: ResolveKidRepository,
+        private resolveDidDocumentRepository: ResolveDidDocumentRepository,
         private jwtServiceRepository: JwtServiceRepository,
         private presentationRequestByDeepLinkVerifier: PresentationRequestByDeepLinkVerifier
     ) {}
@@ -24,55 +25,56 @@ export default class PresentationRequestUseCaseImpl
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         verifiedProfile: VCLVerifiedProfile
     ): Promise<VCLPresentationRequest> {
-        try {
-            const encodedJwtStr =
-                await this.presentationRequestRepository.getPresentationRequest(
-                    presentationRequestDescriptor
-                );
-            const jwt = await this.jwtServiceRepository.decode(encodedJwtStr);
-            return this.onGetPresentationRequestSuccess(
-                new VCLPresentationRequest(
-                    jwt,
-                    verifiedProfile,
-                    presentationRequestDescriptor.deepLink,
-                    presentationRequestDescriptor.pushDelegate,
-                    presentationRequestDescriptor.didJwk,
-                    presentationRequestDescriptor.remoteCryptoServicesToken
-                )
+        const encodedJwtStr =
+            await this.presentationRequestRepository.getPresentationRequest(
+                presentationRequestDescriptor
             );
-        } catch (error: any) {
-            throw VCLError.fromError(error);
-        }
-    }
-
-    async onGetPresentationRequestSuccess(
-        presentationRequest: VCLPresentationRequest
-    ): Promise<VCLPresentationRequest> {
-        const kid = presentationRequest.jwt.kid?.replace(
-            '#',
-            encodeURIComponent('#')
+        const jwt = await this.jwtServiceRepository.decode(encodedJwtStr);
+        const presentationRequest = new VCLPresentationRequest(
+            jwt,
+            verifiedProfile,
+            presentationRequestDescriptor.deepLink,
+            presentationRequestDescriptor.pushDelegate,
+            presentationRequestDescriptor.didJwk,
+            presentationRequestDescriptor.remoteCryptoServicesToken
         );
-        if (!kid) {
-            throw new VCLError('Empty kid');
+        const didDocument =
+            await this.resolveDidDocumentRepository.resolveDidDocument(
+                presentationRequest.iss
+            );
+        const { kid } = presentationRequest.jwt;
+        const publicJwk = didDocument.getPublicJwk(kid);
+        if (publicJwk == null) {
+            throw new VCLError(
+                `Public JWK not found for kid: ${kid} in DID Document: ${didDocument}`
+            );
         }
-        const publicJwk = await this.resolveKidRepository.getPublicKey(kid);
-        return this.onResolvePublicKeySuccess(publicJwk, presentationRequest);
+        return this.verifyPresentationRequest(
+            publicJwk,
+            presentationRequest,
+            didDocument
+        );
     }
 
-    async onResolvePublicKeySuccess(
+    async verifyPresentationRequest(
         publicJwk: VCLPublicJwk,
-        presentationRequest: VCLPresentationRequest
+        presentationRequest: VCLPresentationRequest,
+        didDocument: VCLDidDocument
     ): Promise<VCLPresentationRequest> {
+        await this.jwtServiceRepository.verifyJwt(
+            presentationRequest.jwt,
+            publicJwk,
+            presentationRequest.remoteCryptoServicesToken
+        );
         const isVerified =
-            (await this.jwtServiceRepository.verifyJwt(
-                presentationRequest.jwt,
-                publicJwk,
-                presentationRequest.remoteCryptoServicesToken
-            )) &&
-            (await this.presentationRequestByDeepLinkVerifier.verifyPresentationRequest(
+            await this.presentationRequestByDeepLinkVerifier.verifyPresentationRequest(
                 presentationRequest,
-                presentationRequest.deepLink
-            ));
+                presentationRequest.deepLink,
+                didDocument
+            );
+        VCLLog.info(
+            `Presentation request by deep link verification result: ${isVerified}`
+        );
         return this.onVerificationSuccess(isVerified, presentationRequest);
     }
 

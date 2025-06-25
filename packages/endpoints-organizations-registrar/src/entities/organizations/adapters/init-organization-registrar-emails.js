@@ -209,38 +209,6 @@ The service is still inactive. The foundation staff are reviewing the applicatio
       recipients: emails,
       replyTo: config.registrarSupportEmail,
     }),
-    emailOrganizationCreated: ({
-      organization,
-      ccs,
-      attachment,
-      attachmentName,
-      contentType,
-    }) => ({
-      subject: `Organization ${organization.profile.name} created`,
-      /* eslint-disable max-len */
-      message: `
-Organization ${organization.profile.name} was created by ${organization.profile.adminGivenName} ${organization.profile.adminFamilyName} and an approval request was sent to ${organization.profile.signatoryGivenName} ${organization.profile.signatoryFamilyName}. 
-
-The organization was registered by: 
-Given name: ${organization.profile.adminGivenName}
-Family name: ${organization.profile.adminFamilyName}
-Job title: ${organization.profile.adminTitle}
-Email: ${organization.profile.adminEmail}
-
-Signatory details: 
-Given name: ${organization.profile.signatoryGivenName}
-Family name: ${organization.profile.signatoryFamilyName}
-Job title: ${organization.profile.signatoryTitle}
-Email: ${organization.profile.signatoryEmail}
-`,
-      /* eslint-enable */
-      sender: config.noReplyEmail,
-      ccs,
-      recipients: [config.registrarSupportEmail],
-      attachment,
-      attachmentName,
-      contentType,
-    }),
   };
 };
 

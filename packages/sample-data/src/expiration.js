@@ -75,7 +75,7 @@ const credentialUnexpired = {
     'https://www.w3.org/2018/credentials/v1',
     'https://www.openbadges.org/jsonld-context.json',
   ],
-  id: 'did:velocity:v2:1:BBB:42',
+  id: 'did:velocity:v2:1:BBB:42:abcdefg',
   type: ['OpenBadgeCredential', 'VerifiableCredential'],
   issuer: { id: 'did:velocity:iamanissuer5556667770', name: 'Declan Hospital' },
   issuanceDate: '2000-01-01T00:00:00.000Z',

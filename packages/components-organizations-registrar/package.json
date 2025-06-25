@@ -78,7 +78,7 @@
     "@auth0/auth0-react": "^2.2.1",
     "@mui/icons-material": "^6.0.0",
     "@mui/material": "^6.0.0",
-    "@react-pdf/renderer": "^3.0.0",
+    "@react-pdf/renderer": "^4.0.0",
     "autosuggest-highlight": "^3.3.4",
     "lodash": "^4.17.21",
     "prop-types": "^15.8.1",

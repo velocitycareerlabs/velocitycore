@@ -21,8 +21,6 @@ const {
   mongoify,
 } = require('@velocitycareerlabs/tests-helpers');
 
-require('auth0');
-
 const initGroupsFactory = require('../src/entities/groups/factories/groups-factory');
 const buildFastify = require('./helpers/build-fastify');
 const groupsRepoPlugin = require('../src/entities/groups/repo');

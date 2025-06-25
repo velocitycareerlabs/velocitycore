@@ -26,9 +26,6 @@ const mockInitSendError = jest.fn().mockReturnValue({
   },
 });
 
-/* eslint-disable max-len */
-require('auth0');
-
 const { ObjectId } = require('mongodb');
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { omit } = require('lodash/fp');
@@ -51,29 +48,31 @@ const initCredentialSchemaFactory = require('../../endpoints-credential-types-re
 const { invitationsRepoPlugin } = require('../src/entities/invitations');
 
 const mockAuth0UserCreate = jest.fn().mockImplementation(async (obj) => {
-  return { user_id: 'user_id_123', ...obj };
+  return { data: { user_id: 'user_id_123', ...obj } };
 });
 
 const mockAuth0UserGetByEmail = jest.fn().mockImplementation(async () => {
-  return [];
+  return { data: [] };
 });
 
 const mockAuth0TicketChange = jest.fn().mockImplementation(async () => {
   return {
-    ticket: undefined,
+    data: { ticket: undefined },
   };
 });
 
 const mockAuth0ClientAssignRole = jest.fn().mockImplementation(async (obj) => {
-  return { id: nanoid(), ...obj };
+  return { data: { id: nanoid(), ...obj } };
 });
 
 jest.mock('auth0', () => ({
   ManagementClient: jest.fn().mockImplementation(() => ({
     users: {
       create: mockAuth0UserCreate,
-      getByEmail: mockAuth0UserGetByEmail,
       assignRoles: mockAuth0ClientAssignRole,
+    },
+    usersByEmail: {
+      getByEmail: mockAuth0UserGetByEmail,
     },
     tickets: { changePassword: mockAuth0TicketChange },
   })),
@@ -722,7 +721,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith('test@email.com');
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0UserCreate).toHaveBeenCalledWith({
         app_metadata: { groupId: undefined },
         connection: undefined,
@@ -798,7 +799,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith('test@email.com');
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0UserCreate).toHaveBeenCalledWith({
         app_metadata: { groupId: undefined },
         connection: undefined,
@@ -871,7 +874,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith('test@email.com');
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0UserCreate).toHaveBeenCalledWith({
         app_metadata: { groupId: undefined },
         connection: undefined,
@@ -977,7 +982,7 @@ describe('Organization invitations test suites', () => {
     });
     it('should reuse a an existing user if they have already signed up', async () => {
       mockAuth0UserGetByEmail.mockImplementationOnce(async (email) => {
-        return [{ user_id: 'user_id_123', logins_count: 1, email }];
+        return { data: [{ user_id: 'user_id_123', logins_count: 1, email }] };
       });
       const payload = {
         inviteeEmail: 'test@email.com',
@@ -1032,18 +1037,21 @@ describe('Organization invitations test suites', () => {
       );
     });
 
+    // eslint-disable-next-line max-len
     it('should create two profiles for different organizations with the same auth0 user, ensure only one version of the user is created, and send two emails', async () => {
       const ticket = 'https://ticket.com?pass=123';
       mockAuth0TicketChange.mockImplementationOnce(async () => {
         return {
-          ticket,
+          data: {
+            ticket,
+          },
         };
       });
       mockAuth0UserGetByEmail.mockImplementationOnce(async () => {
-        return [];
+        return { data: [] };
       });
       mockAuth0UserGetByEmail.mockImplementationOnce(async () => {
-        return [{ user_id: 'user_id_123' }];
+        return { data: [{ user_id: 'user_id_123' }] };
       });
 
       const payload1 = {
@@ -1131,14 +1139,12 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(2);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenNthCalledWith(
-        1,
-        'test@email.com'
-      );
-      expect(mockAuth0UserGetByEmail).toHaveBeenNthCalledWith(
-        2,
-        'test@email.com'
-      );
+      expect(mockAuth0UserGetByEmail).toHaveBeenNthCalledWith(1, {
+        email: 'test@email.com',
+      });
+      expect(mockAuth0UserGetByEmail).toHaveBeenNthCalledWith(2, {
+        email: 'test@email.com',
+      });
       expect(mockAuth0UserCreate).toHaveBeenCalledWith({
         app_metadata: { groupId: undefined },
         connection: undefined,
@@ -1764,11 +1770,13 @@ describe('Organization invitations test suites', () => {
     it('Should resend invitation', async () => {
       const ticket = 'https://ticket.com?pass=123';
       mockAuth0UserGetByEmail.mockImplementationOnce(async () => {
-        return [];
+        return { data: [] };
       });
       mockAuth0TicketChange.mockImplementationOnce(async () => {
         return {
-          ticket,
+          data: {
+            ticket,
+          },
         };
       });
       const invitation = await persistInvitation({
@@ -1866,9 +1874,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0UserCreate).toBeCalledTimes(1);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith(
-        'email123@email.com'
-      );
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'email123@email.com',
+      });
       expect(mockAuth0ClientAssignRole.mock.calls).toEqual([
         [{ id: 'user_id_123' }, { roles: ['rol_sQZLrbwBEblVBNDj'] }],
         [{ id: 'user_id_123' }, { roles: ['rol_xxx'] }],
@@ -1889,12 +1897,14 @@ describe('Organization invitations test suites', () => {
 
     it('Should resend invitation without creating a user', async () => {
       mockAuth0UserGetByEmail.mockImplementationOnce(async () => {
-        return [{ user_id: 'user_id_123' }];
+        return { data: [{ user_id: 'user_id_123' }] };
       });
       const ticket = 'https://ticket.com?pass=123';
       mockAuth0TicketChange.mockImplementationOnce(async () => {
         return {
-          ticket,
+          data: {
+            ticket,
+          },
         };
       });
       const invitation = await persistInvitation({
@@ -1993,9 +2003,9 @@ describe('Organization invitations test suites', () => {
       expect(mockAuth0ClientAssignRole).toBeCalledTimes(0);
       expect(mockAuth0TicketChange).toBeCalledTimes(1);
 
-      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith(
-        'email123@email.com'
-      );
+      expect(mockAuth0UserGetByEmail).toHaveBeenCalledWith({
+        email: 'email123@email.com',
+      });
       expect(mockSendEmail.mock.calls[0][0]).toEqual(
         expectedInvitationSentEmail(
           `?signup_url=${encodeURIComponent(ticket)}`,

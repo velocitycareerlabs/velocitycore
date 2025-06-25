@@ -15,18 +15,44 @@
  *
  */
 const {
-  createConfig: configureCredentialTypesRegistrarEndpoints,
+  createConfig: configureCredentialTypeEndpoints,
 } = require('@velocitycareerlabs/endpoints-credential-types-registrar');
 const {
-  createConfig: configureOrganizationRegistrarEndpoints,
+  createConfig: configureOrganizationEndpoints,
 } = require('@velocitycareerlabs/endpoints-organizations-registrar');
 const {
   createConfig: configureEventProcessingEndpoints,
 } = require('@velocitycareerlabs/endpoints-event-processing');
 const packageJson = require('../../package.json');
 
+const credentialTypeEndpointsConfig =
+  configureCredentialTypeEndpoints(packageJson);
+const organizationEndpointsConfig = configureOrganizationEndpoints(packageJson);
+const eventProcessingEndpointsConfig =
+  configureEventProcessingEndpoints(packageJson);
+
+const swaggerInfo = {
+  info: {
+    title: 'VNF Oracle',
+    version: packageJson.version,
+  },
+  tags: [
+    ...credentialTypeEndpointsConfig.swaggerInfo.tags,
+    ...organizationEndpointsConfig.swaggerInfo.tags,
+    ...eventProcessingEndpointsConfig.swaggerInfo.tags,
+  ],
+  components: {
+    securitySchemes: {
+      ...credentialTypeEndpointsConfig.swaggerInfo.components.securitySchemes,
+      ...organizationEndpointsConfig.swaggerInfo.components.securitySchemes,
+      ...eventProcessingEndpointsConfig.swaggerInfo.components.securitySchemes,
+    },
+  },
+};
+
 module.exports = {
-  ...configureCredentialTypesRegistrarEndpoints(packageJson),
-  ...configureOrganizationRegistrarEndpoints(packageJson),
-  ...configureEventProcessingEndpoints(packageJson),
+  ...credentialTypeEndpointsConfig,
+  ...organizationEndpointsConfig,
+  ...eventProcessingEndpointsConfig,
+  swaggerInfo,
 };

@@ -267,14 +267,14 @@ const initMetadataRegistry = async (
 
     const multiToken = ':multi:';
     if (did.indexOf(multiToken) === -1) {
-      const [, , , accountId, listId, index] = did.split(':');
-      return [{ accountId, listId, index }];
+      const [, , , accountId, listId, index, contentHash] = did.split(':');
+      return [{ accountId, listId, index, contentHash }];
     }
 
     const [, entriesPart] = did.split(multiToken);
     return map((entryString) => {
-      const [accountId, listId, index] = entryString.split(':');
-      return { accountId, listId, index };
+      const [accountId, listId, index, contentHash] = entryString.split(':');
+      return { accountId, listId, index, contentHash };
     }, entriesPart.split(';'));
   };
 
@@ -392,7 +392,12 @@ const initMetadataRegistry = async (
       mapWithIndex(async (entry, i) => {
         const id = toDID(indexEntries[i]).toLowerCase();
         const credential = find((c) => c.id.toLowerCase() === id, credentials);
-        const secret = await deriveEncryptionSecret(credential);
+        const secret =
+          indexEntries[i].contentHash != null
+            ? await deriveEncryptionSecretFromPassword(
+                indexEntries[i].contentHash
+              )
+            : await deriveEncryptionSecret(credential);
         return {
           entry,
           id,
@@ -461,8 +466,13 @@ const initMetadataRegistry = async (
     return tx.wait();
   };
 
-  const toDID = ({ accountId, listId, index }) =>
-    `did:velocity:v2:${accountId}:${listId}:${index}`;
+  const toDID = ({ accountId, listId, index, contentHash }) => {
+    if (contentHash != null) {
+      return `did:velocity:v2:${accountId}:${listId}:${index}:${contentHash}`;
+    }
+
+    return `did:velocity:v2:${accountId}:${listId}:${index}`;
+  };
 
   const pullCreatedMetadataListEvents = pullEvents('CreatedMetadataList');
 

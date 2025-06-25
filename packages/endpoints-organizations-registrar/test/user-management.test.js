@@ -23,11 +23,11 @@ const mockAuth0UpdateUser = jest
   .fn()
   .mockImplementation(async ({ id }, obj) => {
     console.log(`update auth0 user ${id}`);
-    return { user_id: id, ...obj };
+    return { data: { user_id: id, ...obj } };
   });
-const mockAuth0GetUserRoles = jest.fn().mockResolvedValue([]);
+const mockAuth0GetUserRoles = jest.fn().mockResolvedValue({ data: [] });
 
-const mockAuth0GetUserByEmail = jest.fn().mockResolvedValue([]);
+const mockAuth0GetUserByEmail = jest.fn().mockResolvedValue({ data: [] });
 
 const auth0User = {
   user_id: 'auth0|1',
@@ -38,7 +38,7 @@ const auth0User = {
   email: 'foo@example.com',
   logins_count: 1,
 };
-const mockAuth0GetUser = jest.fn().mockResolvedValue(auth0User);
+const mockAuth0GetUser = jest.fn().mockResolvedValue({ data: auth0User });
 const testConfig = {
   auth0SuperuserRoleId: 'superuserRoleIdFoo',
   auth0ClientAdminRoleId: 'clientadminRoleIdFoo',
@@ -50,9 +50,11 @@ jest.mock('auth0', () => ({
     users: {
       update: mockAuth0UpdateUser,
       get: mockAuth0GetUser,
+      getRoles: mockAuth0GetUserRoles,
+    },
+    usersByEmail: {
       getByEmail: mockAuth0GetUserByEmail,
     },
-    getUserRoles: mockAuth0GetUserRoles,
   })),
 }));
 
@@ -129,10 +131,12 @@ describe('user management test suite', () => {
 
   describe('get user with roles test suite', () => {
     it('get user with roles', async () => {
-      mockAuth0GetUserRoles.mockResolvedValue([
-        { id: testConfig.auth0ClientAdminRoleId },
-        { id: testConfig.auth0ClientFinanceAdminRoleId },
-      ]);
+      mockAuth0GetUserRoles.mockResolvedValue({
+        data: [
+          { id: testConfig.auth0ClientAdminRoleId },
+          { id: testConfig.auth0ClientFinanceAdminRoleId },
+        ],
+      });
       const { getUserWithRoles } = userManagementClient;
       expect(await getUserWithRoles({ id: 'foo' }, {})).toEqual(
         expectedUser(auth0User, {
@@ -142,17 +146,21 @@ describe('user management test suite', () => {
       );
       expect(mockAuth0GetUser).toHaveBeenLastCalledWith({ id: 'foo' });
       expect(mockAuth0GetUser).toHaveBeenCalledTimes(1);
-      expect(mockAuth0GetUserRoles).toHaveBeenLastCalledWith({
-        id: 'foo',
-        page: 0,
-        per_page: 10,
-      });
+      expect(mockAuth0GetUserRoles).toHaveBeenLastCalledWith(
+        {
+          id: 'foo',
+        },
+        {
+          page: 0,
+          per_page: 10,
+        }
+      );
       expect(mockAuth0GetUserRoles).toHaveBeenCalledTimes(1);
     });
     it('get user with superuser role', async () => {
-      mockAuth0GetUserRoles.mockResolvedValue([
-        { id: testConfig.auth0SuperuserRoleId },
-      ]);
+      mockAuth0GetUserRoles.mockResolvedValue({
+        data: [{ id: testConfig.auth0SuperuserRoleId }],
+      });
       const { getUserWithRoles } = userManagementClient;
       expect(await getUserWithRoles({ id: 'foo' }, {})).toEqual(
         expectedUser(auth0User, {
@@ -161,9 +169,9 @@ describe('user management test suite', () => {
       );
     });
     it('get user with clientsystemuser role', async () => {
-      mockAuth0GetUserRoles.mockResolvedValue([
-        { id: testConfig.auth0ClientSystemUserRoleId },
-      ]);
+      mockAuth0GetUserRoles.mockResolvedValue({
+        data: [{ id: testConfig.auth0ClientSystemUserRoleId }],
+      });
       const { getUserWithRoles } = userManagementClient;
       expect(await getUserWithRoles({ id: 'foo' }, {})).toEqual(
         expectedUser(auth0User, {
@@ -177,7 +185,7 @@ describe('user management test suite', () => {
     let minimalAuth0User;
     beforeAll(() => {
       minimalAuth0User = omit(['given_name', 'logins_count'], auth0User);
-      mockAuth0GetUserByEmail.mockResolvedValue([minimalAuth0User]);
+      mockAuth0GetUserByEmail.mockResolvedValue({ data: [minimalAuth0User] });
     });
     it('get user by email for same user', async () => {
       const { getUserByEmail } = userManagementClient;
@@ -186,9 +194,9 @@ describe('user management test suite', () => {
           scope: { userId: auth0User.user_id },
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
+      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
     });
 
@@ -199,9 +207,9 @@ describe('user management test suite', () => {
           scope: { groupId: auth0User.app_metadata.groupId },
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
+      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
     });
 
@@ -212,9 +220,9 @@ describe('user management test suite', () => {
           pick(['user_id', 'family_name', 'email'], minimalAuth0User)
         ),
       ]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
+      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
     });
   });

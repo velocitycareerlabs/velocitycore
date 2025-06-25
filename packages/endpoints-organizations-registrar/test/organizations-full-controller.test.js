@@ -31,6 +31,7 @@ const mockAddPrimary = jest.fn().mockResolvedValue(undefined);
 const mockAddOperator = jest.fn().mockResolvedValue(undefined);
 const mockRemoveOperator = jest.fn().mockResolvedValue(undefined);
 const mockUpdateAddressScopes = jest.fn().mockResolvedValue(undefined);
+const csvParser = require('@velocitycareerlabs/csv-parser');
 
 const mockInitPermission = jest.fn().mockResolvedValue({
   addPrimary: mockAddPrimary,
@@ -56,6 +57,7 @@ const {
   isEmpty,
   pick,
   forEach,
+  reject,
   without,
 } = require('lodash/fp');
 const { nanoid } = require('nanoid');
@@ -96,7 +98,6 @@ const {
   ServiceTypeToCategoryMap,
 } = require('@velocitycareerlabs/organizations-registry');
 
-require('auth0');
 const console = require('console');
 
 const nock = require('nock');
@@ -131,6 +132,7 @@ const {
   VNF_GROUP_ID_CLAIM,
   getServiceConsentType,
 } = require('../src/entities');
+const { Authorities } = require('../src');
 
 const fullUrl = '/api/v0.6/organizations/full';
 
@@ -145,25 +147,25 @@ const mockAuth0ClientGrantDelete = jest
 const mockAuth0ClientCreate = jest.fn().mockImplementation(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 client ${id}`);
-  return { client_id: id, client_secret: nanoid(), ...obj };
+  return { data: { client_id: id, client_secret: nanoid(), ...obj } };
 });
 const mockAuth0ClientGrantCreate = jest.fn().mockImplementation(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 clientGrant ${id}`);
-  return { id: nanoid(), ...obj };
+  return { data: { id: nanoid(), ...obj } };
 });
 const mockAuth0UserUpdate = jest
   .fn()
   .mockImplementation(async ({ id }, obj) => {
     console.log(`update auth0 user ${id}`);
-    return { id, ...obj };
+    return { data: { id, ...obj } };
   });
-const mockAuth0GetUsers = jest
-  .fn()
-  .mockResolvedValue(times((id) => ({ email: `${id}@localhost.test` }), 2));
-const mockAuth0GetUser = jest
-  .fn()
-  .mockResolvedValue(times((id) => ({ email: `${id}@localhost.test` }), 2));
+const mockAuth0GetUsers = jest.fn().mockResolvedValue({
+  data: times((id) => ({ email: `${id}@localhost.test` }), 2),
+});
+const mockAuth0GetUser = jest.fn().mockResolvedValue({
+  data: times((id) => ({ email: `${id}@localhost.test` }), 2),
+});
 
 jest.mock('auth0', () => ({
   ManagementClient: jest.fn().mockImplementation(() => ({
@@ -182,6 +184,13 @@ jest.mock('auth0', () => ({
     getUsers: mockAuth0GetUsers,
   })),
 }));
+
+jest.mock('@velocitycareerlabs/csv-parser', () => {
+  const originalModule = jest.requireActual('@velocitycareerlabs/csv-parser');
+  return {
+    parseToCsv: jest.fn().mockImplementation(originalModule.parseToCsv),
+  };
+});
 
 const mockCreateFineractClientReturnValue = {
   fineractClientId: '11',
@@ -982,6 +991,7 @@ describe('Organizations Full Test Suite', () => {
             serviceEndpoint: 'https://agent.samplevendor.com/acme',
             logoUrl: 'http://example.com/logo',
             name: 'fooWallet',
+            supportedExchangeProtocols: ['VN_API'],
           };
           const payload = {
             profile: orgProfile,
@@ -2026,8 +2036,22 @@ describe('Organizations Full Test Suite', () => {
 
       it('Should create organization, DID & ethereum accounts with default type even if no services or invitation', async () => {
         const monitorNockScope = setMonitorEventsNock();
+        const registrationNumbers = [
+          {
+            authority: Authorities.LinkedIn,
+            number: 'foo',
+          },
+          {
+            authority: Authorities.GLEIF,
+            number: '1',
+            uri: 'uri://uri',
+          },
+        ];
         const payload = {
-          profile: omit(['type'], orgProfile),
+          profile: {
+            ...omit(['type'], orgProfile),
+            registrationNumbers,
+          },
         };
         const response = await fastify.injectJson({
           method: 'POST',
@@ -2046,18 +2070,23 @@ describe('Organizations Full Test Suite', () => {
         // json response checks
         expect(did).toMatch(DID_FORMAT);
         expect(response.json).toEqual(
-          expectedCreateFullOrganizationResponse(response.json.id, orgProfile)
+          expectedCreateFullOrganizationResponse(response.json.id, {
+            ...orgProfile,
+            registrationNumbers,
+          })
         );
 
         // organization entity checks
         const orgFromDb = await getOrganizationFromDb(did);
-        expect(orgFromDb).toEqual(expectedOrganization(did, orgProfile));
+        expect(orgFromDb).toEqual(
+          expectedOrganization(did, { ...orgProfile, registrationNumbers })
+        );
         const credentialPayload = decodeCredentialJwt(
           orgFromDb.signedProfileVcJwt.signedCredential
         );
         expect(credentialPayload).toEqual({
           credentialSubject: {
-            ...publicProfileMatcher(orgProfile),
+            ...publicProfileMatcher({ ...orgProfile, registrationNumbers }),
             id: did,
             permittedVelocityServiceCategory: [],
           },
@@ -2101,9 +2130,26 @@ describe('Organizations Full Test Suite', () => {
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(false);
 
         // email checks
-        expect(mockSendEmail.mock.calls).toEqual([
-          [expectedSupportEmail()],
-          [expectedSignatoryApprovalEmail(null, orgFromDb)],
+        expect(mockSendEmail.mock.calls).toEqual(
+          expect.arrayContaining([
+            [expectedSignatoryApprovalEmail(null, orgFromDb)],
+            [expectedSupportEmail()],
+          ])
+        );
+        expect(csvParser.parseToCsv.mock.calls).toEqual([
+          [
+            [
+              expect.objectContaining({
+                registrationNumbers: reject(
+                  {
+                    authority: Authorities.LinkedIn,
+                  },
+                  registrationNumbers
+                ),
+              }),
+            ],
+            expect.any(Array),
+          ],
         ]);
       });
 
@@ -2583,11 +2629,13 @@ describe('Organizations Full Test Suite', () => {
 
         expect(mockAuth0ClientGrantCreate).toHaveBeenCalledTimes(0);
 
-        expect(mockSendEmail.mock.calls).toEqual([
-          [expectedSupportEmail('Super Organization')],
-          [expectedSignatoryApprovalEmail(null, orgFromDb)],
-          [expectedServiceActivationRequiredEmail],
-        ]);
+        expect(mockSendEmail.mock.calls).toEqual(
+          expect.arrayContaining([
+            [expectedSupportEmail('Super Organization')],
+            [expectedSignatoryApprovalEmail(null, orgFromDb)],
+            [expectedServiceActivationRequiredEmail],
+          ])
+        );
       });
 
       it('Should create organization that is a Node Operator', async () => {
@@ -4445,6 +4493,7 @@ describe('Organizations Full Test Suite', () => {
           googlePlayId: 'com.example.app',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const holderAppServiceMissingFields = {
@@ -4454,6 +4503,7 @@ describe('Organizations Full Test Suite', () => {
           appleAppId: 'com.example.app',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const webWalletServiceAllFields = {
@@ -4461,12 +4511,14 @@ describe('Organizations Full Test Suite', () => {
           serviceEndpoint: 'https://agent.samplevendor.com/acme',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const webWalletServiceMissingFields = {
           type: ServiceTypes.WebWalletProviderType,
           serviceEndpoint: 'https://agent.samplevendor.com/acme',
           logoUrl: 'http://example.com/logo',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const result = await runSequentially([
@@ -4901,10 +4953,12 @@ describe('Organizations Full Test Suite', () => {
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(false);
 
         // email checks
-        expect(mockSendEmail.mock.calls).toEqual([
-          [expectedSupportEmail()],
-          [expectedSignatoryApprovalEmail(null, orgFromDb)],
-        ]);
+        expect(mockSendEmail.mock.calls).toEqual(
+          expect.arrayContaining([
+            [expectedSupportEmail()],
+            [expectedSignatoryApprovalEmail(null, orgFromDb)],
+          ])
+        );
 
         expect(nockData.isDone()).toEqual(true);
       });
@@ -5117,11 +5171,13 @@ describe('Organizations Full Test Suite', () => {
         expect(postMonitorNockExecuted(monitorNockScope)).toEqual(true);
 
         // email checks
-        expect(mockSendEmail.mock.calls).toEqual([
-          [expectedSupportEmail()],
-          [sendServicesActivatedEmailMatcher()],
-          [expectedSignatoryApprovalEmail(inviterOrganization, orgFromDb)],
-        ]);
+        expect(mockSendEmail.mock.calls).toEqual(
+          expect.arrayContaining([
+            [expectedSupportEmail()],
+            [sendServicesActivatedEmailMatcher()],
+            [expectedSignatoryApprovalEmail(inviterOrganization, orgFromDb)],
+          ])
+        );
 
         expect(nockData.isDone()).toEqual(true);
       });
