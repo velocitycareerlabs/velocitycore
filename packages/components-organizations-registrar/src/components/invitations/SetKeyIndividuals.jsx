@@ -21,7 +21,11 @@ import InfoIcon from '@mui/icons-material/Info';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import { validateEmail } from '../organizations/CreateOrganization.utils';
 import OrganizationSubmitButton from '../organizations/OrganisationSubmitButton.jsx';
-import { ADMINISTRATOR_DETAILS_HINT, SIGNATORY_DETAILS_HINT } from '../../utils/index.jsx';
+import {
+  ADMINISTRATOR_DETAILS_HINT,
+  SIGNATORY_DETAILS_HINT,
+  SIGNATORY_EMAIL_HINT,
+} from '../../utils/index.jsx';
 
 const SetKeyIndividuals = ({ children, onSubmit, defaultValues, onBack, loading }) => {
   return (
@@ -69,7 +73,14 @@ const SetKeyIndividuals = ({ children, onSubmit, defaultValues, onBack, loading 
             </Tooltip>
           </Box>
         </Stack>
-        <TextInput fullWidth label="Email" source="signatoryEmail" validate={validateEmail} />
+        <Stack flexDirection="row" gap={1.75}>
+          <TextInput fullWidth label="Email" source="signatoryEmail" validate={validateEmail} />
+          <Box mt={2}>
+            <Tooltip title={SIGNATORY_EMAIL_HINT}>
+              <InfoIcon color="info" fontSize="small" cursor="pointer" />
+            </Tooltip>
+          </Box>
+        </Stack>
         <TextInput
           fullWidth
           label="First name"
