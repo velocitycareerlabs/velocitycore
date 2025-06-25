@@ -162,6 +162,8 @@ To retrieve your LinkedIn Company ID, visit your company page on LinkedIn as an 
 For example, if your company page URL is https://www.linkedin.com/company/1234567/admin/, the ID is 1234567
 `;
 
+export const SIGNATORY_EMAIL_HINT = 'Please ensure that the email address provided is a personal corporate email (e.g., sam@acme.com). Generic or role-based email addresses (e.g., manager@acme.com) will not be accepted.';
+
 export const parseJwt = (token) => {
   try {
     return JSON.parse(atob(token.split('.')[1]));

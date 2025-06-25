@@ -49,7 +49,7 @@ export const ServiceEndpointSelection = ({
         <Stack sx={styles.endpointForm}>
           {isIssueOrInspection ? (
             <Stack sx={{ mt: 2 }}>
-              <Stack flexDirection="row" alignItems="center" sx={{ width: '100%' }}>
+              <Stack flexDirection="row" alignItems="center" sx={styles.selectCAOContainer}>
                 <Autocomplete
                   source="serviceCAO"
                   label="Select Credential Agent Operator"
@@ -65,18 +65,7 @@ export const ServiceEndpointSelection = ({
                   )}
                   inputText={getOptionAsText}
                   disabled={false}
-                  style={{
-                    width: '100%',
-                    '& .MuiInputBase-root': {
-                      width: '100%',
-                    },
-                    '& .MuiSelect-select': {
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      py: 0,
-                    },
-                  }}
+                  styles={styles.selectCAO}
                 />
                 <Box sx={{ ml: 2 }}>
                   <Tooltip title="The Credential Agent Operator your organization will use to integrate with Velocity Network™">
@@ -175,6 +164,25 @@ const styles = {
   },
   endpointForm: {
     marginTop: '20px',
+  },
+  selectCAOContainer: {
+    width: '100%',
+    marginBottom: '20px',
+  },
+  selectCAO: {
+    width: '100%',
+    '& .MuiInputBase-root': {
+      width: '100%',
+    },
+    '& .MuiSelect-select': {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      py: 0,
+    },
+    '& .MuiFormHelperText-root': {
+      display: 'none',
+    },
   },
   menuItemLogo: {
     display: 'flex',

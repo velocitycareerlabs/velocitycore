@@ -12,7 +12,7 @@ const Autocomplete = forwardRef(function Autocomplete(
     items,
     stringValue: format,
     inputText,
-    styleSelect,
+    styles,
     source = '',
     parse = (value) => value,
   },
@@ -60,7 +60,7 @@ const Autocomplete = forwardRef(function Autocomplete(
       inputText={inputText || defaultInputText}
       optionValue="id"
       disabled={disabled || (items && items.length === 1)}
-      sx={styleSelect}
+      sx={styles}
       error={!!error}
       helperText={error ? error.message : ''}
       fullWidth
@@ -80,7 +80,7 @@ Autocomplete.propTypes = {
   stringValue: PropTypes.func,
   inputText: PropTypes.func,
   // eslint-disable-next-line react/forbid-prop-types
-  styleSelect: PropTypes.object,
+  styles: PropTypes.object,
   source: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
   defaultValue: PropTypes.any,

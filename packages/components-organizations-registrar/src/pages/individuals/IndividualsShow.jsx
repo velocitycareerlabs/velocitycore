@@ -17,14 +17,19 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useGetOne, useRedirect } from 'react-admin';
-import { Box, Button, Stack, Typography, Grid, Paper, Tooltip } from '@mui/material';
+import { Box, Button, Stack, Typography, Paper, Tooltip } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import useSelectedOrganization from '@/state/selectedOrganizationState';
 import Loading from '@/components/Loading.jsx';
 import DataItem from '@/components/common/DataItem.jsx';
 import { useAuth } from '@/utils/auth/AuthContext';
-import { ADMINISTRATOR_DETAILS_HINT, SIGNATORY_DETAILS_HINT } from '@/utils/index.jsx';
+import {
+  ADMINISTRATOR_DETAILS_HINT,
+  SIGNATORY_DETAILS_HINT,
+  SIGNATORY_EMAIL_HINT,
+} from '@/utils/index.jsx';
 
 const IndividualsShow = () => {
   const [savedDid, setDid] = useSelectedOrganization();
@@ -90,7 +95,7 @@ const IndividualsShow = () => {
         </Button>
       </Stack>
       <Grid container spacing={1}>
-        <Grid item xs={6}>
+        <Grid size={{ xs: 6 }}>
           <Paper
             elevation={2}
             sx={{
@@ -116,7 +121,7 @@ const IndividualsShow = () => {
             <DataItem title="Email" value={record.profile.adminEmail} sxValue={sx.value} />
           </Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={{ xs: 6 }}>
           <Paper
             elevation={2}
             sx={{
@@ -147,7 +152,12 @@ const IndividualsShow = () => {
               sxValue={sx.value}
             />
             <DataItem title="Job Title" value={record.profile.signatoryTitle} sxValue={sx.value} />
-            <DataItem title="Email" value={record.profile.signatoryEmail} sxValue={sx.value} />
+            <DataItem
+              title="Email"
+              value={record.profile.signatoryEmail}
+              sxValue={sx.value}
+              hint={SIGNATORY_EMAIL_HINT}
+            />
           </Paper>
         </Grid>
       </Grid>

@@ -43,6 +43,7 @@ import {
   SUPPORT_EMAIL_HINT,
   TECHNICAL_EMAIL_HINT,
   WEBSITE_HINT,
+  SIGNATORY_EMAIL_HINT,
 } from '../../utils/index.jsx';
 import AuthorityRegistrationNumbersInput from '../../pages/organizations/components/AuthorityRegistrationInput.jsx';
 import { LinkedInRegistrationInput } from '../../pages/organizations/components/LinkedInRegistrationInput.jsx';
@@ -295,6 +296,11 @@ const CreateOrganization = ({
                         source="signatoryEmail"
                         validate={[...validateEmail, required()]}
                       />
+                      <Box mt={2}>
+                        <Tooltip title={SIGNATORY_EMAIL_HINT}>
+                          <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                        </Tooltip>
+                      </Box>
                     </Stack>
                   </Grid>
                 </Grid>

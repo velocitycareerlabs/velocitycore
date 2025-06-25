@@ -50,9 +50,11 @@ jest.mock('auth0', () => ({
     users: {
       update: mockAuth0UpdateUser,
       get: mockAuth0GetUser,
+      getRoles: mockAuth0GetUserRoles,
+    },
+    usersByEmail: {
       getByEmail: mockAuth0GetUserByEmail,
     },
-    getUserRoles: mockAuth0GetUserRoles,
   })),
 }));
 
@@ -144,11 +146,15 @@ describe('user management test suite', () => {
       );
       expect(mockAuth0GetUser).toHaveBeenLastCalledWith({ id: 'foo' });
       expect(mockAuth0GetUser).toHaveBeenCalledTimes(1);
-      expect(mockAuth0GetUserRoles).toHaveBeenLastCalledWith({
-        id: 'foo',
-        page: 0,
-        per_page: 10,
-      });
+      expect(mockAuth0GetUserRoles).toHaveBeenLastCalledWith(
+        {
+          id: 'foo',
+        },
+        {
+          page: 0,
+          per_page: 10,
+        }
+      );
       expect(mockAuth0GetUserRoles).toHaveBeenCalledTimes(1);
     });
     it('get user with superuser role', async () => {
@@ -188,9 +194,9 @@ describe('user management test suite', () => {
           scope: { userId: auth0User.user_id },
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
+      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
     });
 
@@ -201,9 +207,9 @@ describe('user management test suite', () => {
           scope: { groupId: auth0User.app_metadata.groupId },
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
+      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
     });
 
@@ -214,9 +220,9 @@ describe('user management test suite', () => {
           pick(['user_id', 'family_name', 'email'], minimalAuth0User)
         ),
       ]);
-      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith(
-        'test@email.com'
-      );
+      expect(mockAuth0GetUserByEmail).toHaveBeenLastCalledWith({
+        email: 'test@email.com',
+      });
       expect(mockAuth0GetUserByEmail).toHaveBeenCalledTimes(1);
     });
   });

@@ -94,7 +94,9 @@ const initUserManagement = ({
   };
 
   const getUserByEmail = async (email, context) => {
-    const { data: users } = await managementClient.users.getByEmail(email);
+    const { data: users } = await managementClient.usersByEmail.getByEmail({
+      email,
+    });
     return map((user) => scopeUser(mapUser(user), context), users);
   };
 
@@ -122,13 +124,17 @@ const initUserManagement = ({
   };
 
   const getRolesOfUser = async ({ id, page, perPage }) => {
-    const { data: roles } = await managementClient.getUserRoles({
-      id,
-      page,
-      per_page: perPage,
-      // sort: 'date:-1',
-      // include_totals: true,
-    });
+    const { data: roles } = await managementClient.users.getRoles(
+      {
+        id,
+      },
+      {
+        page,
+        per_page: perPage,
+        // sort: 'date:-1',
+        // include_totals: true,
+      }
+    );
     return roles;
   };
 

@@ -18,7 +18,7 @@ const {
   generateKeyPair,
   get2BytesHash,
 } = require('@velocitycareerlabs/crypto');
-const { map, reduce } = require('lodash/fp');
+const { compact, map, omit, reduce } = require('lodash/fp');
 const { nanoid } = require('nanoid');
 const {
   toEthereumAddress,
@@ -435,7 +435,7 @@ describe('Metadata Registry', () => {
     it('Parse multi DID fails', () => {
       const indexEntries = [
         [operatorAddress, '1', '1'],
-        [operatorAddress, '1', '2'],
+        [operatorAddress, '1', '2', 'xyz'],
       ];
       const did = buildMultiDid(indexEntries, 'did:wrongformat:');
       expect(() =>
@@ -445,15 +445,20 @@ describe('Metadata Registry', () => {
 
     it('Parse multi did succeeds', async () => {
       const indexEntries = [
-        [operatorAddress, '1', '1'],
-        [operatorAddress, '1', '2'],
+        [operatorAddress, '1', '1'], // velocity v2
+        [operatorAddress, '1', '2', 'xyz'], // velocity v2.1 including contentHash
       ];
       const did = buildMultiDid(indexEntries);
       await expect(
         operatorMetadataRegistryClient.parseVelocityV2Did(did)
       ).toEqual(
         map(
-          ([accountId, listId, index]) => ({ accountId, listId, index }),
+          ([accountId, listId, index, contentHash]) => ({
+            accountId,
+            listId,
+            index,
+            contentHash,
+          }),
           indexEntries
         )
       );
@@ -712,233 +717,237 @@ describe('Metadata Registry', () => {
       });
     });
 
-    describe('Resolve did document', () => {
-      let credentialId;
-
-      const { publicKey } = generateKeyPair({ format: 'jwk' });
-      const credentialMetadata = {
-        ...baseCredentialMetadata,
-        index: 2342,
-        publicKey,
-      };
-
-      beforeAll(async () => {
-        credentialId = `did:velocity:v2:${primaryAddress}:${credentialMetadata.listId}:${credentialMetadata.index}`;
-        await operatorMetadataRegistryClient.addCredentialMetadataEntry(
-          credentialMetadata,
-          password,
-          caoDid
-        );
-      });
-      beforeEach(async () => {
-        await deployerVerificationCouponClient.mint({
-          toAddress: primaryAddress,
-          expirationTime,
-          quantity: 1,
-          ownerDid,
-        });
-      });
-
-      it('Create and resolve did', async () => {
-        const credential = {
-          id: credentialId,
-          credentialType: defaultCredentialType,
-          contentHash: password,
-        };
-        const didDocument =
-          await operatorMetadataRegistryClient.resolveDidDocument({
-            did: credentialId,
-            credentials: [credential],
-            burnerDid,
-            caoDid: 'did:velocity:99',
-          });
-
-        expect(didDocument).toEqual({
-          didDocument: {
-            id: didValidation,
-            publicKey: [publicKeyValidation],
-            service: [serviceValidation],
-          },
-          didDocumentMetadata: {
-            boundIssuerVcs: [boundIssuerVcsValidation],
-          },
-          didResolutionMetadata: {},
-        });
-      });
-
-      it('Create and resolve multi did', async () => {
-        const credentialData = {
-          id: credentialId,
-          credentialType: defaultCredentialType,
-          contentHash: password,
-        };
-        const indexEntries = [
-          [primaryAddress, baseCredentialMetadata.listId, 2342],
-          [primaryAddress, baseCredentialMetadata.listId, 2342],
-        ];
-        const did = buildMultiDid(indexEntries);
-        const didDocument =
-          await operatorMetadataRegistryClient.resolveDidDocument({
-            did,
-            credentials: [credentialData, credentialData],
-            burnerDid,
-            caoDid: 'did:velocity:99',
-          });
-        const multiDidDocumentValidation = {
-          didDocument: {
-            id: didValidation,
-            publicKey: [publicKeyValidation, publicKeyValidation],
-            service: [serviceValidation, serviceValidation],
-          },
-          didDocumentMetadata: {
-            boundIssuerVcs: [
-              boundIssuerVcsValidation,
-              boundIssuerVcsValidation,
-            ],
-          },
-          didResolutionMetadata: {},
-        };
-        expect(didDocument).toEqual(multiDidDocumentValidation);
-      });
-
-      it('Should return did resolution metadata if wrong resolved', async () => {
-        const entryIndexes = [
-          [primaryAddress, baseCredentialMetadata.listId, 2342],
-        ];
-        const did = entryIndexes.reduce(
-          (multiDid, [accountId, listId, index], i) =>
-            !i
-              ? `${multiDid}:${accountId}:${listId}:${index}`
-              : `${multiDid};${accountId}:${listId}:${index}`,
-          'did:velocity:v2:multi'
-        );
-        const credential = {
-          id: credentialId,
-          credentialType: defaultCredentialType,
-          contentHash:
-            '1111111111111111111111111111111111111111111111111111111111111111',
-        };
-        const didDocument =
-          await operatorMetadataRegistryClient.resolveDidDocument({
-            did,
-            credentials: [credential],
-            burnerDid,
-            caoDid: 'did:velocity:99',
-          });
-
-        expect(didDocument).toEqual({
-          didDocument: {
-            id: didValidation,
-            publicKey: [],
-            service: [serviceValidation],
-          },
-          didDocumentMetadata: {
-            boundIssuerVcs: [boundIssuerVcsValidation],
-          },
-          didResolutionMetadata: {
-            error: 'UNRESOLVED_MULTI_DID_ENTRIES',
-            unresolvedMultiDidEntries: [
-              {
-                id: didValidation,
-                error: 'DATA_INTEGRITY_ERROR',
-              },
-            ],
-          },
-        });
-      });
-
-      it('Unsupported encryption algorithm and version to resolve multi did', async () => {
-        const listId = 11;
-        await operatorMetadataRegistryClient.createCredentialMetadataList(
-          primaryAddress,
+    describe.each([
+      { listId: 3, didSuffix: null },
+      { listId: 4, didSuffix: password },
+    ])(
+      'Resolve did document with $didSuffix didSuffix',
+      ({ listId, didSuffix }) => {
+        let credential;
+        let indexEntry;
+        const index = 2342;
+        const { publicKey } = generateKeyPair({ format: 'jwk' });
+        const credentialMetadata = {
+          ...baseCredentialMetadata,
           listId,
-          vc,
-          caoDid,
-          'unsupported algorithm',
-          '1'
-        );
-        await operatorMetadataRegistryClient.setEntrySigned(
-          regularIssuingCredentialTypeHash,
-          bytes,
-          listId,
-          1,
-          traceId,
-          caoDid
-        );
-
-        const credentialData = {
-          id: `did:velocity:v2:${primaryAddress}:${listId}:1`,
-          credentialType: regularIssuingCredentialType,
-          contentHash: password,
+          index,
+          publicKey,
         };
-        const indexEntries = [[primaryAddress, listId, 1]];
-        const did = buildMultiDid(indexEntries);
-        const result = operatorMetadataRegistryClient.resolveDidDocument({
-          did,
-          credentials: [credentialData],
-          burnerDid,
-          caoDid: 'did:velocity:99',
+
+        beforeAll(async () => {
+          indexEntry = [primaryAddress, listId, index, didSuffix];
+          credential = {
+            id: buildDid(indexEntry),
+            credentialType: defaultCredentialType,
+          };
+          if (didSuffix == null) {
+            credential.contentHash = password;
+          }
+
+          await operatorMetadataRegistryClient.createCredentialMetadataList(
+            primaryAddress,
+            listId,
+            vc,
+            caoDid
+          );
+          await operatorMetadataRegistryClient.addCredentialMetadataEntry(
+            credentialMetadata,
+            password,
+            caoDid
+          );
+        });
+        beforeEach(async () => {
+          await deployerVerificationCouponClient.mint({
+            toAddress: primaryAddress,
+            expirationTime,
+            quantity: 1,
+            ownerDid,
+          });
         });
 
-        await expect(result).rejects.toThrow(
-          'Unsupported encryption algorithm "aes-256-gcm" or version "1"'
-        );
-      });
+        it('Create and resolve did', async () => {
+          const didDocument =
+            await operatorMetadataRegistryClient.resolveDidDocument({
+              did: credential.id,
+              credentials: [credential],
+              burnerDid,
+              caoDid: 'did:velocity:99',
+            });
 
-      it('Invalid hash credentialType wrong type resolve did', async () => {
-        const credential = {
-          id: credentialId,
-          credentialType: 'Wrong type!',
-          contentHash: password,
-        };
-        const result = operatorMetadataRegistryClient.resolveDidDocument({
-          did: credentialId,
-          credentials: [credential],
-          burnerDid,
-          caoDid: 'did:velocity:99',
+          expect(didDocument).toEqual({
+            didDocument: {
+              id: didValidation,
+              publicKey: [publicKeyValidation],
+              service: [serviceValidation],
+            },
+            didDocumentMetadata: {
+              boundIssuerVcs: [boundIssuerVcsValidation],
+            },
+            didResolutionMetadata: {},
+          });
         });
 
-        await expect(result).rejects.toThrow(
-          'Invalid hash credentialType "Wrong type!"'
-        );
-      });
-      it('Missed credential type field in VC', async () => {
-        const credential = {
-          id: credentialId,
-          credentialType: null,
-          contentHash: {
-            value: password,
-          },
-        };
-        const result = operatorMetadataRegistryClient.resolveDidDocument({
-          did: credentialId,
-          credentials: [credential],
-          burnerDid,
-          caoDid: 'did:velocity:99',
+        it('Create and resolve multi did', async () => {
+          const indexEntries = [indexEntry, indexEntry];
+          const did = buildMultiDid(indexEntries);
+          const didDocument =
+            await operatorMetadataRegistryClient.resolveDidDocument({
+              did,
+              credentials: [credential, credential],
+              burnerDid,
+              caoDid: 'did:velocity:99',
+            });
+          const multiDidDocumentValidation = {
+            didDocument: {
+              id: didValidation,
+              publicKey: [publicKeyValidation, publicKeyValidation],
+              service: [serviceValidation, serviceValidation],
+            },
+            didDocumentMetadata: {
+              boundIssuerVcs: [
+                boundIssuerVcsValidation,
+                boundIssuerVcsValidation,
+              ],
+            },
+            didResolutionMetadata: {},
+          };
+          expect(didDocument).toEqual(multiDidDocumentValidation);
         });
 
-        await expect(result).rejects.toThrow(
-          `Could not resolve credential type from VC with ${credentialId}`
-        );
-      });
+        it('Should return did resolution metadata if wrong resolved', async () => {
+          const badContentHash = '1111111111111111111111111111111111111111';
+          const badIndexEntry = [
+            primaryAddress,
+            listId,
+            2342,
+            didSuffix == null ? null : badContentHash,
+          ];
+          const badCredential = {
+            id: buildDid(badIndexEntry),
+            credentialType: defaultCredentialType,
+          };
+          if (didSuffix == null) {
+            badCredential.contentHash = badContentHash;
+          }
+          const didDocument =
+            await operatorMetadataRegistryClient.resolveDidDocument({
+              did: buildMultiDid([badIndexEntry]),
+              credentials: [badCredential],
+              burnerDid,
+              caoDid: 'did:velocity:99',
+            });
 
-      it('Missed content hash field in VC', async () => {
-        const credential = {
-          id: credentialId,
-          credentialType: defaultCredentialType,
-        };
-        const result = operatorMetadataRegistryClient.resolveDidDocument({
-          did: credentialId,
-          credentials: [credential],
-          burnerDid,
-          caoDid: 'did:velocity:99',
+          expect(didDocument).toEqual({
+            didDocument: {
+              id: didValidation,
+              publicKey: [],
+              service: [serviceValidation],
+            },
+            didDocumentMetadata: {
+              boundIssuerVcs: [boundIssuerVcsValidation],
+            },
+            didResolutionMetadata: {
+              error: 'UNRESOLVED_MULTI_DID_ENTRIES',
+              unresolvedMultiDidEntries: [
+                {
+                  id: didValidation,
+                  error: 'DATA_INTEGRITY_ERROR',
+                },
+              ],
+            },
+          });
         });
 
-        await expect(result).rejects.toThrow(
-          `Could not resolve content hash from VC with ${credentialId}`
-        );
-      });
-    });
+        it('Unsupported encryption algorithm and version to resolve multi did', async () => {
+          const badIndexEntry = [primaryAddress, listId + 8, 1, didSuffix];
+          await operatorMetadataRegistryClient.createCredentialMetadataList(
+            primaryAddress,
+            badIndexEntry[1],
+            vc,
+            caoDid,
+            'unsupported algorithm',
+            '1'
+          );
+          await operatorMetadataRegistryClient.setEntrySigned(
+            regularIssuingCredentialTypeHash,
+            bytes,
+            badIndexEntry[1],
+            badIndexEntry[2],
+            traceId,
+            caoDid
+          );
+          const credentialData = {
+            id: buildDid(badIndexEntry),
+            credentialType: regularIssuingCredentialType,
+          };
+          if (didSuffix == null) {
+            credentialData.contentHash = password;
+          }
+
+          const did = buildMultiDid([badIndexEntry]);
+          const result = operatorMetadataRegistryClient.resolveDidDocument({
+            did,
+            credentials: [credentialData],
+            burnerDid,
+            caoDid: 'did:velocity:99',
+          });
+
+          await expect(result).rejects.toThrow(
+            'Unsupported encryption algorithm "aes-256-gcm" or version "1"'
+          );
+        });
+
+        it('Invalid hash credentialType wrong type resolve did', async () => {
+          const badCredential = {
+            ...credential,
+            credentialType: 'Wrong type!',
+          };
+          const result = operatorMetadataRegistryClient.resolveDidDocument({
+            did: badCredential.id,
+            credentials: [badCredential],
+            burnerDid,
+            caoDid: 'did:velocity:99',
+          });
+
+          await expect(result).rejects.toThrow(
+            'Invalid hash credentialType "Wrong type!"'
+          );
+        });
+        it('Missed credential type field in VC', async () => {
+          const badCredential = {
+            ...credential,
+            credentialType: null,
+          };
+          const result = operatorMetadataRegistryClient.resolveDidDocument({
+            did: badCredential.id,
+            credentials: [badCredential],
+            burnerDid,
+            caoDid: 'did:velocity:99',
+          });
+
+          await expect(result).rejects.toThrow(
+            `Could not resolve credential type from VC with ${badCredential.id}`
+          );
+        });
+
+        it('Missed content hash field in VC', async () => {
+          const badCredential = omit(['contentHash'], credential);
+          if (credential.contentHash == null) {
+            return;
+          }
+          const result = operatorMetadataRegistryClient.resolveDidDocument({
+            did: badCredential.id,
+            credentials: [badCredential],
+            burnerDid,
+            caoDid: 'did:velocity:99',
+          });
+
+          await expect(result).rejects.toThrow(
+            `Could not resolve content hash from VC with ${badCredential.id}`
+          );
+        });
+      }
+    );
 
     describe('Pull Metadata Registry Events', () => {
       it('Should pull CreatedMetadataList event', async () => {
@@ -990,10 +999,12 @@ describe('Metadata Registry', () => {
 
 const expectedEntries = [sampleEntry, sampleEntryFree, sampleEntryContactFree];
 
+const buildDid = (indexEntry, prefix = 'did:velocity:v2:') =>
+  `${prefix}${compact(indexEntry).join(':')}`;
+
 const buildMultiDid = (indexEntries, didPrefix = 'did:velocity:v2:multi:') =>
   reduce(
-    (multiDid, [accountId, listId, index]) =>
-      `${multiDid}${accountId}:${listId}:${index};`,
+    (multiDid, indexEntry) => `${buildDid(indexEntry, multiDid)};`,
     didPrefix,
     indexEntries
   ).slice(0, -1);

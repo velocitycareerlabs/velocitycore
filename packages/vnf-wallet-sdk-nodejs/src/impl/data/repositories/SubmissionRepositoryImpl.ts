@@ -22,8 +22,6 @@ export default class SubmissionRepositoryImpl implements SubmissionRepository {
             body: submission.generateRequestBody(jwt),
             method: HttpMethod.POST,
             headers: this.generateHeader(accessToken),
-            contentType: 'application/json',
-            useCaches: false,
         });
         return this.parse(
             submissionResponse.payload,

@@ -22,14 +22,11 @@ export default class PresentationRequestRepositoryImpl
         const presentationRequestResponse =
             await this.networkService.sendRequest({
                 endpoint,
-                contentType: null,
                 method: HttpMethod.GET,
                 headers: {
                     [HeaderKeys.XVnfProtocolVersion]:
                         HeaderValues.XVnfProtocolVersion,
                 },
-                body: null,
-                useCaches: false,
             });
         return presentationRequestResponse.payload[
             VCLPresentationRequest.KeyPresentationRequest
