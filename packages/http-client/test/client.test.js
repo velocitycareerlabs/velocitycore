@@ -269,7 +269,7 @@ describe('Http Client Package', () => {
           .reply(200, { message: 'matched' });
         const httpClient2 = initHttpClient({
           rejectUnauthorized: false,
-          agent: mockAgent,
+          agentOverride: mockAgent,
         })({
           log: console,
           traceId: 'TRACE-ID',

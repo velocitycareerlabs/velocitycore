@@ -15,7 +15,13 @@
  */
 
 const { nanoid } = require('nanoid/non-secure');
-const { Agent, interceptors, cacheStores } = require('undici');
+const {
+  Agent,
+  interceptors,
+  cacheStores,
+  setGlobalDispatcher,
+  getGlobalDispatcher 
+} = require('undici');
 const { createOidcInterceptor } = require('undici-oidc-interceptor');
 const { map } = require('lodash/fp');
 const pkg = require('../package.json');
@@ -27,9 +33,6 @@ const initCache = () => new cacheStores.MemoryCacheStore();
 
 const initHttpClient = (options) => {
   const {
-    clientOptions,
-    traceIdHeader,
-    customHeaders,
     prefixUrls,
     agentOverride,
     clientId,
@@ -38,6 +41,12 @@ const initHttpClient = (options) => {
     scopes,
     audience,
     cache,
+  } = options;
+
+  const {
+    clientOptions,
+    traceIdHeader,
+    customHeaders,
   } = parseOptions(options);
 
   // register prefixUrls
@@ -54,18 +63,20 @@ const initHttpClient = (options) => {
       interceptors.cache({ cache, methods: ['GET'] }),
       ...(tokensEndpoint
         ? [
-            createOidcInterceptor({
-              idpTokenUrl: tokensEndpoint,
-              clientId,
-              clientSecret,
-              retryOnStatusCodes: [401],
-              scopes,
-              audience,
-              urls: map((url) => url.origin, registeredPrefixUrls.values()),
-            }),
-          ]
+          createOidcInterceptor({
+            idpTokenUrl: tokensEndpoint,
+            clientId,
+            clientSecret,
+            retryOnStatusCodes: [401],
+            scopes,
+            audience,
+            urls: map((url) => url.origin, registeredPrefixUrls.values()),
+          }),
+        ]
         : []),
     ]);
+
+  setGlobalDispatcher(agent);
 
   const request = async (
     url,
@@ -88,7 +99,9 @@ const initHttpClient = (options) => {
 
     log.info({ origin, path, url, reqId, reqHeaders }, 'HttpClient request');
 
-    const httpResponse = await agent.request({
+    const globalAgent = getGlobalDispatcher();
+
+    const httpResponse = await globalAgent.request({
       origin,
       path,
       method,
@@ -154,7 +167,6 @@ const parseOptions = (options) => {
   }
 
   return {
-    ...options,
     clientOptions,
     traceIdHeader: options.traceIdHeader ?? 'TRACE_ID',
     customHeaders: options.customHeaders ?? {},
