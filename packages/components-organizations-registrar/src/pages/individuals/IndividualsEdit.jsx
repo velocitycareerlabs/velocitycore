@@ -31,7 +31,12 @@ import Grid from '@mui/material/Grid2';
 import InfoIcon from '@mui/icons-material/Info';
 import { omit } from 'lodash/fp';
 import Loading from '../../components/Loading.jsx';
-import { ERRORS, ADMINISTRATOR_DETAILS_HINT, SIGNATORY_DETAILS_HINT } from '../../utils/index.jsx';
+import {
+  ERRORS,
+  ADMINISTRATOR_DETAILS_HINT,
+  SIGNATORY_DETAILS_HINT,
+  SIGNATORY_EMAIL_HINT,
+} from '../../utils/index.jsx';
 
 const validateEmail = [required(), email()];
 
@@ -155,12 +160,19 @@ const IndividualsEdit = () => {
                         />
                       </Grid>
                       <Grid size={{ xs: 12 }}>
-                        <TextInput
-                          fullWidth
-                          label="Email"
-                          source="profile.signatoryEmail"
-                          validate={validateEmail}
-                        />
+                        <Stack flexDirection="row" gap={1.75}>
+                          <TextInput
+                            fullWidth
+                            label="Email"
+                            source="profile.signatoryEmail"
+                            validate={validateEmail}
+                          />
+                          <Box mt={2}>
+                            <Tooltip title={SIGNATORY_EMAIL_HINT}>
+                              <InfoIcon color="info" fontSize="small" cursor="pointer" />
+                            </Tooltip>
+                          </Box>
+                        </Stack>
                       </Grid>
                     </Stack>
                   </Grid>
