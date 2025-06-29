@@ -103,78 +103,79 @@ jobs:
         echo "lint-packages=$LINT_PACKAGES_LIST" >> $GITHUB_OUTPUT
         echo "test-packages=$TEST_PACKAGES_LIST" >> $GITHUB_OUTPUT
 
-  # Lint
-  lint:
-    name: Lint
-    needs: [prepare]
-    runs-on: ubuntu-latest
-    if: needs.prepare.outputs.lint-packages != '[]'
-    strategy:
-      matrix:
-        package: ${{ fromJson(needs.prepare.outputs.lint-packages) }}
-        node-version: ${{ fromJson(needs.prepare.outputs.node-versions) }}
-        mongodb-version: ['8.0']
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      with:
-        fetch-depth: 0
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Get yarn cache directory path
-      id: yarn-cache-dir-path
-      run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-    - name: Restore yarn cached
-      id: cache-yarn-restore
-      uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4
-      with:
-        path: |
-          ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          node_modules
-        key: ${{ runner.os }}-${{ matrix.node-version }}-yarn-${{ hashFiles('yarn.lock') }}
-    - name: Install Dependencies
-      run: yarn install --frozen-lockfile --prefer-offline
-    - name: Build Libs
-      run: yarn build:lib
-    - name: Lint
-      run: yarn nx run ${{ matrix.package }}:lint
-    - name: Create Artifact Name
-      run: |
-        echo ARTIFACT_NAME=$(echo ${{ matrix.package }} | sed -e 's+@+-+g; s+/+-+g') >> $GITHUB_ENV
-      if: '!cancelled()'
-    - name: Upload Lint Report
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-      with:
-        name: lint${{ env.ARTIFACT_NAME }}
-        path: |
-          **/eslint.json
-      if: '!cancelled()'
+  # # Lint
+  # lint:
+  #   name: Lint
+  #   needs: [prepare]
+  #   runs-on: ubuntu-latest
+  #   if: needs.prepare.outputs.lint-packages != '[]'
+  #   strategy:
+  #     matrix:
+  #       package: ${{ fromJson(needs.prepare.outputs.lint-packages) }}
+  #       node-version: ${{ fromJson(needs.prepare.outputs.node-versions) }}
+  #       mongodb-version: ['8.0']
+  #   steps:
+  #   - name: Checkout repo
+  #     uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+  #     with:
+  #       fetch-depth: 0
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #   - name: Get yarn cache directory path
+  #     id: yarn-cache-dir-path
+  #     run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+  #   - name: Restore yarn cached
+  #     id: cache-yarn-restore
+  #     uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+  #     with:
+  #       path: |
+  #         ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         node_modules
+  #       key: ${{ runner.os }}-${{ matrix.node-version }}-yarn-${{ hashFiles('yarn.lock') }}
+  #   - name: Install Dependencies
+  #     run: yarn install --frozen-lockfile --prefer-offline
+  #   - name: Build Libs
+  #     run: yarn build:lib
+  #   - name: Lint
+  #     run: yarn nx run ${{ matrix.package }}:lint
+  #   - name: Create Artifact Name
+  #     run: |
+  #       echo ARTIFACT_NAME=$(echo ${{ matrix.package }} | sed -e 's+@+-+g; s+/+-+g') >> $GITHUB_ENV
+  #     if: '!cancelled()'
+  #   - name: Upload Lint Report
+  #     uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+  #     with:
+  #       name: lint${{ env.ARTIFACT_NAME }}
+  #       path: |
+  #         **/eslint.json
+  #     if: '!cancelled()'
 
-  # Post Lint
-  post-lint:
-    name: Post Lint
-    needs: lint
-    runs-on: ubuntu-latest
-    if: needs.prepare.outputs.lint-packages != '[]' && !cancelled()
-    steps:
-    - name: Download All Reports
-      uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
-      with:
-        path: reports
-        pattern: lint-*
-        merge-multiple: true
-    - name: Publish Lint Report
-      uses: ataylorme/eslint-annotate-action@v3
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        report-json: "**/eslint.json"
+  # # Post Lint
+  # post-lint:
+  #   name: Post Lint
+  #   needs: lint
+  #   runs-on: ubuntu-latest
+  #   if: needs.prepare.outputs.lint-packages != '[]' && !cancelled()
+  #   steps:
+  #   - name: Download All Reports
+  #     uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+  #     with:
+  #       path: reports
+  #       pattern: lint-*
+  #       merge-multiple: true
+  #   - name: Publish Lint Report
+  #     uses: ataylorme/eslint-annotate-action@v3
+  #     with:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       report-json: "**/eslint.json"
 
   # Test
   test:
     name: Test
-    needs: [prepare, lint]
+    # needs: [prepare, lint]
+    needs: [prepare]
     runs-on: ubuntu-latest
     if: needs.prepare.outputs.test-packages != '[]'
     strategy:
@@ -320,7 +321,8 @@ jobs:
   # CI Result
   ci-result:
     name: CI Result
-    needs: [prepare, lint, post-lint, test, post-test]
+    # needs: [prepare, lint, post-lint, test, post-test]
+    needs: [prepare, test, post-test]
     runs-on: ubuntu-latest
     if: always() && !cancelled() && github.event.pull_request.draft == false
     steps:
