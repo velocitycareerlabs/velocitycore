@@ -20,6 +20,7 @@ const {
   interceptors,
   ResponseStatusCodeError,
   cacheStores,
+  setGlobalDispatcher
 } = require('undici');
 const {
   initHttpClient,
@@ -99,6 +100,7 @@ describe('Http Client Package', () => {
     beforeAll(() => {
       mockAgent = new MockAgent().compose(interceptors.responseError());
       mockAgent.disableNetConnect();
+      setGlobalDispatcher(mockAgent);
     });
 
     describe('Request client test suite', () => {
@@ -107,7 +109,7 @@ describe('Http Client Package', () => {
       beforeAll(() => {
         httpClient = initHttpClient({
           rejectUnauthorized: false,
-          agentOverride: mockAgent,
+          skipAgentInit: true,
           prefixUrls: [origin],
         })(origin, {
           log: console,
@@ -269,7 +271,7 @@ describe('Http Client Package', () => {
           .reply(200, { message: 'matched' });
         const httpClient2 = initHttpClient({
           rejectUnauthorized: false,
-          agentOverride: mockAgent,
+          skipAgentInit: true,
         })({
           log: console,
           traceId: 'TRACE-ID',
@@ -293,7 +295,7 @@ describe('Http Client Package', () => {
           .reply(200, { message: 'matched' });
         const httpClient2 = initHttpClient({
           rejectUnauthorized: false,
-          agentOverride: mockAgent,
+          skipAgentInit: true,
         })({
           log: console,
           traceId: 'TRACE-ID',

@@ -20,7 +20,7 @@ const {
   interceptors,
   cacheStores,
   setGlobalDispatcher,
-  getGlobalDispatcher 
+  getGlobalDispatcher
 } = require('undici');
 const { createOidcInterceptor } = require('undici-oidc-interceptor');
 const { map } = require('lodash/fp');
@@ -34,7 +34,7 @@ const initCache = () => new cacheStores.MemoryCacheStore();
 const initHttpClient = (options) => {
   const {
     prefixUrls,
-    agentOverride,
+    skipAgentInit,
     clientId,
     clientSecret,
     tokensEndpoint,
@@ -55,28 +55,29 @@ const initHttpClient = (options) => {
     registeredPrefixUrls.set(prefixUrl, parsedPrefixUrl);
   }
 
-  const agent =
-    agentOverride ??
-    new Agent(clientOptions).compose([
-      interceptors.dns({ maxTTL: 300000, maxItems: 2000, dualStack: false }),
-      interceptors.responseError(),
-      interceptors.cache({ cache, methods: ['GET'] }),
-      ...(tokensEndpoint
-        ? [
-          createOidcInterceptor({
-            idpTokenUrl: tokensEndpoint,
-            clientId,
-            clientSecret,
-            retryOnStatusCodes: [401],
-            scopes,
-            audience,
-            urls: map((url) => url.origin, registeredPrefixUrls.values()),
-          }),
-        ]
-        : []),
-    ]);
+  if (!skipAgentInit) {
+    const agent =
+      new Agent(clientOptions).compose([
+        interceptors.dns({ maxTTL: 300000, maxItems: 2000, dualStack: false }),
+        interceptors.responseError(),
+        interceptors.cache({ cache, methods: ['GET'] }),
+        ...(tokensEndpoint
+          ? [
+            createOidcInterceptor({
+              idpTokenUrl: tokensEndpoint,
+              clientId,
+              clientSecret,
+              retryOnStatusCodes: [401],
+              scopes,
+              audience,
+              urls: map((url) => url.origin, registeredPrefixUrls.values()),
+            }),
+          ]
+          : []),
+      ]);
 
-  setGlobalDispatcher(agent);
+    setGlobalDispatcher(agent);
+  }
 
   const request = async (
     url,
