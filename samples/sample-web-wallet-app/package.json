@@ -27,7 +27,7 @@
     "eslint-config-prettier": "8.10.0",
     "eslint-import-resolver-typescript": "3.10.1",
     "eslint-plugin-autofix": "1.1.0",
-    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
     "eslint-plugin-prettier": "4.2.1",
