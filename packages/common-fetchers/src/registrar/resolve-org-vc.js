@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-const resolveOrgVc = ({ did }, { registrarFetch }) =>
-  registrarFetch
-    .get(
-      `api/v0.6/organizations/${did}/resolve-vc?type=OrganizationBasicProfile-v1.0`
-    )
-    .json();
+const resolveOrgVc = async ({ did }, { registrarFetch }) => {
+  const path = `api/v0.6/organizations/${did}/resolve-vc?type=OrganizationBasicProfile-v1.0`;
+  if (registrarFetch.responseType === 'promise') {
+    const response = await registrarFetch.get(path);
+    return response.json();
+  }
+  return registrarFetch.get(path).json();
+};
 
 module.exports = {
   resolveOrgVc,
