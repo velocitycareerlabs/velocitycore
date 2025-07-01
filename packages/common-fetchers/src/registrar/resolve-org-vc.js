@@ -15,7 +15,9 @@
  */
 
 const resolveOrgVc = async ({ did }, { registrarFetch }) => {
-  const path = `api/v0.6/organizations/${did}/resolve-vc?type=OrganizationBasicProfile-v1.0`;
+  const path = `api/v0.6/organizations/${encodeURIComponent(
+    did
+  )}/resolve-vc?type=OrganizationBasicProfile-v1.0`;
   if (registrarFetch.responseType === 'promise') {
     const response = await registrarFetch.get(path);
     return response.json();
