@@ -21,8 +21,12 @@
  * @import { Context, Id, KMS, KeySpec, KmsKey, KmsSecret, ImportableKey, ImportableSecret } from "../../types/types"
  */
 
-const { generateJWAKeyPair } = require('@velocitycareerlabs/crypto');
-const { jwtSign, jwtVerify } = require('@velocitycareerlabs/jwt');
+const {
+  generateJWAKeyPair,
+  encrypt: _encrypt,
+  decrypt: _decrypt,
+} = require('@velocitycareerlabs/crypto');
+const { jwtSign, jwtVerify, hexFromJwk } = require('@velocitycareerlabs/jwt');
 const { isEmpty, omit } = require('lodash/fp');
 const kmsRepo = require('./repo');
 const { defaultRepoOptions } = require('./default-repo-options');
@@ -165,6 +169,34 @@ const initDbKms = (fastify, kmsOptions = {}) => {
       );
     };
 
+    /**
+     * encrypt text using a secret
+     * @param {Record<string, unknown>} plainText the text to encrypt
+     * @param {Id} keyId the key id to encrypt with
+     * @returns {string} the encrypted text
+     */
+    const encrypt = async (plainText, keyId) => {
+      const key = await loadKey(keyId);
+      const hex = hexFromJwk(
+        key[repoOptions.secretProp] ?? key[repoOptions.keyProp]
+      );
+      return _encrypt(plainText, hex);
+    };
+
+    /**
+     * Decrypt text using a secret
+     * @param {string} encrypted the encrypted text to decrypt
+     * @param {Id} keyId the key id to decrypt with
+     * @returns {string} the decrypted text
+     */
+    const decrypt = async (encrypted, keyId) => {
+      const key = await loadKey(keyId);
+      const hex = hexFromJwk(
+        key[repoOptions.secretProp] ?? key[repoOptions.keyProp]
+      );
+      return _decrypt(encrypted, hex);
+    };
+
     return {
       createKey,
       importKey,
@@ -172,6 +204,8 @@ const initDbKms = (fastify, kmsOptions = {}) => {
       exportKeyOrSecret,
       signJwt,
       verifyJwt,
+      encrypt,
+      decrypt,
     };
   };
 };
