@@ -27,7 +27,7 @@
   "devDependencies": {
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "jest": "29.7.0",
-    "nock": "14.0.5"
+    "nock": "15.0.0-beta.3"
   },
   "nx": {
     "tags": ["lib"]

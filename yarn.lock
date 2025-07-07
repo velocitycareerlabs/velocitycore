@@ -16088,14 +16088,13 @@ no-case@^3.0.4:
     lower-case "^2.0.2"
     tslib "^2.0.3"
 
-nock@14.0.5:
-  version "14.0.5"
-  resolved "https://registry.npmjs.org/nock/-/nock-14.0.5.tgz#efed293a4b9ce208eae2151a3690cbe3d80148ba"
-  integrity sha512-R49fALR9caB6vxuSWUIaK2eBYeTloZQUFBZ4rHO+TbhMGQHtwnhdqKLYki+o+8qMgLvoBYWrp/2KzGPhxL4S6w==
+nock@15.0.0-beta.3:
+  version "15.0.0-beta.3"
+  resolved "https://registry.npmjs.org/nock/-/nock-15.0.0-beta.3.tgz#6d4e5353254a39f9339340c11bf72d54705a725b"
+  integrity sha512-4q0Cr/pU11G5f3aM/V7w4u1PEeimng6MhjqGdaUEyMYp32ZbCvTuiLQknoSS9iWTbKvTCpr0Q/jN8NZpHbXfdQ==
   dependencies:
     "@mswjs/interceptors" "^0.38.7"
     json-stringify-safe "^5.0.1"
-    propagate "^2.0.0"
 
 node-abi@^3.61.0:
   version "3.74.0"
@@ -17750,11 +17749,6 @@ prop-types@^15.6.2, prop-types@^15.8.1:
     object-assign "^4.1.1"
     react-is "^16.13.1"
 
-propagate@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.npmjs.org/propagate/-/propagate-2.0.1.tgz#40cdedab18085c792334e64f0ac17256d38f9a45"
-  integrity sha512-vGrhOavPSTz4QVNuBNdcNXePNdNMaO1xj9yBeH1ScQPjk/rhg9sSlCXPhMkFuaNNW/syTvYqsnbIJxMBfRbbag==
-
 proper-lockfile@^4.1.1:
   version "4.1.2"
   resolved "https://registry.npmjs.org/proper-lockfile/-/proper-lockfile-4.1.2.tgz#c8b9de2af6b2f1601067f98e01ac66baa223141f"
@@ -18765,9 +18759,9 @@ semver-regex@^3.1.2:
   integrity sha512-6IiqeZNgq01qGf0TId0t3NvKzSvUsjcpdEO3AQNeIjR6A2+ckTnQlDpl4qu1bjRv0RzN3FP9hzFmws3lKqRWkA==
 
 "semver@2 || 3 || 4 || 5", semver@^5.3.0, semver@^5.6.0, semver@^6.3.0, semver@^6.3.1, semver@^7.0.0, semver@^7.1.1, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.3.8, semver@^7.5.2, semver@^7.5.3, semver@^7.5.4, semver@^7.6.0, semver@^7.6.3, semver@^7.7.1, semver@^7.7.2, semver@~5.4.1, semver@~7.7.0:
-  version "7.7.1"
-  resolved "https://registry.npmjs.org/semver/-/semver-7.7.1.tgz#abd5098d82b18c6c81f6074ff2647fd3e7220c9f"
-  integrity sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==
+  version "7.7.2"
+  resolved "https://registry.npmjs.org/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
+  integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
 
 send@0.19.0:
   version "0.19.0"
@@ -20183,6 +20177,14 @@ undefsafe@^2.0.5:
   version "2.0.5"
   resolved "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.5.tgz#38733b9327bdcd226db889fb723a6efd162e6e2c"
   integrity sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==
+
+undici-oidc-interceptor@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.npmjs.org/undici-oidc-interceptor/-/undici-oidc-interceptor-0.6.0.tgz#3275138fb25d926bd11f1d8863784a0d11546187"
+  integrity sha512-9Cddcqv9kLsvsYlGd5wuC9CywgontjyKmhvOC0JUj0HOUzr6nr3zfJZG4NfAEtutLzlyMAiGRq5gNhMqbmxqIw==
+  dependencies:
+    fast-jwt "^5.0.0"
+    undici "^7.0.0"
 
 undici-types@^6.15.0, undici-types@~6.21.0:
   version "6.21.0"
