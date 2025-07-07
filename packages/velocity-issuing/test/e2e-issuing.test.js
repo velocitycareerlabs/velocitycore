@@ -70,13 +70,9 @@ describe('E2E issuing', () => {
 
   beforeAll(async () => {
     await mongoFactoryWrapper('test-metadata-registry', context);
-    repos.revocationListAllocations = await collectionClient({
+    repos.allocations = await collectionClient({
       mongoClient,
-      name: 'revocationListAllocations',
-    });
-    repos.base64JwkMetadataListAllocations = await collectionClient({
-      mongoClient,
-      name: 'base64JwkMetadataListAllocations',
+      name: 'allocations',
     });
 
     context = buildContext({
@@ -161,8 +157,7 @@ describe('E2E issuing', () => {
   });
 
   beforeEach(async () => {
-    await repos.revocationListAllocations.deleteMany();
-    await repos.base64JwkMetadataListAllocations.deleteMany();
+    await repos.allocations.deleteMany();
     jest.resetAllMocks();
     context = buildContext({
       issuerEntity,
@@ -170,7 +165,8 @@ describe('E2E issuing', () => {
       revocationContractAddress,
       metadataRegistryContractAddress,
       allocationListQueries: mongoAllocationListQueries(
-        mongoClient.db('test-collections')
+        mongoClient.db('test-collections'),
+        'allocations'
       ),
       rpcProvider,
     });

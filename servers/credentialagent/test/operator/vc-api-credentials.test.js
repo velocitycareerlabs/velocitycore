@@ -21,10 +21,7 @@ const {
   errorResponseMatcher,
 } = require('@velocitycareerlabs/tests-helpers');
 const nock = require('nock');
-const {
-  generateKeyPair,
-  KeyAlgorithms,
-} = require('@velocitycareerlabs/crypto');
+const { generateKeyPair } = require('@velocitycareerlabs/crypto');
 const { getDidUriFromJwk } = require('@velocitycareerlabs/did-doc');
 const { jwtDecode } = require('@velocitycareerlabs/jwt');
 const { BASE64_FORMAT } = require('@velocitycareerlabs/test-regexes');
@@ -342,7 +339,7 @@ describe('vc-api credentials endpoints', () => {
             expect.any(Object),
             expect.any(String),
             'did:ion:cao',
-            'jwk-base64:aes-256-gcm',
+            'cosekey:aes-256-gcm',
           ],
         ]);
       });
@@ -835,7 +832,7 @@ const jwtVcExpectation = ({
 }) => {
   let expectation = {
     header: {
-      alg: KeyAlgorithms.ES256,
+      alg: 'ES256K',
       kid: `${credentialId}#key-1`,
       typ: 'JWT',
     },

@@ -66,21 +66,16 @@ jest.mock('@velocitycareerlabs/metadata-registration', () => ({
 describe('issuing velocity verifiable credentials', () => {
   const mongoClient = new MongoClient('mongodb://localhost:27017/');
 
-  let metadataListCollection;
-  let revocationListCollection;
+  let allocationsCollection;
   let issuer;
   let issuerEntity;
   let caoEntity;
   let context;
 
   beforeAll(async () => {
-    revocationListCollection = await collectionClient({
+    allocationsCollection = await collectionClient({
       mongoClient,
-      name: 'revocationListAllocations',
-    });
-    metadataListCollection = await collectionClient({
-      mongoClient,
-      name: 'base64JwkMetadataListAllocations',
+      name: 'allocations',
     });
     issuerEntity = entityFactory({ service: [{ id: '#issuer-1' }] });
     caoEntity = entityFactory({ service: [{ id: '#cao-1' }] });
@@ -98,8 +93,7 @@ describe('issuing velocity verifiable credentials', () => {
   });
 
   beforeEach(async () => {
-    await revocationListCollection.deleteMany();
-    await metadataListCollection.deleteMany();
+    await allocationsCollection.deleteMany();
     jest.resetAllMocks();
     mockAddCredentialMetadataEntry.mockResolvedValue(true);
     mockCreateCredentialMetadataList.mockResolvedValue(true);
@@ -107,7 +101,8 @@ describe('issuing velocity verifiable credentials', () => {
       issuerEntity,
       caoEntity,
       allocationListQueries: mongoAllocationListQueries(
-        mongoClient.db('test-collections')
+        mongoClient.db('test-collections'),
+        'allocations'
       ),
     });
   });

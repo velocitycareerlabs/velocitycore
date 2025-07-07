@@ -58,7 +58,7 @@ const issueVelocityVerifiableCredentials = async (
   const metadataEntries = await allocateListEntries(
     offers.length,
     issuer,
-    'base64JwkMetadataListAllocations',
+    'metadataListAllocations',
     METADATA_LIST_SIZE,
     context
   );
