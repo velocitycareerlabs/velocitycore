@@ -23,7 +23,7 @@ const VERSION = '1';
 
 const ALG_TYPE = {
   HEX_AES_256: 'aes-256-gcm',
-  JWK_BASE64_AES_256: 'jwk-base64:aes-256-gcm',
+  COSEKEY_AES_256: 'cosekey:aes-256-gcm',
 };
 
 module.exports = {

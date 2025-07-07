@@ -384,7 +384,7 @@ const verifyCreateMetadataListCalledOnce = async (
     listId,
     expect.any(String),
     caoEntity.did,
-    ALG_TYPE.JWK_BASE64_AES_256,
+    ALG_TYPE.COSEKEY_AES_256,
   ]);
 
   const issuerAttestationJwtVc = args[2];
@@ -455,7 +455,7 @@ const verifyCredentialAndAddEntryExpectations = async (
     }),
     hashOffer(offer),
     caoEntity.did,
-    ALG_TYPE.JWK_BASE64_AES_256,
+    ALG_TYPE.COSEKEY_AES_256,
   ]);
 
   const { publicKey } = first(credentialMetadataCall);

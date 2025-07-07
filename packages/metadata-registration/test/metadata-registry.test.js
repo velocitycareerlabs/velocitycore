@@ -241,10 +241,11 @@ describe('Metadata Registry', () => {
     it('Create a jwk list', async () => {
       const result =
         await operatorMetadataRegistryClient.createCredentialMetadataList(
+          primaryAddress,
           2001,
           vc,
           caoDid,
-          ALG_TYPE.JWK_BASE64_AES_256
+          ALG_TYPE.COSEKEY_AES_256
         );
       expect(result).toEqual(true);
     });
@@ -299,10 +300,11 @@ describe('Metadata Registry', () => {
         scope: 'credential:contactissue',
       });
       await operatorMetadataRegistryClient.createCredentialMetadataList(
+        primaryAddress,
         baseCredentialMetadata.listId,
         vc,
         caoDid,
-        ALG_TYPE.JWK_BASE64_AES_256
+        ALG_TYPE.COSEKEY_AES_256
       );
     });
 
@@ -317,7 +319,7 @@ describe('Metadata Registry', () => {
           metadata,
           password,
           caoDid,
-          ALG_TYPE.JWK_BASE64_AES_256
+          ALG_TYPE.COSEKEY_AES_256
         );
 
       expect(result0).toEqual(true);
@@ -335,7 +337,7 @@ describe('Metadata Registry', () => {
           metadata,
           password,
           caoDid,
-          ALG_TYPE.JWK_BASE64_AES_256
+          ALG_TYPE.COSEKEY_AES_256
         );
       expect(result).toEqual(true);
     });
@@ -345,14 +347,14 @@ describe('Metadata Registry', () => {
         baseCredentialMetadata,
         password,
         caoDid,
-        ALG_TYPE.JWK_BASE64_AES_256
+        ALG_TYPE.COSEKEY_AES_256
       );
 
       const result = operatorMetadataRegistryClient.addCredentialMetadataEntry(
         baseCredentialMetadata,
         password,
         caoDid,
-        ALG_TYPE.JWK_BASE64_AES_256
+        ALG_TYPE.COSEKEY_AES_256
       );
       await expect(result).rejects.toThrow('Index already used');
     });
@@ -369,7 +371,7 @@ describe('Metadata Registry', () => {
           metadata,
           password,
           caoDid,
-          ALG_TYPE.JWK_BASE64_AES_256
+          ALG_TYPE.COSEKEY_AES_256
         )
       ).rejects.toThrow('Index already used');
     });
@@ -389,7 +391,7 @@ describe('Metadata Registry', () => {
           metadata,
           password,
           caoDid,
-          ALG_TYPE.JWK_BASE64_AES_256
+          ALG_TYPE.COSEKEY_AES_256
         );
 
         await deployerPermissionsClient.addAddressScope({
@@ -423,7 +425,7 @@ describe('Metadata Registry', () => {
           metadata,
           password,
           caoDid,
-          ALG_TYPE.JWK_BASE64_AES_256
+          ALG_TYPE.COSEKEY_AES_256
         );
         expect(true).toEqual('should have thrown');
       } catch (e) {
@@ -446,7 +448,7 @@ describe('Metadata Registry', () => {
           metadata,
           password,
           caoDid,
-          ALG_TYPE.JWK_BASE64_AES_256
+          ALG_TYPE.COSEKEY_AES_256
         );
         expect(true).toEqual('should have thrown');
       } catch (e) {
@@ -1082,7 +1084,7 @@ describe('Metadata Registry', () => {
           });
 
           await expect(result).rejects.toThrow(
-            'Unsupported encryption algorithm "aes-256-gcm" or version "1"'
+            'Unsupported algorithm (0x682d). Valid values are aes-256-gcm (0xa38d) or cosekey:aes-256-gcm (0xd19a)'
           );
         });
 
@@ -1159,10 +1161,11 @@ describe('Metadata Registry', () => {
 
       beforeAll(async () => {
         await operatorMetadataRegistryClient.createCredentialMetadataList(
+          primaryAddress,
           first(credentialMetadatas).listId,
           vc,
           caoDid,
-          ALG_TYPE.JWK_BASE64_AES_256
+          ALG_TYPE.COSEKEY_AES_256
         );
         credentialIds = map(
           (credentialMetadata) =>
@@ -1176,7 +1179,7 @@ describe('Metadata Registry', () => {
             credentialMetadata,
             password,
             caoDid,
-            ALG_TYPE.JWK_BASE64_AES_256
+            ALG_TYPE.COSEKEY_AES_256
           );
         }
       });
@@ -1321,6 +1324,7 @@ describe('Metadata Registry', () => {
       it('Unsupported encryption algorithm and version to resolve multi did', async () => {
         const listId = 11;
         await operatorMetadataRegistryClient.createCredentialMetadataList(
+          primaryAddress,
           listId,
           vc,
           caoDid,
@@ -1331,7 +1335,7 @@ describe('Metadata Registry', () => {
           { ...credentialMetadatas[0], listId },
           password,
           caoDid,
-          ALG_TYPE.JWK_BASE64_AES_256
+          ALG_TYPE.COSEKEY_AES_256
         );
 
         const credentialData = {
@@ -1350,7 +1354,9 @@ describe('Metadata Registry', () => {
           caoDid: 'did:velocity:99',
         });
 
-        await expect(result).rejects.toThrow('Unsupported algorithm "0x682d"');
+        await expect(result).rejects.toThrow(
+          'Unsupported algorithm (0x682d). Valid values are aes-256-gcm (0xa38d) or cosekey:aes-256-gcm (0xd19a)'
+        );
       });
 
       it('Invalid hash credentialType wrong type resolve did', async () => {

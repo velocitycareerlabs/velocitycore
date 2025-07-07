@@ -64,7 +64,7 @@ const initCredentialMetadataContract = async (issuer, context) => {
         metadata,
         metadata.contentHash,
         caoDid,
-        ALG_TYPE.JWK_BASE64_AES_256
+        ALG_TYPE.COSEKEY_AES_256
       ),
     /**
      * List to create on the dlt
@@ -96,7 +96,7 @@ const initCredentialMetadataContract = async (issuer, context) => {
         listId,
         issuerVC,
         caoDid,
-        ALG_TYPE.JWK_BASE64_AES_256
+        ALG_TYPE.COSEKEY_AES_256
       );
     },
   };

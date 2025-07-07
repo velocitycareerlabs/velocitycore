@@ -8,7 +8,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "jest --config ./jest.config.js --runInBand --coverage",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.js --runInBand --coverage",
     "lint": "eslint . --format json >> eslint.json",
     "lint:fix": "eslint --fix --ext .js ."
   },
@@ -18,7 +18,9 @@
     "@trust/keyto": "~2.0.0-alpha1",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
     "argon2": "0.43.0",
+    "bigint-crypto-utils": "3.3.0",
     "canonicalize": "^2.1.0",
+    "cborg": "4.2.12",
     "elliptic": "^6.6.1",
     "lodash": "^4.17.21",
     "multihashing": "~0.3.3",

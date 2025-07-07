@@ -23,4 +23,7 @@ module.exports = {
   encryptCollection: encrypt,
   decryptCollection: decrypt,
   ...require('./src/vnf-signature'),
+  ...require('./src/derive-ec-y-values'),
+  ...require('./src/cose-key'),
+  ...require('./src/cose-iana'),
 };
