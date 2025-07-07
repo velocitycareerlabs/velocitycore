@@ -8349,10 +8349,10 @@ attr-accept@^2.2.4:
   resolved "https://registry.npmjs.org/attr-accept/-/attr-accept-2.2.5.tgz#d7061d958e6d4f97bf8665c68b75851a0713ab5e"
   integrity sha512-0bDNnY/u6pPwHDMoF0FieU354oBi0a8rD9FcsLwzcGWbc8KS8KPIi7y+s13OlVY+gMWc/9xEMUgNE6Qm8ZllYQ==
 
-auth0@4.25.0:
-  version "4.25.0"
-  resolved "https://registry.npmjs.org/auth0/-/auth0-4.25.0.tgz#272a7eeea9ff6d1b10ae9d91d642bb9cce1f46ae"
-  integrity sha512-KtguJex54uhvXfSQjhGKko9xdej7moSSgdaeUzUXz70mMc00/INANHNyDog+EiATHNnBq7kapl6YttCZjOlC6g==
+auth0@4.27.0:
+  version "4.27.0"
+  resolved "https://registry.npmjs.org/auth0/-/auth0-4.27.0.tgz#92a2524fe78911246f3f50bcd1403203d190831e"
+  integrity sha512-4FGgjzKCH/f7rQLQVR5dM30asjOObeW3PyHa8bQrS4rKkuv22JoNxox26fb1FZ3hI4zEgbVbPm9x7pHrljZzrw==
   dependencies:
     jose "^4.13.2"
     undici-types "^6.15.0"
