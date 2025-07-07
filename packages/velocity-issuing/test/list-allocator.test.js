@@ -32,14 +32,15 @@ const { allocateListEntry } = require('../src/allocate-list-entries');
 
 describe('dlt list allocation', () => {
   const mongoClient = new MongoClient('mongodb://localhost:27017/');
-  const collectionName = 'metadataListAllocations';
-  let metadataListAllocations;
+  const collectionName = 'allocations';
+  const entityName = 'metadataList';
+  let allocations;
   let context;
   let issuer;
   let dltOperatorKMSKeyId;
 
   beforeAll(async () => {
-    metadataListAllocations = await collectionClient({
+    allocations = await collectionClient({
       mongoClient,
       name: collectionName,
       factory: allocationListFactory,
@@ -69,7 +70,8 @@ describe('dlt list allocation', () => {
 
     context = {
       allocationListQueries: mongoAllocationListQueries(
-        mongoClient.db('test-collections')
+        mongoClient.db('test-collections'),
+        collectionName
       ),
       kms: {
         exportKeyOrSecret: (keyId) => {
@@ -86,7 +88,7 @@ describe('dlt list allocation', () => {
   });
 
   beforeEach(async () => {
-    await metadataListAllocations.deleteMany({});
+    await allocations.deleteMany({});
   });
 
   afterAll(async () => {
@@ -95,19 +97,20 @@ describe('dlt list allocation', () => {
 
   describe('modifying existing list', () => {
     it('should return new index and pop index from collection', async () => {
-      const dbId = await metadataListAllocations.insertOne({
+      const dbId = await allocations.insertOne({
         tenantId: issuer.id,
         operatorAddress: issuer.dltOperatorAddress,
+        entityName,
       });
-      const metadataListBefore = await metadataListAllocations.findById(dbId);
+      const metadataListBefore = await allocations.findById(dbId);
       const metadataListEntry = await allocateListEntry(
         issuer,
-        collectionName,
+        entityName,
         10000,
         context
       );
 
-      const metadataListAfter = await metadataListAllocations.findById(dbId);
+      const metadataListAfter = await allocations.findById(dbId);
       expect(metadataListAfter).toEqual(
         mongoify({
           _id: dbId,
@@ -127,19 +130,20 @@ describe('dlt list allocation', () => {
     });
 
     it('when returning a new index should use kms for operator fallback', async () => {
-      const dbId = await metadataListAllocations.insertOne({
+      const dbId = await allocations.insertOne({
         tenantId: issuer.id,
         operatorAddress: issuer.dltOperatorAddress,
+        entityName,
       });
-      const metadataListBefore = await metadataListAllocations.findById(dbId);
+      const metadataListBefore = await allocations.findById(dbId);
       const metadataListEntry = await allocateListEntry(
         { ...omit('dltOperatorAddress', issuer), dltOperatorKMSKeyId },
-        collectionName,
+        entityName,
         10000,
         context
       );
 
-      const metadataListAfter = await metadataListAllocations.findById(dbId);
+      const metadataListAfter = await allocations.findById(dbId);
       expect(metadataListAfter).toEqual(
         mongoify({
           _id: dbId,
@@ -159,16 +163,17 @@ describe('dlt list allocation', () => {
     });
 
     it('should return new index and pop index from collection of 2 items', async () => {
-      const dbId = await metadataListAllocations.insertOne({
+      const dbId = await allocations.insertOne({
         tenantId: issuer.id,
         operatorAddress: issuer.dltOperatorAddress,
+        entityName,
         freeIndexes: [1, 2],
       });
-      const initialList = await metadataListAllocations.findById(dbId);
+      const initialList = await allocations.findById(dbId);
 
       const metadataListEntry = await allocateListEntry(
         issuer,
-        collectionName,
+        entityName,
         10000,
         context
       );
@@ -178,7 +183,7 @@ describe('dlt list allocation', () => {
         isNewList: false,
       });
 
-      const metadataListAfter = await metadataListAllocations.findById(dbId);
+      const metadataListAfter = await allocations.findById(dbId);
 
       expect(metadataListAfter).toEqual(
         mongoify({
@@ -195,17 +200,18 @@ describe('dlt list allocation', () => {
   });
 
   describe('creating new metadata lists', () => {
-    it('should create a new metadata list', async () => {
-      const dbId = await metadataListAllocations.insertOne({
+    it('should create a new metadata list if tenant is distinct', async () => {
+      const dbId = await allocations.insertOne({
         tenantId: nanoid(),
         operatorAddress: issuer.dltOperatorAddress,
+        entityName,
       });
 
-      const altMetadataList = await metadataListAllocations.findById(dbId);
+      const altMetadataList = await allocations.findById(dbId);
 
       const metadataListEntry = await allocateListEntry(
         issuer,
-        collectionName,
+        entityName,
         10000,
         context
       );
@@ -219,7 +225,7 @@ describe('dlt list allocation', () => {
       );
 
       // new allocation list created
-      const newAllocation = await metadataListAllocations
+      const newAllocation = await allocations
         .collection()
         .findOne({ currentListId: metadataListEntry.listId });
       expect(newAllocation).toEqual(
@@ -227,6 +233,90 @@ describe('dlt list allocation', () => {
           _id: expect.any(ObjectId),
           currentListId: expect.any(Number),
           freeIndexes: expect.any(Array),
+          entityName,
+          tenantId: issuer.id,
+          operatorAddress: issuer.dltOperatorAddress,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })
+      );
+    });
+
+    it('should create a new metadata list if entityName is distinct', async () => {
+      const dbId = await allocations.insertOne({
+        tenantId: issuer.id,
+        operatorAddress: issuer.dltOperatorAddress,
+        entityName: 'other',
+      });
+
+      const altMetadataList = await allocations.findById(dbId);
+
+      const metadataListEntry = await allocateListEntry(
+        issuer,
+        entityName,
+        10000,
+        context
+      );
+      expect(metadataListEntry).toEqual({
+        index: expect.any(Number),
+        listId: expect.any(Number),
+        isNewList: true,
+      });
+      expect(metadataListEntry.listId).not.toEqual(
+        altMetadataList.currentListId
+      );
+
+      // new allocation list created
+      const newAllocation = await allocations
+        .collection()
+        .findOne({ currentListId: metadataListEntry.listId });
+      expect(newAllocation).toEqual(
+        mongoify({
+          _id: expect.any(ObjectId),
+          currentListId: expect.any(Number),
+          freeIndexes: expect.any(Array),
+          entityName,
+          tenantId: issuer.id,
+          operatorAddress: issuer.dltOperatorAddress,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })
+      );
+    });
+
+    it('should create a new metadata list if entityName is missing', async () => {
+      const dbId = await allocations.insertOne({
+        tenantId: issuer.id,
+        operatorAddress: issuer.dltOperatorAddress,
+      });
+
+      const altMetadataList = await allocations.findById(dbId);
+
+      const metadataListEntry = await allocateListEntry(
+        issuer,
+        entityName,
+        10000,
+        context
+      );
+      expect(metadataListEntry).toEqual({
+        index: expect.any(Number),
+        listId: expect.any(Number),
+        isNewList: true,
+      });
+      expect(metadataListEntry.listId).not.toEqual(
+        altMetadataList.currentListId
+      );
+
+      // new allocation list created
+      const newAllocation = await allocations
+        .collection()
+        .findOne({ currentListId: metadataListEntry.listId });
+      expect(newAllocation).toEqual(
+        mongoify({
+          _id: expect.any(ObjectId),
+          currentListId: expect.any(Number),
+          freeIndexes: expect.any(Array),
+          entityName,
           tenantId: issuer.id,
           operatorAddress: issuer.dltOperatorAddress,
           createdAt: expect.any(Date),
@@ -236,16 +326,17 @@ describe('dlt list allocation', () => {
     });
 
     it('when creating a new metadata list should use kms for operator address fallback', async () => {
-      const dbId = await metadataListAllocations.insertOne({
+      const dbId = await allocations.insertOne({
         tenantId: nanoid(),
         operatorAddress: issuer.dltOperatorAddress,
+        entityName,
       });
 
-      const altMetadataList = await metadataListAllocations.findById(dbId);
+      const altMetadataList = await allocations.findById(dbId);
 
       const metadataListEntry = await allocateListEntry(
         { ...omit('dltOperatorAddress', issuer), dltOperatorKMSKeyId },
-        collectionName,
+        entityName,
         10000,
         context
       );
@@ -259,13 +350,14 @@ describe('dlt list allocation', () => {
       );
 
       // new allocation list created
-      const newAllocation = await metadataListAllocations
+      const newAllocation = await allocations
         .collection()
         .findOne({ currentListId: metadataListEntry.listId });
       expect(newAllocation).toEqual(
         mongoify({
           _id: expect.any(ObjectId),
           currentListId: expect.any(Number),
+          entityName,
           freeIndexes: expect.any(Array),
           tenantId: issuer.id,
           operatorAddress: issuer.dltOperatorAddress,
@@ -276,15 +368,16 @@ describe('dlt list allocation', () => {
     });
 
     it('should allocate a new list when previous one is exhausted', async () => {
-      const dbId = await metadataListAllocations.insertOne({
+      const dbId = await allocations.insertOne({
         tenantId: issuer.id,
         operatorAddress: issuer.dltOperatorAddress,
+        entityName,
       });
-      const metadataList1Before = await metadataListAllocations.findById(dbId);
+      const metadataList1Before = await allocations.findById(dbId);
 
       const metadataListEntry = await allocateListEntry(
         issuer,
-        collectionName,
+        entityName,
         10000,
         context
       );
@@ -294,7 +387,7 @@ describe('dlt list allocation', () => {
         isNewList: false,
       });
 
-      expect(await metadataListAllocations.findById(dbId)).toEqual(
+      expect(await allocations.findById(dbId)).toEqual(
         mongoify({
           ...metadataList1Before,
           freeIndexes: [],
@@ -304,7 +397,7 @@ describe('dlt list allocation', () => {
 
       const metadataListEntry2 = await allocateListEntry(
         issuer,
-        collectionName,
+        entityName,
         10000,
         context
       );
@@ -315,7 +408,7 @@ describe('dlt list allocation', () => {
         isNewList: true,
       });
 
-      const newAllocation = await metadataListAllocations.collection().findOne({
+      const newAllocation = await allocations.collection().findOne({
         currentListId: metadataListEntry2.listId,
       });
 
@@ -328,13 +421,14 @@ describe('dlt list allocation', () => {
     });
 
     it('should allocate a new list when existing list is missing operatorAddress', async () => {
-      const dbId = await metadataListAllocations.insertOne({
+      const dbId = await allocations.insertOne({
         tenantId: issuer.id,
+        entityName,
       });
-      const metadataList1Before = await metadataListAllocations.findById(dbId);
+      const metadataList1Before = await allocations.findById(dbId);
       const metadataListEntry = await allocateListEntry(
         issuer,
-        collectionName,
+        entityName,
         10000,
         context
       );
@@ -345,7 +439,7 @@ describe('dlt list allocation', () => {
         isNewList: true,
       });
 
-      const metadataList1After = await metadataListAllocations.findById(dbId);
+      const metadataList1After = await allocations.findById(dbId);
 
       expect(metadataList1After).toEqual(
         mongoify({
@@ -358,7 +452,7 @@ describe('dlt list allocation', () => {
         })
       );
 
-      const newAllocation = await metadataListAllocations.collection().findOne({
+      const newAllocation = await allocations.collection().findOne({
         currentListId: metadataListEntry.listId,
       });
 

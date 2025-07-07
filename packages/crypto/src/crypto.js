@@ -22,6 +22,7 @@ const randomNumber = require('random-number-csprng');
 const multihash = require('multihashing');
 const keyto = require('@trust/keyto');
 const { HEX_FORMAT } = require('@velocitycareerlabs/test-regexes');
+const { KeyAlgorithms } = require('./constants');
 
 const secp256k1 = new EC('secp256k1');
 
@@ -35,14 +36,33 @@ const createCommitment = (val) => {
   return Buffer.from(hash).toString('base64');
 };
 
-const generateJWAKeyPair = (config) =>
-  config.algorithm === 'rsa'
+const generateJWAKeyPair = (dsaOrConfig) => {
+  const jwaConfig = isString(dsaOrConfig)
+    ? dsaJwaConfigMap[dsaOrConfig]
+    : dsaOrConfig;
+
+  return jwaConfig.algorithm === 'rsa'
     ? generateKeyPair({ type: 'rsa', format: 'jwk', modulusLength: 2048 })
     : generateKeyPair({
         type: 'ec',
         format: 'jwk',
-        curve: config.curve,
+        curve: jwaConfig.curve,
       });
+};
+
+const dsaJwaConfigMap = {
+  [KeyAlgorithms.SECP256K1]: {
+    algorithm: 'ec',
+    curve: 'secp256k1',
+  },
+  [KeyAlgorithms.ES256]: {
+    algorithm: 'ec',
+    curve: 'P-256',
+  },
+  [KeyAlgorithms.RS256]: {
+    algorithm: 'rsa',
+  },
+};
 
 const generateKeyPair = (options = {}) => {
   const { format = 'hex', type = 'ec' } = options;
@@ -154,6 +174,28 @@ const verifyBase64Signature = (value, signature, publicKey) => {
     );
 };
 
+const encryptBuffer = (buffer, secret) => {
+  const iv = crypto.randomBytes(16);
+  const salt = crypto.randomBytes(64);
+  const key = crypto.pbkdf2Sync(secret, salt, 2145, 32, 'sha512');
+  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+
+  const encrypted = Buffer.concat([cipher.update(buffer), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  return Buffer.concat([salt, iv, tag, encrypted]);
+};
+
+const decryptBuffer = (encrypted, secret) => {
+  const salt = encrypted.slice(0, 64);
+  const iv = encrypted.slice(64, 80);
+  const tag = encrypted.slice(80, 96);
+  const buffer = encrypted.slice(96);
+  const key = crypto.pbkdf2Sync(secret, salt, 2145, 32, 'sha512');
+  const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
+  decipher.setAuthTag(tag);
+  return Buffer.concat([decipher.update(buffer), decipher.final()]);
+};
+
 const encrypt = (text, secret) => {
   const iv = crypto.randomBytes(16);
   const salt = crypto.randomBytes(64);
@@ -198,9 +240,9 @@ const initBuildRefreshToken = (bitLength = 512) => {
   return () => generateRandomBytes(byteLength).toString('hex');
 };
 
-const deriveEncryptionSecretFromPassword = async (contentHash) => {
-  const salt = Buffer.from(contentHash.slice(-16), 'hex');
-  const secret = await argon2.hash(contentHash, {
+const deriveEncryptionSecretFromPassword = async (password) => {
+  const salt = Buffer.from(password.slice(-16), 'hex');
+  const secret = await argon2.hash(password, {
     type: argon2.argon2i,
     salt,
     raw: true,
@@ -219,6 +261,8 @@ module.exports = {
   publicKeyHexToPem,
   encrypt,
   decrypt,
+  encryptBuffer,
+  decryptBuffer,
   signPayload,
   verifyPayload,
   hashAndEncodeHex,

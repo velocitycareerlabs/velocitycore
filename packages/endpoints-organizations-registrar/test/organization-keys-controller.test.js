@@ -168,7 +168,7 @@ jest.mock('nanoid/non-secure', () => {
   };
 });
 
-describe('Organization Registrar Test Suite', () => {
+describe('Organization Keys Test Suite', () => {
   let fastify;
   let organizationsRepo;
   let persistOrganization;
@@ -652,7 +652,7 @@ describe('Organization Registrar Test Suite', () => {
                 id: kidFragment,
                 controller: organization.didDoc.id,
                 type: 'JsonWebKey2020',
-                publicKeyJwk: publicJwkMatcher,
+                publicKeyJwk: publicJwkMatcher(),
               },
             ],
           },
@@ -725,13 +725,13 @@ describe('Organization Registrar Test Suite', () => {
                 id: '#fragment-1',
                 controller: organization.didDoc.id,
                 type: 'JsonWebKey2020',
-                publicKeyJwk: publicJwkMatcher,
+                publicKeyJwk: publicJwkMatcher(),
               },
               {
                 id: '#fragment-2',
                 controller: organization.didDoc.id,
                 type: 'JsonWebKey2020',
-                publicKeyJwk: publicJwkMatcher,
+                publicKeyJwk: publicJwkMatcher(),
               },
             ],
           },
@@ -796,7 +796,7 @@ describe('Organization Registrar Test Suite', () => {
                 id: kidFragment,
                 controller: organization.didDoc.id,
                 type: 'JsonWebKey2020',
-                publicKeyJwk: publicJwkMatcher,
+                publicKeyJwk: publicJwkMatcher(),
               },
             ],
           },
