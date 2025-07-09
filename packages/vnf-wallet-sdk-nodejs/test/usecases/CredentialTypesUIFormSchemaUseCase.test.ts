@@ -61,16 +61,16 @@ describe('CredentialTypesUIFormSchemaUseCase Tests', () => {
         );
 
         // Assert
-        expect(expectedAddressCountryCodes).toBe(
+        expect(expectedAddressCountryCodes).toEqual(
             CredentialTypesUIFormSchemaMocks.CountryCodes
         );
-        expect(expectedAddressCountryNames).toBe(
+        expect(expectedAddressCountryNames).toEqual(
             CredentialTypesUIFormSchemaMocks.CountryNames
         );
-        expect(expectedAddressRegionCodes).toBe(
+        expect(expectedAddressRegionCodes).toEqual(
             CredentialTypesUIFormSchemaMocks.CanadaRegionCodes
         );
-        expect(expectedAddressRegionNames).toBe(
+        expect(expectedAddressRegionNames).toEqual(
             CredentialTypesUIFormSchemaMocks.CanadaRegionNames
         );
     });
@@ -115,10 +115,10 @@ describe('CredentialTypesUIFormSchemaUseCase Tests', () => {
             addressRegionJsonObj[VCLCredentialTypesUIFormSchema.KeyUiNames];
 
         // Assert
-        expect(expectedAddressCountryCodes).toBe(
+        expect(expectedAddressCountryCodes).toEqual(
             CredentialTypesUIFormSchemaMocks.CountryCodes
         );
-        expect(expectedAddressCountryNames).toBe(
+        expect(expectedAddressCountryNames).toEqual(
             CredentialTypesUIFormSchemaMocks.CountryNames
         );
         expect(expectedAddressRegionCodes).toBeFalsy();
@@ -167,10 +167,10 @@ describe('CredentialTypesUIFormSchemaUseCase Tests', () => {
         // Assert
         expect(expectedAddressCountryCodes).toBeFalsy();
         expect(expectedAddressCountryNames).toBeFalsy();
-        expect(expectedAddressRegionCodes).toBe(
+        expect(expectedAddressRegionCodes).toEqual(
             CredentialTypesUIFormSchemaMocks.CanadaRegionCodes
         );
-        expect(expectedAddressRegionNames).toBe(
+        expect(expectedAddressRegionNames).toEqual(
             CredentialTypesUIFormSchemaMocks.CanadaRegionNames
         );
     });
@@ -215,11 +215,11 @@ describe('CredentialTypesUIFormSchemaUseCase Tests', () => {
             addressRegionJsonObj[VCLCredentialTypesUIFormSchema.KeyUiNames];
 
         // Assert
-        expect(expectedAddressCountryCodes).toBe(
+        expect(expectedAddressCountryCodes).toEqual(
             CredentialTypesUIFormSchemaMocks.CountryCodes
         );
         expect(expectedAddressCountryNames).toBeFalsy();
-        expect(expectedAddressRegionCodes).toBe(
+        expect(expectedAddressRegionCodes).toEqual(
             CredentialTypesUIFormSchemaMocks.CanadaRegionCodes
         );
         expect(expectedAddressRegionNames).toBeFalsy();

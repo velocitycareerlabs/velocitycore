@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars,no-unused-vars */
 /**
  * Created by Michael Avoyan on 21/07/2024.
  *
@@ -13,9 +12,7 @@ export default class CredentialIssuerVerifierEmptyImpl
     implements CredentialIssuerVerifier
 {
     async verifyCredentials(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         jwtCredentials: VCLJwt[],
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor
     ): Promise<boolean> {
         return true;

@@ -29,12 +29,11 @@ export default class VCLExchange {
                 payload[VCLExchange.KeyDisclosureComplete];
             this.exchangeComplete = payload[VCLExchange.KeyExchangeComplete];
         } else if (args.length === 4) {
-            [
-                this.id,
-                this.type,
-                this.disclosureComplete,
-                this.exchangeComplete,
-            ] = args;
+            const [id, type, disclosureComplete, exchangeComplete] = args;
+            this.id = id;
+            this.type = type;
+            this.disclosureComplete = disclosureComplete;
+            this.exchangeComplete = exchangeComplete;
         } else {
             throw new Error('Invalid constructor arguments for VCLExchange');
         }

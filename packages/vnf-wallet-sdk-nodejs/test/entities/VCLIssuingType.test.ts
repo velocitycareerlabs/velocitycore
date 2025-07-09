@@ -2,24 +2,28 @@ import { issuingTypeFromString, VCLIssuingType } from '../../src';
 
 describe('VCLIssuingType Tests', () => {
     test('testFromExactString', () => {
-        expect(issuingTypeFromString('Career')).toBe(VCLIssuingType.Career);
-        expect(issuingTypeFromString('Identity')).toBe(VCLIssuingType.Identity);
-        expect(issuingTypeFromString('Refresh')).toBe(VCLIssuingType.Refresh);
-        expect(issuingTypeFromString('Undefined')).toBe(
+        expect(issuingTypeFromString('Career')).toEqual(VCLIssuingType.Career);
+        expect(issuingTypeFromString('Identity')).toEqual(
+            VCLIssuingType.Identity
+        );
+        expect(issuingTypeFromString('Refresh')).toEqual(
+            VCLIssuingType.Refresh
+        );
+        expect(issuingTypeFromString('Undefined')).toEqual(
             VCLIssuingType.Undefined
         );
     });
 
     test('testFromNonExactString', () => {
-        expect(issuingTypeFromString('11_Career6_2')).toBe(
+        expect(issuingTypeFromString('11_Career6_2')).toEqual(
             VCLIssuingType.Career
         );
-        expect(issuingTypeFromString('hyre_8Identity09_nf')).toBe(
+        expect(issuingTypeFromString('hyre_8Identity09_nf')).toEqual(
             VCLIssuingType.Identity
         );
-        expect(issuingTypeFromString('hyrek_yRefresho89#l')).toBe(
+        expect(issuingTypeFromString('hyrek_yRefresho89#l')).toEqual(
             VCLIssuingType.Refresh
         );
-        expect(issuingTypeFromString('')).toBe(VCLIssuingType.Undefined);
+        expect(issuingTypeFromString('')).toEqual(VCLIssuingType.Undefined);
     });
 });

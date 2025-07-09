@@ -58,10 +58,10 @@ describe('PresentationRequestUseCase Tests', () => {
         expect(presentationRequest.jwt).toStrictEqual(
             PresentationRequestMocks.PresentationRequestJwt
         );
-        expect(presentationRequest.pushDelegate?.pushUrl).toBe(pushUrl);
-        expect(presentationRequest.pushDelegate?.pushToken).toBe(pushToken);
+        expect(presentationRequest.pushDelegate?.pushUrl).toEqual(pushUrl);
+        expect(presentationRequest.pushDelegate?.pushToken).toEqual(pushToken);
         expect(presentationRequest.didJwk).toStrictEqual(DidJwkMocks.DidJwk);
-        expect(presentationRequest.remoteCryptoServicesToken?.value).toBe(
+        expect(presentationRequest.remoteCryptoServicesToken?.value).toEqual(
             'some token'
         );
     });
@@ -94,9 +94,9 @@ describe('PresentationRequestUseCase Tests', () => {
                 ),
                 new VCLVerifiedProfile({})
             );
-            expect(true).toBe(false);
+            expect(true).toEqual(false);
         } catch (error: any) {
-            expect(error.errorCode).toBe(VCLErrorCode.SdkError.toString());
+            expect(error.errorCode).toEqual(VCLErrorCode.SdkError.toString());
         }
     });
 });

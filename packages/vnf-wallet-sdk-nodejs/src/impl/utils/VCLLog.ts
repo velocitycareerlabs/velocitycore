@@ -12,7 +12,7 @@ export default class VCLLog {
         return this._LoggerService;
     }
 
-    static set LoggerService(value: VCLLogService) {
+    static setLoggerService(value: VCLLogService) {
         this._LoggerService = value || pino();
     }
 

@@ -17,21 +17,35 @@ export default class CredentialDidVerifierImpl
         jwtCredentials: VCLJwt[],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor
     ): Promise<VCLJwtVerifiableCredentials> {
-        const passedCredentials: VCLJwt[] = [];
-        const failedCredentials: VCLJwt[] = [];
-
-        jwtCredentials.forEach((jwtCredential: VCLJwt) => {
-            if (
-                this.verifyCredential(
+        const { passedCredentials, failedCredentials } = jwtCredentials.reduce(
+            (acc, jwtCredential) => {
+                const isValid = this.verifyCredential(
                     jwtCredential,
                     finalizeOffersDescriptor.issuerId
-                )
-            ) {
-                passedCredentials.push(jwtCredential);
-            } else {
-                failedCredentials.push(jwtCredential);
+                );
+
+                return isValid
+                    ? {
+                          passedCredentials: [
+                              ...acc.passedCredentials,
+                              jwtCredential,
+                          ],
+                          failedCredentials: acc.failedCredentials,
+                      }
+                    : {
+                          passedCredentials: acc.passedCredentials,
+                          failedCredentials: [
+                              ...acc.failedCredentials,
+                              jwtCredential,
+                          ],
+                      };
+            },
+            {
+                passedCredentials: [] as VCLJwt[],
+                failedCredentials: [] as VCLJwt[],
             }
-        });
+        );
+
         return new VCLJwtVerifiableCredentials(
             passedCredentials,
             failedCredentials
