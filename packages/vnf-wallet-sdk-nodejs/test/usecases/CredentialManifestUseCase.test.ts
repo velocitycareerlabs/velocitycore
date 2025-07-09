@@ -60,7 +60,7 @@ describe('CredentialManifestUseCase Tests', () => {
                     )
                 )
             );
-            expect(credentialManifest?.jwt.encodedJwt).toBe(
+            expect(credentialManifest?.jwt.encodedJwt).toEqual(
                 CredentialManifestMocks.JwtCredentialManifest1
             );
             expect(credentialManifest?.jwt.header).toStrictEqual(
@@ -69,15 +69,15 @@ describe('CredentialManifestUseCase Tests', () => {
             expect(credentialManifest?.jwt.payload).toStrictEqual(
                 JSON.parse(CredentialManifestMocks.Payload)
             );
-            expect(credentialManifest?.jwt.signature).toBe(
+            expect(credentialManifest?.jwt.signature).toEqual(
                 CredentialManifestMocks.Signature
             );
             expect(credentialManifest?.didJwk).toStrictEqual(
                 DidJwkMocks.DidJwk
             );
-            expect(credentialManifest?.remoteCryptoServicesToken?.value).toBe(
-                'some token'
-            );
+            expect(
+                credentialManifest?.remoteCryptoServicesToken?.value
+            ).toEqual('some token');
         } catch (error) {
             expect(error).toBeNull();
         }
@@ -114,9 +114,9 @@ describe('CredentialManifestUseCase Tests', () => {
                     )
                 )
             );
-            expect(true).toBe(false);
+            expect(true).toEqual(false);
         } catch (error: any) {
-            expect(error?.errorCode).toBe(VCLErrorCode.SdkError.toString());
+            expect(error?.errorCode).toEqual(VCLErrorCode.SdkError.toString());
         }
     });
 });

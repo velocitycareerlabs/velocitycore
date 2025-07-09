@@ -57,14 +57,14 @@ export class Params {
 }
 
 export class HeaderKeys {
-    static readonly HeaderKeyAuthorization = 'Authorization';
-
-    static readonly HeaderValuePrefixBearer = 'Bearer';
+    static readonly Authorization = 'Authorization';
 
     static readonly XVnfProtocolVersion = 'x-vnf-protocol-version';
 }
 
 export class HeaderValues {
+    static readonly PrefixBearer = 'Bearer';
+
     static get XVnfProtocolVersion() {
         return GlobalConfig.XVnfProtocolVersion.toString();
     }

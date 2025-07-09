@@ -1,8 +1,9 @@
 import VCLCredentialTypes from '../../../api/entities/VCLCredentialTypes';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import CredentialTypesRepository from '../../domain/repositories/CredentialTypesRepository';
-import Request, { HttpMethod } from '../infrastructure/network/Request';
+import Request from '../infrastructure/network/Request';
 import Urls, { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class CredentialTypesRepositoryImpl
     implements CredentialTypesRepository

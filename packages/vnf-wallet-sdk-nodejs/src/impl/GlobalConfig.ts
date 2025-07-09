@@ -8,7 +8,7 @@ export default class GlobalConfig {
         return this._IsDebugOn;
     }
 
-    public static set IsDebugOn(value) {
+    public static setIsDebugOn(value) {
         this._IsDebugOn = value;
     }
 
@@ -18,7 +18,7 @@ export default class GlobalConfig {
         return this._CurrentEnvironment;
     }
 
-    public static set CurrentEnvironment(value) {
+    public static setCurrentEnvironment(value) {
         this._CurrentEnvironment = value;
     }
 
@@ -29,7 +29,7 @@ export default class GlobalConfig {
         return this._XVnfProtocolVersion;
     }
 
-    public static set XVnfProtocolVersion(value) {
+    public static setXVnfProtocolVersion(value) {
         this._XVnfProtocolVersion = value;
     }
 
@@ -39,7 +39,7 @@ export default class GlobalConfig {
         return this._IsDirectIssuerOn;
     }
 
-    private static set IsDirectIssuerOn(value) {
+    private static setIsDirectIssuerOn(value) {
         this._IsDirectIssuerOn = value;
     }
 
@@ -49,10 +49,10 @@ export default class GlobalConfig {
         xVnfProtocolVersion: VCLXVnfProtocolVersion = VCLXVnfProtocolVersion.XVnfProtocolVersion1,
         isDirectIssuerOn = true
     ) {
-        GlobalConfig.IsDebugOn = isDebugOn;
-        GlobalConfig.CurrentEnvironment = currentEnvironment;
-        GlobalConfig.XVnfProtocolVersion = xVnfProtocolVersion;
-        GlobalConfig.IsDirectIssuerOn = isDirectIssuerOn;
+        GlobalConfig.setIsDebugOn(isDebugOn);
+        GlobalConfig.setCurrentEnvironment(currentEnvironment);
+        GlobalConfig.setXVnfProtocolVersion(xVnfProtocolVersion);
+        GlobalConfig.setIsDirectIssuerOn(isDirectIssuerOn);
     }
 
     public static get IsLoggerOn() {

@@ -18,7 +18,7 @@ describe('UrlsTest', () => {
     test('testProdEnvironment', () => {
         const registrarPrefix = 'https://registrar.velocitynetwork.foundation';
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.Prod;
+        GlobalConfig.setCurrentEnvironment(VCLEnvironment.Prod);
 
         verifyUrlsPrefix(registrarPrefix);
     });
@@ -27,7 +27,7 @@ describe('UrlsTest', () => {
         const registrarPrefix =
             'https://stagingregistrar.velocitynetwork.foundation';
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.Staging;
+        GlobalConfig.setCurrentEnvironment(VCLEnvironment.Staging);
 
         verifyUrlsPrefix(registrarPrefix);
     });
@@ -36,7 +36,7 @@ describe('UrlsTest', () => {
         const registrarPrefix =
             'https://qaregistrar.velocitynetwork.foundation';
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.Qa;
+        GlobalConfig.setCurrentEnvironment(VCLEnvironment.Qa);
 
         verifyUrlsPrefix(registrarPrefix);
     });
@@ -45,32 +45,34 @@ describe('UrlsTest', () => {
         const registrarPrefix =
             'https://devregistrar.velocitynetwork.foundation';
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.Dev;
+        GlobalConfig.setCurrentEnvironment(VCLEnvironment.Dev);
 
         verifyUrlsPrefix(registrarPrefix);
     });
 
     const verifyUrlsPrefix = (registrarPrefix: string) => {
-        expect(Urls.CredentialTypes.startsWith(registrarPrefix)).toBe(true);
-        expect(Urls.CredentialTypeSchemas.startsWith(registrarPrefix)).toBe(
+        expect(Urls.CredentialTypes.startsWith(registrarPrefix)).toEqual(true);
+        expect(Urls.CredentialTypeSchemas.startsWith(registrarPrefix)).toEqual(
             true
         );
-        expect(Urls.Countries.startsWith(registrarPrefix)).toBe(true);
-        expect(Urls.Organizations.startsWith(registrarPrefix)).toBe(true);
-        expect(Urls.ResolveKid.startsWith(registrarPrefix)).toBe(true);
-        expect(Urls.CredentialTypesFormSchema.startsWith(registrarPrefix)).toBe(
-            true
-        );
+        expect(Urls.Countries.startsWith(registrarPrefix)).toEqual(true);
+        expect(Urls.Organizations.startsWith(registrarPrefix)).toEqual(true);
+        expect(Urls.ResolveKid.startsWith(registrarPrefix)).toEqual(true);
+        expect(
+            Urls.CredentialTypesFormSchema.startsWith(registrarPrefix)
+        ).toEqual(true);
     };
 
     test('testXVnfProtocolVersion', () => {
-        GlobalConfig.XVnfProtocolVersion =
-            VCLXVnfProtocolVersion.XVnfProtocolVersion1;
-        expect(HeaderValues.XVnfProtocolVersion).toBe('1.0');
+        GlobalConfig.setXVnfProtocolVersion(
+            VCLXVnfProtocolVersion.XVnfProtocolVersion1
+        );
+        expect(HeaderValues.XVnfProtocolVersion).toEqual('1.0');
 
-        GlobalConfig.XVnfProtocolVersion =
-            VCLXVnfProtocolVersion.XVnfProtocolVersion2;
-        expect(HeaderValues.XVnfProtocolVersion).toBe('2.0');
+        GlobalConfig.setXVnfProtocolVersion(
+            VCLXVnfProtocolVersion.XVnfProtocolVersion2
+        );
+        expect(HeaderValues.XVnfProtocolVersion).toEqual('2.0');
     });
 
     afterEach(() => {
