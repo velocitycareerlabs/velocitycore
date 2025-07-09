@@ -31,6 +31,8 @@ import {
     OffersByDeepLinkVerifierImpl,
 } from '../../src/impl/data/verifiers';
 import { CredentialTypesModelMock } from '../infrastructure/resources/valid/CredentialTypesModelMock';
+import ResolveDidDocumentRepositoryImpl from '../../src/impl/data/repositories/ResolveDidDocumentRepositoryImpl';
+import { DidDocumentMocks } from '../infrastructure/resources/valid/DidDocumentMocks';
 
 describe('FinalizeOffersUseCase Tests', () => {
     let subject1: FinalizeOffersUseCase;
@@ -82,7 +84,11 @@ describe('FinalizeOffersUseCase Tests', () => {
                     JSON.parse(GenerateOffersMocks.GeneratedOffers)
                 )
             ),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         ).generateOffers(generateOffersDescriptor, new VCLToken(''));
 
         expect(offers.challenge).toBe(GenerateOffersMocks.Challenge);
@@ -137,7 +143,11 @@ describe('FinalizeOffersUseCase Tests', () => {
                 )
             ),
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         try {
@@ -170,7 +180,11 @@ describe('FinalizeOffersUseCase Tests', () => {
                 )
             ),
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const finalizeOffers = await subject2.finalizeOffers(
@@ -213,7 +227,11 @@ describe('FinalizeOffersUseCase Tests', () => {
                 )
             ),
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const finalizeOffers = await subject3.finalizeOffers(
@@ -240,7 +258,11 @@ describe('FinalizeOffersUseCase Tests', () => {
                 )
             ),
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         try {

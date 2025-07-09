@@ -37,6 +37,10 @@ export default class Urls {
         return `${Urls.BaseUrlServices}/api/v0.6/resolve-kid/`;
     }
 
+    static get ResolveDid(): string {
+        return `${Urls.BaseUrlServices}/api/v0.6/resolve-did/`;
+    }
+
     static get CredentialTypesFormSchema(): string {
         return `${Urls.BaseUrlServices}/api/v0.6/form-schemas?credentialType=${Params.CredentialType}`;
     }

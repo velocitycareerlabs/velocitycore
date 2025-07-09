@@ -2,38 +2,48 @@ import axios, { AxiosResponse } from 'axios';
 import { Nullish } from '../../../../api/VCLTypes';
 import NetworkService from '../../../domain/infrastructure/network/NetworkService';
 import VCLLog from '../../../utils/VCLLog';
-import Request, { HttpMethod } from './Request';
 import Response from './Response';
-// TODO: implement response caching
+import Request from './Request';
+import { HttpMethod } from './HttpMethod';
 
 export default class NetworkServiceImpl implements NetworkService {
-    async sendRequestRaw(params: Request): Promise<Response> {
-        let handler: () => Nullish<Promise<AxiosResponse<any, any>>> = () => {
-            return null;
-        };
-        switch (params.method) {
+    async sendRequestRaw(request: Request): Promise<Response> {
+        const MAX_AGE = 60 * 60 * 24; // 24 hours
+
+        let handler: () => Nullish<Promise<AxiosResponse>> = () => null;
+
+        let commonHeaders = request.headers;
+        if (request.useCaches) {
+            commonHeaders = {
+                ...request.headers,
+                'Cache-Control': `public, max-age=${MAX_AGE}`,
+            };
+        }
+
+        switch (request.method) {
             case HttpMethod.GET:
                 handler = () =>
-                    axios.create({ ...axios.defaults }).get(params.endpoint, {
-                        headers: {
-                            ...params.headers,
-                        },
+                    axios.create({ ...axios.defaults }).get(request.endpoint, {
+                        headers: commonHeaders,
                     });
                 break;
+
             case HttpMethod.POST:
                 handler = () =>
                     axios
                         .create({ ...axios.defaults })
-                        .post(params.endpoint, params.body, {
+                        .post(request.endpoint, request.body, {
                             headers: {
-                                ...params.headers,
-                                'Content-Type': params.contentType,
+                                ...commonHeaders,
+                                'Content-Type': request.contentType,
                             },
                         });
                 break;
+
             default:
                 break;
         }
+
         try {
             const r = await handler();
             return new Response(r!.data, r!.status);
@@ -42,9 +52,9 @@ export default class NetworkServiceImpl implements NetworkService {
         }
     }
 
-    async sendRequest(params: Request): Promise<Response> {
-        this.logRequest(params);
-        return this.sendRequestRaw(params);
+    async sendRequest(request: Request): Promise<Response> {
+        this.logRequest(request);
+        return this.sendRequestRaw(request);
     }
 
     logRequest(request: Request) {
