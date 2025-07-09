@@ -169,11 +169,14 @@ const encrypt = (text, secret) => {
 };
 
 const decrypt = (encrypted, secret) => {
-  const bData = Buffer.from(encrypted, 'base64');
-  const salt = bData.slice(0, 64);
-  const iv = bData.slice(64, 80);
-  const tag = bData.slice(80, 96);
-  const text = bData.slice(96);
+  let bData = encrypted;
+  if (!Buffer.isBuffer(encrypted)) {
+    bData = Buffer.from(encrypted, 'base64');
+  }
+  const salt = bData.subarray(0, 64);
+  const iv = bData.subarray(64, 80);
+  const tag = bData.subarray(80, 96);
+  const text = bData.subarray(96);
   const key = crypto.pbkdf2Sync(secret, salt, 2145, 32, 'sha512');
   const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
   decipher.setAuthTag(tag);
