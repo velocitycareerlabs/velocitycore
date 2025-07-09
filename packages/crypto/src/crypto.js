@@ -165,12 +165,17 @@ const encrypt = (text, secret) => {
     cipher.final(),
   ]);
   const tag = cipher.getAuthTag();
-  return Buffer.concat([salt, iv, tag, encrypted]).toString('base64');
+  const encryptedBuffer = Buffer.concat([salt, iv, tag, encrypted]);
+  if (Buffer.isBuffer(text)) {
+    return encryptedBuffer;
+  }
+  return encryptedBuffer.toString('base64');
 };
 
 const decrypt = (encrypted, secret) => {
+  const isBuffer = Buffer.isBuffer(encrypted);
   let bData = encrypted;
-  if (!Buffer.isBuffer(encrypted)) {
+  if (!isBuffer) {
     bData = Buffer.from(encrypted, 'base64');
   }
   const salt = bData.subarray(0, 64);
@@ -180,7 +185,10 @@ const decrypt = (encrypted, secret) => {
   const key = crypto.pbkdf2Sync(secret, salt, 2145, 32, 'sha512');
   const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
   decipher.setAuthTag(tag);
-  return decipher.update(text, 'binary', 'utf8') + decipher.final('utf8');
+  if (!isBuffer) {
+    return decipher.update(text, 'binary', 'utf8') + decipher.final('utf8');
+  }
+  return Buffer.concat([decipher.update(text, 'binary'), decipher.final()]);
 };
 
 const generateRandomNumber = (length) =>

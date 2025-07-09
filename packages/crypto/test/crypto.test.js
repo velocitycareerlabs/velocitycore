@@ -88,16 +88,13 @@ describe('Crypto tests', () => {
       const buffer = Buffer.from(text);
       const secret =
         '81F9D21264DBA82B70E4B21241178473320A016ACF5819FB276CBA562A7AD78F';
-      const encryptedStr = encrypt(buffer, secret);
-      const encryptedBuffer = Buffer.from(encryptedStr, 'base64');
+      const encryptedBuffer = encrypt(buffer, secret);
 
-      expect(encryptedStr).toEqual(expect.any(String));
       expect(encryptedBuffer).toEqual(expect.any(Buffer));
 
-      expect(encryptedStr).not.toEqual(text);
-      expect(encryptedBuffer).not.toEqual(buffer);
-      const decryptedString = decrypt(encryptedBuffer, secret);
-      expect(decryptedString).toEqual(text);
+      expect(encryptedBuffer.equals(buffer)).toEqual(false);
+      const decryptedBuffer = decrypt(encryptedBuffer, secret);
+      expect(decryptedBuffer.equals(buffer)).toEqual(true);
     });
   });
 
