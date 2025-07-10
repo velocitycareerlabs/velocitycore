@@ -1,29 +1,25 @@
 {
-  "name": "@velocitycareerlabs/blockchain-functions",
+  "name": "@velocitycareerlabs/cosekey",
   "version": "0.5.0-build",
-  "description": "Blockchain related wrappers and helpers.",
+  "description": "Set of cosekey functions used in Verii projects",
   "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "test": "jest --config ./jest.config.js --runInBand --coverage --passWithNoTests",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.js --runInBand --coverage",
     "lint": "eslint . --format json >> eslint.json",
     "lint:fix": "eslint --fix --ext .js ."
   },
-  "author": "Itay Podhajcer",
+  "author": "Velocity Team",
   "license": "Apache-2.0",
   "dependencies": {
-    "@velocitycareerlabs/jwt": "0.5.0-build",
-    "lodash": "^4.17.21",
-    "ethers": "~6.15.0"
-  },
-  "resolutions": {
-    "elliptic": "^6.6.1"
+    "bigint-crypto-utils": "3.3.0",
+    "cborg": "4.2.12",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@velocitycareerlabs/crypto": "0.5.0-build",
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "8.10.0",
