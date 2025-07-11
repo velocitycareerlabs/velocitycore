@@ -23,8 +23,8 @@
 
 const {
   generateJWAKeyPair,
-  encrypt: _encrypt,
-  decrypt: _decrypt,
+  encrypt,
+  decrypt,
 } = require('@velocitycareerlabs/crypto');
 const { jwtSign, jwtVerify, hexFromJwk } = require('@velocitycareerlabs/jwt');
 const { isEmpty, omit } = require('lodash/fp');
@@ -175,12 +175,12 @@ const initDbKms = (fastify, kmsOptions = {}) => {
      * @param {Id} keyId the key id to encrypt with
      * @returns {string} the encrypted text
      */
-    const encrypt = async (plainText, keyId) => {
+    const encryptString = async (plainText, keyId) => {
       const key = await loadKey(keyId);
       const hex = hexFromJwk(
         key[repoOptions.secretProp] ?? key[repoOptions.keyProp]
       );
-      return _encrypt(plainText, hex);
+      return encrypt(plainText, hex);
     };
 
     /**
@@ -189,12 +189,12 @@ const initDbKms = (fastify, kmsOptions = {}) => {
      * @param {Id} keyId the key id to decrypt with
      * @returns {string} the decrypted text
      */
-    const decrypt = async (encrypted, keyId) => {
+    const decryptString = async (encrypted, keyId) => {
       const key = await loadKey(keyId);
       const hex = hexFromJwk(
         key[repoOptions.secretProp] ?? key[repoOptions.keyProp]
       );
-      return _decrypt(encrypted, hex);
+      return decrypt(encrypted, hex);
     };
 
     return {
@@ -204,8 +204,8 @@ const initDbKms = (fastify, kmsOptions = {}) => {
       exportKeyOrSecret,
       signJwt,
       verifyJwt,
-      encrypt,
-      decrypt,
+      encryptString,
+      decryptString,
     };
   };
 };
