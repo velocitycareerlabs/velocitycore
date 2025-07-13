@@ -20237,12 +20237,7 @@ undici@^6.19.5:
   resolved "https://registry.npmjs.org/undici/-/undici-6.21.2.tgz#49c5884e8f9039c65a89ee9018ef3c8e2f1f4928"
   integrity sha512-uROZWze0R0itiAKVPsYhFov9LxrPMHLMEQFszeI2gCN6bnIIZ8twzBCJcN2LJrBBLfrP0t1FW0g+JmKVl8Vk1g==
 
-undici@^7.0.0:
-  version "7.10.0"
-  resolved "https://registry.npmjs.org/undici/-/undici-7.10.0.tgz#8ae17a976acc6593b13c9ff3342840bea9b24670"
-  integrity sha512-u5otvFBOBZvmdjWLVW+5DAc9Nkq8f24g0O9oY7qw2JVIF1VocIFoyz9JFkuVOS2j41AufeO0xnlweJ2RLT8nGw==
-
-undici@^7.10.0:
+undici@^7.0.0, undici@^7.10.0:
   version "7.11.0"
   resolved "https://registry.npmjs.org/undici/-/undici-7.11.0.tgz#8e13a54f62afa756666c0590c38b3866e286d0b3"
   integrity sha512-heTSIac3iLhsmZhUCjyS3JQEkZELateufzZuBaVM5RHXdSBMb1LPMQf5x+FH7qjsZYDP0ttAc3nnVpUB+wYbOg==
