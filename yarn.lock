@@ -16147,10 +16147,10 @@ no-case@^3.0.4:
     lower-case "^2.0.2"
     tslib "^2.0.3"
 
-nock@15.0.0-beta.3:
-  version "15.0.0-beta.3"
-  resolved "https://registry.npmjs.org/nock/-/nock-15.0.0-beta.3.tgz#6d4e5353254a39f9339340c11bf72d54705a725b"
-  integrity sha512-4q0Cr/pU11G5f3aM/V7w4u1PEeimng6MhjqGdaUEyMYp32ZbCvTuiLQknoSS9iWTbKvTCpr0Q/jN8NZpHbXfdQ==
+nock@15.0.0-beta.4:
+  version "15.0.0-beta.4"
+  resolved "https://registry.npmjs.org/nock/-/nock-15.0.0-beta.4.tgz#6e2a40361f2b9782d576e7e903d8376bf2377dd8"
+  integrity sha512-ZWLweXuh96gt8LwF9NjBRtNN/NMZYeLRoDc2wX8djva+v2qVzI0EiFZpSMbanJ45WTFIAiqsM5GW8TahiBn7Xw==
   dependencies:
     "@mswjs/interceptors" "^0.38.7"
     json-stringify-safe "^5.0.1"
