@@ -16,13 +16,7 @@
  */
 
 // Code snippet inspired by: https://github.com/ldclabs/cose-ts
-const {
-  KeyParameters,
-  KeyTypes,
-  OKPKeyParameters,
-  EC2KeyParameters,
-  SymmetricKeyParameters,
-} = require('./cose-iana');
+const { KeyParameters, KeyTypes, EC2KeyParameters } = require('./cose-iana');
 
 const { decodeCBOR } = require('./cose-utils');
 
@@ -143,12 +137,8 @@ class CoseKey extends KVMap {
    */
   getSecret() {
     switch (this.kty) {
-      case KeyTypes.OKP:
-        return this.getBytes(OKPKeyParameters.D, 'k');
       case KeyTypes.EC2:
         return this.getBytes(EC2KeyParameters.D, 'd');
-      case KeyTypes.Symmetric:
-        return this.getBytes(SymmetricKeyParameters.K, 'k');
       default:
         throw new Error('unsupported key type');
     }

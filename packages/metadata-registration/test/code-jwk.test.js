@@ -22,12 +22,7 @@ const {
   decrypt,
 } = require('@velocitycareerlabs/crypto');
 const { hexFromJwk, jwkFromSecp256k1Key } = require('@velocitycareerlabs/jwt');
-const {
-  encodeJwk,
-  decodeJwk,
-  convertECToCoseKey,
-  convertCoseKeyToEC,
-} = require('../src/code-jwk');
+const { encodeJwk, decodeJwk } = require('../src/code-jwk');
 const { ALG_TYPE } = require('../src/constants');
 
 const es256Jwk = {
@@ -103,11 +98,6 @@ describe('encoding and decoding of jwks for blockchains', () => {
       await expect(() =>
         decodeJwk('SOME_OTHER_TYPE', Buffer.from('deadbeef', 'hex'), secret)
       ).rejects.toThrowError();
-    });
-
-    it('converts back and forth from cosekey', async () => {
-      const coseKey = await convertECToCoseKey(es256kJwk);
-      expect(convertCoseKeyToEC(coseKey)).toEqual(es256kJwk);
     });
 
     it('decodes a es256k compact JWK buffer back to JWK object', async () => {

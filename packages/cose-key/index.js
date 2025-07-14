@@ -18,4 +18,5 @@ module.exports = {
   ...require('./src/derive-ec-y-values'),
   ...require('./src/cose-key'),
   ...require('./src/cose-iana'),
+  ...require('./src/jwk-converters'),
 };

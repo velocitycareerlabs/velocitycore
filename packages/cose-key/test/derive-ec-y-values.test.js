@@ -15,9 +15,11 @@
  *
  */
 
+const {
+  generateJWAKeyPair,
+  KeyAlgorithms,
+} = require('@velocitycareerlabs/crypto');
 const { isEcYValueEven, deriveEcYValue } = require('../src/derive-ec-y-values');
-const { generateJWAKeyPair } = require('../src/crypto');
-const { KeyAlgorithms } = require('../src/constants');
 
 const hundred = Array.from(Array(3000).keys()).map((i) => [i]);
 describe.each(hundred)('Derive EC Y Coordinates', () => {

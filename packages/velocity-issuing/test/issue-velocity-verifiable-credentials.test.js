@@ -25,7 +25,7 @@ const { getUnixTime } = require('date-fns/fp');
 const { nanoid } = require('nanoid');
 const { ISO_DATETIME_FORMAT } = require('@velocitycareerlabs/test-regexes');
 const { ALG_TYPE } = require('@velocitycareerlabs/metadata-registration');
-const { KeyAlgorithms } = require('@velocitycareerlabs/crypto/src/constants');
+const { KeyAlgorithms } = require('@velocitycareerlabs/crypto');
 const { hashOffer } = require('../src/domain/hash-offer');
 const {
   issueVelocityVerifiableCredentials,

@@ -26,7 +26,7 @@ const { CoseKey } = require('../src/cose-key');
 
 const { isEcYValueEven, deriveEcYValue } = require('../src/derive-ec-y-values');
 
-describe('cose key tests', () => {
+describe('COSE key tests', () => {
   it('ECDSA 256-Bit COSE Key', async () => {
     const key = new CoseKey();
     key.kty = KeyTypes.EC2;
@@ -142,6 +142,7 @@ describe('cose key tests', () => {
         EC2KeyParameters.Y,
         isEcYValueEven(Buffer.from(secp256k1Key.y, 'base64url'))
       );
+    expect(key.alg).toEqual(Algorithms.ES256);
     const expected =
       // eslint-disable-next-line max-len
       'a5010203262001215820367e19155d840392799d37c11b83f4729bc8ad58a415c0a24f7df6162831a89d22f4';
@@ -161,5 +162,25 @@ describe('cose key tests', () => {
 
     const key2 = await CoseKey.fromBytes(Buffer.from(expected, 'hex'));
     expect(Buffer.from(await key2.toBytes()).toString('hex')).toEqual(expected);
+  });
+  it('should get and set kid parameter', async () => {
+    const key = new CoseKey();
+    const kid = Buffer.from('my-key-id');
+    key.kid = kid;
+    expect(Buffer.from(key.kid)).toEqual(kid);
+  });
+
+  it('should get and set iv parameter', async () => {
+    const key = new CoseKey();
+    const iv = Buffer.from('initial-vector');
+    key.baseIV = iv;
+    expect(Buffer.from(key.baseIV)).toEqual(iv);
+  });
+
+  it('should get and set key operations', async () => {
+    const key = new CoseKey();
+    const ops = [1, 2, 3];
+    key.ops = ops;
+    expect(key.ops).toEqual(ops);
   });
 });

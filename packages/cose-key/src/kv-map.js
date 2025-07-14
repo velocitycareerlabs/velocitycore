@@ -269,13 +269,6 @@ class KVMap {
   }
 
   /**
-   * @returns {RawMap}
-   */
-  toRaw() {
-    return this._raw;
-  }
-
-  /**
    * @returns {Promise<Uint8Array>}
    */
   async toBytes() {

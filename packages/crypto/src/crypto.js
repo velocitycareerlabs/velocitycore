@@ -174,18 +174,39 @@ const verifyBase64Signature = (value, signature, publicKey) => {
     );
 };
 
-const encryptBuffer = (buffer, secret) => {
+const encryptBuffer = (buffer, secret) =>
+  doEncrypt(secret, (cipher) => cipher.update(buffer));
+
+const encrypt = (text, secret) =>
+  doEncrypt(secret, (cipher) => cipher.update(text, 'utf8')).toString('base64');
+
+const decryptBuffer = (encrypted, secret) =>
+  doDecrypt(encrypted, secret, (encryptedBuffer, decipher) =>
+    Buffer.concat([decipher.update(encryptedBuffer), decipher.final()])
+  );
+
+const decrypt = (encrypted, secret) => {
+  const bData = Buffer.from(encrypted, 'base64');
+  return doDecrypt(
+    bData,
+    secret,
+    (encryptedBuffer, decipher) =>
+      decipher.update(encryptedBuffer, 'binary', 'utf8') +
+      decipher.final('utf8')
+  );
+};
+
+const doEncrypt = (secret, callback) => {
   const iv = crypto.randomBytes(16);
   const salt = crypto.randomBytes(64);
   const key = crypto.pbkdf2Sync(secret, salt, 2145, 32, 'sha512');
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-
-  const encrypted = Buffer.concat([cipher.update(buffer), cipher.final()]);
+  const encrypted = Buffer.concat([callback(cipher), cipher.final()]);
   const tag = cipher.getAuthTag();
   return Buffer.concat([salt, iv, tag, encrypted]);
 };
 
-const decryptBuffer = (encrypted, secret) => {
+const doDecrypt = (encrypted, secret, callback) => {
   const salt = encrypted.slice(0, 64);
   const iv = encrypted.slice(64, 80);
   const tag = encrypted.slice(80, 96);
@@ -193,33 +214,7 @@ const decryptBuffer = (encrypted, secret) => {
   const key = crypto.pbkdf2Sync(secret, salt, 2145, 32, 'sha512');
   const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
   decipher.setAuthTag(tag);
-  return Buffer.concat([decipher.update(buffer), decipher.final()]);
-};
-
-const encrypt = (text, secret) => {
-  const iv = crypto.randomBytes(16);
-  const salt = crypto.randomBytes(64);
-  const key = crypto.pbkdf2Sync(secret, salt, 2145, 32, 'sha512');
-  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-
-  const encrypted = Buffer.concat([
-    cipher.update(text, 'utf8'),
-    cipher.final(),
-  ]);
-  const tag = cipher.getAuthTag();
-  return Buffer.concat([salt, iv, tag, encrypted]).toString('base64');
-};
-
-const decrypt = (encrypted, secret) => {
-  const bData = Buffer.from(encrypted, 'base64');
-  const salt = bData.slice(0, 64);
-  const iv = bData.slice(64, 80);
-  const tag = bData.slice(80, 96);
-  const text = bData.slice(96);
-  const key = crypto.pbkdf2Sync(secret, salt, 2145, 32, 'sha512');
-  const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
-  decipher.setAuthTag(tag);
-  return decipher.update(text, 'binary', 'utf8') + decipher.final('utf8');
+  return callback(buffer, decipher);
 };
 
 const generateRandomNumber = (length) =>

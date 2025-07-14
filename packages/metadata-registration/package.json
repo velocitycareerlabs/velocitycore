@@ -18,6 +18,7 @@
     "@velocitycareerlabs/base-contract-io": "^0.5.0-build",
     "@velocitycareerlabs/blockchain-functions": "0.5.0-build",
     "@velocitycareerlabs/common-functions": "0.5.0-build",
+    "@velocitycareerlabs/cose-key": "0.5.0-build",
     "@velocitycareerlabs/crypto": "0.5.0-build",
     "@velocitycareerlabs/jwt": "0.5.0-build",
     "@velocitycareerlabs/contract-permissions": "^0.5.0-build",

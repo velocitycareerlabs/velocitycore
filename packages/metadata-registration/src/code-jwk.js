@@ -20,16 +20,10 @@ const {
   get2BytesHash,
   encrypt,
   encryptBuffer,
-  deriveEcYValue,
   decrypt,
   decryptBuffer,
-  isEcYValueEven,
-  KeyTypes,
-  EC2KeyParameters,
-  EllipticCurves,
-  RSAKeyParameters,
-  CoseKey,
 } = require('@velocitycareerlabs/crypto');
+const { CoseKey, fromJwk, toJwk } = require('@velocitycareerlabs/cose-key');
 const { ALG_TYPE } = require('./constants');
 
 const encodeJwk = async (algType, jwk, secret) => {
@@ -41,13 +35,11 @@ const encodeJwk = async (algType, jwk, secret) => {
   }
 
   if (algType === ALG_TYPE.COSEKEY_AES_256) {
-    const coseKey =
-      jwk.kty === 'RSA' ? convertRSAToCoseKey(jwk) : convertECToCoseKey(jwk);
-
+    const coseKey = fromJwk(jwk);
     return encryptBuffer(Buffer.from(await coseKey.toBytes()), secret);
   }
 
-  throw new Error('Unsupported algorithm type');
+  throw new Error(`Unsupported Credential Metadata Algorithm Type ${algType}`);
 };
 
 const decodeJwk = async (algType, rawKeyBuffer, secret) => {
@@ -61,61 +53,12 @@ const decodeJwk = async (algType, rawKeyBuffer, secret) => {
     const coseKey = await CoseKey.fromBytes(
       decryptBuffer(rawKeyBuffer, secret)
     );
-    return coseKey.kty === KeyTypes.RSA
-      ? convertCoseKeyToRSA(coseKey)
-      : convertCoseKeyToEC(coseKey);
+    return toJwk(coseKey);
   }
-  throw new Error(`Unsupported algType ${algType}`);
-};
-
-const convertCoseKeyToRSA = (coseKey) => {
-  return {
-    kty: 'RSA',
-    n: Buffer.from(coseKey.getParam(RSAKeyParameters.N)).toString('base64url'),
-    e: Buffer.from(coseKey.getParam(RSAKeyParameters.E)).toString('base64url'),
-  };
-};
-
-const convertCoseKeyToEC = (coseKey) => {
-  const crv =
-    coseKey.getParam(EC2KeyParameters.Crv) === EllipticCurves.Secp256k1
-      ? 'secp256k1'
-      : 'P-256';
-  const x = Buffer.from(coseKey.getParam(EC2KeyParameters.X));
-  const y = deriveEcYValue(crv, x, coseKey.getParam(EC2KeyParameters.Y));
-
-  return {
-    kty: 'EC',
-    crv,
-    x: x.toString('base64url'),
-    y: y.toString('base64url'),
-  };
-};
-
-const convertRSAToCoseKey = (jwk) => {
-  const key = new CoseKey();
-  key.kty = KeyTypes.RSA;
-  return key
-    .setParam(RSAKeyParameters.N, Buffer.from(jwk.n, 'base64url'))
-    .setParam(RSAKeyParameters.E, Buffer.from(jwk.e, 'base64url'));
-};
-
-const convertECToCoseKey = (jwk) => {
-  const y = isEcYValueEven(Buffer.from(jwk.y, 'base64url'));
-  const key = new CoseKey();
-  key.kty = KeyTypes.EC2;
-  return key
-    .setParam(
-      EC2KeyParameters.Crv,
-      jwk.crv === 'secp256k1' ? EllipticCurves.Secp256k1 : EllipticCurves.P_256
-    )
-    .setParam(EC2KeyParameters.X, Buffer.from(jwk.x, 'base64url'))
-    .setParam(EC2KeyParameters.Y, y);
+  throw new Error(`Unsupported Credential Metadata Algorithm Type ${algType}`);
 };
 
 module.exports = {
   encodeJwk,
   decodeJwk,
-  convertECToCoseKey,
-  convertCoseKeyToEC,
 };
