@@ -78,6 +78,26 @@ describe('KVMap', () => {
     expect(map.getParam('key')).toEqual(123);
   });
 
+  it('should support nil keys for getParam', () => {
+    const map = new KVMap();
+    map.setParam(null, 123);
+    expect(map.getParam(null)).toEqual(123);
+    map.setParam('', 456);
+    expect(map.getParam('')).toEqual(456);
+    map.setParam(undefined, 789);
+    expect(map.getParam(undefined)).toEqual(789);
+  });
+
+  it('should support nil values for setParam', () => {
+    const map = new KVMap();
+    map.setParam('key1', null);
+    expect(map.getParam('key1')).toEqual(null);
+    map.setParam('key2', '');
+    expect(map.getParam('key2')).toEqual('');
+    map.setParam('key3', undefined);
+    expect(map.getParam('key3')).toEqual(undefined);
+  });
+
   it('should round-trip encode and decode with CBOR', async () => {
     const map = new KVMap();
     map.setParam(1, 'value');

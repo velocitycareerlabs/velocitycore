@@ -38,18 +38,18 @@ const rs256Jwk = {
 };
 
 describe('jwk converters', () => {
-  it('converts SECP256k1 EC key back and forth from cosekey', async () => {
-    const coseKey = await fromJwk(es256kJwk);
+  it('converts SECP256k1 EC key back and forth from cosekey', () => {
+    const coseKey = fromJwk(es256kJwk);
     expect(toJwk(coseKey)).toEqual(es256kJwk);
   });
 
-  it('converts P-256 EC key back and forth from cosekey', async () => {
-    const coseKey = await fromJwk(es256Jwk);
+  it('converts P-256 EC key back and forth from cosekey', () => {
+    const coseKey = fromJwk(es256Jwk);
     expect(toJwk(coseKey)).toEqual(es256Jwk);
   });
 
-  it('converts RSA key back and forth from cosekey', async () => {
-    const coseKey = await fromJwk(rs256Jwk);
+  it('converts RSA key back and forth from cosekey', () => {
+    const coseKey = fromJwk(rs256Jwk);
     expect(toJwk(coseKey)).toEqual(rs256Jwk);
   });
 });

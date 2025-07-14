@@ -197,8 +197,8 @@ const decrypt = (encrypted, secret) => {
 };
 
 const doEncrypt = (secret, callback) => {
-  const iv = crypto.randomBytes(16);
   const salt = crypto.randomBytes(64);
+  const iv = crypto.randomBytes(16);
   const key = crypto.pbkdf2Sync(secret, salt, 2145, 32, 'sha512');
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
   const encrypted = Buffer.concat([callback(cipher), cipher.final()]);
