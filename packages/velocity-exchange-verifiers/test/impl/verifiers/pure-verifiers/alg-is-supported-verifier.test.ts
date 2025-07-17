@@ -1,0 +1,65 @@
+/**
+ * Created by Michael Avoyan on 17/07/2025.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { ERROR_CODES } from 'impl/errors';
+import { CredentialJwt, ValidationContext } from 'impl/types';
+import { algIsSupportedVerifier } from 'impl/verifiers/pure-verifiers';
+
+describe('algIsSupportedVerifier', () => {
+  const baseContext: ValidationContext = {
+    path: [],
+    credential_issuer_metadata: {
+      iss: 'did:issuer:example',
+      credential_issuer: 'https://issuer.example.com',
+    },
+  };
+
+  const makeCredential = (alg?: string): CredentialJwt => {
+    const header = alg !== undefined ? { alg } : ({} as any);
+    return {
+      header,
+      payload: {
+        iss: 'did:example',
+        vc: {},
+      },
+    };
+  };
+
+  it.each(['ES256', 'ES256K', 'RS256'])(
+    'should pass for supported alg "%s"',
+    (alg) => {
+      const credential = makeCredential(alg);
+      const result = algIsSupportedVerifier(credential, baseContext);
+      expect(result).toEqual([]);
+    }
+  );
+
+  it.each(['HS256', 'none', '', 'EdDSA'])(
+    'should fail for unsupported alg "%s"',
+    (alg) => {
+      const credential = makeCredential(alg);
+      const result = algIsSupportedVerifier(credential, baseContext);
+      expect(result).toHaveLength(1);
+      expect(result[0]).toMatchObject({
+        code: ERROR_CODES.INVALID_ALG,
+        message: expect.stringContaining(alg),
+        path: ['header', 'alg'],
+      });
+    }
+  );
+
+  it('should fail when alg is missing entirely', () => {
+    const credential = makeCredential(undefined);
+    const result = algIsSupportedVerifier(credential, baseContext);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toMatchObject({
+      code: ERROR_CODES.INVALID_ALG,
+      message: expect.stringContaining('undefined'),
+      path: ['header', 'alg'],
+    });
+  });
+});
