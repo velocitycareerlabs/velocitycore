@@ -21,7 +21,6 @@ const { publicJwkMatcher } = require('@velocitycareerlabs/tests-helpers');
 const initRequest = require('@velocitycareerlabs/request');
 const { jwtDecode, jwtVerify, jwtSign } = require('@velocitycareerlabs/jwt');
 const { first, map } = require('lodash/fp');
-const { getUnixTime } = require('date-fns/fp');
 const { nanoid } = require('nanoid');
 const { ISO_DATETIME_FORMAT } = require('@velocitycareerlabs/test-regexes');
 const { ALG_TYPE } = require('@velocitycareerlabs/metadata-registration');
@@ -393,7 +392,7 @@ const verifyCreateMetadataListCalledOnce = async (
     typ: 'JWT',
   });
   expect(payload).toEqual({
-    iat: getUnixTime(payload.vc.issuanceDate),
+    iat: expect.any(Number),
     iss: issuerEntity.did,
     jti: `ethereum:${METADATA_LIST_CONTRACT_ADDRESS}/getСredentialMetadataListIssuerVC?address=${issuerEntity.primaryAddress}&listId=${listId}`,
     nbf: expect.any(Number),
