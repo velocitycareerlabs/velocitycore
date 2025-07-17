@@ -74,9 +74,9 @@ const jwtVcExpectation = ({
       ),
       id: credentialId,
       type: [
+        'VerifiableCredential',
         first(credential.content.type),
         'VelocityNetworkLayer1Credential',
-        'VerifiableCredential',
       ],
       credentialSubject: {
         ...credential.content.credentialSubject,
