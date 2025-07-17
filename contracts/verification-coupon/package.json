@@ -23,7 +23,7 @@
     "@openzeppelin/truffle-upgrades": "1.21.0",
     "@truffle/hdwallet-provider": "1.7.0",
     "@velocitycareerlabs/permissions-contract": "^0.5.0-build",
-    "ethers": "6.13.5",
+    "ethers": "6.14.4",
     "truffle": "5.11.5",
     "truffle-assertions": "0.9.2"
   }
