@@ -15,7 +15,7 @@
  *
  */
 /**
- * Coerces a value to an array
+ * Coerces a value to a non-empty array
  * @param {undefined|null|Array<T>|T} value
  * @return {undefined|Array<T>}
  */
