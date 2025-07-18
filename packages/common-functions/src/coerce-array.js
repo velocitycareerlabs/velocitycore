@@ -28,7 +28,7 @@ const coerceArray = (value) => {
     return value.length !== 0 ? value : undefined;
   }
 
-  return value;
+  return [value];
 };
 
 module.exports = {
