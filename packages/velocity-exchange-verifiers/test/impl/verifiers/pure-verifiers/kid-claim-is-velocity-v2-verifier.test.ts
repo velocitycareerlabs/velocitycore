@@ -1,0 +1,62 @@
+/**
+ * Created by Michael Avoyan on 17/07/2025.
+ *
+ * Copyright 2022 Velocity Career Labs inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { kidClaimIsVelocityV2Verifier } from 'impl/verifiers/pure-verifiers';
+import { CredentialJwt, ValidationContext } from 'impl/types';
+import { ERROR_CODES } from 'impl/errors';
+
+describe('kidClaimIsVelocityV2Verifier', () => {
+  const baseContext: ValidationContext = {
+    path: [],
+    credential_issuer_metadata: {
+      iss: 'did:issuer:example',
+      credential_issuer: 'https://issuer.example.com',
+    },
+  };
+
+  const makeCredential = (kid?: string): CredentialJwt => ({
+    header: { alg: 'ES256' },
+    payload: {
+      iss: 'did:example',
+      kid,
+      vc: {},
+    },
+  });
+
+  it('should pass when kid starts with "did:velocity:v2"', () => {
+    const credential = makeCredential('did:velocity:v2:1234');
+    const result = kidClaimIsVelocityV2Verifier(credential, baseContext);
+    expect(result).toEqual([]);
+  });
+
+  it.each([
+    'did:velocity:v1:1234',
+    'did:web:velocity.com',
+    'something-else',
+    '',
+  ])('should fail when kid is "%s"', (invalidKid) => {
+    const credential = makeCredential(invalidKid);
+    const result = kidClaimIsVelocityV2Verifier(credential, baseContext);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toMatchObject({
+      code: ERROR_CODES.INVALID_KID,
+      message: expect.stringContaining(invalidKid),
+      path: ['payload', 'kid'],
+    });
+  });
+
+  it('should fail when kid is undefined', () => {
+    const credential = makeCredential(undefined);
+    const result = kidClaimIsVelocityV2Verifier(credential, baseContext);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toMatchObject({
+      code: ERROR_CODES.INVALID_KID,
+      message: expect.stringContaining('undefined'),
+      path: ['payload', 'kid'],
+    });
+  });
+});
