@@ -17,14 +17,14 @@ import { CredentialJwt, Verifier } from 'impl/types';
  * and is required by the Velocity Profile conformance rules.
  *
  * @param credential - The {@link CredentialJwt} object containing both `header` and `payload`.
- * @param context - The {@link ValidationContext} used for issuer metadata and error path tracking.
+ * @param context - The {@link VerificationContext} used for issuer metadata and error path tracking.
  *
  * @returns An array of {@link VerificationError} with a single entry if the field is missing,
  * or an empty array if the credential is valid.
  *
  * @example
  * ```ts
- * const errors = credentialStatusVerifier(credentialJwt, validationContext);
+ * const errors = credentialStatusVerifier(credentialJwt, verificationContext);
  * if (errors.length > 0) {
  *   handleValidationErrors(errors);
  * }
@@ -35,7 +35,7 @@ import { CredentialJwt, Verifier } from 'impl/types';
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
- * @see {@link ValidationContext}
+ * @see {@link VerificationContext}
  */
 export const credentialStatusVerifier: Verifier<CredentialJwt> = (
   credential,

@@ -8,4 +8,4 @@
 export * from './credential-jwt';
 export * from './verifier';
 export * from './verification-error';
-export * from './validation-context';
+export * from './verification-context';

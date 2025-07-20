@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationContext, CredentialJwt } from 'impl/types';
+import { VerificationContext, CredentialJwt } from 'impl/types';
 import { ERROR_CODES } from 'impl/errors';
 import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
 import { verifyCredentialEndpointResponse } from 'api/verify-credential-endpoint-response';
@@ -16,7 +16,7 @@ jest.mock('impl/rules', () => ({
 }));
 
 describe('verifyCredentialEndpointResponse', () => {
-  const baseContext: ValidationContext = {
+  const baseContext: VerificationContext = {
     path: [],
     credential_issuer_metadata: {
       iss: 'did:issuer:example',

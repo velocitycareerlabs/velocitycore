@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { VerificationError, ValidationContext } from 'impl/types';
+import { VerificationError, VerificationContext } from 'impl/types';
 import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
 
 /**
@@ -41,7 +41,7 @@ import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
  * import { verifyCredentialEndpointResponse } from '...';
  *
  * const response = await fetchCredentialResponse();
- * const errors = verifyCredentialEndpointResponse(response, validationContext);
+ * const errors = verifyCredentialEndpointResponse(response, verificationContext);
  * if (errors.length > 0) {
  *   logAndReject(errors);
  * }
@@ -49,11 +49,11 @@ import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
  *
  * @see {@link verifyCredentialJwtPayloadStrict}
  * @see {@link VerificationError}
- * @see {@link ValidationContext}
+ * @see {@link VerificationContext}
  */
 export const verifyCredentialEndpointResponse = (
   response: any,
-  context: ValidationContext
+  context: VerificationContext
 ): VerificationError[] => {
   const errors: VerificationError[] = [];
 

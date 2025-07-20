@@ -6,11 +6,11 @@
  */
 
 import { ERROR_CODES } from 'impl/errors';
-import { CredentialJwt, ValidationContext } from 'impl/types';
+import { CredentialJwt, VerificationContext } from 'impl/types';
 import { algIsSupportedVerifier } from 'impl/verifiers/pure-verifiers';
 
 describe('algIsSupportedVerifier', () => {
-  const baseContext: ValidationContext = {
+  const baseContext: VerificationContext = {
     path: [],
     credential_issuer_metadata: {
       iss: 'did:issuer:example',

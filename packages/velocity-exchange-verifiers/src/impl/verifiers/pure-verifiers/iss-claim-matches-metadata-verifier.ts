@@ -18,7 +18,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * `credential_issuer_metadata.credential_issuer`.
  *
  * @param credential - A parsed {@link CredentialJwt} object.
- * @param context - The {@link ValidationContext} containing expected issuer metadata and optional path.
+ * @param context - The {@link VerificationContext} containing expected issuer metadata and optional path.
  *
  * @returns An array containing a {@link VerificationError} if the `iss` does not match, or an empty array if valid.
  *
@@ -35,7 +35,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
- * @see {@link ValidationContext}
+ * @see {@link VerificationContext}
  */
 export const issClaimMatchesMetadataVerifier: Verifier<CredentialJwt> = (
   credential,

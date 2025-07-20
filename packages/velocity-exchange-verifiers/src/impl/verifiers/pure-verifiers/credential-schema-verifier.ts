@@ -16,14 +16,14 @@ import { CredentialJwt, Verifier } from 'impl/types';
  * If missing, the credential is considered invalid under profile rules.
  *
  * @param credential - The {@link CredentialJwt} object containing both `header` and `payload`.
- * @param context - The {@link ValidationContext} used for error path tracking and metadata access.
+ * @param context - The {@link VerificationContext} used for error path tracking and metadata access.
  *
  * @returns An array of {@link VerificationError} containing a single error if the field is missing,
  * or an empty array if the credential is valid.
  *
  * @example
  * ```ts
- * const errors = credentialSchemaVerifier(credentialJwt, validationContext);
+ * const errors = credentialSchemaVerifier(credentialJwt, verificationContext);
  * if (errors.length > 0) {
  *   console.error(errors);
  * }
@@ -34,7 +34,7 @@ import { CredentialJwt, Verifier } from 'impl/types';
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
- * @see {@link ValidationContext}
+ * @see {@link VerificationContext}
  */
 export const credentialSchemaVerifier: Verifier<CredentialJwt> = (
   credential,

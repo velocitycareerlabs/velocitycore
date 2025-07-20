@@ -9,7 +9,7 @@
  * Provides shared context passed to all verifiers during credential validation.
  *
  * @remarks
- * The `ValidationContext` includes global metadata and environmental state used
+ * The `VerificationContext` includes global metadata and environmental state used
  * by verifier functions to perform rule-based checks. This context enables validators
  * to access issuer metadata, full response data, and JSON path tracking for accurate
  * error localization.
@@ -22,7 +22,7 @@
  *
  * @example
  * ```ts
- * const context: ValidationContext = {
+ * const context: VerificationContext = {
  *   credential_issuer_metadata: {
  *     iss: "did:velocity:issuer",
  *     credential_issuer: "https://issuer.velocity.network"
@@ -31,7 +31,7 @@
  * };
  * ```
  */
-export type ValidationContext = {
+export type VerificationContext = {
   credential_issuer_metadata: {
     iss: string;
     credential_issuer?: string;

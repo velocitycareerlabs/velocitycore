@@ -41,7 +41,7 @@ import {
  *   a present `payload.cnf`, enforced via {@link subIsDidJwkOrCnfVerifier}.
  *
  * @param credential - A parsed {@link CredentialJwt} object including the header and payload.
- * @param context - A {@link ValidationContext} containing path information and issuer metadata.
+ * @param context - A {@link VerificationContext} containing path information and issuer metadata.
  *
  * @returns An array of {@link VerificationError} objects. Returns an empty array if the credential is valid.
  *

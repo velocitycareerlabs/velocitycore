@@ -7,10 +7,10 @@
 
 import { credentialStatusVerifier } from 'impl/verifiers/pure-verifiers/credential-status-verifier';
 import { ERROR_CODES } from 'impl/errors';
-import { CredentialJwt, ValidationContext } from 'impl/types';
+import { CredentialJwt, VerificationContext } from 'impl/types';
 
 describe('credentialStatusVerifier', () => {
-  const baseContext: ValidationContext = {
+  const baseContext: VerificationContext = {
     path: [],
     credential_issuer_metadata: {
       iss: 'did:issuer:example',
@@ -78,7 +78,7 @@ describe('credentialStatusVerifier', () => {
         vc: {},
       },
     };
-    const nestedContext: ValidationContext = {
+    const nestedContext: VerificationContext = {
       ...baseContext,
       path: ['credentials', 0],
     };

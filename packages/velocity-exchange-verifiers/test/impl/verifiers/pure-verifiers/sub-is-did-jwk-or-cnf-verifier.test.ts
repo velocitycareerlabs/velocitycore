@@ -6,11 +6,11 @@
  */
 
 import { subIsDidJwkOrCnfVerifier } from 'impl/verifiers/pure-verifiers';
-import { CredentialJwt, ValidationContext } from 'impl/types';
+import { CredentialJwt, VerificationContext } from 'impl/types';
 import { ERROR_CODES } from 'impl/errors';
 
 describe('subIsDidJwkOrCnfVerifier', () => {
-  const baseContext: ValidationContext = {
+  const baseContext: VerificationContext = {
     path: [],
     credential_issuer_metadata: {
       iss: 'did:issuer:example',

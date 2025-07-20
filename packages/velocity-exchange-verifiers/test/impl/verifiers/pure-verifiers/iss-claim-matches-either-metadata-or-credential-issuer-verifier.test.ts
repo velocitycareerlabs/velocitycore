@@ -7,10 +7,10 @@
 
 import { issClaimMatchesEitherMetadataOrCredentialIssuerVerifier } from 'impl/verifiers/pure-verifiers';
 import { ERROR_CODES } from 'impl/errors';
-import { CredentialJwt, ValidationContext } from 'impl/types';
+import { CredentialJwt, VerificationContext } from 'impl/types';
 
 describe('issClaimMatchesEitherMetadataOrCredentialIssuerVerifier', () => {
-  const context: ValidationContext = {
+  const context: VerificationContext = {
     path: [],
     credential_issuer_metadata: {
       iss: 'did:example:issuer',

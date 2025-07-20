@@ -20,7 +20,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * This ensures conformance with OpenID4VCI while enabling broader ecosystem compatibility.
  *
  * @param credential - A parsed {@link CredentialJwt} object.
- * @param context - The {@link ValidationContext} containing issuer metadata and optional path.
+ * @param context - The {@link VerificationContext} containing issuer metadata and optional path.
  *
  * @returns An array containing a {@link VerificationError} if validation fails, or an empty array if valid.
  *
@@ -37,7 +37,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
- * @see {@link ValidationContext}
+ * @see {@link VerificationContext}
  */
 export const issClaimMatchesEitherMetadataOrCredentialIssuerVerifier: Verifier<
   CredentialJwt

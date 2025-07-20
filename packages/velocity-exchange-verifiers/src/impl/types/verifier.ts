@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { VerificationError } from './verification-error';
-import { ValidationContext } from './validation-context';
+import { VerificationContext } from './verification-context';
 
 /**
  * Represents a reusable validation rule that checks a value against a specific constraint.
@@ -35,9 +35,9 @@ import { ValidationContext } from './validation-context';
  * ```
  *
  * @see {@link VerificationError}
- * @see {@link ValidationContext}
+ * @see {@link VerificationContext}
  */
 export type Verifier<T> = (
   value: T,
-  context: ValidationContext
+  context: VerificationContext
 ) => VerificationError[];

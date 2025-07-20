@@ -24,12 +24,12 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * {@link VerificationError} with the code `INVALID_ALG` will be returned.
  *
  * @param credential - The {@link CredentialJwt} object, including the JOSE header and payload.
- * @param context - The {@link ValidationContext}, used for tracking the path of the validated field.
+ * @param context - The {@link VerificationContext}, used for tracking the path of the validated field.
  * @returns An array containing a {@link VerificationError} if validation fails, or an empty array if the algorithm is supported.
  *
  * @example
  * ```ts
- * const errors = algIsSupportedVerifier(credentialJwt, validationContext);
+ * const errors = algIsSupportedVerifier(credentialJwt, verificationContext);
  * if (errors.length > 0) {
  *   console.error(errors);
  * }

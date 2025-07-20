@@ -21,13 +21,13 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * This verifier enforces that at least one of these identity mechanisms is present.
  *
  * @param credential - The parsed {@link CredentialJwt} to validate.
- * @param context - A {@link ValidationContext} object, used to trace the source of the error.
+ * @param context - A {@link VerificationContext} object, used to trace the source of the error.
  *
  * @returns An array containing a {@link VerificationError} if the validation fails, or an empty array if the credential is valid.
  *
  * @example
  * ```ts
- * const errors = subIsDidJwkOrCnfVerifier(credentialJwt, validationContext);
+ * const errors = subIsDidJwkOrCnfVerifier(credentialJwt, verificationContext);
  * if (errors.length > 0) {
  *   handle(errors);
  * }
@@ -38,7 +38,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
- * @see {@link ValidationContext}
+ * @see {@link VerificationContext}
  */
 export const subIsDidJwkOrCnfVerifier: Verifier<CredentialJwt> = (
   credential,
