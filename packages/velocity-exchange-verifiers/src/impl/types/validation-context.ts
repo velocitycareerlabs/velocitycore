@@ -6,25 +6,30 @@
  */
 
 /**
- * Shared context passed to all verifiers during credential validation.
+ * Provides shared context passed to all verifiers during credential validation.
  *
- * The `ValidationContext` contains metadata and environmental information
- * that verifiers use to perform rule-based checks on a credential or response.
+ * @remarks
+ * The `ValidationContext` includes global metadata and environmental state used
+ * by verifier functions to perform rule-based checks. This context enables validators
+ * to access issuer metadata, full response data, and JSON path tracking for accurate
+ * error localization.
  *
- * Fields:
- * - `credential_issuer_metadata.iss`: The expected issuer identifier (`iss`) from the credential issuer metadata.
- * - `credential_issuer_metadata.credential_issuer`: Optional alternate issuer reference (used in some spec contexts).
- * - `response`: Optional full credential endpoint response object, in case verifiers need to cross-reference it.
- * - `path`: Optional JSON path to the current value being validated. Used to generate precise and traceable error locations.
- *
- * This context is passed alongside each value to be verified, and is useful for
- * rules that require global or parent-level knowledge beyond the local credential structure.
+ * @property credential_issuer_metadata - The issuer metadata used for issuer validation rules.
+ * @property credential_issuer_metadata.iss - The expected `iss` (issuer identifier).
+ * @property credential_issuer_metadata.credential_issuer - An optional alternate issuer URI (used for OpenID4VCI fallback).
+ * @property response - (Optional) The full Credential Endpoint response object. Useful when a rule needs global context.
+ * @property path - (Optional) A hierarchical path to the current value being validated (used for precise error reporting).
  *
  * @example
+ * ```ts
  * const context: ValidationContext = {
- *   credential_issuer_metadata: { iss: "did:velocity:issuer" },
+ *   credential_issuer_metadata: {
+ *     iss: "did:velocity:issuer",
+ *     credential_issuer: "https://issuer.velocity.network"
+ *   },
  *   path: ["credentials", 0]
  * };
+ * ```
  */
 export type ValidationContext = {
   credential_issuer_metadata: {

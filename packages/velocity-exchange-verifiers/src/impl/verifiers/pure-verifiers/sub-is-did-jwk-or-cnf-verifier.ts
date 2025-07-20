@@ -9,29 +9,36 @@ import { CredentialJwt, Verifier } from 'impl/types';
 import { buildError, ERROR_CODES } from 'impl/errors';
 
 /**
- * Verifies that the Credential JWT payload contains a valid subject declaration via either `sub` or `cnf`.
+ * Verifies that the Credential JWT payload includes a valid subject declaration using either `sub` or `cnf`.
  *
- * According to the OpenID4VCI specification and Velocity profile requirements, a credential must:
- * - Either have the `sub` (subject) claim set to `"did:jwk"`
- * - Or include a `cnf` (confirmation) object representing key binding
+ * @remarks
+ * According to the OpenID for Verifiable Credential Issuance (OpenID4VCI) specification and the Velocity profile,
+ * a credential must express subject binding via either:
  *
- * This verifier ensures that one of these two valid identity-binding mechanisms is present.
+ * - A `sub` (subject) claim with the exact value `"did:jwk"`, or
+ * - A `cnf` (confirmation) object containing key binding information.
  *
- * ### Validation Rule
- * - `payload.sub === "did:jwk"` **OR** `payload.cnf` must be defined
+ * This verifier enforces that at least one of these identity mechanisms is present.
  *
- * ### Error Raised
- * - `SUB_OR_CNF_MISSING` — if neither `sub` equals `"did:jwk"` nor `cnf` exists in the payload
+ * @param credential - The parsed {@link CredentialJwt} to validate.
+ * @param context - A {@link ValidationContext} object, used to trace the source of the error.
  *
- * @param credential - A parsed Credential JWT object
- * @param context - The validation context, used to track the error location path
- * @returns An array containing a `VerificationError` if validation fails, or an empty array if valid
+ * @returns An array containing a {@link VerificationError} if the validation fails, or an empty array if the credential is valid.
  *
  * @example
- * const errors = subIsDidJwkOrCnfVerifier(credentialJwt, context);
+ * ```ts
+ * const errors = subIsDidJwkOrCnfVerifier(credentialJwt, validationContext);
+ * if (errors.length > 0) {
+ *   handle(errors);
+ * }
+ * ```
+ *
+ * @validationRule `payload.sub` must equal `"did:jwk"` **or** `payload.cnf` must be present.
+ * @errorCode `SUB_OR_CNF_MISSING` — if both are missing or invalid.
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
+ * @see {@link ValidationContext}
  */
 export const subIsDidJwkOrCnfVerifier: Verifier<CredentialJwt> = (
   credential,

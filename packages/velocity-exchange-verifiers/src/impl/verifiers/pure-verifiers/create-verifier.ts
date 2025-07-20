@@ -7,30 +7,36 @@
 import { Verifier } from 'impl/types';
 
 /**
- * Composes multiple single-purpose verifiers into a single compound verifier.
+ * Creates a compound verifier by composing multiple single-purpose verifiers.
  *
- * Each individual verifier is applied to the same input `value` and shared `context`,
- * and their results (arrays of `VerificationError`s) are flattened into a single array.
+ * @remarks
+ * This function enables declarative validation by combining multiple reusable {@link Verifier} functions
+ * into a single pipeline. Each verifier is applied to the same `value` and `context`, and their
+ * resulting {@link VerificationError[]} arrays are merged into a single result list.
  *
- * This utility allows you to define validation logic declaratively by assembling
- * reusable rules (verifiers) into a coherent validation pipeline.
+ * This utility is useful for building modular, maintainable validation logic.
  *
- * @typeParam T - The type of data the verifiers operate on (e.g., a credential JWT).
+ * @typeParam T - The type of data being validated (e.g., a parsed {@link CredentialJwt}).
  *
- * @param rules - An array of `Verifier<T>` functions to be applied in sequence.
- * @returns A `Verifier<T>` that runs all rules and returns a combined list of validation errors.
+ * @param rules - An array of {@link Verifier} functions to apply in order.
+ * @returns A {@link Verifier} that applies all provided rules and returns a combined list of validation errors.
  *
  * @example
+ * ```ts
  * const myVerifier = createVerifier([
- *   issClaimMatchesMetadata,
- *   kidClaimIsVelocityV2,
- *   algIsSupported
+ *   issClaimMatchesMetadataVerifier,
+ *   kidClaimIsVelocityV2Verifier,
+ *   algIsSupportedVerifier
  * ]);
  *
- * const errors = myVerifier(credential, context);
+ * const errors = myVerifier(credentialJwt, context);
  * if (errors.length > 0) {
  *   console.error("Validation failed:", errors);
  * }
+ * ```
+ *
+ * @see {@link Verifier}
+ * @see {@link VerificationError}
  */
 export const createVerifier =
   <T>(rules: Verifier<T>[]): Verifier<T> =>

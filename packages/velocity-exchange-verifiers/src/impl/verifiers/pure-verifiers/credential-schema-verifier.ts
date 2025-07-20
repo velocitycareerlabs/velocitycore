@@ -8,27 +8,33 @@ import { buildError, ERROR_CODES } from 'impl/errors';
 import { CredentialJwt, Verifier } from 'impl/types';
 
 /**
- * Verifies the presence of the `vc.credentialSchema` field in a Credential JWT payload.
+ * Verifies that the `vc.credentialSchema` field exists in the Credential JWT payload.
  *
- * This verifier ensures that the `credentialSchema` property is present in the Verifiable Credential (VC) object,
- * as required by the Velocity profile conformance rules. Absence of this field indicates an invalid or non-compliant
- * credential under the profile’s expectations.
+ * @remarks
+ * This verifier ensures that the `credentialSchema` property is present inside the Verifiable Credential (VC)
+ * object located within the payload. This is a mandatory requirement for conformance with the Velocity Profile.
+ * If missing, the credential is considered invalid under profile rules.
  *
- * ### Validation Rule
- * - `credential.payload.vc.credentialSchema` **must be defined**
+ * @param credential - The {@link CredentialJwt} object containing both `header` and `payload`.
+ * @param context - The {@link ValidationContext} used for error path tracking and metadata access.
  *
- * ### Error Raised
- * - `MISSING_CREDENTIAL_SCHEMA` — when `credentialSchema` is missing from `payload.vc`
- *
- * @param credential - Parsed JWT containing a `header` and `payload`
- * @param context - Validation context providing path tracing and issuer metadata
- * @returns An array with a single `VerificationError` if the check fails, or an empty array on success
+ * @returns An array of {@link VerificationError} containing a single error if the field is missing,
+ * or an empty array if the credential is valid.
  *
  * @example
+ * ```ts
  * const errors = credentialSchemaVerifier(credentialJwt, validationContext);
+ * if (errors.length > 0) {
+ *   console.error(errors);
+ * }
+ * ```
+ *
+ * @validationRule `credential.payload.vc.credentialSchema` must be defined.
+ * @errorCode `MISSING_CREDENTIAL_SCHEMA` — if `payload.vc.credentialSchema` is missing.
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
+ * @see {@link ValidationContext}
  */
 export const credentialSchemaVerifier: Verifier<CredentialJwt> = (
   credential,

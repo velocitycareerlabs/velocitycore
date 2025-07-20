@@ -8,16 +8,25 @@ import { VerificationError } from '../types';
 import { ErrorCode } from './error-codes';
 
 /**
- * Constructs a `VerificationError` object with the specified code, message, and error path.
+ * Creates a {@link VerificationError} with a given error code, message, and location path.
  *
- * This utility function standardizes error creation across verifiers, ensuring a consistent
- * structure for all validation errors returned by the verification framework.
+ * @param code - A predefined {@link ERROR_CODES | error code} representing the type of validation failure.
+ * @param message - A human-readable explanation describing the error condition.
+ * @param path - An optional array of strings representing the JSON pointer path to the offending field.
+ *   This path is useful for identifying the exact location of the error within nested credential structures.
  *
- * @param code - A known `ErrorCode` indicating the type of validation failure.
- * @param message - A human-readable description of the error.
- * @param path - An optional array representing the JSON path to the offending field,
- *               useful for pinpointing the exact location in nested structures.
- * @returns A `VerificationError` object conforming to the framework's expected shape.
+ * @returns A {@link VerificationError} object with a standardized shape suitable for reporting or logging.
+ *
+ * @remarks
+ * This utility ensures consistency across all verifiers in how errors are constructed and reported.
+ *
+ * @example
+ * ```ts
+ * const error = buildError(ERROR_CODES.INVALID_ALG, "Unsupported algorithm", ["header", "alg"]);
+ * ```
+ *
+ * @see {@link VerificationError}
+ * @see {@link ERROR_CODES}
  */
 export const buildError = (
   code: ErrorCode,

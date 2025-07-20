@@ -8,38 +8,53 @@
 /**
  * Represents a parsed Credential JWT (JWS) used in Verifiable Credential flows.
  *
+ * @remarks
  * This type models the decoded structure of a signed credential in JWT format,
- * including both the JOSE `header` and the credential `payload` according to
- * OpenID for Verifiable Credential Issuance (OpenID4VCI) and Velocity profile specifications.
+ * as defined by the OpenID for Verifiable Credential Issuance (OpenID4VCI) and
+ * Velocity Profile specifications. It includes both the JOSE `header` and the
+ * credential `payload`.
  *
- * ### Structure
- * - `header`: Standard JWT header containing algorithm and optional fields.
- * - `payload`: Contains standard JWT claims and Verifiable Credential (`vc`) claims.
+ * @property header - A standard JWT header object, including the `alg` field specifying the signature algorithm.
+ * @property payload - The JWT payload, including standard claims and Verifiable Credential claims.
  *
- * ### Notable Fields
- * - `header.alg` — The algorithm used to sign the JWT (e.g., `ES256K`, `ES256`, `RS256`).
- * - `payload.iss` — Issuer identifier (must match expected metadata).
- * - `payload.sub` — Subject identifier (expected to be `"did:jwk"` or a confirmation key must be present).
- * - `payload.kid` — Key ID used to sign the JWT (Velocity profile expects a `did:velocity:v2` prefix).
- * - `payload.vc.credentialSchema` — Credential schema descriptor (must be present for strict profile compliance).
- * - `payload.vc.credentialStatus` — Credential status descriptor (must be present for revocation support).
+ * @example
+ * ```ts
+ * const credential: CredentialJwt = {
+ *   header: { alg: "ES256K" },
+ *   payload: {
+ *     iss: "https://issuer.example.com",
+ *     sub: "did:jwk",
+ *     kid: "did:velocity:v2:issuer#key-1",
+ *     vc: {
+ *       credentialSchema: { ... },
+ *       credentialStatus: { ... }
+ *     }
+ *   }
+ * };
+ * ```
  *
- * ### Usage
- * This type is used as the input for credential verification logic, including
- * `verifyCredentialJwtPayloadStrict`, to ensure conformance with spec and profile rules.
+ * @see {@link verifyCredentialJwtPayloadStrict}
  */
 export type CredentialJwt = {
   header: {
+    /** The algorithm used to sign the JWT (e.g., ES256K, ES256, RS256) */
     alg: string;
     [key: string]: unknown;
   };
   payload: {
+    /** The credential issuer (must match issuer metadata) */
     iss: string;
+    /** Optional subject identifier (should be "did:jwk" or accompanied by `cnf`) */
     sub?: string;
+    /** Optional Key ID (should start with `did:velocity:v2` for Velocity conformance) */
     kid?: string;
+    /** Optional confirmation object used for subject binding */
     cnf?: unknown;
+    /** Verifiable Credential object with required fields for validation */
     vc: {
+      /** Optional credential schema (required by Velocity profile) */
       credentialSchema?: unknown;
+      /** Optional credential status (required for revocation support) */
       credentialStatus?: unknown;
       [key: string]: unknown;
     };

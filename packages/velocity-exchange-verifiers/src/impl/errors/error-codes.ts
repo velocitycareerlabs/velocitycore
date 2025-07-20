@@ -6,11 +6,19 @@
  */
 
 /**
- * Defines a fixed set of error codes used across credential validation verifiers.
+ * A constant object defining all supported error codes used by credential validation verifiers.
  *
- * Each code corresponds to a specific validation failure condition, and is intended
- * to be machine-readable and stable for use in error handling, logging, or client-facing
- * messages.
+ * @remarks
+ * Each error code represents a specific type of validation failure.
+ *
+ * @example
+ * ```ts
+ * if (error.code === ERROR_CODES.MISSING_CREDENTIAL_SCHEMA) {
+ *   // Handle missing schema case
+ * }
+ * ```
+ *
+ * @see {@link VerificationError.code}
  */
 export const ERROR_CODES = {
   INVALID_ALG: 'invalid_alg',

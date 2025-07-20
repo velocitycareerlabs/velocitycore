@@ -10,16 +10,19 @@ import { ValidationContext } from './validation-context';
 /**
  * Represents a reusable validation rule that checks a value against a specific constraint.
  *
- * A `Verifier<T>` is a pure function that receives:
- * - `value`: the target data to be validated (e.g., a parsed Credential JWT)
- * - `context`: additional metadata and path information used during validation
+ * @remarks
+ * A `Verifier<T>` is a pure function that accepts a `value` and a `context`, returning
+ * a list of {@link VerificationError} objects representing any validation rule violations.
+ * Verifiers are designed to be stateless, composable, and isolated, making them suitable
+ * for custom rule engines or use within higher-order validation pipelines like `createVerifier(...)`.
  *
- * The function returns a list of `VerificationError` objects describing any violations of the rule.
- * If the value is valid, it must return an empty array. Verifiers are designed to be
- * stateless, composable, and isolated — allowing them to be used in custom rule engines
- * or combined using `createVerifier(...)`.
+ * @template T - The type of data being validated (e.g., {@link CredentialJwt}).
  *
- * ### Usage Example
+ * @param value - The value to be validated.
+ * @param context - Shared validation context including metadata and optional path tracing.
+ * @returns An array of {@link VerificationError} objects if validation fails, or an empty array if the value is valid.
+ *
+ * @example
  * ```ts
  * const issVerifier: Verifier<CredentialJwt> = (credential, context) => {
  *   if (credential.payload.iss !== context.credential_issuer_metadata.iss) {
@@ -30,11 +33,6 @@ import { ValidationContext } from './validation-context';
  *   return [];
  * };
  * ```
- *
- * @template T - The type of data being validated (e.g., CredentialJwt)
- * @param value - The value under validation
- * @param context - The shared context used for validation (includes path and metadata)
- * @returns An array of `VerificationError` objects, or an empty array if valid
  *
  * @see {@link VerificationError}
  * @see {@link ValidationContext}

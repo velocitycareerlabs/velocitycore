@@ -11,25 +11,29 @@ import { buildError, ERROR_CODES } from 'impl/errors';
 /**
  * Verifies that the JWT's `header.alg` value is one of the supported algorithms.
  *
+ * @remarks
  * This verifier ensures that the credential is signed using an approved algorithm,
  * as required by the Velocity profile and JOSE (JSON Object Signing and Encryption) standards.
+ *
  * Supported algorithms are:
  * - `ES256`
  * - `ES256K`
  * - `RS256`
  *
- * ### Validation Rule
- * - `credential.header.alg` **must be one of** `["ES256", "ES256K", "RS256"]`
+ * If the `alg` value is missing or does not match one of the supported algorithms, a
+ * {@link VerificationError} with the code `INVALID_ALG` will be returned.
  *
- * ### Error Raised
- * - `INVALID_ALG` — when the algorithm is missing or not in the allowlist
- *
- * @param credential - The Credential JWT, including header and payload
- * @param context - The validation context, used to track field path
- * @returns An array with a single `VerificationError` if the algorithm is unsupported, or an empty array otherwise
+ * @param credential - The {@link CredentialJwt} object, including the JOSE header and payload.
+ * @param context - The {@link ValidationContext}, used for tracking the path of the validated field.
+ * @returns An array containing a {@link VerificationError} if validation fails, or an empty array if the algorithm is supported.
  *
  * @example
+ * ```ts
  * const errors = algIsSupportedVerifier(credentialJwt, validationContext);
+ * if (errors.length > 0) {
+ *   console.error(errors);
+ * }
+ * ```
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}

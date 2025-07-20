@@ -9,27 +9,33 @@ import { buildError, ERROR_CODES } from 'impl/errors';
 import { CredentialJwt, Verifier } from 'impl/types';
 
 /**
- * Verifies the presence of the `vc.credentialStatus` field in the Credential JWT payload.
+ * Verifies that the `vc.credentialStatus` field exists in the Credential JWT payload.
  *
- * This verifier enforces the requirement that the Verifiable Credential (VC) object
- * includes a `credentialStatus` property, which is essential for enabling revocation or suspension mechanisms.
- * Its presence is mandated by the Velocity profile conformance rules.
+ * @remarks
+ * This verifier ensures that the `credentialStatus` property is present within the Verifiable Credential (VC)
+ * section of the JWT payload. This field is critical for enabling status checks like revocation or suspension,
+ * and is required by the Velocity Profile conformance rules.
  *
- * ### Validation Rule
- * - `credential.payload.vc.credentialStatus` **must be defined**
+ * @param credential - The {@link CredentialJwt} object containing both `header` and `payload`.
+ * @param context - The {@link ValidationContext} used for issuer metadata and error path tracking.
  *
- * ### Error Raised
- * - `MISSING_CREDENTIAL_STATUS` — if `vc.credentialStatus` is missing from the credential payload
- *
- * @param credential - The Credential JWT object with `header` and `payload`
- * @param context - Validation context including metadata and hierarchical path
- * @returns A list containing a `VerificationError` if validation fails, or an empty list if valid
+ * @returns An array of {@link VerificationError} with a single entry if the field is missing,
+ * or an empty array if the credential is valid.
  *
  * @example
+ * ```ts
  * const errors = credentialStatusVerifier(credentialJwt, validationContext);
+ * if (errors.length > 0) {
+ *   handleValidationErrors(errors);
+ * }
+ * ```
+ *
+ * @validationRule `credential.payload.vc.credentialStatus` must be defined.
+ * @errorCode `MISSING_CREDENTIAL_STATUS` — if `vc.credentialStatus` is missing.
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
+ * @see {@link ValidationContext}
  */
 export const credentialStatusVerifier: Verifier<CredentialJwt> = (
   credential,

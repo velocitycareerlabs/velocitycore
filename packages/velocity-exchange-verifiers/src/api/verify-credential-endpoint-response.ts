@@ -11,32 +11,41 @@ import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
 /**
  * Verifies the structure and contents of a Credential Endpoint response.
  *
- * This function is intended to validate the full response body returned by a Credential Issuer
- * in immediate issuance flows, as defined by the OpenID for Verifiable Credential Issuance (OpenID4VCI) specification.
- * It delegates the verification of each credential inside the `credentials` array to
- * `verifyCredentialJwtPayloadStrict`, applying Velocity profile-level validation rules.
+ * @param response - The JSON object returned by a Credential Issuer's Credential Endpoint.
+ * @param context - Validation context containing issuer metadata and the current location path.
+ * @returns An array of {@link VerificationError | VerificationError} objects describing all detected issues.
  *
- * ### What It Validates
- * - Iterates over `response.credentials[]`
- * - For each credential, applies strict JWT payload verification using:
- *   - `alg`, `iss`, `kid`, `sub/cnf`, `vc.credentialSchema`, `vc.credentialStatus`
- * - Collects all `VerificationError`s into a flat array
+ * @remarks
+ * This validator is intended for **immediate issuance flows** defined by the
+ * OpenID for Verifiable Credential Issuance (OpenID4VCI) specification.
  *
- * ### Notes
- * - If `credentials` is missing or empty, the verifier behaves as a no-op.
- * - The `notification_id` field is not validated yet (see TODO).
- * - For deferred issuance flows (`transaction_id`, `interval`), use a separate verifier.
+ * For each entry in `response.credentials[]`, this function delegates to
+ * {@link verifyCredentialJwtPayloadStrict} to apply Velocity profile–level validation, including:
  *
- * @param response - The JSON response object from the credential endpoint
- * @param context - Validation context containing issuer metadata and path tracking
- * @returns An array of `VerificationError` objects from all credential verifications
+ * - Supported signing algorithm (`alg`)
+ * - Issuer consistency (`iss`)
+ * - Key identifier prefix (`kid`)
+ * - Subject binding (`sub` or `cnf`)
+ * - Presence of `vc.credentialSchema`
+ * - Presence of `vc.credentialStatus`
+ *
+ * All `VerificationError` objects produced by per-credential validation are flattened and returned.
+ *
+ * #### Behavior Notes
+ * - If `response.credentials` is **missing or empty**, validation is a no-op and returns `[]`.
+ * - `notification_id` is **not validated** yet. (TODO)
+ * - Deferred issuance responses (`transaction_id`, `interval`) are **out of scope**; use a dedicated verifier.
  *
  * @example
+ * ```ts
+ * import { verifyCredentialEndpointResponse } from '...';
+ *
  * const response = await fetchCredentialResponse();
  * const errors = verifyCredentialEndpointResponse(response, validationContext);
  * if (errors.length > 0) {
  *   logAndReject(errors);
  * }
+ * ```
  *
  * @see {@link verifyCredentialJwtPayloadStrict}
  * @see {@link VerificationError}

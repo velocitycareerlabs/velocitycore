@@ -8,33 +8,36 @@ import { CredentialJwt, Verifier } from 'impl/types';
 import { buildError, ERROR_CODES } from 'impl/errors';
 
 /**
- * Verifies that the Credential JWT's `iss` claim matches either the `iss` or `credential_issuer`
- * field in the issuer's metadata.
+ * Verifies that the Credential JWT's `iss` claim matches the expected issuer metadata.
  *
- * This verifier implements the **OpenID4VCI specification fallback behavior**, where the credential's
- * `iss` claim may be validated against either:
+ * @remarks
+ * This verifier implements the OpenID4VCI specification fallback behavior by validating that
+ * the `payload.iss` field in the Credential JWT matches **either**:
+ *
  * - `credential_issuer_metadata.iss`
  * - `credential_issuer_metadata.credential_issuer`
  *
- * Use this verifier when implementing spec-compliant fallback behavior in addition to (or instead of)
- * Velocity profile conformance.
+ * This ensures conformance with OpenID4VCI while enabling broader ecosystem compatibility.
  *
- * ### Validation Rule
- * - `credential.payload.iss` **must equal** `credential_issuer_metadata.iss`
- *   **OR** `credential_issuer_metadata.credential_issuer`
+ * @param credential - A parsed {@link CredentialJwt} object.
+ * @param context - The {@link ValidationContext} containing issuer metadata and optional path.
  *
- * ### Error Raised
- * - `UNEXPECTED_CREDENTIAL_PAYLOAD_ISS` — when `payload.iss` matches neither of the allowed values
- *
- * @param credential - A parsed Credential JWT object
- * @param context - Validation context containing issuer metadata
- * @returns A single `VerificationError` if no match is found, or an empty array if valid
+ * @returns An array containing a {@link VerificationError} if validation fails, or an empty array if valid.
  *
  * @example
+ * ```ts
  * const errors = issClaimMatchesEitherMetadataOrCredentialIssuerVerifier(credentialJwt, context);
+ * if (errors.length > 0) {
+ *   handleValidationErrors(errors);
+ * }
+ * ```
+ *
+ * @validationRule `credential.payload.iss` must equal `credential_issuer_metadata.iss` or `credential_issuer_metadata.credential_issuer`.
+ * @errorCode `UNEXPECTED_CREDENTIAL_PAYLOAD_ISS` — if the issuer does not match either expected value.
  *
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
+ * @see {@link ValidationContext}
  */
 export const issClaimMatchesEitherMetadataOrCredentialIssuerVerifier: Verifier<
   CredentialJwt

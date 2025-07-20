@@ -18,37 +18,42 @@ import {
 } from 'impl/verifiers/pure-verifiers';
 
 /**
- * Validates a Credential JWT payload against the Velocity Profile and OpenID4VCI specification.
+ * Verifies a Credential JWT payload using strict validation rules defined by both
+ * the Velocity Profile and the OpenID4VCI specification.
  *
- * This verifier applies a strict rule set, combining both **Velocity Profile Conformance** and
- * **spec-level issuer fallback logic**, to ensure maximum security and ecosystem compatibility.
- * Each rule is implemented as a modular, reusable verifier.
+ * @remarks
+ * This composite verifier applies multiple independent verifiers to enforce critical
+ * constraints on the credential's structure and issuer claims. It validates the payload
+ * with both Velocity-specific and spec-compliant fallback logic for maximum security
+ * and interoperability.
  *
- * ### What This Verifier Checks
- * - `header.alg` is one of: `ES256`, `ES256K`, `RS256` (via `algIsSupportedVerifier`)
- * - `payload.vc.credentialSchema` is defined (via `credentialSchemaVerifier`)
- * - `payload.vc.credentialStatus` is defined (via `credentialStatusVerifier`)
- * - `payload.iss` passes **both**:
- *   - `issClaimMatchesMetadataVerifier`: strictly matches `credential_issuer_metadata.iss` (Velocity Profile)
- *   - `issClaimMatchesEitherMetadataOrCredentialIssuerVerifier`: matches `credential_issuer_metadata.iss` **or** `credential_issuer_metadata.credential_issuer` (OpenID4VCI fallback)
- * - `payload.kid` starts with `did:velocity:v2` (via `kidClaimIsVelocityV2Verifier`)
- * - `payload.sub === "did:jwk"` **or** `payload.cnf` exists (via `subIsDidJwkOrCnfVerifier`)
+ * @details
+ * The following validations are applied:
+ * - `header.alg` is one of `ES256`, `ES256K`, or `RS256` via {@link algIsSupportedVerifier}.
+ * - `payload.vc.credentialSchema` must be present via {@link credentialSchemaVerifier}.
+ * - `payload.vc.credentialStatus` must be present via {@link credentialStatusVerifier}.
+ * - `payload.iss` must satisfy both:
+ *   - `issClaimMatchesMetadataVerifier`: strict match with `credential_issuer_metadata.iss`
+ *   - `issClaimMatchesEitherMetadataOrCredentialIssuerVerifier`: match with `credential_issuer_metadata.iss`
+ *     or `credential_issuer_metadata.credential_issuer`.
+ * - `payload.kid` must begin with `did:velocity:v2` via {@link kidClaimIsVelocityV2Verifier}.
+ * - Subject binding must be satisfied by either `payload.sub === "did:jwk"` or
+ *   a present `payload.cnf`, enforced via {@link subIsDidJwkOrCnfVerifier}.
  *
- * ### Error Handling
- * - Returns an array of `VerificationError` objects if validation fails.
- * - Each error includes a code, message, and hierarchical path to the failing field.
+ * @param credential - A parsed {@link CredentialJwt} object including the header and payload.
+ * @param context - A {@link ValidationContext} containing path information and issuer metadata.
  *
- * ### Usage
+ * @returns An array of {@link VerificationError} objects. Returns an empty array if the credential is valid.
+ *
  * @example
- * const errors = verifyCredentialJwtPayloadStrict(credentialJwt, validationContext);
+ * ```ts
+ * const errors = verifyCredentialJwtPayloadStrict(credentialJwt, context);
  * if (errors.length > 0) {
- *   // Handle or report validation failures
+ *   console.error("Validation failed:", errors);
  * }
+ * ```
  *
- * @param credential - A parsed Credential JWT containing `header` and `payload`
- * @param context - Validation context including issuer metadata and optional path
- * @returns An array of `VerificationError` objects, or an empty array if the credential is valid
- *
+ * @see {@link createVerifier}
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
  */
