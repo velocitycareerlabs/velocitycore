@@ -137,14 +137,6 @@ const initMetadataRegistry = async (
         context
       );
 
-    await transactingClient.contractClient.getPaidEntriesSigned.staticCall(
-      indexEntries,
-      traceId,
-      caoDid,
-      burnerDid,
-      signature
-    );
-
     const tx = await transactingClient.contractClient.getPaidEntriesSigned(
       indexEntries,
       traceId,
