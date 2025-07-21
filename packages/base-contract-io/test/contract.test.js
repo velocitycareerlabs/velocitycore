@@ -26,6 +26,7 @@ const {
   toEthereumAddress,
 } = require('@velocitycareerlabs/blockchain-functions');
 
+const { wait } = require('@velocitycareerlabs/common-functions');
 const testEventsAbi = require('./data/test-events-abi.json');
 const { initContractClient, initProvider } = require('../index');
 const { deployContract } = require('./helpers/deployContract');
@@ -50,6 +51,10 @@ describe('Contract Client Test Suite', () => {
 
   beforeAll(async () => {
     await mongoFactoryWrapper('test-contract', context);
+  });
+
+  afterEach(async () => {
+    await wait(1000);
   });
 
   afterAll(async () => {
