@@ -32,7 +32,7 @@ const {
 const { env } = require('@spencejs/spence-config');
 const console = require('console');
 
-const { mapWithIndex } = require('@velocitycareerlabs/common-functions');
+const { mapWithIndex, wait } = require('@velocitycareerlabs/common-functions');
 const {
   deployPermissionContract,
   deployVerificationCouponContract,
@@ -202,6 +202,10 @@ describe('Metadata Registry', () => {
       },
       context
     );
+  });
+
+  afterEach(async () => {
+    await wait(1000);
   });
 
   afterAll(async () => {
