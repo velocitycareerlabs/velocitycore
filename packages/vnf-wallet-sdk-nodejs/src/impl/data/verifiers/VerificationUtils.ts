@@ -24,6 +24,10 @@ export const getCredentialTypeMetadataByVc = (
     return result?.payload || {};
 };
 
+/**
+ * The implementation relaying on the below reference:
+ * https://github.com/velocitycareerlabs/velocitycore/blob/37c8535c2ef839ed72a2706685a398f20f4ae11c/packages/vc-checks/src/extract-credential-type.js#L20
+ */
 const getCredentialTypeName = (jwtVc: VCLJwt): string | undefined => {
     const types = jwtVc.payload?.vc?.type || [];
     return types?.find((type: any) => type !== 'VerifiableCredential');
