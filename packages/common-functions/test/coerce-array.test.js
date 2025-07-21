@@ -25,7 +25,7 @@ describe('coerce array', () => {
     expect(coerceArray(null)).toEqual(undefined);
   });
 
-  it('should return an empty array if input is null', () => {
+  it('should return undefined if input is empty array', () => {
     expect(coerceArray([])).toEqual(undefined);
   });
 

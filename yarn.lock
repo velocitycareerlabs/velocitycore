@@ -7198,10 +7198,10 @@
   dependencies:
     undici-types "~6.21.0"
 
-"@types/node@22.16.3":
-  version "22.16.3"
-  resolved "https://registry.npmjs.org/@types/node/-/node-22.16.3.tgz#006f83d80e6f05f65768acc77f4a57bfac1d545f"
-  integrity sha512-sr4Xz74KOUeYadexo1r8imhRtlVXcs+j3XK3TcoiYk7B1t3YRVJgtaD3cwX73NYb71pmVuMLNRhJ9XKdoDB74g==
+"@types/node@22.16.4":
+  version "22.16.4"
+  resolved "https://registry.npmjs.org/@types/node/-/node-22.16.4.tgz#00c763ad4d4e45f62d5a270c040ae1a799c7e38a"
+  integrity sha512-PYRhNtZdm2wH/NT2k/oAJ6/f2VD2N2Dag0lGlx2vWgMSJXGNmlce5MiTQzoWAiIJtso30mjnfQCOKVH+kAQC/g==
   dependencies:
     undici-types "~6.21.0"
 
@@ -8104,13 +8104,13 @@ arg@^4.1.0:
   resolved "https://registry.npmjs.org/arg/-/arg-4.1.3.tgz#269fc7ad5b8e42cb63c896d5666017261c144089"
   integrity sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==
 
-argon2@0.43.0:
-  version "0.43.0"
-  resolved "https://registry.npmjs.org/argon2/-/argon2-0.43.0.tgz#4a5d8943506923ce7450f4e9069e03e134c7473e"
-  integrity sha512-u/HKLcbWShVDhkfwI4hWyiUf3qyX8QhTfaIv2cWE18uqhXCmR5hb6Ed7oqYi2KCQegeAnRhiFzbjzm7i5yl1GA==
+argon2@0.43.1:
+  version "0.43.1"
+  resolved "https://registry.npmjs.org/argon2/-/argon2-0.43.1.tgz#8155ae67fd4ca2a7364364ca3e45e0d8fbbc0ee9"
+  integrity sha512-TfOzvDWUaQPurCT1hOwIeFNkgrAJDpbBGBGWDgzDsm11nNhImc13WhdGdCU6K7brkp8VpeY07oGtSex0Wmhg8w==
   dependencies:
     "@phc/format" "^1.0.0"
-    node-addon-api "^8.3.1"
+    node-addon-api "^8.4.0"
     node-gyp-build "^4.8.4"
 
 argparse@^1.0.7:
@@ -12332,10 +12332,10 @@ form-data-encoder@1.7.1:
   resolved "https://registry.npmjs.org/form-data-encoder/-/form-data-encoder-1.7.1.tgz#ac80660e4f87ee0d3d3c3638b7da8278ddb8ec96"
   integrity sha512-EFRDrsMm/kyqbTQocNvRXMLjc7Es2Vk+IQFx/YW7hkUH1eBl4J1fqiP34l74Yt0pFLCNpc06fkbVk00008mzjg==
 
-form-data@4.0.3:
-  version "4.0.3"
-  resolved "https://registry.npmjs.org/form-data/-/form-data-4.0.3.tgz#608b1b3f3e28be0fccf5901fc85fb3641e5cf0ae"
-  integrity sha512-qsITQPfmvMOSAdeyZ+12I1c+CKSstAFAwu+97zrnWAbIr5u8wfsExUzCesVLC8NgHuRUqNN4Zy6UPWUTRGslcA==
+form-data@4.0.4:
+  version "4.0.4"
+  resolved "https://registry.npmjs.org/form-data/-/form-data-4.0.4.tgz#784cdcce0669a9d68e94d11ac4eea98088edd2c4"
+  integrity sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
@@ -16180,10 +16180,10 @@ node-addon-api@^5.0.0:
   resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-5.1.0.tgz#49da1ca055e109a23d537e9de43c09cca21eb762"
   integrity sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==
 
-node-addon-api@^8.3.1:
-  version "8.3.1"
-  resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-8.3.1.tgz#53bc8a4f8dbde3de787b9828059da94ba9fd4eed"
-  integrity sha512-lytcDEdxKjGJPTLEfW4mYMigRezMlyJY8W4wxJK8zE533Jlb8L8dRuObJFWg2P+AuOIxoCgKF+2Oq4d4Zd0OUA==
+node-addon-api@^8.4.0:
+  version "8.5.0"
+  resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-8.5.0.tgz#c91b2d7682fa457d2e1c388150f0dff9aafb8f3f"
+  integrity sha512-/bRZty2mXUIFY/xU5HLvveNHlswNJej+RnxBjOMkidWfwZzgTbPG1E3K5TOxRLOR+5hX7bSofy8yf1hZevMS8A==
 
 node-cache@^5.1.2:
   version "5.1.2"
