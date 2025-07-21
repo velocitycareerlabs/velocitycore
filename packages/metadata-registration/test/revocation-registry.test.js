@@ -52,10 +52,12 @@ describe('Revocation Registry', () => {
     await mongoFactoryWrapper('test-revocation-registry', context);
 
     permissionsContractAddress = await deployPermissionContract();
+    console.log(JSON.stringify({ permissionsContractAddress }));
     revocationRegistryContractAddress = await deployRevocationContract(
       permissionsContractAddress,
       context
     );
+    console.log(JSON.stringify({ revocationRegistryContractAddress }));
     const { primaryAddress, operatorKeyPair } =
       await initializationPermissions();
     defaultPrimaryAddress = primaryAddress;
@@ -347,6 +349,12 @@ describe('Revocation Registry', () => {
       },
       context
     );
+    console.log(
+      JSON.stringify({
+        call: 'addWalletToRegistrySigned',
+        fromAddress: toEthereumAddress(operatorKeyPair.privateKey),
+      })
+    );
     await revocationRegistryClient.addWalletToRegistrySigned({
       caoDid: 'did:velocity:99',
     });
@@ -356,7 +364,14 @@ describe('Revocation Registry', () => {
   const initializationPermissions = async () => {
     const primaryKeyPair = generateKeyPair();
     const primaryAddress = toEthereumAddress(primaryKeyPair.publicKey);
+    console.log(JSON.stringify({ primaryAddress }));
 
+    console.log(
+      JSON.stringify({
+        call: 'initPermissions',
+        fromAddress: toEthereumAddress(deployerPrivateKey),
+      })
+    );
     const permissionsContractRootClient = await initPermissions(
       {
         privateKey: deployerPrivateKey,
@@ -366,16 +381,31 @@ describe('Revocation Registry', () => {
       context
     );
 
+    console.log(
+      JSON.stringify({
+        call: 'addPrimary',
+        fromAddress: toEthereumAddress(deployerPrivateKey),
+      })
+    );
     await permissionsContractRootClient.addPrimary({
       primary: primaryAddress,
       permissioning: primaryAddress,
       rotation: primaryAddress,
     });
+    console.log(
+      JSON.stringify({
+        call: 'addAddressScope',
+        fromAddress: toEthereumAddress(deployerPrivateKey),
+      })
+    );
     await permissionsContractRootClient.addAddressScope({
       address: primaryAddress,
       scope: 'transactions:write',
     });
 
+    console.log(
+      JSON.stringify({ call: 'initPermissions', fromAddress: primaryAddress })
+    );
     const operatorPermissionsClient = await initPermissions(
       {
         privateKey: primaryKeyPair.privateKey,
@@ -387,6 +417,14 @@ describe('Revocation Registry', () => {
 
     const operatorKeyPair = generateKeyPair();
     const operatorAddress = toEthereumAddress(operatorKeyPair.publicKey);
+
+    console.log(
+      JSON.stringify({
+        call: 'addOperatorKey',
+        fromAddress: primaryAddress,
+        toAddress: operatorAddress,
+      })
+    );
     await operatorPermissionsClient.addOperatorKey({
       primary: primaryAddress,
       operator: operatorAddress,

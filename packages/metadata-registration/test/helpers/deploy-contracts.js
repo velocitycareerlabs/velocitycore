@@ -26,6 +26,9 @@ const {
   get2BytesHash,
 } = require('@velocitycareerlabs/crypto');
 const { initProvider } = require('@velocitycareerlabs/base-contract-io');
+const {
+  toEthereumAddress,
+} = require('@velocitycareerlabs/blockchain-functions/src/ethers-wrappers');
 const { initVerificationCoupon, initMetadataRegistry } = require('../../index');
 const verificationCouponAbi = require('../../src/contracts/verification-coupon.json');
 const metadataRegistryAbi = require('../../src/contracts/metadata-registry.json');
@@ -38,6 +41,12 @@ const rpcProvider = initProvider(rpcUrl, authenticate);
 const { privateKey: deployerPrivateKey } = generateKeyPair();
 
 const deployPermissionContract = async () => {
+  console.log(
+    JSON.stringify({
+      call: 'deployPermissionContract',
+      fromAddress: toEthereumAddress(deployerPrivateKey),
+    })
+  );
   const permissionsContract = await deployTestPermissionsContract(
     deployerPrivateKey,
     rpcUrl
@@ -52,6 +61,12 @@ const deployVerificationCouponContract = async (
   const name = 'Velocity Verification Coupon';
   const baseTokenURI = 'https://www.velocitynetwork.foundation/';
 
+  console.log(
+    JSON.stringify({
+      call: 'deployVerificationCouponContract',
+      fromAddress: toEthereumAddress(deployerPrivateKey),
+    })
+  );
   const verificationCouponContract = await deployContract(
     verificationCouponAbi,
     deployerPrivateKey,
@@ -82,6 +97,12 @@ const deployMetadataContract = async (
   permissionsAddress,
   context
 ) => {
+  console.log(
+    JSON.stringify({
+      call: 'deployMetadataContract',
+      fromAddress: toEthereumAddress(deployerPrivateKey),
+    })
+  );
   const metadataRegistryContract = await deployContract(
     metadataRegistryAbi,
     deployerPrivateKey,
@@ -112,6 +133,12 @@ const deployRevocationContract = async (
   permissionsContractAddress,
   context
 ) => {
+  console.log(
+    JSON.stringify({
+      call: 'deployRevocationContract',
+      fromAddress: toEthereumAddress(deployerPrivateKey),
+    })
+  );
   const revocationRegistryContract = await deployContract(
     revocationRegistryAbi,
     deployerPrivateKey,
@@ -120,6 +147,12 @@ const deployRevocationContract = async (
   const revocationRegistryContractAddress =
     await revocationRegistryContract.getAddress();
 
+  console.log(
+    JSON.stringify({
+      call: 'initRevocationRegistry',
+      fromAddress: toEthereumAddress(deployerPrivateKey),
+    })
+  );
   const deployerRevocationRegistry = await initRevocationRegistry(
     {
       privateKey: deployerPrivateKey,
@@ -127,6 +160,12 @@ const deployRevocationContract = async (
       rpcProvider,
     },
     context
+  );
+  console.log(
+    JSON.stringify({
+      call: 'setPermissionsAddress',
+      fromAddress: toEthereumAddress(deployerPrivateKey),
+    })
   );
   await deployerRevocationRegistry.setPermissionsAddress(
     permissionsContractAddress
