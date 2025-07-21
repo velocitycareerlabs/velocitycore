@@ -24,6 +24,7 @@ const {
   mongoCloseWrapper,
 } = require('@velocitycareerlabs/tests-helpers');
 const { env } = require('@spencejs/spence-config');
+const { wait } = require('@velocitycareerlabs/common-functions');
 const {
   deployTestPermissionsContract,
 } = require('./helpers/deploy-test-permissions-contract');
@@ -85,6 +86,10 @@ describe('Permissions Contract Test Suite', () => {
       permissioningAccount.privateKey,
       deployedContract
     );
+  });
+
+  afterEach(async () => {
+    await wait(1000);
   });
 
   afterAll(async () => {
