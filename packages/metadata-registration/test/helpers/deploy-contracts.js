@@ -39,6 +39,7 @@ const rpcUrl = 'http://localhost:8545';
 const authenticate = () => 'TOKEN';
 const rpcProvider = initProvider(rpcUrl, authenticate);
 const { privateKey: deployerPrivateKey } = generateKeyPair();
+/* eslint-disable no-console */
 
 const deployPermissionContract = async () => {
   console.log(
