@@ -19,20 +19,12 @@ export const getCredentialTypeMetadataByVc = (
     const result = credentialTypes.all.find(
         (credentialTypeObj) =>
             credentialTypeObj.payload?.credentialType?.toLowerCase() ===
-            credentialTypeName.toLowerCase()
+            credentialTypeName?.toLowerCase()
     );
     return result?.payload || {};
 };
 
-const getCredentialTypeName = (jwtVc: VCLJwt): string => {
-    try {
-        const types = jwtVc.payload.vc[CodingKeys.KeyType] || [];
-        return types[0] || '';
-    } catch (e) {
-        return '';
-    }
+const getCredentialTypeName = (jwtVc: VCLJwt): string | undefined => {
+    const types = jwtVc.payload?.vc?.type || [];
+    return types?.find((type: any) => type !== 'VerifiableCredential');
 };
-
-class CodingKeys {
-    static readonly KeyType = 'type';
-}
