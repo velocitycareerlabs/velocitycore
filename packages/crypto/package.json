@@ -17,7 +17,7 @@
   "dependencies": {
     "@trust/keyto": "~2.0.0-alpha1",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
-    "argon2": "0.43.0",
+    "argon2": "0.43.1",
     "bigint-crypto-utils": "3.3.0",
     "canonicalize": "^2.1.0",
     "cborg": "4.2.12",
