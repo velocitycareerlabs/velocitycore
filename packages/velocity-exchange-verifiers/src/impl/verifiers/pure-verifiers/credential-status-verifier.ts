@@ -4,7 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import _ from 'lodash';
+
 import { buildError, ERROR_CODES } from 'impl/errors';
 import { CredentialJwt, Verifier } from 'impl/types';
 
@@ -43,7 +43,9 @@ export const credentialStatusVerifier: Verifier<CredentialJwt> = (
 ) => {
   const path = [...(context.path ?? []), 'payload', 'vc', 'credentialStatus'];
 
-  if (!_.has(credential.payload, 'vc.credentialStatus')) {
+  const exists = credential.payload?.vc?.credentialStatus != null;
+
+  if (!exists) {
     return [
       buildError(
         ERROR_CODES.MISSING_CREDENTIAL_STATUS,
