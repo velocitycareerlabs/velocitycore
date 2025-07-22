@@ -37,7 +37,7 @@ export type CredentialIssuerMetadata = {
 };
 
 export type VerificationContext = {
-  credential_issuer_metadata: CredentialIssuerMetadata;
+  credential_issuer_metadata?: CredentialIssuerMetadata;
   response?: unknown;
   path?: Array<string | number>;
 };
