@@ -33,5 +33,5 @@
 export type VerificationError = {
   code: string;
   message: string;
-  path?: (string | number)[];
+  path?: Array<string | number>;
 };
