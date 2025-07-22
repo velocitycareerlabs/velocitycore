@@ -7,6 +7,7 @@
 
 import { VerificationError, VerificationContext } from 'impl/types';
 import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
+import { withPath } from 'impl/utils';
 
 /**
  * Verifies the structure and contents of a Credential Endpoint response.
@@ -55,21 +56,12 @@ export const verifyCredentialEndpointResponse = (
   response: any,
   context: VerificationContext
 ): VerificationError[] => {
-  const errors: VerificationError[] = [];
-
   const credentials = response.credentials ?? [];
 
-  const credentialErrors = credentials.flatMap(
-    (credential: any, i: string | number) =>
-      verifyCredentialJwtPayloadStrict(credential, {
-        ...context,
-        path: ['credentials', i],
-      })
+  return credentials.flatMap((credential: any, i: number) =>
+    verifyCredentialJwtPayloadStrict(
+      credential,
+      withPath(context, ['credentials', i])
+    )
   );
-
-  errors.push(...credentialErrors);
-
-  // TODO: Optionally validate notification_id here if needed
-
-  return errors;
 };

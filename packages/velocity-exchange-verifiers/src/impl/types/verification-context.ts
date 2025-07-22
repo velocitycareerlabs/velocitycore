@@ -31,11 +31,13 @@
  * };
  * ```
  */
+export type CredentialIssuerMetadata = {
+  iss: string;
+  credential_issuer?: string;
+};
+
 export type VerificationContext = {
-  credential_issuer_metadata: {
-    iss: string;
-    credential_issuer?: string;
-  };
-  response?: any;
-  path?: (string | number)[];
+  credential_issuer_metadata: CredentialIssuerMetadata;
+  response?: unknown;
+  path?: Array<string | number>;
 };
