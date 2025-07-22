@@ -19,10 +19,9 @@ describe('kidClaimIsVelocityV2Verifier', () => {
   };
 
   const makeCredential = (kid?: string): CredentialJwt => ({
-    header: { alg: 'ES256' },
+    header: { alg: 'ES256', kid },
     payload: {
       iss: 'did:example',
-      kid,
       vc: {},
     },
   });
@@ -45,7 +44,7 @@ describe('kidClaimIsVelocityV2Verifier', () => {
     expect(result[0]).toMatchObject({
       code: ERROR_CODES.INVALID_KID,
       message: expect.stringContaining(invalidKid),
-      path: ['payload', 'kid'],
+      path: ['header', 'kid'],
     });
   });
 
@@ -56,7 +55,7 @@ describe('kidClaimIsVelocityV2Verifier', () => {
     expect(result[0]).toMatchObject({
       code: ERROR_CODES.INVALID_KID,
       message: expect.stringContaining('undefined'),
-      path: ['payload', 'kid'],
+      path: ['header', 'kid'],
     });
   });
 });

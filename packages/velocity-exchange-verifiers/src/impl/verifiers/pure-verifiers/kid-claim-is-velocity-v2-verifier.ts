@@ -16,7 +16,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * to begin with `"did:velocity:v2"`, ensuring that the key used for signing is anchored in the expected
  * namespace. This is essential for enforcing trust boundaries and key provenance.
  *
- * @param credential - A parsed {@link CredentialJwt} containing a `payload` with the `kid` field.
+ * @param credential - A parsed {@link CredentialJwt} containing a `header` with the `kid` field.
  * @param context - The {@link VerificationContext} used to track the current JSON path for precise error reporting.
  *
  * @returns An array containing a {@link VerificationError} if the `kid` is missing or invalid, or an empty array if valid.
@@ -29,7 +29,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * }
  * ```
  *
- * @validationRule `credential.payload.kid` must start with `"did:velocity:v2"`.
+ * @validationRule `credential.header.kid` must start with `"did:velocity:v2"`.
  * @errorCode `INVALID_KID` — when `kid` is missing or does not begin with the required prefix.
  *
  * @see {@link CredentialJwt}
@@ -40,13 +40,13 @@ export const kidClaimIsVelocityV2Verifier: Verifier<CredentialJwt> = (
   credential,
   context
 ) => {
-  const kid = credential.payload?.kid;
-  if (!kid?.startsWith('did:velocity:v2')) {
+  const kid = credential.header?.kid;
+  if (typeof kid !== 'string' || !kid.startsWith('did:velocity:v2')) {
     return [
       buildError(
         ERROR_CODES.INVALID_KID,
         `kid must start with 'did:velocity:v2', got '${kid}'`,
-        [...(context.path ?? []), 'payload', 'kid']
+        [...(context.path ?? []), 'header', 'kid']
       ),
     ];
   }
