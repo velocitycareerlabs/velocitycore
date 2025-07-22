@@ -5,7 +5,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { VerificationError, VerificationContext } from 'impl/types';
+import {
+  VerificationError,
+  VerificationContext,
+  CredentialJwt,
+  CredentialEndpointResponse,
+} from 'impl/types';
 import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
 import { withPath } from 'impl/utils';
 
@@ -53,12 +58,12 @@ import { withPath } from 'impl/utils';
  * @see {@link VerificationContext}
  */
 export const verifyCredentialEndpointResponse = (
-  response: any,
+  response: CredentialEndpointResponse,
   context: VerificationContext
 ): VerificationError[] => {
   const credentials = response.credentials ?? [];
 
-  return credentials.flatMap((credential: any, i: number) =>
+  return credentials.flatMap((credential: CredentialJwt, i: number) =>
     verifyCredentialJwtPayloadStrict(
       credential,
       withPath(context, ['credentials', i])

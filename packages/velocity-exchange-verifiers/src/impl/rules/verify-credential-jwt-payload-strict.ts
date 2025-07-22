@@ -16,6 +16,7 @@ import {
   kidClaimIsVelocityV2Verifier,
   subIsDidJwkOrCnfVerifier,
 } from 'impl/verifiers/pure-verifiers';
+import { CredentialJwt } from 'impl/types';
 
 /**
  * Verifies a Credential JWT payload using strict validation rules defined by both
@@ -57,7 +58,7 @@ import {
  * @see {@link CredentialJwt}
  * @see {@link VerificationError}
  */
-export const verifyCredentialJwtPayloadStrict = createVerifier<any>([
+export const verifyCredentialJwtPayloadStrict = createVerifier<CredentialJwt>([
   algIsSupportedVerifier,
   credentialSchemaVerifier,
   credentialStatusVerifier,

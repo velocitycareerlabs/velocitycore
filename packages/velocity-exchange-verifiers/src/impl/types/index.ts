@@ -172,3 +172,23 @@ export type CredentialJwt = {
     [key: string]: unknown;
   };
 };
+
+/**
+ * Represents a response from the Credential Endpoint (OpenID4VCI).
+ *
+ * Typically includes a `credentials` array of {@link CredentialJwt} entries, each expected to
+ * conform to OpenID4VCI and Velocity validation rules.
+ *
+ * Additional fields may be present depending on the issuer.
+ *
+ * @example
+ * const response: CredentialEndpointResponse = {
+ *   credentials: [parsedCredentialJwt1, parsedCredentialJwt2]
+ * };
+ *
+ * @see {@link CredentialJwt}
+ */
+export type CredentialEndpointResponse = {
+  credentials?: CredentialJwt[];
+  [key: string]: unknown;
+};
