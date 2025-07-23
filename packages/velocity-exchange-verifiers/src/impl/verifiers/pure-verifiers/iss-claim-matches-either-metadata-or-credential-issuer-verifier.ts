@@ -4,7 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { W3CCredentialJwtV1, Verifier } from 'impl/types';
+import { W3CCredentialJwtV1, Verifier, VerificationContext } from 'impl/types';
 import { buildError, ERROR_CODES } from 'impl/errors';
 
 /**
@@ -42,19 +42,22 @@ import { buildError, ERROR_CODES } from 'impl/errors';
 export const issClaimMatchesEitherMetadataOrCredentialIssuerVerifier: Verifier<
   W3CCredentialJwtV1
 > = (credential, context) => {
-  const actual = credential.payload?.iss;
-  const allowed = [
-    context.credential_issuer_metadata?.iss,
-    context.credential_issuer_metadata?.credential_issuer,
-  ];
+  const { payload } = credential;
+  const credentialIssuerMetadata = context.credential_issuer_metadata;
 
-  if (!actual || !allowed.includes(actual)) {
+  // Filter out null/undefined values explicitly
+  const allowedValues = [
+    credentialIssuerMetadata?.iss,
+    credentialIssuerMetadata?.credential_issuer,
+  ].filter((v): v is string => typeof v === 'string' && v.length > 0);
+
+  if (!allowedValues.includes(payload.iss)) {
     return [
       buildError(
         ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
-        `Expected iss to be one of [${allowed.join(
-          ', '
-        )}], but got '${actual}'`,
+        `Expected iss to be one of [${allowedValues.join(', ')}], but got '${
+          payload.iss
+        }'`,
         [...(context.path ?? []), 'payload', 'iss']
       ),
     ];

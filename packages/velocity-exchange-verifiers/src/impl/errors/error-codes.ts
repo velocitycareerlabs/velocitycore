@@ -25,6 +25,8 @@ export const ERROR_CODES = {
   INVALID_KID: 'invalid_kid',
   SUB_OR_CNF_MISSING: 'sub_or_cnf_missing',
   UNEXPECTED_CREDENTIAL_PAYLOAD_ISS: 'unexpected_credential_payload_iss',
+  UNEXPECTED_CREDENTIAL_ISSUER_METADATA:
+    'unexpected_credential_credential_issuer_metadata',
   MISSING_CREDENTIAL_STATUS: 'missing_credential_status',
   MISSING_CREDENTIAL_SCHEMA: 'missing_credential_schema',
 } as const;
