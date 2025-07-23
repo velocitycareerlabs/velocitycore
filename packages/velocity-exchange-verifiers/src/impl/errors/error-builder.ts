@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { VerificationError } from '../types';
-import { ErrorCode } from './error-codes';
+import { ErrorCode } from './error-code';
 
 /**
  * Creates a {@link VerificationError} with a given error code, message, and location path.
