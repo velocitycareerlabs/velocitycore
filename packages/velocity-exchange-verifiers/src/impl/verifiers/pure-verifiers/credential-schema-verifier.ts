@@ -4,8 +4,8 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { buildError, ERROR_CODES } from 'impl/errors';
-import { W3CCredentialJwtV1, Verifier } from 'api/types';
+import { buildError } from 'impl/errors';
+import {W3CCredentialJwtV1, Verifier, ERROR_CODES} from 'api/types';
 
 /**
  * Verifies that the `vc.credentialSchema` field exists in the Credential JWT payload.
