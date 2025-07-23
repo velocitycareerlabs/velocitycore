@@ -1,5 +1,5 @@
-/**
- * Copyright 2023 Velocity Team
+/*
+ * Copyright 2025 Velocity Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,8 +12,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
+/**
+ * Coerces a value to a non-empty array
+ * @param {undefined|null|Array<T>|T} value
+ * @return {undefined|Array<T>}
+ */
+const coerceArray = (value) => {
+  if (value == null || value === []) {
+    return undefined;
+  }
+
+  if (Array.isArray(value)) {
+    return value.length !== 0 ? value : undefined;
+  }
+
+  return [value];
+};
 
 module.exports = {
-  revocationListAllocationPlugin: require('./repo'),
+  coerceArray,
 };

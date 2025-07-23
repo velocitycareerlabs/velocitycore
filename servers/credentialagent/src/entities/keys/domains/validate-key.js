@@ -16,12 +16,12 @@
 
 const { all, includes, values, uniq } = require('lodash/fp');
 const newError = require('http-errors');
-const { KeyPurposes } = require('@velocitycareerlabs/crypto');
 const {
-  KeyErrorMessages,
+  KeyPurposes,
   KeyAlgorithms,
   KeyEncodings,
-} = require('./constants');
+} = require('@velocitycareerlabs/crypto');
+const { KeyErrorMessages } = require('./constants');
 
 const validKeyPurposes = values(KeyPurposes);
 

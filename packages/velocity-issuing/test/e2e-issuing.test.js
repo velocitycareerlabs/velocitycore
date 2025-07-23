@@ -34,11 +34,7 @@ const {
 } = require('@velocitycareerlabs/metadata-registration/test/helpers/deploy-contracts');
 
 const { nanoid } = require('nanoid');
-const {
-  jwkFromSecp256k1Key,
-  jwtSign,
-  jwtDecode,
-} = require('@velocitycareerlabs/jwt');
+const { hexFromJwk, jwtSign, jwtDecode } = require('@velocitycareerlabs/jwt');
 const { initHttpClient } = require('@velocitycareerlabs/http-client');
 const { MongoClient } = require('mongodb');
 const { map } = require('lodash/fp');
@@ -74,13 +70,9 @@ describe('E2E issuing', () => {
 
   beforeAll(async () => {
     await mongoFactoryWrapper('test-metadata-registry', context);
-    repos.revocationListAllocations = await collectionClient({
+    repos.allocations = await collectionClient({
       mongoClient,
-      name: 'revocationListAllocations',
-    });
-    repos.metadataListAllocations = await collectionClient({
-      mongoClient,
-      name: 'metadataListAllocations',
+      name: 'allocations',
     });
 
     context = buildContext({
@@ -147,7 +139,7 @@ describe('E2E issuing', () => {
     });
     const operatorPermissionsClient = await initPermissions(
       {
-        privateKey: issuerEntity.keyPair.privateKey,
+        privateKey: hexFromJwk(issuerEntity.keyPair.privateKey, true),
         contractAddress: permissionsAddress,
         rpcProvider,
       },
@@ -165,8 +157,7 @@ describe('E2E issuing', () => {
   });
 
   beforeEach(async () => {
-    await repos.revocationListAllocations.deleteMany();
-    await repos.metadataListAllocations.deleteMany();
+    await repos.allocations.deleteMany();
     jest.resetAllMocks();
     context = buildContext({
       issuerEntity,
@@ -174,7 +165,8 @@ describe('E2E issuing', () => {
       revocationContractAddress,
       metadataRegistryContractAddress,
       allocationListQueries: mongoAllocationListQueries(
-        mongoClient.db('test-collections')
+        mongoClient.db('test-collections'),
+        'allocations'
       ),
       rpcProvider,
     });
@@ -183,6 +175,24 @@ describe('E2E issuing', () => {
   it('should create vcs', async () => {
     const offers = map(offerFactory, [
       { issuerId: issuerEntity.did }, // default email credential
+      {
+        type: ['OpenBadgeCredential'],
+        name: 'Velocity Network Board Member 2022',
+        validFrom: '2022-12-31T00:00:00Z',
+        issuer: { type: ['Profile'], id: issuerEntity.did },
+        credentialSubject: {
+          type: ['AchievementSubject'],
+          achievement: {
+            type: ['Achievement'],
+            id: 'mailto:conformance@imsglobal.org',
+            identifier: {
+              type: ['IdentifierEntry'],
+              identityType: 'emailAddress',
+              identityHash: 'conformance@imsglobal.org',
+            },
+          },
+        },
+      },
       {
         type: 'EmploymentCurrentV1.1',
         issuerId: issuerEntity.did,
@@ -234,7 +244,7 @@ const buildContext = ({
         throw new Error('KeyNotFound');
       }
       return Promise.resolve({
-        privateJwk: jwkFromSecp256k1Key(issuerEntity.keyPair.privateKey),
+        privateJwk: issuerEntity.keyPair.privateKey,
         id: issuerKeyId,
       });
     },

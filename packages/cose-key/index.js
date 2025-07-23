@@ -1,5 +1,5 @@
 /**
- * Copyright 2023 Velocity Team
+ * Copyright 2025 Velocity Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,5 +15,8 @@
  */
 
 module.exports = {
-  ...require('./repos'),
+  ...require('./src/derive-ec-y-values'),
+  ...require('./src/cose-key'),
+  ...require('./src/cose-iana'),
+  ...require('./src/jwk-converters'),
 };

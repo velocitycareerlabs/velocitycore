@@ -26,12 +26,13 @@ module.exports = (app, options, next = () => {}) => {
   next();
   return repoFactory(
     {
-      name: 'revocationListAllocations',
-      entityName: 'revocationListAllocation',
+      name: 'allocations',
+      entityName: 'allocation',
       defaultProjection: {
         _id: 1,
         currentListId: 1,
         freeIndexes: 1,
+        entityName: 1,
         createdAt: 1,
         updatedAt: 1,
       },
