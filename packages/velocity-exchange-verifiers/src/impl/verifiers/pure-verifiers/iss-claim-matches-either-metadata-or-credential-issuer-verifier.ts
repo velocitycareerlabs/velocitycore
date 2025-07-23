@@ -51,12 +51,15 @@ export const issClaimMatchesEitherMetadataOrCredentialIssuerVerifier: Verifier<
     credentialIssuerMetadata?.credential_issuer,
   ].filter((v): v is string => typeof v === 'string' && v.length > 0);
 
-  if (!allowedValues.includes(payload.iss)) {
+  if (
+    typeof payload?.iss !== 'string' ||
+    !allowedValues.includes(payload.iss)
+  ) {
     return [
       buildError(
         ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
         `Expected iss to be one of [${allowedValues.join(', ')}], but got '${
-          payload.iss
+          payload?.iss
         }'`,
         [...(context.path ?? []), 'payload', 'iss']
       ),
