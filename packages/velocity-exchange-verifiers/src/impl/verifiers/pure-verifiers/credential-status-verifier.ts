@@ -43,7 +43,8 @@ export const credentialStatusVerifier: Verifier<W3CCredentialJwtV1> = (
 ) => {
   const path = [...(context.path ?? []), 'payload', 'vc', 'credentialStatus'];
 
-  const credentialStatusExists = credential.payload?.vc?.credentialStatus != null;
+  const credentialStatusExists =
+    credential.payload?.vc?.credentialStatus != null;
 
   if (!credentialStatusExists) {
     return [
