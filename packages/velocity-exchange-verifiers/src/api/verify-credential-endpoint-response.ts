@@ -8,7 +8,7 @@
 import {
   VerificationError,
   VerificationContext,
-  CredentialJwt,
+  W3CCredentialJwtV1,
   CredentialEndpointResponse,
 } from 'impl/types';
 import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
@@ -63,7 +63,7 @@ export const verifyCredentialEndpointResponse = (
 ): VerificationError[] => {
   const credentials = response.credentials ?? [];
 
-  return credentials.flatMap((credential: CredentialJwt, i: number) =>
+  return credentials.flatMap((credential: W3CCredentialJwtV1, i: number) =>
     verifyCredentialJwtPayloadStrict(
       credential,
       withPath(context, ['credentials', i])

@@ -6,7 +6,7 @@
  */
 
 import { buildError, ERROR_CODES } from 'impl/errors';
-import { CredentialJwt, Verifier } from 'impl/types';
+import { W3CCredentialJwtV1, Verifier } from 'impl/types';
 
 /**
  * Verifies that the `vc.credentialStatus` field exists in the Credential JWT payload.
@@ -16,7 +16,7 @@ import { CredentialJwt, Verifier } from 'impl/types';
  * section of the JWT payload. This field is critical for enabling status checks like revocation or suspension,
  * and is required by the Velocity Profile conformance rules.
  *
- * @param credential - The {@link CredentialJwt} object containing both `header` and `payload`.
+ * @param credential - The {@link W3CCredentialJwtV1} object containing both `header` and `payload`.
  * @param context - The {@link VerificationContext} used for issuer metadata and error path tracking.
  *
  * @returns An array of {@link VerificationError} with a single entry if the field is missing,
@@ -33,11 +33,11 @@ import { CredentialJwt, Verifier } from 'impl/types';
  * @validationRule `credential.payload.vc.credentialStatus` must be defined.
  * @errorCode `MISSING_CREDENTIAL_STATUS` — if `vc.credentialStatus` is missing.
  *
- * @see {@link CredentialJwt}
+ * @see {@link W3CCredentialJwtV1}
  * @see {@link VerificationError}
  * @see {@link VerificationContext}
  */
-export const credentialStatusVerifier: Verifier<CredentialJwt> = (
+export const credentialStatusVerifier: Verifier<W3CCredentialJwtV1> = (
   credential,
   context
 ) => {

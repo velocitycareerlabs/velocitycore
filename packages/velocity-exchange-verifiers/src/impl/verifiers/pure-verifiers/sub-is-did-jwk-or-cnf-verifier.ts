@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CredentialJwt, Verifier } from 'impl/types';
+import { W3CCredentialJwtV1, Verifier } from 'impl/types';
 import { buildError, ERROR_CODES } from 'impl/errors';
 
 /**
@@ -20,7 +20,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  *
  * This verifier enforces that at least one of these identity mechanisms is present.
  *
- * @param credential - The parsed {@link CredentialJwt} to validate.
+ * @param credential - The parsed {@link W3CCredentialJwtV1} to validate.
  * @param context - A {@link VerificationContext} object, used to trace the source of the error.
  *
  * @returns An array containing a {@link VerificationError} if the validation fails, or an empty array if the credential is valid.
@@ -36,11 +36,11 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * @validationRule `payload.sub` must equal `"did:jwk"` **or** `payload.cnf` must be present.
  * @errorCode `SUB_OR_CNF_MISSING` — if both are missing or invalid.
  *
- * @see {@link CredentialJwt}
+ * @see {@link W3CCredentialJwtV1}
  * @see {@link VerificationError}
  * @see {@link VerificationContext}
  */
-export const subIsDidJwkOrCnfVerifier: Verifier<CredentialJwt> = (
+export const subIsDidJwkOrCnfVerifier: Verifier<W3CCredentialJwtV1> = (
   credential,
   context
 ) => {

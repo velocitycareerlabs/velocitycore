@@ -7,7 +7,7 @@
 
 import { credentialStatusVerifier } from 'impl/verifiers/pure-verifiers/credential-status-verifier';
 import { ERROR_CODES } from 'impl/errors';
-import { CredentialJwt, VerificationContext } from 'impl/types';
+import { W3CCredentialJwtV1, VerificationContext } from 'impl/types';
 
 describe('credentialStatusVerifier', () => {
   const baseContext: VerificationContext = {
@@ -20,7 +20,7 @@ describe('credentialStatusVerifier', () => {
 
   const buildCredential = (
     statusValue: unknown = { id: 'https://status.example.com' }
-  ): CredentialJwt => ({
+  ): W3CCredentialJwtV1 => ({
     header: { alg: 'ES256' },
     payload: {
       iss: 'did:example',
@@ -37,7 +37,7 @@ describe('credentialStatusVerifier', () => {
   });
 
   it('should fail when credentialStatus is undefined', () => {
-    const credential: CredentialJwt = {
+    const credential: W3CCredentialJwtV1 = {
       header: { alg: 'ES256' },
       payload: {
         iss: 'did:example',
@@ -54,7 +54,7 @@ describe('credentialStatusVerifier', () => {
   });
 
   it('should fail when vc is missing', () => {
-    const credential: CredentialJwt = {
+    const credential: W3CCredentialJwtV1 = {
       header: { alg: 'ES256' },
       payload: {
         iss: 'did:example',
@@ -83,7 +83,7 @@ describe('credentialStatusVerifier', () => {
       path: ['credentials', 0],
     };
     const result = credentialStatusVerifier(
-      credential as CredentialJwt,
+      credential as W3CCredentialJwtV1,
       nestedContext
     );
 

@@ -6,7 +6,7 @@
  */
 
 import { issClaimMatchesMetadataVerifier } from 'impl/verifiers/pure-verifiers';
-import { CredentialJwt, VerificationContext } from 'impl/types';
+import { W3CCredentialJwtV1, VerificationContext } from 'impl/types';
 import { ERROR_CODES } from 'impl/errors';
 
 describe('issClaimMatchesMetadataVerifier', () => {
@@ -18,7 +18,7 @@ describe('issClaimMatchesMetadataVerifier', () => {
     },
   };
 
-  const makeCredential = (iss: string): CredentialJwt => ({
+  const makeCredential = (iss: string): W3CCredentialJwtV1 => ({
     header: { alg: 'ES256' },
     payload: {
       iss,

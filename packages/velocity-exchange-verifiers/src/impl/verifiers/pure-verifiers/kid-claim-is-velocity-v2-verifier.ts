@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CredentialJwt, Verifier } from 'impl/types';
+import { W3CCredentialJwtV1, Verifier } from 'impl/types';
 import { buildError, ERROR_CODES } from 'impl/errors';
 
 /**
@@ -16,7 +16,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * to begin with `"did:velocity:v2"`, ensuring that the key used for signing is anchored in the expected
  * namespace. This is essential for enforcing trust boundaries and key provenance.
  *
- * @param credential - A parsed {@link CredentialJwt} containing a `header` with the `kid` field.
+ * @param credential - A parsed {@link W3CCredentialJwtV1} containing a `header` with the `kid` field.
  * @param context - The {@link VerificationContext} used to track the current JSON path for precise error reporting.
  *
  * @returns An array containing a {@link VerificationError} if the `kid` is missing or invalid, or an empty array if valid.
@@ -32,11 +32,11 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * @validationRule `credential.header.kid` must start with `"did:velocity:v2"`.
  * @errorCode `INVALID_KID` — when `kid` is missing or does not begin with the required prefix.
  *
- * @see {@link CredentialJwt}
+ * @see {@link W3CCredentialJwtV1}
  * @see {@link VerificationError}
  * @see {@link VerificationContext}
  */
-export const kidClaimIsVelocityV2Verifier: Verifier<CredentialJwt> = (
+export const kidClaimIsVelocityV2Verifier: Verifier<W3CCredentialJwtV1> = (
   credential,
   context
 ) => {

@@ -6,7 +6,7 @@
  */
 
 import { ERROR_CODES } from 'impl/errors';
-import { CredentialJwt, VerificationContext } from 'impl/types';
+import { W3CCredentialJwtV1, VerificationContext } from 'impl/types';
 import { algIsSupportedVerifier } from 'impl/verifiers/pure-verifiers';
 
 describe('algIsSupportedVerifier', () => {
@@ -18,7 +18,7 @@ describe('algIsSupportedVerifier', () => {
     },
   };
 
-  const makeCredential = (alg?: string): CredentialJwt => {
+  const makeCredential = (alg?: string): W3CCredentialJwtV1 => {
     const header = alg !== undefined ? { alg } : ({} as any);
     return {
       header,

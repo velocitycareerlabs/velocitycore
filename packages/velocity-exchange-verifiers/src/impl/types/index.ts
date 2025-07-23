@@ -106,11 +106,16 @@ export type VerificationError = {
  * This structure includes both the JOSE `header` and `payload` fields,
  * with strongly typed VC-relevant claims.
  */
-export type CredentialJwt = {
+export type W3CCredentialJwtV1 = {
   /**
    * JWT header fields, including the signing algorithm.
    */
   header: {
+    /**
+     * Optional Key ID; expected to start with `did:velocity:v2` under the Velocity Profile.
+     */
+    kid?: string;
+
     /**
      * The cryptographic algorithm used to sign the JWT (e.g., `ES256K`, `ES256`, `RS256`).
      */
@@ -135,11 +140,6 @@ export type CredentialJwt = {
      * Optional subject identifier; typically `"did:jwk"` for wallet-based credentials.
      */
     sub?: string;
-
-    /**
-     * Optional Key ID; expected to start with `did:velocity:v2` under the Velocity Profile.
-     */
-    kid?: string;
 
     /**
      * Optional confirmation object for subject key binding (used when `sub` is not present).
@@ -176,7 +176,7 @@ export type CredentialJwt = {
 /**
  * Represents a response from the Credential Endpoint (OpenID4VCI).
  *
- * Typically includes a `credentials` array of {@link CredentialJwt} entries, each expected to
+ * Typically includes a `credentials` array of {@link W3CCredentialJwtV1} entries, each expected to
  * conform to OpenID4VCI and Velocity validation rules.
  *
  * Additional fields may be present depending on the issuer.
@@ -186,9 +186,9 @@ export type CredentialJwt = {
  *   credentials: [parsedCredentialJwt1, parsedCredentialJwt2]
  * };
  *
- * @see {@link CredentialJwt}
+ * @see {@link W3CCredentialJwtV1}
  */
 export type CredentialEndpointResponse = {
-  credentials?: CredentialJwt[];
+  credentials?: W3CCredentialJwtV1[];
   [key: string]: unknown;
 };

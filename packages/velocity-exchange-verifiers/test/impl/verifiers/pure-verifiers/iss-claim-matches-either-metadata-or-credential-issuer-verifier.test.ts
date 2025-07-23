@@ -7,7 +7,7 @@
 
 import { issClaimMatchesEitherMetadataOrCredentialIssuerVerifier } from 'impl/verifiers/pure-verifiers';
 import { ERROR_CODES } from 'impl/errors';
-import { CredentialJwt, VerificationContext } from 'impl/types';
+import { W3CCredentialJwtV1, VerificationContext } from 'impl/types';
 
 describe('issClaimMatchesEitherMetadataOrCredentialIssuerVerifier', () => {
   const context: VerificationContext = {
@@ -18,7 +18,7 @@ describe('issClaimMatchesEitherMetadataOrCredentialIssuerVerifier', () => {
     },
   };
 
-  const makeCredential = (iss: string): CredentialJwt => ({
+  const makeCredential = (iss: string): W3CCredentialJwtV1 => ({
     header: { alg: 'ES256' },
     payload: {
       iss,

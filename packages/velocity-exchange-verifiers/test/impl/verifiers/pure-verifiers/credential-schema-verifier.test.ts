@@ -7,7 +7,7 @@
 
 import { credentialSchemaVerifier } from 'impl/verifiers/pure-verifiers/credential-schema-verifier';
 import { ERROR_CODES } from 'impl/errors';
-import { CredentialJwt, VerificationContext } from 'impl/types';
+import { W3CCredentialJwtV1, VerificationContext } from 'impl/types';
 
 describe('credentialSchemaVerifier', () => {
   const baseContext: VerificationContext = {
@@ -21,7 +21,7 @@ describe('credentialSchemaVerifier', () => {
   const buildCredential = (
     schema?: unknown,
     vcOverride: any = {}
-  ): CredentialJwt => ({
+  ): W3CCredentialJwtV1 => ({
     header: { alg: 'ES256' },
     payload: {
       iss: 'did:example',
@@ -54,7 +54,7 @@ describe('credentialSchemaVerifier', () => {
   });
 
   it('should fail when vc is undefined', () => {
-    const credential: CredentialJwt = {
+    const credential: W3CCredentialJwtV1 = {
       header: { alg: 'ES256' },
       payload: {
         iss: 'did:example',

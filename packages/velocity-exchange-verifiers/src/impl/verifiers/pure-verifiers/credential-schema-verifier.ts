@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { buildError, ERROR_CODES } from 'impl/errors';
-import { CredentialJwt, Verifier } from 'impl/types';
+import { W3CCredentialJwtV1, Verifier } from 'impl/types';
 
 /**
  * Verifies that the `vc.credentialSchema` field exists in the Credential JWT payload.
@@ -15,7 +15,7 @@ import { CredentialJwt, Verifier } from 'impl/types';
  * object located within the payload. This is a mandatory requirement for conformance with the Velocity Profile.
  * If missing, the credential is considered invalid under profile rules.
  *
- * @param credential - The {@link CredentialJwt} object containing both `header` and `payload`.
+ * @param credential - The {@link W3CCredentialJwtV1} object containing both `header` and `payload`.
  * @param context - The {@link VerificationContext} used for error path tracking and metadata access.
  *
  * @returns An array of {@link VerificationError} containing a single error if the field is missing,
@@ -32,11 +32,11 @@ import { CredentialJwt, Verifier } from 'impl/types';
  * @validationRule `credential.payload.vc.credentialSchema` must be defined.
  * @errorCode `MISSING_CREDENTIAL_SCHEMA` — if `payload.vc.credentialSchema` is missing.
  *
- * @see {@link CredentialJwt}
+ * @see {@link W3CCredentialJwtV1}
  * @see {@link VerificationError}
  * @see {@link VerificationContext}
  */
-export const credentialSchemaVerifier: Verifier<CredentialJwt> = (
+export const credentialSchemaVerifier: Verifier<W3CCredentialJwtV1> = (
   credential,
   context
 ) => {

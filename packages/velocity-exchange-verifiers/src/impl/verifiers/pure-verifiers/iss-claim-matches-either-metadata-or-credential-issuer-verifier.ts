@@ -4,7 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { CredentialJwt, Verifier } from 'impl/types';
+import { W3CCredentialJwtV1, Verifier } from 'impl/types';
 import { buildError, ERROR_CODES } from 'impl/errors';
 
 /**
@@ -19,7 +19,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  *
  * This ensures conformance with OpenID4VCI while enabling broader ecosystem compatibility.
  *
- * @param credential - A parsed {@link CredentialJwt} object.
+ * @param credential - A parsed {@link W3CCredentialJwtV1} object.
  * @param context - The {@link VerificationContext} containing issuer metadata and optional path.
  *
  * @returns An array containing a {@link VerificationError} if validation fails, or an empty array if valid.
@@ -35,12 +35,12 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * @validationRule `credential.payload.iss` must equal `credential_issuer_metadata.iss` or `credential_issuer_metadata.credential_issuer`.
  * @errorCode `UNEXPECTED_CREDENTIAL_PAYLOAD_ISS` — if the issuer does not match either expected value.
  *
- * @see {@link CredentialJwt}
+ * @see {@link W3CCredentialJwtV1}
  * @see {@link VerificationError}
  * @see {@link VerificationContext}
  */
 export const issClaimMatchesEitherMetadataOrCredentialIssuerVerifier: Verifier<
-  CredentialJwt
+  W3CCredentialJwtV1
 > = (credential, context) => {
   const actual = credential.payload?.iss;
   const allowed = [

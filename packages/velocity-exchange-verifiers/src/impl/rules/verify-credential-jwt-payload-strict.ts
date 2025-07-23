@@ -16,7 +16,7 @@ import {
   kidClaimIsVelocityV2Verifier,
   subIsDidJwkOrCnfVerifier,
 } from 'impl/verifiers/pure-verifiers';
-import { CredentialJwt } from 'impl/types';
+import { W3CCredentialJwtV1 } from 'impl/types';
 
 /**
  * Verifies a Credential JWT payload using strict validation rules defined by both
@@ -41,7 +41,7 @@ import { CredentialJwt } from 'impl/types';
  * - Subject binding must be satisfied by either `payload.sub === "did:jwk"` or
  *   a present `payload.cnf`, enforced via {@link subIsDidJwkOrCnfVerifier}.
  *
- * @param credential - A parsed {@link CredentialJwt} object including the header and payload.
+ * @param credential - A parsed {@link W3CCredentialJwtV1} object including the header and payload.
  * @param context - A {@link VerificationContext} containing path information and issuer metadata.
  *
  * @returns An array of {@link VerificationError} objects. Returns an empty array if the credential is valid.
@@ -55,15 +55,16 @@ import { CredentialJwt } from 'impl/types';
  * ```
  *
  * @see {@link createVerifier}
- * @see {@link CredentialJwt}
+ * @see {@link W3CCredentialJwtV1}
  * @see {@link VerificationError}
  */
-export const verifyCredentialJwtPayloadStrict = createVerifier<CredentialJwt>([
-  algIsSupportedVerifier,
-  credentialSchemaVerifier,
-  credentialStatusVerifier,
-  issClaimMatchesEitherMetadataOrCredentialIssuerVerifier,
-  issClaimMatchesMetadataVerifier,
-  kidClaimIsVelocityV2Verifier,
-  subIsDidJwkOrCnfVerifier,
-]);
+export const verifyCredentialJwtPayloadStrict =
+  createVerifier<W3CCredentialJwtV1>([
+    algIsSupportedVerifier,
+    credentialSchemaVerifier,
+    credentialStatusVerifier,
+    issClaimMatchesEitherMetadataOrCredentialIssuerVerifier,
+    issClaimMatchesMetadataVerifier,
+    kidClaimIsVelocityV2Verifier,
+    subIsDidJwkOrCnfVerifier,
+  ]);

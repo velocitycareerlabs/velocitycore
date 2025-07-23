@@ -6,7 +6,7 @@
  */
 
 import { kidClaimIsVelocityV2Verifier } from 'impl/verifiers/pure-verifiers';
-import { CredentialJwt, VerificationContext } from 'impl/types';
+import { W3CCredentialJwtV1, VerificationContext } from 'impl/types';
 import { ERROR_CODES } from 'impl/errors';
 
 describe('kidClaimIsVelocityV2Verifier', () => {
@@ -18,7 +18,7 @@ describe('kidClaimIsVelocityV2Verifier', () => {
     },
   };
 
-  const makeCredential = (kid?: string): CredentialJwt => ({
+  const makeCredential = (kid?: string): W3CCredentialJwtV1 => ({
     header: { alg: 'ES256', kid },
     payload: {
       iss: 'did:example',

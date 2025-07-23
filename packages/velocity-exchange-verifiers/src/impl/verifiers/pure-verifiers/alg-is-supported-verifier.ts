@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CredentialJwt, Verifier } from 'impl/types';
+import { W3CCredentialJwtV1, Verifier } from 'impl/types';
 import { buildError, ERROR_CODES } from 'impl/errors';
 
 /**
@@ -23,7 +23,7 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * If the `alg` value is missing or does not match one of the supported algorithms, a
  * {@link VerificationError} with the code `INVALID_ALG` will be returned.
  *
- * @param credential - The {@link CredentialJwt} object, including the JOSE header and payload.
+ * @param credential - The {@link W3CCredentialJwtV1} object, including the JOSE header and payload.
  * @param context - The {@link VerificationContext}, used for tracking the path of the validated field.
  * @returns An array containing a {@link VerificationError} if validation fails, or an empty array if the algorithm is supported.
  *
@@ -35,10 +35,10 @@ import { buildError, ERROR_CODES } from 'impl/errors';
  * }
  * ```
  *
- * @see {@link CredentialJwt}
+ * @see {@link W3CCredentialJwtV1}
  * @see {@link VerificationError}
  */
-export const algIsSupportedVerifier: Verifier<CredentialJwt> = (
+export const algIsSupportedVerifier: Verifier<W3CCredentialJwtV1> = (
   credential,
   context
 ) => {

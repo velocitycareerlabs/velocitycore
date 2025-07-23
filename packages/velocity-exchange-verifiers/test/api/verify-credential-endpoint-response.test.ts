@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { VerificationContext, CredentialJwt } from 'impl/types';
+import { VerificationContext, W3CCredentialJwtV1 } from 'impl/types';
 import { ERROR_CODES } from 'impl/errors';
 import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
 import { verifyCredentialEndpointResponse } from 'api/verify-credential-endpoint-response';
@@ -24,7 +24,7 @@ describe('verifyCredentialEndpointResponse', () => {
     },
   };
 
-  const mockCredential: CredentialJwt = {
+  const mockCredential: W3CCredentialJwtV1 = {
     header: { alg: 'ES256' },
     payload: {
       iss: 'did:issuer:example',

@@ -6,7 +6,7 @@
  */
 
 import { subIsDidJwkOrCnfVerifier } from 'impl/verifiers/pure-verifiers';
-import { CredentialJwt, VerificationContext } from 'impl/types';
+import { W3CCredentialJwtV1, VerificationContext } from 'impl/types';
 import { ERROR_CODES } from 'impl/errors';
 
 describe('subIsDidJwkOrCnfVerifier', () => {
@@ -18,7 +18,7 @@ describe('subIsDidJwkOrCnfVerifier', () => {
     },
   };
 
-  const makeCredential = (sub?: string, cnf?: unknown): CredentialJwt => ({
+  const makeCredential = (sub?: string, cnf?: unknown): W3CCredentialJwtV1 => ({
     header: { alg: 'ES256' },
     payload: {
       iss: 'did:example',
