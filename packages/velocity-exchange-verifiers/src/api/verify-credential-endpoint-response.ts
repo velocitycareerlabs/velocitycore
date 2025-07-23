@@ -10,7 +10,7 @@ import {
   VerificationContext,
   W3CCredentialJwtV1,
   CredentialEndpointResponse,
-} from 'impl/types';
+} from 'api/types';
 import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
 import { withPath } from 'impl/utils';
 

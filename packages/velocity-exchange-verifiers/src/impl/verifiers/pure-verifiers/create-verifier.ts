@@ -4,7 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Verifier } from 'impl/types';
+import { Verifier } from 'api/types';
 
 /**
  * Creates a compound verifier by composing multiple single-purpose verifiers.

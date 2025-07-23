@@ -6,7 +6,7 @@
  */
 
 import { ERROR_CODES } from 'impl/errors';
-import { W3CCredentialJwtV1, VerificationContext } from 'impl/types';
+import { W3CCredentialJwtV1, VerificationContext } from 'api/types';
 import { algIsSupportedVerifier } from 'impl/verifiers/pure-verifiers';
 
 describe('algIsSupportedVerifier', () => {

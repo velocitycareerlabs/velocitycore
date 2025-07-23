@@ -16,7 +16,7 @@ import {
   kidClaimIsVelocityV2Verifier,
   subIsDidJwkOrCnfVerifier,
 } from 'impl/verifiers/pure-verifiers';
-import { W3CCredentialJwtV1 } from 'impl/types';
+import { W3CCredentialJwtV1 } from 'api/types';
 
 /**
  * Verifies a Credential JWT payload using strict validation rules defined by both

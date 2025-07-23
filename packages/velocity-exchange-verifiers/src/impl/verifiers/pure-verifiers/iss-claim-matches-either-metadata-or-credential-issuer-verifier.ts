@@ -4,7 +4,7 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { W3CCredentialJwtV1, Verifier, VerificationContext } from 'impl/types';
+import { W3CCredentialJwtV1, Verifier, VerificationContext } from 'api/types';
 import { buildError, ERROR_CODES } from 'impl/errors';
 
 /**

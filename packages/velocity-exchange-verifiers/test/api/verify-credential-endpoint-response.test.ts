@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { VerificationContext, W3CCredentialJwtV1 } from 'impl/types';
+import { VerificationContext, W3CCredentialJwtV1 } from 'api/types';
 import { ERROR_CODES } from 'impl/errors';
 import { verifyCredentialJwtPayloadStrict } from 'impl/rules';
 import { verifyCredentialEndpointResponse } from 'api/verify-credential-endpoint-response';
