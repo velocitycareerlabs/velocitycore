@@ -6,7 +6,7 @@
  */
 
 import { buildError } from 'impl/errors';
-import {W3CCredentialJwtV1, Verifier, ERROR_CODES} from 'api/types';
+import { W3CCredentialJwtV1, Verifier, ERROR_CODES } from 'api/types';
 
 /**
  * Verifies that the `vc.credentialStatus` field exists in the Credential JWT payload.

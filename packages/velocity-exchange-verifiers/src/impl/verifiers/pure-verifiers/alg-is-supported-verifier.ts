@@ -42,7 +42,7 @@ export const algIsSupportedVerifier: Verifier<W3CCredentialJwtV1> = (
   credential,
   context
 ) => {
-  const alg = credential.header?.alg;
+  const { alg } = credential.header;
   if (!supportedAlgs.includes(alg)) {
     return [
       buildError(ERROR_CODES.INVALID_ALG, `Unsupported alg: '${alg}'`, [

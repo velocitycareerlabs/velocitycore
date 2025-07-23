@@ -6,8 +6,11 @@
  */
 
 import { credentialSchemaVerifier } from 'impl/verifiers/pure-verifiers/credential-schema-verifier';
-import { ERROR_CODES } from 'impl/errors';
-import { W3CCredentialJwtV1, VerificationContext } from 'api/types';
+import {
+  W3CCredentialJwtV1,
+  VerificationContext,
+  ERROR_CODES,
+} from 'api/types';
 
 describe('credentialSchemaVerifier', () => {
   const baseContext: VerificationContext = {

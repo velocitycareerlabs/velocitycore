@@ -5,8 +5,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ERROR_CODES } from 'impl/errors';
-import { W3CCredentialJwtV1, VerificationContext } from 'api/types';
+import {
+  W3CCredentialJwtV1,
+  VerificationContext,
+  ERROR_CODES,
+} from 'api/types';
 import { algIsSupportedVerifier } from 'impl/verifiers/pure-verifiers';
 
 describe('algIsSupportedVerifier', () => {

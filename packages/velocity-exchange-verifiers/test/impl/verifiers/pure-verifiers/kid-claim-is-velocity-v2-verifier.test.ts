@@ -6,8 +6,11 @@
  */
 
 import { kidClaimIsVelocityV2Verifier } from 'impl/verifiers/pure-verifiers';
-import { W3CCredentialJwtV1, VerificationContext } from 'api/types';
-import { ERROR_CODES } from 'impl/errors';
+import {
+  W3CCredentialJwtV1,
+  VerificationContext,
+  ERROR_CODES,
+} from 'api/types';
 
 describe('kidClaimIsVelocityV2Verifier', () => {
   const baseContext: VerificationContext = {

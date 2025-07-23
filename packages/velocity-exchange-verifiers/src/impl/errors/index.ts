@@ -5,5 +5,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from './error-code';
 export * from './error-builder';
