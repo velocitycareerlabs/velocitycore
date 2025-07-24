@@ -41,7 +41,7 @@ export const issClaimMatchesMetadataVerifier: Verifier<W3CCredentialJwtV1> = (
   credential,
   context
 ) => {
-  const actual = credential.payload?.iss;
+  const actual = credential.payload.iss;
   const expected = context.credential_issuer_metadata?.iss;
 
   if (actual !== expected) {
