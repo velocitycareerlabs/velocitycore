@@ -18,14 +18,13 @@ import { W3CCredentialJwtV1, Verifier, ERROR_CODES } from 'api/types';
  * @param credential - The {@link W3CCredentialJwtV1} object containing both `header` and `payload`.
  * @param context - The {@link VerificationContext} used for error path tracking and metadata access.
  *
- * @returns An array of {@link VerificationError} containing a single error if the field is missing,
- * or an empty array if the credential is valid.
+ * @returns A {@link VerificationError} if the field is missing, or `null` if the credential is valid.
  *
  * @example
  * ```ts
- * const errors = credentialSchemaVerifier(credentialJwt, verificationContext);
- * if (errors.length > 0) {
- *   console.error(errors);
+ * const error = credentialSchemaVerifier(credentialJwt, verificationContext);
+ * if (error) {
+ *   console.error(error);
  * }
  * ```
  *
@@ -40,15 +39,11 @@ export const credentialSchemaVerifier: Verifier<W3CCredentialJwtV1> = (
   credential,
   context
 ) => {
-  if (!credential.payload?.vc?.credentialSchema) {
-    return [
-      buildError(
+  return credential.payload?.vc?.credentialSchema == null
+    ? buildError(
         ERROR_CODES.MISSING_CREDENTIAL_SCHEMA,
-        'Expected credentialSchema in payload.vc?.credentialSchema got undefined',
+        'Expected credentialSchema in payload.vc.credentialSchema, but got undefined',
         [...(context.path ?? []), 'payload', 'vc', 'credentialSchema']
-      ),
-    ];
-  }
-
-  return [];
+      )
+    : null;
 };

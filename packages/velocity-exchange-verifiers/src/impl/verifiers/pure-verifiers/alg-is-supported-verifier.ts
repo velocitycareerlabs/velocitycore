@@ -25,13 +25,13 @@ import { buildError } from 'impl/errors';
  *
  * @param credential - The {@link W3CCredentialJwtV1} object, including the JOSE header and payload.
  * @param context - The {@link VerificationContext}, used for tracking the path of the validated field.
- * @returns An array containing a {@link VerificationError} if validation fails, or an empty array if the algorithm is supported.
+ * @returns A {@link VerificationError} if validation fails, or `null` if the algorithm is supported.
  *
  * @example
  * ```ts
- * const errors = algIsSupportedVerifier(credentialJwt, verificationContext);
- * if (errors.length > 0) {
- *   console.error(errors);
+ * const error = algIsSupportedVerifier(credentialJwt, verificationContext);
+ * if (error) {
+ *   console.error(error);
  * }
  * ```
  *
@@ -44,15 +44,13 @@ export const algIsSupportedVerifier: Verifier<W3CCredentialJwtV1> = (
 ) => {
   const { alg } = credential.header;
   if (!supportedAlgs.includes(alg)) {
-    return [
-      buildError(ERROR_CODES.INVALID_ALG, `Unsupported alg: '${alg}'`, [
-        ...(context.path ?? []),
-        'header',
-        'alg',
-      ]),
-    ];
+    return buildError(ERROR_CODES.INVALID_ALG, `Unsupported alg: '${alg}'`, [
+      ...(context.path ?? []),
+      'header',
+      'alg',
+    ]);
   }
-  return [];
+  return null;
 };
 
 const supportedAlgs = ['ES256', 'ES256K', 'RS256'];

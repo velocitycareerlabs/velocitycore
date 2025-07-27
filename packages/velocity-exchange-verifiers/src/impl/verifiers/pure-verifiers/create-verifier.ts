@@ -4,15 +4,15 @@
  * Copyright 2022 Velocity Career Labs inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Verifier } from 'api/types';
+import { VerificationError, Verifier } from 'api/types';
 
 /**
  * Creates a compound verifier by composing multiple single-purpose verifiers.
  *
  * @remarks
  * This function enables declarative validation by combining multiple reusable {@link Verifier} functions
- * into a single pipeline. Each verifier is applied to the same `value` and `context`, and their
- * resulting {@link VerificationError[]} arrays are merged into a single result list.
+ * into a single pipeline. Each verifier is applied to the same `value` and `context`, and any
+ * resulting {@link VerificationError} objects are collected into a single array.
  *
  * This utility is useful for building modular, maintainable validation logic.
  *
@@ -39,7 +39,11 @@ import { Verifier } from 'api/types';
  * @see {@link VerificationError}
  */
 export const createVerifier =
-  <T>(rules: Verifier<T>[]): Verifier<T> =>
+  <T>(
+    rules: Verifier<T>[]
+  ): ((value: T, context: any) => VerificationError[]) =>
   (value, context) => {
-    return rules.flatMap((rule) => rule(value, context));
+    return rules
+      .map((rule) => rule(value, context))
+      .filter((err): err is VerificationError => err != null);
   };

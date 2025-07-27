@@ -27,13 +27,13 @@ import { buildError } from 'impl/errors';
  * @param credential - A parsed {@link W3CCredentialJwtV1} object.
  * @param context - The {@link VerificationContext} containing issuer metadata and optional path.
  *
- * @returns An array containing a {@link VerificationError} if validation fails, or an empty array if valid.
+ * @returns A {@link VerificationError} if validation fails, or `null` if valid.
  *
  * @example
  * ```ts
- * const errors = issClaimMatchesEitherMetadataOrCredentialIssuerVerifier(credentialJwt, context);
- * if (errors.length > 0) {
- *   handleValidationErrors(errors);
+ * const error = issClaimMatchesEitherMetadataOrCredentialIssuerVerifier(credentialJwt, context);
+ * if (error) {
+ *   console.error(error);
  * }
  * ```
  *
@@ -50,7 +50,6 @@ export const issClaimMatchesEitherMetadataOrCredentialIssuerVerifier: Verifier<
   const { payload } = credential;
   const credentialIssuerMetadata = context.credential_issuer_metadata;
 
-  // Filter out null/undefined values explicitly
   const allowedValues = [
     credentialIssuerMetadata?.iss,
     credentialIssuerMetadata?.credential_issuer,
@@ -60,16 +59,14 @@ export const issClaimMatchesEitherMetadataOrCredentialIssuerVerifier: Verifier<
     typeof payload?.iss !== 'string' ||
     !allowedValues.includes(payload.iss)
   ) {
-    return [
-      buildError(
-        ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
-        `Expected iss to be one of [${allowedValues.join(', ')}], but got '${
-          payload?.iss
-        }'`,
-        [...(context.path ?? []), 'payload', 'iss']
-      ),
-    ];
+    return buildError(
+      ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
+      `Expected iss to be one of [${allowedValues.join(', ')}], but got '${
+        payload?.iss
+      }'`,
+      [...(context.path ?? []), 'payload', 'iss']
+    );
   }
 
-  return [];
+  return null;
 };

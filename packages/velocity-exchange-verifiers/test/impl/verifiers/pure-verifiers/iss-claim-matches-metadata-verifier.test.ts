@@ -32,14 +32,13 @@ describe('issClaimMatchesMetadataVerifier', () => {
   it('should pass when iss matches credential_issuer_metadata.iss exactly', () => {
     const credential = makeCredential('did:velocity:issuer123');
     const result = issClaimMatchesMetadataVerifier(credential, baseContext);
-    expect(result).toEqual([]);
+    expect(result).toEqual(null);
   });
 
   it('should fail when iss matches credential_issuer_metadata.credential_issuer but not .iss', () => {
     const credential = makeCredential('https://issuer.velocitycareerlabs.com');
     const result = issClaimMatchesMetadataVerifier(credential, baseContext);
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
       message: expect.stringContaining('https://issuer.velocitycareerlabs.com'),
       path: ['payload', 'iss'],
@@ -49,8 +48,7 @@ describe('issClaimMatchesMetadataVerifier', () => {
   it('should fail when iss does not match anything', () => {
     const credential = makeCredential('did:wrong:issuer');
     const result = issClaimMatchesMetadataVerifier(credential, baseContext);
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
       message: expect.stringContaining('did:wrong:issuer'),
       path: ['payload', 'iss'],
@@ -60,8 +58,7 @@ describe('issClaimMatchesMetadataVerifier', () => {
   it('should fail when iss is missing', () => {
     const credential = makeCredential('');
     const result = issClaimMatchesMetadataVerifier(credential, baseContext);
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
       message: expect.stringContaining(''),
       path: ['payload', 'iss'],

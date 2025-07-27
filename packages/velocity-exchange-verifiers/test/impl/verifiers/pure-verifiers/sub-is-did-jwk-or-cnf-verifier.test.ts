@@ -34,20 +34,19 @@ describe('subIsDidJwkOrCnfVerifier', () => {
   it('should pass if sub is "did:jwk"', () => {
     const credential = makeCredential('did:jwk');
     const result = subIsDidJwkOrCnfVerifier(credential, baseContext);
-    expect(result).toEqual([]);
+    expect(result).toEqual(null);
   });
 
   it('should pass if cnf is defined and sub is something else', () => {
     const credential = makeCredential('some-other-sub', { jwk: {} });
     const result = subIsDidJwkOrCnfVerifier(credential, baseContext);
-    expect(result).toEqual([]);
+    expect(result).toEqual(null);
   });
 
   it('should fail if sub is not "did:jwk" and cnf is missing', () => {
     const credential = makeCredential('some-other-sub');
     const result = subIsDidJwkOrCnfVerifier(credential, baseContext);
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.SUB_OR_CNF_MISSING,
       message: expect.stringContaining('some-other-sub'),
       path: ['payload'],
@@ -57,8 +56,7 @@ describe('subIsDidJwkOrCnfVerifier', () => {
   it('should fail if sub and cnf are both missing', () => {
     const credential = makeCredential(undefined, undefined);
     const result = subIsDidJwkOrCnfVerifier(credential, baseContext);
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.SUB_OR_CNF_MISSING,
       message: expect.stringContaining('undefined'),
       path: ['payload'],

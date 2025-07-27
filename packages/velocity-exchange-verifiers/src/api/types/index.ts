@@ -26,15 +26,15 @@
  * Defines a reusable verification function that checks a value against one or more rules.
  *
  * A `Verifier<T>` is a pure function that receives the input value and a shared
- * `VerificationContext`, and returns an array of `VerificationError` objects
- * describing any detected issues.
+ * `VerificationContext`, and returns an array of `VerificationError` object
+ * describing any detected issue.
  *
  * @template T - The input type to verify (e.g., `CredentialJwt`)
  */
 export type Verifier<T> = (
   value: T,
   context: VerificationContext
-) => VerificationError[];
+) => VerificationError | null;
 
 /**
  * Describes metadata about a credential issuer, typically retrieved from

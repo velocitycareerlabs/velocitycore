@@ -19,13 +19,13 @@ import { buildError } from 'impl/errors';
  * @param credential - A parsed {@link W3CCredentialJwtV1} containing a `header` with the `kid` field.
  * @param context - The {@link VerificationContext} used to track the current JSON path for precise error reporting.
  *
- * @returns An array containing a {@link VerificationError} if the `kid` is missing or invalid, or an empty array if valid.
+ * @returns A {@link VerificationError} if the `kid` is missing or invalid, or `null` if valid.
  *
  * @example
  * ```ts
- * const errors = kidClaimIsVelocityV2Verifier(credentialJwt, context);
- * if (errors.length > 0) {
- *   console.error(errors);
+ * const error = kidClaimIsVelocityV2Verifier(credentialJwt, context);
+ * if (error) {
+ *   console.error(error);
  * }
  * ```
  *
@@ -42,13 +42,11 @@ export const kidClaimIsVelocityV2Verifier: Verifier<W3CCredentialJwtV1> = (
 ) => {
   const kid = credential.header?.kid;
   if (typeof kid !== 'string' || !kid.startsWith('did:velocity:v2')) {
-    return [
-      buildError(
-        ERROR_CODES.INVALID_KID,
-        `kid must start with 'did:velocity:v2', got '${kid}'`,
-        [...(context.path ?? []), 'header', 'kid']
-      ),
-    ];
+    return buildError(
+      ERROR_CODES.INVALID_KID,
+      `kid must start with 'did:velocity:v2', got '${kid}'`,
+      [...(context.path ?? []), 'header', 'kid']
+    );
   }
-  return [];
+  return null;
 };

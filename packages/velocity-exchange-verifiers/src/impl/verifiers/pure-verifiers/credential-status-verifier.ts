@@ -19,14 +19,14 @@ import { W3CCredentialJwtV1, Verifier, ERROR_CODES } from 'api/types';
  * @param credential - The {@link W3CCredentialJwtV1} object containing both `header` and `payload`.
  * @param context - The {@link VerificationContext} used for issuer metadata and error path tracking.
  *
- * @returns An array of {@link VerificationError} with a single entry if the field is missing,
- * or an empty array if the credential is valid.
+ * @returns A {@link VerificationError} with a single entry if the field is missing,
+ * or `null` if the credential is valid.
  *
  * @example
  * ```ts
- * const errors = credentialStatusVerifier(credentialJwt, verificationContext);
- * if (errors.length > 0) {
- *   handleValidationErrors(errors);
+ * const error = credentialStatusVerifier(credentialJwt, verificationContext);
+ * if (error) {
+ *   console.error(error);
  * }
  * ```
  *
@@ -43,17 +43,11 @@ export const credentialStatusVerifier: Verifier<W3CCredentialJwtV1> = (
 ) => {
   const path = [...(context.path ?? []), 'payload', 'vc', 'credentialStatus'];
 
-  const credentialStatusExists = credential.payload.vc.credentialStatus != null;
-
-  if (!credentialStatusExists) {
-    return [
-      buildError(
+  return credential.payload?.vc?.credentialStatus == null
+    ? buildError(
         ERROR_CODES.MISSING_CREDENTIAL_STATUS,
         `Expected vc.credentialStatus to exist at path: ${path.join('.')}`,
         path
-      ),
-    ];
-  }
-
-  return [];
+      )
+    : null;
 };

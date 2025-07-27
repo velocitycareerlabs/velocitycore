@@ -36,7 +36,7 @@ describe('credentialStatusVerifier', () => {
   it('should pass when credentialStatus is present', () => {
     const credential = buildCredential();
     const result = credentialStatusVerifier(credential, baseContext);
-    expect(result).toEqual([]);
+    expect(result).toEqual(null);
   });
 
   it('should fail when credentialStatus is undefined', () => {
@@ -49,8 +49,7 @@ describe('credentialStatusVerifier', () => {
     };
     const result = credentialStatusVerifier(credential, baseContext);
 
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.MISSING_CREDENTIAL_STATUS,
       path: ['payload', 'vc', 'credentialStatus'],
     });
@@ -66,8 +65,7 @@ describe('credentialStatusVerifier', () => {
     };
     const result = credentialStatusVerifier(credential, baseContext);
 
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.MISSING_CREDENTIAL_STATUS,
       path: ['payload', 'vc', 'credentialStatus'],
     });
@@ -90,7 +88,7 @@ describe('credentialStatusVerifier', () => {
       nestedContext
     );
 
-    expect(result[0].path).toEqual([
+    expect(result?.path).toEqual([
       'credentials',
       0,
       'payload',

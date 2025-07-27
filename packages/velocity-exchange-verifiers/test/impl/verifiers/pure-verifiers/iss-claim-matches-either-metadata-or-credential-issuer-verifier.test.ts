@@ -35,7 +35,7 @@ describe('issClaimMatchesEitherMetadataOrCredentialIssuerVerifier', () => {
       credential,
       context
     );
-    expect(errors).toEqual([]);
+    expect(errors).toEqual(null);
   });
 
   it('should pass if iss matches metadata.credential_issuer', () => {
@@ -44,7 +44,7 @@ describe('issClaimMatchesEitherMetadataOrCredentialIssuerVerifier', () => {
       credential,
       context
     );
-    expect(errors).toEqual([]);
+    expect(errors).toEqual(null);
   });
 
   it('should fail if iss matches neither', () => {
@@ -53,8 +53,7 @@ describe('issClaimMatchesEitherMetadataOrCredentialIssuerVerifier', () => {
       credential,
       context
     );
-    expect(errors).toHaveLength(1);
-    expect(errors[0]).toMatchObject({
+    expect(errors).toMatchObject({
       code: ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
       message: expect.stringContaining('https://other.example.org'),
       path: ['payload', 'iss'],
@@ -67,8 +66,7 @@ describe('issClaimMatchesEitherMetadataOrCredentialIssuerVerifier', () => {
       credential,
       context
     );
-    expect(errors).toHaveLength(1);
-    expect(errors[0]).toMatchObject({
+    expect(errors).toMatchObject({
       code: ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
       message: expect.stringContaining(''),
       path: ['payload', 'iss'],

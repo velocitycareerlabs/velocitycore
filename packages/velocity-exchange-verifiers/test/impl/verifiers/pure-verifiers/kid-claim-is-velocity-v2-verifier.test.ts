@@ -32,7 +32,7 @@ describe('kidClaimIsVelocityV2Verifier', () => {
   it('should pass when kid starts with "did:velocity:v2"', () => {
     const credential = makeCredential('did:velocity:v2:1234');
     const result = kidClaimIsVelocityV2Verifier(credential, baseContext);
-    expect(result).toEqual([]);
+    expect(result).toEqual(null);
   });
 
   it.each([
@@ -43,8 +43,7 @@ describe('kidClaimIsVelocityV2Verifier', () => {
   ])('should fail when kid is "%s"', (invalidKid) => {
     const credential = makeCredential(invalidKid);
     const result = kidClaimIsVelocityV2Verifier(credential, baseContext);
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.INVALID_KID,
       message: expect.stringContaining(invalidKid),
       path: ['header', 'kid'],
@@ -54,8 +53,7 @@ describe('kidClaimIsVelocityV2Verifier', () => {
   it('should fail when kid is undefined', () => {
     const credential = makeCredential(undefined);
     const result = kidClaimIsVelocityV2Verifier(credential, baseContext);
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.INVALID_KID,
       message: expect.stringContaining('undefined'),
       path: ['header', 'kid'],

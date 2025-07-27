@@ -41,19 +41,18 @@ describe('credentialSchemaVerifier', () => {
       type: 'JsonSchema',
     });
     const result = credentialSchemaVerifier(credential, baseContext);
-    expect(result).toEqual([]);
+    expect(result).toEqual(null);
   });
 
   it('should fail when credentialSchema is missing', () => {
     const credential = buildCredential(undefined, {}); // no credentialSchema
     const result = credentialSchemaVerifier(credential, baseContext);
 
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.MISSING_CREDENTIAL_SCHEMA,
       path: ['payload', 'vc', 'credentialSchema'],
     });
-    expect(result[0].message).toContain('Expected credentialSchema');
+    expect(result?.message).toContain('Expected credentialSchema');
   });
 
   it('should fail when vc is undefined', () => {
@@ -68,8 +67,7 @@ describe('credentialSchemaVerifier', () => {
 
     const result = credentialSchemaVerifier(credential, baseContext);
 
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.MISSING_CREDENTIAL_SCHEMA,
       path: ['payload', 'vc', 'credentialSchema'],
     });

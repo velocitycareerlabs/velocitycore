@@ -37,7 +37,7 @@ describe('algIsSupportedVerifier', () => {
     (alg) => {
       const credential = makeCredential(alg);
       const result = algIsSupportedVerifier(credential, baseContext);
-      expect(result).toEqual([]);
+      expect(result).toEqual(null);
     }
   );
 
@@ -46,8 +46,7 @@ describe('algIsSupportedVerifier', () => {
     (alg) => {
       const credential = makeCredential(alg);
       const result = algIsSupportedVerifier(credential, baseContext);
-      expect(result).toHaveLength(1);
-      expect(result[0]).toMatchObject({
+      expect(result).toMatchObject({
         code: ERROR_CODES.INVALID_ALG,
         message: expect.stringContaining(alg),
         path: ['header', 'alg'],
@@ -58,8 +57,7 @@ describe('algIsSupportedVerifier', () => {
   it('should fail when alg is missing entirely', () => {
     const credential = makeCredential(undefined);
     const result = algIsSupportedVerifier(credential, baseContext);
-    expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({
+    expect(result).toMatchObject({
       code: ERROR_CODES.INVALID_ALG,
       message: expect.stringContaining('undefined'),
       path: ['header', 'alg'],

@@ -20,13 +20,13 @@ import { buildError } from 'impl/errors';
  * @param credential - A parsed {@link W3CCredentialJwtV1} object.
  * @param context - The {@link VerificationContext} containing expected issuer metadata and optional path.
  *
- * @returns An array containing a {@link VerificationError} if the `iss` does not match, or an empty array if valid.
+ * @returns A {@link VerificationError} if the `iss` does not match, or `null` if valid.
  *
  * @example
  * ```ts
- * const errors = issClaimMatchesMetadataVerifier(credentialJwt, context);
- * if (errors.length > 0) {
- *   throw new Error("Credential issuer mismatch");
+ * const error = issClaimMatchesMetadataVerifier(credentialJwt, context);
+ * if (error) {
+ *   console.error(error);
  * }
  * ```
  *
@@ -45,14 +45,12 @@ export const issClaimMatchesMetadataVerifier: Verifier<W3CCredentialJwtV1> = (
   const expected = context.credential_issuer_metadata?.iss;
 
   if (actual !== expected) {
-    return [
-      buildError(
-        ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
-        `Expected iss to be exactly '${expected}', but got '${actual}'`,
-        [...(context.path ?? []), 'payload', 'iss']
-      ),
-    ];
+    return buildError(
+      ERROR_CODES.UNEXPECTED_CREDENTIAL_PAYLOAD_ISS,
+      `Expected iss to be exactly '${expected}', but got '${actual}'`,
+      [...(context.path ?? []), 'payload', 'iss']
+    );
   }
 
-  return [];
+  return null;
 };
