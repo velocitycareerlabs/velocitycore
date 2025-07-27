@@ -11,12 +11,15 @@ import {
   createVerifier,
   credentialSchemaVerifier,
   credentialStatusVerifier,
-  issClaimMatchesEitherMetadataOrCredentialIssuerVerifier,
-  issClaimMatchesMetadataVerifier,
   kidClaimIsVelocityV2Verifier,
   subIsDidJwkOrCnfVerifier,
 } from 'impl/verifiers/pure-verifiers';
-import { W3CCredentialJwtV1 } from 'api/types';
+import {
+  CredentialVerifiers,
+  VerificationContext,
+  VerificationError,
+  W3CCredentialJwtV1,
+} from 'api/types';
 
 /**
  * Verifies a Credential JWT payload using strict validation rules defined by both
@@ -58,13 +61,20 @@ import { W3CCredentialJwtV1 } from 'api/types';
  * @see {@link W3CCredentialJwtV1}
  * @see {@link VerificationError}
  */
-export const verifyCredentialJwtPayloadStrict =
-  createVerifier<W3CCredentialJwtV1>([
-    algIsSupportedVerifier,
-    credentialSchemaVerifier,
-    credentialStatusVerifier,
-    issClaimMatchesEitherMetadataOrCredentialIssuerVerifier,
-    issClaimMatchesMetadataVerifier,
-    kidClaimIsVelocityV2Verifier,
-    subIsDidJwkOrCnfVerifier,
+export const verifyCredentialJwtPayloadStrict = (
+  credential: W3CCredentialJwtV1,
+  context: VerificationContext,
+  verifiers: CredentialVerifiers
+): VerificationError[] => {
+  const composedVerifier = createVerifier<W3CCredentialJwtV1>([
+    verifiers.algIsSupported,
+    verifiers.credentialSchema,
+    verifiers.credentialStatus,
+    verifiers.issClaimMatchesEitherMetadataOrCredentialIssuer,
+    verifiers.issClaimMatchesMetadata,
+    verifiers.kidClaimIsVelocityV2,
+    verifiers.subIsDidJwkOrCnf,
   ]);
+
+  return composedVerifier(credential, context);
+};

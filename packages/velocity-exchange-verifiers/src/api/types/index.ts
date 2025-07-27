@@ -6,6 +6,24 @@
  */
 
 /**
+ * A structured group of verifiers used for validating a W3C Credential JWT under the Velocity Profile.
+ *
+ * Each verifier enforces a distinct validation rule on the credential, such as checking required fields,
+ * cryptographic algorithm support, issuer consistency, and schema conformance.
+ *
+ * This type allows verifiers to be injected for testing or customized validation behavior.
+ */
+export interface CredentialVerifiers {
+  algIsSupported: Verifier<W3CCredentialJwtV1>;
+  credentialSchema: Verifier<W3CCredentialJwtV1>;
+  credentialStatus: Verifier<W3CCredentialJwtV1>;
+  issClaimMatchesEitherMetadataOrCredentialIssuer: Verifier<W3CCredentialJwtV1>;
+  issClaimMatchesMetadata: Verifier<W3CCredentialJwtV1>;
+  kidClaimIsVelocityV2: Verifier<W3CCredentialJwtV1>;
+  subIsDidJwkOrCnf: Verifier<W3CCredentialJwtV1>;
+}
+
+/**
  * @packageDocumentation
  * This module defines core types used in the Verifiable Credential (VC) verification framework
  * for the OpenID for Verifiable Credential Issuance (OpenID4VCI) protocol and the Velocity Profile.
