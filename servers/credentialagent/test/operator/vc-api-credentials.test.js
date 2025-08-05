@@ -14,6 +14,24 @@
  * limitations under the License.
  */
 
+const { after, before, beforeEach, describe, it, mock } = require('node:test');
+const { expect } = require('expect');
+
+const mockAddCredentialMetadataEntry = mock.fn();
+const mockCreateCredentialMetadataList = mock.fn();
+const mockAddRevocationListSigned = mock.fn();
+
+mock.module('@velocitycareerlabs/metadata-registration', {
+  namedExports: {
+    initRevocationRegistry: () => ({
+      addRevocationListSigned: mockAddRevocationListSigned,
+    }),
+    initMetadataRegistry: () => ({
+      addCredentialMetadataEntry: mockAddCredentialMetadataEntry,
+      createCredentialMetadataList: mockCreateCredentialMetadataList,
+    }),
+  },
+});
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const { ObjectId } = require('mongodb');
 const {
@@ -59,22 +77,6 @@ const {
 } = require('../../src/entities');
 const { nockRegistrarAppSchemaName } = require('../combined/helpers');
 
-const mockAddCredentialMetadataEntry = jest.fn();
-const mockCreateCredentialMetadataList = jest.fn();
-const mockAddRevocationListSigned = jest.fn();
-const mockGetRevokeUrl = jest.fn();
-
-jest.mock('@velocitycareerlabs/metadata-registration', () => ({
-  ...jest.requireActual('@velocitycareerlabs/metadata-registration'),
-  initRevocationRegistry: () => ({
-    addRevocationListSigned: mockAddRevocationListSigned,
-  }),
-  initMetadataRegistry: () => ({
-    addCredentialMetadataEntry: mockAddCredentialMetadataEntry,
-    createCredentialMetadataList: mockCreateCredentialMetadataList,
-  }),
-}));
-
 const clearDb = async () => {
   await mongoDb().collection('tenants').deleteMany({});
   await mongoDb().collection('keys').deleteMany({});
@@ -98,11 +100,6 @@ describe('vc-api credentials endpoints', () => {
 
   beforeEach(async () => {
     nock.cleanAll();
-    jest.resetAllMocks();
-    mockGetRevokeUrl.mockImplementation(
-      (listId, index) =>
-        `ethereum://0x1234/getRevokeStatus?address=0x412&listId=${listId}&index=${index}`
-    );
     await clearDb();
     tenant = await persistTenant({
       serviceIds: ['#foo-service-id-1'],
@@ -155,13 +152,14 @@ describe('vc-api credentials endpoints', () => {
     };
   });
 
-  afterAll(() => {
+  after(() => {
     nock.cleanAll();
     nock.restore();
+    mock.reset();
   });
 
   describe('vc-api when enabled', () => {
-    beforeAll(async () => {
+    before(async () => {
       fastify = buildFastify({
         vcApiEnabled: true,
       });
@@ -171,7 +169,7 @@ describe('vc-api credentials endpoints', () => {
       ({ persistOffer } = initOfferFactory(fastify));
     });
 
-    afterAll(async () => {
+    after(async () => {
       await clearDb();
       await fastify.close();
     });
@@ -274,8 +272,12 @@ describe('vc-api credentials endpoints', () => {
 
     describe('successful issuing', () => {
       beforeEach(() => {
-        mockCreateCredentialMetadataList.mockResolvedValue(true);
-        mockAddCredentialMetadataEntry.mockResolvedValue(true);
+        mockCreateCredentialMetadataList.mock.mockImplementation(() =>
+          Promise.resolve(true)
+        );
+        mockAddCredentialMetadataEntry.mock.mockImplementation(() =>
+          Promise.resolve(true)
+        );
 
         const nockInstance = nock('http://oracle.localhost.test');
         nockCredentialTypes();
@@ -334,14 +336,11 @@ describe('vc-api credentials endpoints', () => {
             ],
           })
         );
-        expect(mockAddCredentialMetadataEntry.mock.calls).toEqual([
-          [
-            expect.any(Object),
-            expect.any(String),
-            'did:ion:cao',
-            'cosekey:aes-256-gcm',
-          ],
-        ]);
+        expect(
+          mockAddCredentialMetadataEntry.mock.calls.map(
+            (call) => call.arguments
+          )
+        ).toEqual([[expect.any(Object), expect.any(String), 'did:ion:cao', 'cosekey:aes-256-gcm']]);
       });
 
       it("should issue a credential without a credential subject's DID", async () => {
@@ -746,14 +745,14 @@ describe('vc-api credentials endpoints', () => {
   });
 
   describe('vc-api when disabled', () => {
-    beforeAll(async () => {
+    before(async () => {
       fastify = buildFastify();
       await fastify.ready();
       ({ persistTenant } = initTenantFactory(fastify));
       ({ persistKey } = initKeysFactory(fastify));
     });
 
-    afterAll(async () => {
+    after(async () => {
       await clearDb();
       await fastify.close();
     });

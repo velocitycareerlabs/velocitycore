@@ -16,7 +16,8 @@
 
 const { last } = require('lodash/fp');
 const { HEX_FORMAT } = require('@velocitycareerlabs/test-regexes');
-const { publicJwkMatcher } = require('./jwk-matchers');
+const { expect } = require('expect');
+const { publicKeyMatcher } = require('./matchers');
 
 const generateOrganizationKeyMatcher = ({
   kid,

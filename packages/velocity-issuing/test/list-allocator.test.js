@@ -15,6 +15,9 @@
  *
  */
 
+const { after, before, beforeEach, describe, it } = require('node:test');
+const { expect } = require('expect');
+
 const { mongoify } = require('@velocitycareerlabs/tests-helpers');
 const { first, omit } = require('lodash/fp');
 const { ObjectId, MongoClient } = require('mongodb');
@@ -39,7 +42,7 @@ describe('dlt list allocation', () => {
   let issuer;
   let dltOperatorKMSKeyId;
 
-  beforeAll(async () => {
+  before(async () => {
     allocations = await collectionClient({
       mongoClient,
       name: collectionName,
@@ -91,7 +94,7 @@ describe('dlt list allocation', () => {
     await allocations.deleteMany({});
   });
 
-  afterAll(async () => {
+  after(async () => {
     await mongoClient.close();
   });
 
