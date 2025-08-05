@@ -1,7 +1,7 @@
 {
   "name": "@velocitycareerlabs/crypto",
   "version": "0.5.0-build",
-  "description": "Set of secp256k1 based functions used in Velocity Foundation projects",
+  "description": "Set of crypto functions used in Velocity Foundation projects",
   "repository": "https://github.com/velocitycareerlabs/velocitycore",
   "main": "index.js",
   "publishConfig": {
@@ -19,8 +19,10 @@
   "dependencies": {
     "@trust/keyto": "~2.0.0-alpha1",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
-    "argon2": "0.43.0",
-    "canonicalize": "^2.0.0",
+    "argon2": "0.43.1",
+    "bigint-crypto-utils": "3.3.0",
+    "canonicalize": "^2.1.0",
+    "cborg": "4.2.12",
     "elliptic": "^6.6.1",
     "lodash": "^4.17.21",
     "multihashing": "~0.3.3",
@@ -29,12 +31,12 @@
   "devDependencies": {
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
-    "eslint-config-prettier": "8.10.0",
+    "eslint-config-prettier": "8.10.2",
     "eslint-plugin-autofix": "1.1.0",
     "eslint-plugin-better-mutation": "1.7.0",
-    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-import": "2.32.0",
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
-    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-prettier": "4.2.5",
     "eslint-watch": "7.0.0",
     "expect": "29.7.0",
     "prettier": "2.8.8"

@@ -597,7 +597,19 @@ describe('signatoriesController', () => {
           },
         ],
       });
-      const signatoryStatus3 = await persistSignatoryStatus({});
+      const signatoryStatus3 = await persistSignatoryStatus({
+        organization: organization2,
+        events: [
+          {
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: subDays(8)(new Date()),
+          },
+          {
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: new Date(),
+          },
+        ],
+      });
       await originalSendReminders(
         sendEmailToSignatoryForOrganizationApproval,
         testContext
@@ -620,6 +632,10 @@ describe('signatoriesController', () => {
         organizationDid: expect.any(String),
         organizationId: expect.any(ObjectId),
         events: [
+          {
+            state: SignatoryEventStatus.LINK_SENT,
+            timestamp: expect.any(Date),
+          },
           {
             state: SignatoryEventStatus.LINK_SENT,
             timestamp: expect.any(Date),

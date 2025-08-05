@@ -14,6 +14,8 @@ import { VerifiedProfileMocks } from '../infrastructure/resources/valid/Verified
 import { DidJwkMocks } from '../infrastructure/resources/valid/DidJwkMocks';
 import { CommonMocks } from '../infrastructure/resources/CommonMocks';
 import { OffersByDeepLinkVerifierImpl } from '../../src/impl/data/verifiers';
+import ResolveDidDocumentRepositoryImpl from '../../src/impl/data/repositories/ResolveDidDocumentRepositoryImpl';
+import { DidDocumentMocks } from '../infrastructure/resources/valid/DidDocumentMocks';
 
 describe('GenerateOffersUseCaseTest', () => {
     let subject1: GenerateOffersUseCase;
@@ -27,11 +29,13 @@ describe('GenerateOffersUseCaseTest', () => {
     it('testGenerateOffers', async () => {
         subject1 = new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(
-                new NetworkServiceSuccess(
-                    JSON.parse(GenerateOffersMocks.GeneratedOffers)
-                )
+                new NetworkServiceSuccess(GenerateOffersMocks.GeneratedOffers)
             ),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const generateOffersDescriptor = new VCLGenerateOffersDescriptor(
@@ -52,10 +56,11 @@ describe('GenerateOffersUseCaseTest', () => {
             generateOffersDescriptor,
             CommonMocks.Token
         );
+        expect(offers.payload).toEqual(GenerateOffersMocks.GeneratedOffers);
         expect(offers.all.map((offer) => offer.payload)).toStrictEqual(
-            JSON.parse(GenerateOffersMocks.Offers)
+            GenerateOffersMocks.Offers
         );
-        expect(offers.challenge).toBe(GenerateOffersMocks.Challenge);
+        expect(offers.challenge).toEqual(GenerateOffersMocks.Challenge);
         expect(offers?.sessionToken).toStrictEqual(CommonMocks.Token);
     });
 
@@ -63,10 +68,14 @@ describe('GenerateOffersUseCaseTest', () => {
         subject2 = new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(
                 new NetworkServiceSuccess(
-                    JSON.parse(GenerateOffersMocks.GeneratedOffersEmptyJsonObj)
+                    GenerateOffersMocks.GeneratedOffersEmptyJsonObj
                 )
             ),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const generateOffersDescriptor = new VCLGenerateOffersDescriptor(
@@ -95,10 +104,14 @@ describe('GenerateOffersUseCaseTest', () => {
         subject3 = new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(
                 new NetworkServiceSuccess(
-                    JSON.parse(GenerateOffersMocks.GeneratedOffersEmptyJsonArr)
+                    GenerateOffersMocks.GeneratedOffersEmptyJsonArr
                 )
             ),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const generateOffersDescriptor = new VCLGenerateOffersDescriptor(

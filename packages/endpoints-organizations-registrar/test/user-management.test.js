@@ -18,10 +18,10 @@ const { before, beforeEach, describe, it, mock, after } = require('node:test');
 const { expect } = require('expect');
 
 const mockAuth0UpdateUser = mock.fn(({ id }, obj) =>
-  Promise.resolve({ user_id: id, ...obj })
+  Promise.resolve({ data: { user_id: id, ...obj }})
 );
-const mockAuth0GetUserRoles = mock.fn(() => Promise.resolve([]));
-const mockAuth0GetUserByEmail = mock.fn(() => Promise.resolve([]));
+const mockAuth0GetUserRoles = mock.fn(() => Promise.resolve({ data: []}));
+const mockAuth0GetUserByEmail = mock.fn(() => Promise.resolve({ data: []}));
 
 const auth0User = {
   user_id: 'auth0|1',
@@ -32,7 +32,7 @@ const auth0User = {
   email: 'foo@example.com',
   logins_count: 1,
 };
-const mockAuth0GetUser = mock.fn(() => Promise.resolve(auth0User));
+const mockAuth0GetUser = mock.fn(() => Promise.resolve({ data: auth0User}));
 
 class ManagementClient {
   constructor() {
@@ -146,10 +146,10 @@ describe('user management test suite', () => {
   describe('get user with roles test suite', () => {
     it('get user with roles', async () => {
       mockAuth0GetUserRoles.mock.mockImplementation(() =>
-        Promise.resolve([
+        Promise.resolve({ data: [
           { id: testConfig.auth0ClientAdminRoleId },
           { id: testConfig.auth0ClientFinanceAdminRoleId },
-        ])
+        ]})
       );
       const { getUserWithRoles } = userManagementClient;
       expect(await getUserWithRoles({ id: 'foo' }, {})).toEqual(
@@ -167,6 +167,8 @@ describe('user management test suite', () => {
       expect(last(mockAuth0GetUserRoles.mock.calls).arguments).toEqual([
         {
           id: 'foo',
+        },
+        {
           page: 0,
           per_page: 10,
         },
@@ -175,7 +177,7 @@ describe('user management test suite', () => {
     });
     it('get user with superuser role', async () => {
       mockAuth0GetUserRoles.mock.mockImplementation(() =>
-        Promise.resolve([{ id: testConfig.auth0SuperuserRoleId }])
+        Promise.resolve({ data: [{ id: testConfig.auth0SuperuserRoleId }]})
       );
       const { getUserWithRoles } = userManagementClient;
       expect(await getUserWithRoles({ id: 'foo' }, {})).toEqual(
@@ -186,7 +188,7 @@ describe('user management test suite', () => {
     });
     it('get user with clientsystemuser role', async () => {
       mockAuth0GetUserRoles.mock.mockImplementation(() =>
-        Promise.resolve([{ id: testConfig.auth0ClientSystemUserRoleId }])
+        Promise.resolve({ data: [{ id: testConfig.auth0ClientSystemUserRoleId }]})
       );
       const { getUserWithRoles } = userManagementClient;
       expect(await getUserWithRoles({ id: 'foo' }, {})).toEqual(
@@ -202,7 +204,7 @@ describe('user management test suite', () => {
     before(() => {
       minimalAuth0User = omit(['given_name', 'logins_count'], auth0User);
       mockAuth0GetUserByEmail.mock.mockImplementation(() =>
-        Promise.resolve([minimalAuth0User])
+        Promise.resolve({ data: [minimalAuth0User]})
       );
     });
     it('get user by email for same user', async () => {
@@ -213,7 +215,7 @@ describe('user management test suite', () => {
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
       expect(last(mockAuth0GetUserByEmail.mock.calls).arguments).toEqual([
-        'test@email.com',
+          {email: 'test@email.com'},
       ]);
       expect(mockAuth0GetUserByEmail.mock.callCount()).toEqual(1);
     });
@@ -226,7 +228,7 @@ describe('user management test suite', () => {
         })
       ).toEqual([expectedUser(minimalAuth0User)]);
       expect(last(mockAuth0GetUserByEmail.mock.calls).arguments).toEqual([
-        'test@email.com',
+          { email: 'test@email.com'},
       ]);
       expect(mockAuth0GetUserByEmail.mock.callCount()).toEqual(1);
     });
@@ -239,7 +241,7 @@ describe('user management test suite', () => {
         ),
       ]);
       expect(last(mockAuth0GetUserByEmail.mock.calls).arguments).toEqual([
-        'test@email.com',
+          { email: 'test@email.com'},
       ]);
       expect(mockAuth0GetUserByEmail.mock.callCount()).toEqual(1);
     });

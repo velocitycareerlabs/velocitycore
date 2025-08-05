@@ -6,8 +6,8 @@ import VCLSubmissionResult from '../../../api/entities/VCLSubmissionResult';
 import VCLToken from '../../../api/entities/VCLToken';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import SubmissionRepository from '../../domain/repositories/SubmissionRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class SubmissionRepositoryImpl implements SubmissionRepository {
     constructor(private networkService: NetworkService) {}
@@ -22,8 +22,6 @@ export default class SubmissionRepositoryImpl implements SubmissionRepository {
             body: submission.generateRequestBody(jwt),
             method: HttpMethod.POST,
             headers: this.generateHeader(accessToken),
-            contentType: 'application/json',
-            useCaches: false,
         });
         return this.parse(
             submissionResponse.payload,
@@ -32,15 +30,13 @@ export default class SubmissionRepositoryImpl implements SubmissionRepository {
         );
     }
 
-    private generateHeader = (accessToken: Nullish<VCLToken>) => {
+    public generateHeader = (accessToken: Nullish<VCLToken> = null) => {
         const header = {
             [HeaderKeys.XVnfProtocolVersion]: HeaderValues.XVnfProtocolVersion,
         };
 
         if (accessToken != null) {
-            header[
-                HeaderKeys.HeaderKeyAuthorization
-            ] = `Bearer ${accessToken?.value}`;
+            header[HeaderKeys.Authorization] = `Bearer ${accessToken?.value}`;
         }
 
         return header;

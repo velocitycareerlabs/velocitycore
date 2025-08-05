@@ -30,7 +30,6 @@ const initSendEmailNotifications = (initCtx) => {
     emailToSupportForOrgRegisteredAndServicesNeedActivation,
     emailToSupportForServicesAddedAndNeedActivation,
     emailToRegisteredOrgForServicesActivated,
-    emailOrganizationCreated,
   } = initOrganizationRegistrarEmails(config);
   const { getUsersByIds } = initAuth0Provisioner(config);
 
@@ -139,17 +138,31 @@ const initSendEmailNotifications = (initCtx) => {
     );
   };
 
-  const sendOrganizationCreatedNotification = async (organization) => {
+  const sendOrganizationCreatedNotification = async (
+    { organization },
+    context
+  ) => {
     const csvFile = await parseProfileToCsv(organization.profile);
-    await initCtx.sendEmail(
-      emailOrganizationCreated({
-        organization,
-        ccs: config.organizationCreationEmailCcList,
-        attachment: csvFile,
-        attachmentName: 'organization.csv',
-        contentType: 'text/csv',
-      })
-    );
+    await initCtx.sendEmail({
+      subject: await context.renderTemplate(
+        'support-organization-created-subject',
+        {
+          organization,
+        }
+      ),
+      message: await context.renderTemplate(
+        'support-organization-created-body',
+        {
+          organization,
+        }
+      ),
+      sender: config.noReplyEmail,
+      ccs: config.organizationCreationEmailCcList,
+      recipients: [config.registrarSupportEmail],
+      attachment: csvFile,
+      attachmentName: 'organization.csv',
+      contentType: 'text/csv',
+    });
   };
 
   const sendEmailToSignatoryForOrganizationApproval = async (
@@ -163,7 +176,7 @@ const initSendEmailNotifications = (initCtx) => {
     const inviterOrganization = invitation?.inviterDid
       ? await context.repos.organizations.findOneByDid(invitation.inviterDid)
       : null;
-    const html = await initCtx.view('signatory-approval-email-body', {
+    const html = await context.renderTemplate('signatory-approval-email-body', {
       organization,
       inviterOrganization,
       authCode,

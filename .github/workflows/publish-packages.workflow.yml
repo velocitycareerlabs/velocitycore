@@ -11,16 +11,16 @@ on:
       environment:
         type: choice
         description: Choose environment
-        default: 'dev'
+        default: 'prerelease'
         options: 
-        - dev
-        - prod
+        - prerelease
+        - release
 env:
   LERNA_VERSION: '6.6.2'
   NX_VERSION: '17.2.7'
   DIST_TAG: 'prerelease'
   NODE_VERSION: '22.x'
-  GLOBAL_ENV: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || format('{0}', 'dev') }}
+  GLOBAL_ENV: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || format('{0}', 'prerelease') }}
 jobs:
   # Publish Packages
   publish-packages:
@@ -34,11 +34,9 @@ jobs:
       # Checkout Repository
       - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      # Set Slug
-      - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@797d68864753cbceedc271349d402da4590e6302 # v4
-        with:
-          short-length: 8
+      # Generate Sequence Number
+      - name: Generate Sequence Number
+        run: echo VER_SEQ_NUM=$(date +%s) >> $GITHUB_ENV
       # Set Common Variables
       - name: Set Common Variables
         run: bash ./eng/environments/common.sh
@@ -85,13 +83,13 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      # Set Dist Tag For Prod
-      - name: Set Dist Tag For Prod
+      # Set Dist Tag For Release
+      - name: Set Dist Tag For Release
         run: echo 'DIST_TAG=latest' >> $GITHUB_ENV
-        if: env.GLOBAL_ENV == 'prod'
+        if: env.GLOBAL_ENV == 'release'
       # Commit Version Locally for Npmjs
       - name: Commit Version Locally for Npmjs
-        run: git commit -am "Creating Version ${{ env.VER_NUM }}"
+        run: git commit -am "Creating Version ${{ env.NPM_VER_NUM }}"
       # Publish Github Repo
       - name: Publish Github Repo
         run: lerna publish --dist-tag ${{ env.DIST_TAG }} from-package --yes --registry ${{ env.REGISTRY_URL }}

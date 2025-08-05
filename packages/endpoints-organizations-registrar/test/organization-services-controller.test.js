@@ -46,25 +46,25 @@ const mockAuth0ClientGrantDelete = mock.fn(async ({ id }) => {
 const mockAuth0ClientCreate = mock.fn(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 client ${id}`);
-  return { client_id: id, client_secret: nanoid(), ...obj };
+  return  { data: { client_id: id, client_secret: nanoid(), ...obj }};
 });
 const mockAuth0ClientGrantCreate = mock.fn(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 clientGrant ${id}`);
-  return { id: nanoid(), ...obj };
+  return  { data: { id: nanoid(), ...obj }};
 });
 const mockAuth0UserUpdate = mock.fn(async ({ id }, obj) => {
   console.log(`update auth0 user ${id}`);
-  return { id, ...obj };
+  return  { data: { id, ...obj }};
 });
 const mockAuth0GetUsers = mock.fn(() =>
-  Promise.resolve([
+  Promise.resolve( { data: [
     { email: '0@localhost.test' },
     { email: '1@localhost.test' },
-  ])
+  ]})
 );
 const mockAuth0GetUser = mock.fn(() =>
-  Promise.resolve({ email: 'admin@localhost.test' })
+  Promise.resolve( { data: { email: 'admin@localhost.test' }})
 );
 
 class ManagementClient {
@@ -166,7 +166,6 @@ const {
 } = require('@velocitycareerlabs/organizations-registry');
 const { ObjectId } = require('mongodb');
 
-require('auth0');
 const console = require('console');
 
 const nock = require('nock');
@@ -1529,6 +1528,40 @@ describe('Organization Services Test Suite', () => {
           );
         });
 
+        it('Should 400 when HolderAppProviderType service is missing supportedExchangeProtocols property', async () => {
+          const organization = await setupOrganizationWithGroup();
+          const did = organization.didDoc.id;
+          const payload = {
+            id: `${did}#holder-1`,
+            type: ServiceTypes.HolderAppProviderType,
+            serviceEndpoint: 'https://agent.samplevendor.com/acme',
+            logoUrl: 'http://example.com/1.png',
+            playStoreUrl: 'http://example.com/play-store',
+            appleAppStoreUrl: 'http://example.com/apple-app-store',
+            appleAppId: 'com.example.app',
+            googlePlayId: 'com.example.app',
+            name: 'fooAppWallet',
+          };
+
+          const response = await fastify.injectJson({
+            method: 'POST',
+            url: `${baseUrl}/${did}/services`,
+            payload,
+            headers: { 'x-auto-activate': '0' },
+          });
+
+          expect(response.statusCode).toEqual(400);
+          expect(response.json).toEqual(
+            errorResponseMatcher({
+              error: 'Bad Request',
+              errorCode: 'missing_error_code',
+              message:
+                'VlcHolderAppProvider_v1 service type requires "supportedExchangeProtocols"',
+              statusCode: 400,
+            })
+          );
+        });
+
         it('Should add organization HolderAppProviderType service', async () => {
           const organization = await setupOrganizationWithGroup();
           const did = organization.didDoc.id;
@@ -1542,6 +1575,7 @@ describe('Organization Services Test Suite', () => {
             appleAppId: 'com.example.app',
             googlePlayId: 'com.example.app',
             name: 'fooAppWallet',
+            supportedExchangeProtocols: ['OPENID4VC'],
           };
 
           const response = await fastify.injectJson({
@@ -1588,6 +1622,7 @@ describe('Organization Services Test Suite', () => {
                 name: 'fooAppWallet',
                 serviceEndpoint: 'https://agent.samplevendor.com/acme',
                 type: 'VlcHolderAppProvider_v1',
+                supportedExchangeProtocols: ['OPENID4VC'],
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
               },
@@ -3026,6 +3061,7 @@ describe('Organization Services Test Suite', () => {
           appleAppStoreUrl: 'http://example.com/apple-app-store',
           appleAppId: 'com.example.app',
           googlePlayId: 'com.example.app',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const response = await fastify.injectJson({
@@ -3995,6 +4031,7 @@ describe('Organization Services Test Suite', () => {
             id: '#app-1',
             type: ServiceTypes.HolderAppProviderType,
             serviceEndpoint: 'https://agent.samplevendor.com',
+            supportedExchangeProtocols: ['VN_API'],
           };
           const org = await persistOrganization({
             service: [serviceFoo],
@@ -4014,6 +4051,7 @@ describe('Organization Services Test Suite', () => {
             serviceEndpoint: 'https://agent.samplevendor.com',
             logoUrl: 'http://example.com/logo',
             name: 'fooWallet',
+            supportedExchangeProtocols: ['VN_API'],
           };
           const org = await persistOrganization({
             service: [serviceFoo],
@@ -4442,6 +4480,7 @@ describe('Organization Services Test Suite', () => {
             appleAppStoreUrl: 'http://example.com/apple-app-store',
             appleAppId: 'com.example.app',
             googlePlayId: 'com.example.app',
+            supportedExchangeProtocols: ['VN_API'],
           };
 
           const response = await fastify.injectJson({
@@ -4493,6 +4532,7 @@ describe('Organization Services Test Suite', () => {
             appleAppStoreUrl: 'http://example.com/apple-app-store',
             appleAppId: 'com.example.app',
             googlePlayId: 'com.example.app',
+            supportedExchangeProtocols: ['VN_API'],
           };
 
           const response = await fastify.injectJson({

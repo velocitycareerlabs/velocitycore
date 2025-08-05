@@ -4,8 +4,8 @@ import VCLOrganizations from '../../../api/entities/VCLOrganizations';
 import { VCLOrganizationsSearchDescriptor } from '../../../api/entities/VCLOrganizationsSearchDescriptor';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import OrganizationsRepository from '../../domain/repositories/OrganizationsRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import Urls, { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class OrganizationsRepositoryImpl
     implements OrganizationsRepository
@@ -20,15 +20,12 @@ export default class OrganizationsRepositoryImpl
             : Urls.Organizations;
 
         const organizationsResponse = await this.networkService.sendRequest({
-            useCaches: false,
             endpoint,
             headers: {
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
-            body: null,
             method: HttpMethod.GET,
-            contentType: null,
         });
         return this.parse(organizationsResponse.payload);
     }

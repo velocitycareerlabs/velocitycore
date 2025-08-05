@@ -26,17 +26,19 @@ describe('VCLAuthToken', () => {
     it('should initialize with only payload', () => {
         const token = new VCLAuthToken(payload);
 
-        expect(token.accessToken.value).toBe(accessToken.encodedJwt);
-        expect(token.refreshToken.value).toBe(refreshToken.encodedJwt);
-        expect(token.tokenType).toBe('Bearer');
-        expect(token.authTokenUri).toBe('https://default.uri');
-        expect(token.walletDid).toBe('did:wallet:default');
-        expect(token.relyingPartyDid).toBe('did:party:default');
+        expect(token.accessToken.value).toEqual(accessToken.encodedJwt);
+        expect(token.refreshToken.value).toEqual(refreshToken.encodedJwt);
+        expect(token.tokenType).toEqual('Bearer');
+        expect(token.authTokenUri).toEqual('https://default.uri');
+        expect(token.walletDid).toEqual('did:wallet:default');
+        expect(token.relyingPartyDid).toEqual('did:party:default');
+        expect(token.payload).toEqual(payload);
     });
 
     it('should override authTokenUri if passed in constructor', () => {
         const token = new VCLAuthToken(payload, 'https://override.uri');
-        expect(token.authTokenUri).toBe('https://override.uri');
+        expect(token.authTokenUri).toEqual('https://override.uri');
+        expect(token.payload).toEqual(payload);
     });
 
     it('should override walletDid if passed in constructor', () => {
@@ -45,7 +47,8 @@ describe('VCLAuthToken', () => {
             undefined,
             'did:wallet:override'
         );
-        expect(token.walletDid).toBe('did:wallet:override');
+        expect(token.walletDid).toEqual('did:wallet:override');
+        expect(token.payload).toEqual(payload);
     });
 
     it('should override relyingPartyDid if passed in constructor', () => {
@@ -55,6 +58,7 @@ describe('VCLAuthToken', () => {
             undefined,
             'did:party:override'
         );
-        expect(token.relyingPartyDid).toBe('did:party:override');
+        expect(token.relyingPartyDid).toEqual('did:party:override');
+        expect(token.payload).toEqual(payload);
     });
 });

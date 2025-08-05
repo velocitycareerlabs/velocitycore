@@ -181,7 +181,7 @@ export class VCLImpl implements VCL {
             initializationDescriptor.xVnfProtocolVersion,
             true
         );
-        VCLLog.LoggerService = initializationDescriptor.logService;
+        VCLLog.setLoggerService(initializationDescriptor.logService);
     }
 
     private initializeUseCases() {

@@ -16,12 +16,11 @@
 
 const { isEmpty, some, map } = require('lodash/fp');
 const newError = require('http-errors');
-const { KeyPurposes } = require('@velocitycareerlabs/crypto');
+const { KeyEncodings, KeyPurposes } = require('@velocitycareerlabs/crypto');
 const { resolveDid } = require('@velocitycareerlabs/common-fetchers');
 
 const {
   addPrimaryAddressToTenant,
-  KeyEncodings,
   validateDidDocKeys,
 } = require('../../../../../entities');
 

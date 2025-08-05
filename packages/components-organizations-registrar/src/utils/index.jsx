@@ -85,19 +85,9 @@ export const formatWebSiteUrl = (value) => {
   return value;
 };
 
-export const formatRegistrationNumbers = (registrationNumbers = [], selectedAuthority) => {
+export const formatRegistrationNumbers = (registrationNumbers = []) => {
   return registrationNumbers
-    .filter((item) => {
-      if (!item.number) return false;
-
-      if (item.authority === Authorities.LinkedIn) return true;
-
-      if (selectedAuthority) {
-        return item.authority === selectedAuthority;
-      }
-
-      return false;
-    })
+    .filter((item) => !!item.number)
     .map((item) => (item.uri ? { ...item, uri: formatWebSiteUrl(item.uri) } : item));
 };
 
@@ -171,6 +161,8 @@ export const LINKEDIN_ORGANIZATION_ID = `
 To retrieve your LinkedIn Company ID, visit your company page on LinkedIn as an admin, and copy the number from the URL.\n
 For example, if your company page URL is https://www.linkedin.com/company/1234567/admin/, the ID is 1234567
 `;
+
+export const SIGNATORY_EMAIL_HINT = 'Please ensure that the email address provided is a personal corporate email (e.g., sam@acme.com). Generic or role-based email addresses (e.g., manager@acme.com) will not be accepted.';
 
 export const parseJwt = (token) => {
   try {

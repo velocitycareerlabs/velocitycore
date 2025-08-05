@@ -9,6 +9,7 @@ on:
   pull_request:
     branches: 
       - main
+      - release/**
     types:
       - opened
       - synchronize
@@ -76,7 +77,7 @@ jobs:
       run: echo "fragment=${BRANCH##*/}" >> $GITHUB_OUTPUT
       if : github.event_name == 'merge_group'
     - name: Derive SHAs `nx affected` commands~
-      uses: nrwl/nx-set-shas@dbe0650947e5f2c81f59190a38512cf49126fe6b # v4
+      uses: nrwl/nx-set-shas@826660b82addbef3abff5fa871492ebad618c9e1 # v4
       with:
         main-branch-name: ${{ github.base_ref || steps.split-branch-name.outputs.fragment }}
       if: github.event_name == 'pull_request' || github.event_name == 'merge_group'
@@ -183,6 +184,10 @@ jobs:
         node-version: ${{ fromJson(needs.prepare.outputs.node-versions) }}
         mongodb-version: ['8.0']
     steps:
+    - name: Checkout repo
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      with:
+        fetch-depth: 0
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@90004df786821b6308fb02299e5835d0dae05d0d # 1.12.0
       with:
@@ -195,15 +200,25 @@ jobs:
         username: $GITHUB_ACTOR
         password: ${{ secrets.VNF_GITHUB_TOKEN }}
     - name: Start Velocity Blockchain Node
-      run: docker run --name blockchain -p 8545:8545 -d ghcr.io/velocitynetworkfoundation/blockchain-dev
+      run: >
+        docker run
+        --name blockchain
+        -p 8545:8545
+        -v ./eng/docker/services/blockchain-config:/opt/besu/config
+        -d
+        hyperledger/besu:25.4.1@sha256:00468488df234ead7c0e450ffcd5bc1ac3ed62f458a0de42ba029155ecdf5331
+        --genesis-file=/opt/besu/config/genesis.json
+        --node-private-key-file=/opt/besu/config/key
+        --rpc-http-enabled
+        --rpc-http-api=ETH,NET,WEB3
+        --host-allowlist=*
+        --rpc-http-cors-origins=all
+        --min-gas-price=0
+        --profile=enterprise
     - name: Start AWS localstack
       run: docker run --name localstack -p 4566:4566 -p 4571:4571 -e SERVICES=sns,ses,kms,s3 -d localstack/localstack:2.3.2
     - name: Wait for SES to launch
       run: while ! nc -z localhost 4566; do echo "Waiting for SES to launch on port 4566..."; sleep 2; done;
-    - name: Checkout repo
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      with:
-        fetch-depth: 0
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
       with:
@@ -275,7 +290,7 @@ jobs:
         pattern: test-*
         merge-multiple: true
     - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@afb2984f4d89672b2f9d9c13ae23d53779671984 # v2
+      uses: EnricoMi/publish-unit-test-result-action@3a74b2957438d0b6e2e61d67b05318aa25c9e6c6 # v2
       with:
         test_changes_limit: 0
         json_thousands_separator: ","

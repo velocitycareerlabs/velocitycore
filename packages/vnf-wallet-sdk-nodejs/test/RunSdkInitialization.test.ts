@@ -26,5 +26,5 @@ describe('GlobalConfigTest', () => {
         // await vclSdk.initialize(initializationDescriptor);
 
         expect(vclSdk).toBeInstanceOf(VCLImpl);
-    }, 30000);
+    });
 });

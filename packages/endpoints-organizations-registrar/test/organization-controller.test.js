@@ -156,7 +156,6 @@ const {
 const { ServiceTypes } = require('@velocitycareerlabs/organizations-registry');
 const { ObjectId } = require('mongodb');
 
-require('auth0');
 const console = require('console');
 
 const nock = require('nock');
@@ -1564,6 +1563,7 @@ describe('Organization Registrar Test Suite', { timeout: 20000 }, () => {
                 id: '#credentialagent-999',
                 type: ServiceTypes.HolderAppProviderType,
                 serviceEndpoint: 'https://agent.samplevendor.com',
+                supportedExchangeProtocols: ['VN_API'],
               },
             ],
           });
@@ -1588,6 +1588,7 @@ describe('Organization Registrar Test Suite', { timeout: 20000 }, () => {
                 serviceEndpoint: 'https://agent.samplevendor.com',
                 logoUrl: 'http://example.com/logo',
                 name: 'fooWallet',
+                supportedExchangeProtocols: ['VN_API'],
               },
             ],
           });

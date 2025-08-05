@@ -22,7 +22,7 @@
     "@velocitycareerlabs/request": "^0.5.0-build",
     "date-fns": "^3.0.0",
     "fastify-plugin": "^5.0.0",
-    "ethers": "6.14.1",
+    "ethers": "6.15.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

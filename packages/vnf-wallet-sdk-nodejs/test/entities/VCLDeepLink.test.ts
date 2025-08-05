@@ -9,12 +9,14 @@ describe('VCLDeepLink Tests', () => {
             DeepLinkMocks.OpenidInitiateIssuanceStrDev
         );
 
-        expect(subject.value).toBe(DeepLinkMocks.OpenidInitiateIssuanceStrDev);
-        expect(decodeURIComponent(subject.value)).toBe(
+        expect(subject.value).toEqual(
+            DeepLinkMocks.OpenidInitiateIssuanceStrDev
+        );
+        expect(decodeURIComponent(subject.value)).toEqual(
             decodeURIComponent(DeepLinkMocks.OpenidInitiateIssuanceStrDev)
         );
         expect(subject.requestUri).toBeFalsy();
-        expect(subject.did).toBe(DeepLinkMocks.OIDIssuerDid);
+        expect(subject.did).toEqual(DeepLinkMocks.OIDIssuerDid);
     });
 
     test('testPresentationRequestDeepLinkDevNetValidAggregation', () => {
@@ -22,21 +24,21 @@ describe('VCLDeepLink Tests', () => {
             DeepLinkMocks.PresentationRequestDeepLinkDevNetStr
         );
 
-        expect(subject.value).toBe(
+        expect(subject.value).toEqual(
             DeepLinkMocks.PresentationRequestDeepLinkDevNetStr
         );
-        expect(decodeURIComponent(subject.value)).toBe(
+        expect(decodeURIComponent(subject.value)).toEqual(
             decodeURIComponent(
                 DeepLinkMocks.PresentationRequestDeepLinkDevNetStr
             )
         );
-        expect(subject.requestUri!).toBe(
+        expect(subject.requestUri!).toEqual(
             DeepLinkMocks.PresentationRequestRequestDecodedUriStr
         );
-        expect(subject.vendorOriginContext).toBe(
+        expect(subject.vendorOriginContext).toEqual(
             DeepLinkMocks.PresentationRequestVendorOriginContext
         );
-        expect(subject.did).toBe(DeepLinkMocks.InspectorDid);
+        expect(subject.did).toEqual(DeepLinkMocks.InspectorDid);
     });
 
     test('testPresentationRequestDeepLinkTestNetValidAggregation', () => {
@@ -44,22 +46,22 @@ describe('VCLDeepLink Tests', () => {
             DeepLinkMocks.PresentationRequestDeepLinkTestNetStr
         );
 
-        expect(subject.value).toBe(
+        expect(subject.value).toEqual(
             DeepLinkMocks.PresentationRequestDeepLinkTestNetStr
         );
 
-        expect(decodeURIComponent(subject.value)).toBe(
+        expect(decodeURIComponent(subject.value)).toEqual(
             decodeURIComponent(
                 DeepLinkMocks.PresentationRequestDeepLinkTestNetStr
             )
         );
-        expect(subject.requestUri!).toBe(
+        expect(subject.requestUri!).toEqual(
             DeepLinkMocks.PresentationRequestRequestDecodedUriStr
         );
-        expect(subject.vendorOriginContext).toBe(
+        expect(subject.vendorOriginContext).toEqual(
             DeepLinkMocks.PresentationRequestVendorOriginContext
         );
-        expect(subject.did).toBe(DeepLinkMocks.InspectorDid);
+        expect(subject.did).toEqual(DeepLinkMocks.InspectorDid);
     });
 
     test('testPresentationRequestDeepLinkMainNetValidAggregation', () => {
@@ -67,21 +69,21 @@ describe('VCLDeepLink Tests', () => {
             DeepLinkMocks.PresentationRequestDeepLinkMainNetStr
         );
 
-        expect(subject.value).toBe(
+        expect(subject.value).toEqual(
             DeepLinkMocks.PresentationRequestDeepLinkMainNetStr
         );
-        expect(decodeURIComponent(subject.value)).toBe(
+        expect(decodeURIComponent(subject.value)).toEqual(
             decodeURIComponent(
                 DeepLinkMocks.PresentationRequestDeepLinkMainNetStr
             )
         );
-        expect(subject.requestUri!).toBe(
+        expect(subject.requestUri!).toEqual(
             DeepLinkMocks.PresentationRequestRequestDecodedUriStr
         );
-        expect(subject.vendorOriginContext).toBe(
+        expect(subject.vendorOriginContext).toEqual(
             DeepLinkMocks.PresentationRequestVendorOriginContext
         );
-        expect(subject.did).toBe(DeepLinkMocks.InspectorDid);
+        expect(subject.did).toEqual(DeepLinkMocks.InspectorDid);
     });
 
     test('testCredentialManifestDeepLinkDevNetValidAggregation', () => {
@@ -89,19 +91,19 @@ describe('VCLDeepLink Tests', () => {
             DeepLinkMocks.CredentialManifestDeepLinkDevNetStr
         );
 
-        expect(subject.value).toBe(
+        expect(subject.value).toEqual(
             DeepLinkMocks.CredentialManifestDeepLinkDevNetStr
         );
-        expect(decodeURIComponent(subject.value)).toBe(
+        expect(decodeURIComponent(subject.value)).toEqual(
             decodeURIComponent(
                 DeepLinkMocks.CredentialManifestDeepLinkDevNetStr
             )
         );
-        expect(decodeURIComponent(subject.requestUri!)).toBe(
+        expect(decodeURIComponent(subject.requestUri!)).toEqual(
             DeepLinkMocks.CredentialManifestRequestDecodedUriStr
         );
         expect(subject.vendorOriginContext).toBeFalsy();
-        expect(subject.did).toBe(DeepLinkMocks.IssuerDid);
+        expect(subject.did).toEqual(DeepLinkMocks.IssuerDid);
     });
 
     test('testCredentialManifestDeepLinkTestNetValidAggregation', () => {
@@ -109,19 +111,19 @@ describe('VCLDeepLink Tests', () => {
             DeepLinkMocks.CredentialManifestDeepLinkTestNetStr
         );
 
-        expect(subject.value).toBe(
+        expect(subject.value).toEqual(
             DeepLinkMocks.CredentialManifestDeepLinkTestNetStr
         );
-        expect(decodeURIComponent(subject.value)).toBe(
+        expect(decodeURIComponent(subject.value)).toEqual(
             decodeURIComponent(
                 DeepLinkMocks.CredentialManifestDeepLinkTestNetStr
             )
         );
-        expect(decodeURIComponent(subject.requestUri!)).toBe(
+        expect(decodeURIComponent(subject.requestUri!)).toEqual(
             DeepLinkMocks.CredentialManifestRequestDecodedUriStr
         );
         expect(subject.vendorOriginContext).toBeFalsy();
-        expect(subject.did).toBe(DeepLinkMocks.IssuerDid);
+        expect(subject.did).toEqual(DeepLinkMocks.IssuerDid);
     });
 
     test('testCredentialManifestDeepLinkMainNetValidAggregation', () => {
@@ -129,18 +131,18 @@ describe('VCLDeepLink Tests', () => {
             DeepLinkMocks.CredentialManifestDeepLinkMainNetStr
         );
 
-        expect(subject.value).toBe(
+        expect(subject.value).toEqual(
             DeepLinkMocks.CredentialManifestDeepLinkMainNetStr
         );
-        expect(decodeURIComponent(subject.value)).toBe(
+        expect(decodeURIComponent(subject.value)).toEqual(
             decodeURIComponent(
                 DeepLinkMocks.CredentialManifestDeepLinkMainNetStr
             )
         );
-        expect(decodeURIComponent(subject.requestUri!)).toBe(
+        expect(decodeURIComponent(subject.requestUri!)).toEqual(
             DeepLinkMocks.CredentialManifestRequestDecodedUriStr
         );
         expect(subject.vendorOriginContext).toBeFalsy();
-        expect(subject.did).toBe(DeepLinkMocks.IssuerDid);
+        expect(subject.did).toEqual(DeepLinkMocks.IssuerDid);
     });
 });

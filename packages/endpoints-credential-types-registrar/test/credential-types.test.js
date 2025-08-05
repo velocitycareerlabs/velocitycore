@@ -20,6 +20,7 @@ const { expect } = require('expect');
 const { mongoDb } = require('@spencejs/spence-mongo-repos');
 const nock = require('nock');
 const { ObjectId } = require('mongodb');
+const { KeyAlgorithms } = require('@velocitycareerlabs/crypto');
 const {
   OBJECT_ID_FORMAT,
   ISO_DATETIME_FORMAT,
@@ -60,6 +61,7 @@ const expectedCredentialType = (payload, user = testRegistrarSuperUser) => ({
   updatedBy: user.sub,
   createdByGroup: user?.[VNF_GROUP_ID_CLAIM],
   issuerCategory: 'RegularIssuer',
+  defaultSignatureAlgorithm: KeyAlgorithms.SECP256K1,
   recommended: false,
   ...payload,
 });
@@ -367,6 +369,7 @@ describe('credential types endpoints', () => {
       expect(response.json).toEqual({
         id: expect.stringMatching(OBJECT_ID_FORMAT),
         ...payload,
+        defaultSignatureAlgorithm: KeyAlgorithms.SECP256K1,
         issuerCategory: 'RegularIssuer',
         recommended: false,
         updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
@@ -405,6 +408,7 @@ describe('credential types endpoints', () => {
         formSchemaUrls: {
           en: 'https://example.com/schema.json',
         },
+        defaultSignatureAlgorithm: KeyAlgorithms.RS256,
       };
 
       const response = await fastify.injectJson({
@@ -421,6 +425,7 @@ describe('credential types endpoints', () => {
         id: expect.stringMatching(OBJECT_ID_FORMAT),
         ...omit(['schema'], payload),
         issuerCategory: 'RegularIssuer',
+        defaultSignatureAlgorithm: KeyAlgorithms.RS256,
         updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
       });
@@ -434,7 +439,7 @@ describe('credential types endpoints', () => {
       ]);
       expect(fetchNock.isDone()).toEqual(true);
     });
-    it('should respond 201 to a create a credential type with issuer category is ContactIssuer', async () => {
+    it('should respond 201 to a create a credential type with issuer category is ContactIssuer and signatureAlgorithm set to RS256', async () => {
       const fetchNock = nock('https://example.com')
         .get('/schema.json')
         .times(3)
@@ -455,6 +460,7 @@ describe('credential types endpoints', () => {
           en: 'https://example.com/schema.json',
         },
         issuerCategory: 'ContactIssuer',
+        defaultSignatureAlgorithm: KeyAlgorithms.RS256,
       };
 
       const response = await fastify.injectJson({
@@ -522,6 +528,7 @@ describe('credential types endpoints', () => {
         id: expect.stringMatching(OBJECT_ID_FORMAT),
         ...payload,
         issuerCategory: 'IdDocumentIssuer',
+        defaultSignatureAlgorithm: KeyAlgorithms.SECP256K1,
         recommended: false,
         updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
@@ -575,6 +582,7 @@ describe('credential types endpoints', () => {
         ...omit(fieldsToOmit, credentialType),
         credentialType: 'EducationDegree',
         issuerCategory: 'RegularIssuer',
+        defaultSignatureAlgorithm: KeyAlgorithms.SECP256K1,
         schemaName: 'fat',
         updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
@@ -638,6 +646,7 @@ describe('credential types endpoints', () => {
         ...omit(fieldsToOmit, credentialType),
         credentialType: 'EducationDegree',
         issuerCategory: 'RegularIssuer',
+        defaultSignatureAlgorithm: KeyAlgorithms.SECP256K1,
         schemaName: 'fat',
         updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),

@@ -30,7 +30,7 @@ import {
 import { useParams } from 'react-router';
 import { Box, Grid, Stack, Tooltip, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   validateWebsite,
   validateWebsiteStrict,
@@ -38,7 +38,6 @@ import {
 import Loading from '../../components/Loading.jsx';
 import {
   ERRORS,
-  LINKEDIN_ORGANIZATION_ID,
   formatWebSiteUrl,
   formatRegistrationNumbers,
   SUPPORT_EMAIL_HINT,
@@ -47,25 +46,21 @@ import {
 } from '../../utils/index.jsx';
 import useCountryCodes from '../../utils/countryCodes';
 import CustomImageInput from '../../components/common/CustomImageInput/index.jsx';
-import OrganizationRegistrationNumbersField from './components/OrganizationRegistrationNumbersField.jsx';
 import { defaultBrandValue, allBrandsFilled, isAddBrandDisabled } from './OrganizationCreate.jsx';
 import PlusButtonBlock from '../../components/common/PlusButtonBlock.jsx';
-import OrganizationAuthorityRadioGroup, {
-  getDefaultAuthority,
-} from './components/OrganizationAuthorityRadioGroup.jsx';
-import { authorityOptions, Authorities } from '../../constants/messageCodes';
-import { OrganizationRegistrationNumbers } from './components/OrganizationRegistrationNumbersContainer.jsx';
 import { OrganizationBrand } from './components/OrganizationBrand.jsx';
+import AuthorityRegistrationNumbersInput from './components/AuthorityRegistrationInput.jsx';
+import { LinkedInRegistrationInput } from './components/LinkedInRegistrationInput.jsx';
 
 const validateEmail = [required(), email()];
 
-const transform = (data, authority) => ({
+const transform = (data) => ({
   ...data,
   profile: {
     ...data.profile,
     website: formatWebSiteUrl(data.profile.website),
     linkedInProfile: formatWebSiteUrl(data.profile.linkedInProfile),
-    registrationNumbers: formatRegistrationNumbers(data.profile?.registrationNumbers, authority),
+    registrationNumbers: formatRegistrationNumbers(data.profile?.registrationNumbers),
     commercialEntities: data.profile.commercialEntities
       .filter((brand) => brand.logo)
       .map((brand) => ({
@@ -85,32 +80,14 @@ const modifyRecord = (record) => ({
   },
 });
 
-const getSellSizeIfLocalAuthority = (authority) => {
-  if (authorityOptions[authority] === authorityOptions.NationalAuthority) {
-    return 6;
-  }
-  return 12;
-};
-
 const OrganizationEdit = () => {
   const { id } = useParams();
   const { data: countryCodes, isLoading: isCodesLoading } = useCountryCodes();
   const [errorMessage, setErrorMessage] = useState('');
-  const [authority, setAuthority] = useState(Authorities.DunnAndBradstreet);
   const { record, isLoading } = useEditController({
     resource: 'organizations',
     id,
   });
-
-  useEffect(() => {
-    if (record?.profile?.registrationNumbers) {
-      setAuthority(getDefaultAuthority(record.profile.registrationNumbers));
-    }
-  }, [record, setAuthority]);
-
-  const handleAuthorityChange = (event) => {
-    setAuthority(event.target.value);
-  };
 
   const onError = ({ body }) => {
     if (body.errorCode === 'webhook_not_protocol_compliant') {
@@ -132,7 +109,7 @@ const OrganizationEdit = () => {
         mutationOptions={{ onError }}
         actions={false}
         sx={sx.formContainer}
-        transform={(data) => transform(data, authority)}
+        transform={(data) => transform(data)}
       >
         <Form record={modifyRecord(record)} mode="onTouched">
           <FormDataConsumer>
@@ -206,16 +183,10 @@ const OrganizationEdit = () => {
                     </Stack>
                   </Grid>
                   <Grid size={{ xs: 6 }}>
-                    <Stack flexDirection="row" gap={1.75}>
-                      <OrganizationRegistrationNumbersField
-                        record={{ ...record, ...formData }}
-                        fieldType="LinkedIn"
-                        label="LinkedIn Company Page ID"
-                        tooltip={LINKEDIN_ORGANIZATION_ID}
-                        type="number"
-                      />
-                    </Stack>
-                    <Typography sx={sx.errorMessage} />
+                    <LinkedInRegistrationInput
+                      formData={{ ...record, ...formData.profile }}
+                      source="profile.registrationNumbers"
+                    />
                   </Grid>
                   <Grid size={{ xs: 6 }}>
                     <Stack flexDirection="row" gap={1.75}>
@@ -247,37 +218,10 @@ const OrganizationEdit = () => {
                       </Box>
                     </Stack>
                   </Grid>
-                  <OrganizationAuthorityRadioGroup
-                    authority={authority}
-                    handleAuthorityChange={handleAuthorityChange}
+                  <AuthorityRegistrationNumbersInput
+                    source="profile.registrationNumbers"
+                    orientation="horizontal"
                   />
-                  {authorityOptions[authority] === authorityOptions.NationalAuthority && (
-                    <Grid size={{ xs: 6 }}>
-                      <Stack flexDirection="row">
-                        <Box sx={sx.fullWidth}>
-                          <OrganizationRegistrationNumbers
-                            formData={formData}
-                            record={record}
-                            authority={authority}
-                            type="uri"
-                            label="Local Country Registration Authority Website"
-                          />
-                        </Box>
-                      </Stack>
-                    </Grid>
-                  )}
-                  <Grid size={{ xs: getSellSizeIfLocalAuthority(authority) }}>
-                    <Stack flexDirection="row">
-                      <Box sx={sx.fullWidth}>
-                        <OrganizationRegistrationNumbers
-                          formData={formData}
-                          record={record}
-                          authority={authority}
-                          type="number"
-                        />
-                      </Box>
-                    </Stack>
-                  </Grid>
                   <Grid size={{ xs: 12 }}>
                     <TextInput fullWidth disabled label="DID" source="id" />
                   </Grid>

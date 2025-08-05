@@ -17,6 +17,7 @@
     "lint:fix": "eslint --fix --ext .js ."
   },
   "devDependencies": {
+    "@velocitycareerlabs/common-functions": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
     "@spencejs/spence-config":  "0.10.2",
     "@velocitycareerlabs/blockchain-functions": "0.5.0-build",

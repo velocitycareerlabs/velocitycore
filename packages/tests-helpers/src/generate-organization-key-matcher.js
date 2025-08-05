@@ -44,7 +44,7 @@ const generateOrganizationKeyMatcher = ({
       controller: expect.any(String),
       ...(type === 'JsonWebKey2020'
         ? {
-            publicKeyJwk: publicKeyMatcher,
+            publicKeyJwk: publicJwkMatcher(),
           }
         : {
             publicKeyMultibase: expect.stringMatching(HEX_FORMAT),

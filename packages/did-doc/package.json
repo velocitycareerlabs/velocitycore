@@ -21,7 +21,6 @@
     "@velocitycareerlabs/crypto": "0.5.0-build",
     "@velocitycareerlabs/jwt": "0.5.0-build",
     "bs58": "^6.0.0",
-    "canonicalize": "~2.1.0",
     "http-errors": "^2.0.0",
     "lodash": "^4.17.21",
     "jose": "~5.10.0"
@@ -29,7 +28,7 @@
   "devDependencies": {
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "expect": "29.7.0",
-    "nock": "14.0.4"
+    "nock": "14.0.6"
   },
   "nx": {
     "tags": ["lib"]

@@ -104,6 +104,7 @@ const AppBarOrganization = () => {
         role="button"
         aria-describedby={id}
         onClick={(e) => setAnchorEl(e.currentTarget)}
+        data-testid="app-bar-org"
       >
         <OrganizationAvatar
           size={36}

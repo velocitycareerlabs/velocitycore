@@ -18,8 +18,9 @@
 const { toLower } = require('lodash/fp');
 const { mapWithIndex } = require('@velocitycareerlabs/common-functions');
 const {
-  generateKeyPair,
+  generateJWAKeyPair,
   get2BytesHash,
+  KeyAlgorithms,
 } = require('@velocitycareerlabs/crypto');
 const {
   jsonLdToUnsignedVcJwtContent,
@@ -55,8 +56,13 @@ const buildVerifiableCredentials = async (
   return Promise.all(
     mapWithIndex(async (offer, i) => {
       const metadataEntry = metadataEntries[i];
-      const keyPair = generateKeyPair({ format: 'jwk' });
       const credentialType = extractCredentialType(offer);
+      const digitalSignatureAlgorithm =
+        credentialTypesMap[credentialType].defaultSignatureAlgorithm ??
+        KeyAlgorithms.SECP256K1;
+
+      const keyPair = generateJWAKeyPair(digitalSignatureAlgorithm);
+
       const metadata = {
         ...metadataEntry,
         credentialType,
@@ -67,7 +73,8 @@ const buildVerifiableCredentials = async (
 
       const credentialId = buildVelocityCredentialMetadataDID(
         metadataEntry,
-        issuer
+        issuer,
+        metadata.contentHash
       );
       const revocationUrl = buildRevocationUrl(
         revocationListEntries[i],
@@ -79,7 +86,7 @@ const buildVerifiableCredentials = async (
         credentialSubjectId,
         offer,
         credentialId,
-        metadata.contentHash,
+        metadata.contentHash, // TODO remove June 2026
         credentialTypesMap[metadata.credentialType],
         revocationUrl,
         context
@@ -87,6 +94,7 @@ const buildVerifiableCredentials = async (
 
       const { header, payload } = jsonLdToUnsignedVcJwtContent(
         jsonLdCredential,
+        digitalSignatureAlgorithm,
         `${credentialId}#key-1`
       );
       const vcJwt = await jwtSign(payload, keyPair.privateKey, header);
@@ -100,11 +108,12 @@ const buildVerifiableCredentials = async (
  * Builds a credential metadata DID URI
  * @param {AllocationListEntry} entry the list entry
  * @param {Issuer} issuer the issuer
+ * @param {string} contentHash the content hash of the credential
  * @returns {string} the DID URI for the location on the credential metadata list
  */
-const buildVelocityCredentialMetadataDID = (entry, issuer) =>
+const buildVelocityCredentialMetadataDID = (entry, issuer, contentHash) =>
   `did:velocity:v2:${toLower(issuer.dltPrimaryAddress)}:${entry.listId}:${
     entry.index
-  }`;
+  }:${contentHash}`;
 
 module.exports = { buildVerifiableCredentials };

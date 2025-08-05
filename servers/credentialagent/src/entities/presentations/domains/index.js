@@ -22,6 +22,5 @@ module.exports = {
   ...require('./errors'),
   ...require('./extract-fields-from-id-credential'),
   ...require('./merge-credential-check-results'),
-  ...require('./unwrap-credentials'),
   ...require('./validate-presentation'),
 };

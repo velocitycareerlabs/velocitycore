@@ -26,6 +26,7 @@ const {
 const { omit } = require('lodash/fp');
 const { generateKeyPair } = require('@velocitycareerlabs/crypto');
 const { nanoid } = require('nanoid');
+const { URLSAFE_BASE64_FORMAT } = require('@velocitycareerlabs/test-regexes');
 const {
   jwtSign,
   jwtSignSymmetric,
@@ -39,6 +40,8 @@ const {
   jwkFromStringified,
   safeJwtDecode,
   toJwk,
+  jwkToPublicBase64Url,
+  base64UrlToJwk,
 } = require('../src/core');
 const { generateDocJwt } = require('../index');
 
@@ -435,6 +438,39 @@ describe('JWT Tests', () => {
       const { privateKey } = generateKeyPair();
       expect(privateKey).toEqual(
         await hexFromJwk(jwkFromSecp256k1Key(privateKey, true), true)
+      );
+    });
+  });
+
+  describe('jwk / base64url conversions', () => {
+    it('should convert from ec jwk to base64url & back', () => {
+      const { publicKey, privateKey } = generateKeyPair({
+        format: 'jwk',
+        type: 'ec',
+        curve: 'secp256k1',
+      });
+      expect(jwkToPublicBase64Url(publicKey)).toMatch(URLSAFE_BASE64_FORMAT);
+      expect(jwkToPublicBase64Url(privateKey)).toMatch(URLSAFE_BASE64_FORMAT);
+      expect(base64UrlToJwk(jwkToPublicBase64Url(publicKey))).toEqual(
+        publicKey
+      );
+      expect(base64UrlToJwk(jwkToPublicBase64Url(privateKey))).toEqual(
+        privateKey
+      );
+    });
+    it('should convert from rsa jwk to base64url & back', () => {
+      const { publicKey, privateKey } = generateKeyPair({
+        format: 'jwk',
+        type: 'rsa',
+        modulusLength: 2048,
+      });
+      expect(jwkToPublicBase64Url(publicKey)).toMatch(URLSAFE_BASE64_FORMAT);
+      expect(jwkToPublicBase64Url(privateKey)).toMatch(URLSAFE_BASE64_FORMAT);
+      expect(base64UrlToJwk(jwkToPublicBase64Url(publicKey))).toEqual(
+        publicKey
+      );
+      expect(base64UrlToJwk(jwkToPublicBase64Url(privateKey))).toEqual(
+        privateKey
       );
     });
   });

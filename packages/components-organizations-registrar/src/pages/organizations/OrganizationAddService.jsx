@@ -57,7 +57,7 @@ const OrganizationAddService = ({
 
   const openedStateRef = useRef(isModalOpened);
 
-  const isIssuingOrInspection = useIsIssuingInspection(selectedServiceType);
+  const { isIssuingOrInspection, isCAO } = useIsIssuingInspection(selectedServiceType);
 
   const { data: credentialAgentOperators, isLoading: isLoadingCAO } = useGetList(
     dataResources.SEARCH_PROFILES,
@@ -141,6 +141,7 @@ const OrganizationAddService = ({
         onClose={() => setIsKeysPopupOpened(true)}
         isIssueOrInspection={isIssuingOrInspection}
         selectedCAO={selectedCAO}
+        isCAO={isCAO}
       />
 
       <SecretKeysPopup

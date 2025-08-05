@@ -21,7 +21,9 @@ describe('VCLOrganizationsSearchDescriptor Tests', () => {
             OrganizationsDescriptorMocks.Query
         );
 
-        expect(subject.queryParams).toBe(organizationDescriptorQueryParamsMock);
+        expect(subject.queryParams).toEqual(
+            organizationDescriptorQueryParamsMock
+        );
     });
 
     test('testOrganizationsDescriptorFilterPageSortParamsAggregationSuccess', () => {
@@ -37,7 +39,9 @@ describe('VCLOrganizationsSearchDescriptor Tests', () => {
             OrganizationsDescriptorMocks.Sort
         );
 
-        expect(subject.queryParams).toBe(organizationDescriptorQueryParamsMock);
+        expect(subject.queryParams).toEqual(
+            organizationDescriptorQueryParamsMock
+        );
     });
 
     test('testOrganizationsDescriptorFilterPageQueryParamsAggregationSuccess', () => {
@@ -54,7 +58,9 @@ describe('VCLOrganizationsSearchDescriptor Tests', () => {
             OrganizationsDescriptorMocks.Query
         );
 
-        expect(subject.queryParams).toBe(organizationDescriptorQueryParamsMock);
+        expect(subject.queryParams).toEqual(
+            organizationDescriptorQueryParamsMock
+        );
     });
 
     test('testOrganizationsDescriptorFilterSortQueryParamsAggregationSuccess', () => {
@@ -71,7 +77,9 @@ describe('VCLOrganizationsSearchDescriptor Tests', () => {
             OrganizationsDescriptorMocks.Query
         );
 
-        expect(subject.queryParams).toBe(organizationDescriptorQueryParamsMock);
+        expect(subject.queryParams).toEqual(
+            organizationDescriptorQueryParamsMock
+        );
     });
 
     test('testOrganizationsDescriptorPageSortQueryParamsAggregationSuccess', () => {
@@ -87,7 +95,9 @@ describe('VCLOrganizationsSearchDescriptor Tests', () => {
             OrganizationsDescriptorMocks.Query
         );
 
-        expect(subject.queryParams).toBe(organizationDescriptorQueryParamsMock);
+        expect(subject.queryParams).toEqual(
+            organizationDescriptorQueryParamsMock
+        );
     });
 
     test('testOrganizationsDescriptorDidFilterAggregationSuccess', () => {
@@ -97,13 +107,17 @@ describe('VCLOrganizationsSearchDescriptor Tests', () => {
             new VCLFilter(OrganizationsDescriptorMocks.Filter.did)
         );
 
-        expect(subject.queryParams).toBe(organizationDescriptorQueryParamsMock);
+        expect(subject.queryParams).toEqual(
+            organizationDescriptorQueryParamsMock
+        );
     });
 
     test('testOrganizationsDescriptorNoParamsAggregationSuccess', () => {
         const organizationDescriptorQueryParamsMock = null;
         subject = new VCLOrganizationsSearchDescriptor();
 
-        expect(subject.queryParams).toBe(organizationDescriptorQueryParamsMock);
+        expect(subject.queryParams).toEqual(
+            organizationDescriptorQueryParamsMock
+        );
     });
 });

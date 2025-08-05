@@ -2,8 +2,8 @@ import VCLVerifiedProfile from '../../../api/entities/VCLVerifiedProfile';
 import VCLVerifiedProfileDescriptor from '../../../api/entities/VCLVerifiedProfileDescriptor';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import VerifiedProfileRepository from '../../domain/repositories/VerifiedProfileRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import Urls, { HeaderKeys, HeaderValues, Params } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class VerifiedProfileRepositoryImpl
     implements VerifiedProfileRepository
@@ -24,8 +24,6 @@ export default class VerifiedProfileRepositoryImpl
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
-            contentType: null,
-            useCaches: false,
         });
         return new VCLVerifiedProfile(verifiedProfileResponse.payload);
     }

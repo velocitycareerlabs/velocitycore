@@ -20,6 +20,8 @@ import { DeepLinkMocks } from '../infrastructure/resources/valid/DeepLinkMocks';
 import { VerifiedProfileMocks } from '../infrastructure/resources/valid/VerifiedProfileMocks';
 import { DidJwkMocks } from '../infrastructure/resources/valid/DidJwkMocks';
 import { CredentialManifestByDeepLinkVerifierImpl } from '../../src/impl/data/verifiers';
+import ResolveDidDocumentRepositoryImpl from '../../src/impl/data/repositories/ResolveDidDocumentRepositoryImpl';
+import { DidDocumentMocks } from '../infrastructure/resources/valid/DidDocumentMocks';
 
 describe('CredentialManifestUseCase Tests', () => {
     let subject1: CredentialManifestUseCase;
@@ -32,8 +34,10 @@ describe('CredentialManifestUseCase Tests', () => {
                     JSON.parse(CredentialManifestMocks.CredentialManifest1)
                 )
             ),
-            new ResolveKidRepositoryImpl(
-                new NetworkServiceSuccess(CredentialManifestMocks.JWK)
+            new ResolveDidDocumentRepositoryImpl(
+                new NetworkServiceSuccess(
+                    DidDocumentMocks.DidDocumentMock.payload
+                )
             ),
             new JwtServiceRepositoryImpl(
                 new JwtSignServiceMock(''),
@@ -57,7 +61,7 @@ describe('CredentialManifestUseCase Tests', () => {
                     )
                 )
             );
-            expect(credentialManifest?.jwt.encodedJwt).toBe(
+            expect(credentialManifest?.jwt.encodedJwt).toEqual(
                 CredentialManifestMocks.JwtCredentialManifest1
             );
             expect(credentialManifest?.jwt.header).toStrictEqual(
@@ -66,15 +70,15 @@ describe('CredentialManifestUseCase Tests', () => {
             expect(credentialManifest?.jwt.payload).toStrictEqual(
                 JSON.parse(CredentialManifestMocks.Payload)
             );
-            expect(credentialManifest?.jwt.signature).toBe(
+            expect(credentialManifest?.jwt.signature).toEqual(
                 CredentialManifestMocks.Signature
             );
             expect(credentialManifest?.didJwk).toStrictEqual(
                 DidJwkMocks.DidJwk
             );
-            expect(credentialManifest?.remoteCryptoServicesToken?.value).toBe(
-                'some token'
-            );
+            expect(
+                credentialManifest?.remoteCryptoServicesToken?.value
+            ).toEqual('some token');
         } catch (error) {
             expect(error).toBeNull();
         }
@@ -85,8 +89,10 @@ describe('CredentialManifestUseCase Tests', () => {
             new CredentialManifestRepositoryImpl(
                 new NetworkServiceSuccess(JSON.parse('{"wrong": "payload"}'))
             ),
-            new ResolveKidRepositoryImpl(
-                new NetworkServiceSuccess(CredentialManifestMocks.JWK)
+            new ResolveDidDocumentRepositoryImpl(
+                new NetworkServiceSuccess(
+                    DidDocumentMocks.DidDocumentMock.payload
+                )
             ),
             new JwtServiceRepositoryImpl(
                 new JwtSignServiceMock(''),
@@ -109,9 +115,9 @@ describe('CredentialManifestUseCase Tests', () => {
                     )
                 )
             );
-            expect(true).toBe(false);
+            expect(true).toEqual(false);
         } catch (error: any) {
-            expect(error?.errorCode).toBe(VCLErrorCode.SdkError.toString());
+            expect(error?.errorCode).toEqual(VCLErrorCode.SdkError.toString());
         }
     });
 });

@@ -199,8 +199,7 @@ describe('e2e issuing tests', { timeout: 45000 }, () => {
     await mongoDb().collection('exchanges').deleteMany({});
     await mongoDb().collection('offers').deleteMany({});
     await mongoDb().collection('vendorUserIdMappings').deleteMany({});
-    await mongoDb().collection('metadataListAllocations').deleteMany({});
-    await mongoDb().collection('revocationListAllocations').deleteMany({});
+    await mongoDb().collection('allocations').deleteMany({});
 
     disclosure = await persistDisclosure({
       tenant,
@@ -277,24 +276,26 @@ describe('e2e issuing tests', { timeout: 45000 }, () => {
     );
 
     const metadataListAllocation = await mongoDb()
-      .collection('metadataListAllocations')
-      .findOne();
+      .collection('allocations')
+      .findOne({ entityName: 'metadataListAllocations' });
     expect(metadataListAllocation).toEqual({
       _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       currentListId: expect.any(Number),
+      entityName: 'metadataListAllocations',
       freeIndexes: expect.any(Array),
       operatorAddress: toEthereumAddress(operatorKeyPair.publicKey),
       tenantId: new ObjectId(tenant._id),
       updatedAt: expect.any(Date),
     });
     const revocationListAllocation = await mongoDb()
-      .collection('revocationListAllocations')
-      .findOne();
+      .collection('allocations')
+      .findOne({ entityName: 'revocationListAllocations' });
     expect(revocationListAllocation).toEqual({
       _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       currentListId: expect.any(Number),
+      entityName: 'revocationListAllocations',
       freeIndexes: expect.any(Array),
       operatorAddress: toEthereumAddress(operatorKeyPair.publicKey),
       tenantId: new ObjectId(tenant._id),
@@ -330,24 +331,26 @@ describe('e2e issuing tests', { timeout: 45000 }, () => {
     );
 
     const metadataListAllocation = await mongoDb()
-      .collection('metadataListAllocations')
-      .findOne();
+      .collection('allocations')
+      .findOne({ entityName: 'metadataListAllocations' });
     expect(metadataListAllocation).toEqual({
       _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       currentListId: expect.any(Number),
+      entityName: 'metadataListAllocations',
       freeIndexes: expect.any(Array),
       operatorAddress: toEthereumAddress(operatorKeyPair.publicKey),
       tenantId: new ObjectId(tenant._id),
       updatedAt: expect.any(Date),
     });
     const revocationListAllocation = await mongoDb()
-      .collection('revocationListAllocations')
-      .findOne();
+      .collection('allocations')
+      .findOne({ entityName: 'revocationListAllocations' });
     expect(revocationListAllocation).toEqual({
       _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       currentListId: expect.any(Number),
+      entityName: 'revocationListAllocations',
       freeIndexes: expect.any(Array),
       operatorAddress: toEthereumAddress(operatorKeyPair.publicKey),
       tenantId: new ObjectId(tenant._id),
@@ -383,24 +386,26 @@ describe('e2e issuing tests', { timeout: 45000 }, () => {
     );
 
     const metadataListAllocation = await mongoDb()
-      .collection('metadataListAllocations')
-      .findOne();
+      .collection('allocations')
+      .findOne({ entityName: 'metadataListAllocations' });
     expect(metadataListAllocation).toEqual({
       _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       currentListId: expect.any(Number),
+      entityName: 'metadataListAllocations',
       freeIndexes: expect.any(Array),
       operatorAddress: toEthereumAddress(operatorKeyPair.publicKey),
       tenantId: new ObjectId(tenant._id),
       updatedAt: expect.any(Date),
     });
     const revocationListAllocation = await mongoDb()
-      .collection('revocationListAllocations')
-      .findOne();
+      .collection('allocations')
+      .findOne({ entityName: 'revocationListAllocations' });
     expect(revocationListAllocation).toEqual({
       _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       currentListId: expect.any(Number),
+      entityName: 'revocationListAllocations',
       freeIndexes: expect.any(Array),
       operatorAddress: toEthereumAddress(operatorKeyPair.publicKey),
       tenantId: new ObjectId(tenant._id),

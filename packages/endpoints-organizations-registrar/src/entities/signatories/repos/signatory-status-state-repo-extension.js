@@ -94,40 +94,24 @@ const signatoryStatusStateRepoExtension = (parent) => ({
     );
     return result.value;
   },
-  findByEvent: async (eventState, eventTimestamp) => {
+  findByEvent: async (eventTimestamp) => {
     const aggregationPipeline = [
       {
         $match: {
-          'events.state': { $ne: SignatoryEventStatus.COMPLETED },
+          'events.state': {
+            $ne: SignatoryEventStatus.COMPLETED,
+          },
         },
       },
       {
-        $unwind: {
-          path: '$events',
-        },
-      },
-      {
-        $project: {
-          event: '$events',
-          organizationId: 1,
+        $addFields: {
+          latestEvent: { $last: '$events' },
         },
       },
       {
         $match: {
-          'event.state': eventState,
-          'event.timestamp': {
+          'latestEvent.timestamp': {
             $lte: eventTimestamp,
-          },
-        },
-      },
-      {
-        $group: {
-          _id: '$_id',
-          events: {
-            $push: '$event',
-          },
-          organizationId: {
-            $first: '$organizationId',
           },
         },
       },

@@ -1,3 +1,8 @@
+/*
+Added the bellow suppression to allow mutating methods like `push`, `pop`, etc.
+Alternatively, we could rewrite the code to avoid using mutating methods,
+ */
+/* eslint-disable better-mutation/no-mutating-methods,better-mutation/no-mutation */
 import { Dictionary, Nullish } from '../../../api/VCLTypes';
 import VCLCountries from '../../../api/entities/VCLCountries';
 import VCLCredentialTypesUIFormSchema from '../../../api/entities/VCLCredentialTypesUIFormSchema';
@@ -6,8 +11,9 @@ import VCLPlace from '../../../api/entities/VCLPlace';
 import VCLRegions from '../../../api/entities/VCLRegions';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import CredentialTypesUIFormSchemaRepository from '../../domain/repositories/CredentialTypesUIFormSchemaRepository';
-import Request, { HttpMethod } from '../infrastructure/network/Request';
+import Request from '../infrastructure/network/Request';
 import Urls, { HeaderKeys, HeaderValues, Params } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class CredentialTypesUIFormSchemaRepositoryImpl
     implements CredentialTypesUIFormSchemaRepository

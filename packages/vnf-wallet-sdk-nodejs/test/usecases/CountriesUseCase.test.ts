@@ -7,38 +7,20 @@ import { CountriesMocks } from '../infrastructure/resources/valid/CountriesMocks
 import { VCLCountryCodes } from '../../src';
 
 describe('CredentialManifestUseCase Tests', () => {
+    const expectedCountriesPayload = JSON.parse(CountriesMocks.CountriesJson);
+
     const subject = new CountriesUseCaseImpl(
         new CountriesRepositoryImpl(
-            new NetworkServiceSuccess(JSON.parse(CountriesMocks.CountriesJson))
+            new NetworkServiceSuccess(expectedCountriesPayload)
         )
     );
 
     test('testGetCountriesSuccess', async () => {
         const countries = await subject.getCountries();
 
-        const afghanistanCountry = countries.countryByCode(VCLCountryCodes.AF);
-        const afghanistanRegions = afghanistanCountry?.regions;
-
-        expect(afghanistanCountry?.code).toBe(CountriesMocks.AfghanistanCode);
-        expect(afghanistanCountry?.name).toBe(CountriesMocks.AfghanistanName);
-
-        expect(afghanistanRegions?.all[0].name).toBe(
-            CountriesMocks.AfghanistanRegion1Name
+        const receivedCountriesPayload = countries?.all?.map(
+            (country) => country.payload
         );
-        expect(afghanistanRegions?.all[0].code).toBe(
-            CountriesMocks.AfghanistanRegion1Code
-        );
-        expect(afghanistanRegions?.all[1].name).toBe(
-            CountriesMocks.AfghanistanRegion2Name
-        );
-        expect(afghanistanRegions?.all[1].code).toBe(
-            CountriesMocks.AfghanistanRegion2Code
-        );
-        expect(afghanistanRegions?.all[2].name).toBe(
-            CountriesMocks.AfghanistanRegion3Name
-        );
-        expect(afghanistanRegions?.all[2].code).toBe(
-            CountriesMocks.AfghanistanRegion3Code
-        );
+        expect(receivedCountriesPayload).toEqual(expectedCountriesPayload);
     });
 });

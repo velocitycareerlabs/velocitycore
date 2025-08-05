@@ -30,6 +30,7 @@ const {
   toEthereumAddress,
 } = require('@velocitycareerlabs/blockchain-functions');
 const { initPermissions } = require('@velocitycareerlabs/contract-permissions');
+const { wait } = require('@velocitycareerlabs/common-functions');
 const initRevocationRegistry = require('../src/revocation-registry');
 const {
   deployPermissionContract,
@@ -63,6 +64,10 @@ describe('Revocation Registry', { timeout: 240000 }, () => {
       await initializationPermissions();
     defaultPrimaryAddress = primaryAddress;
     revocationRegistry = await createRevocationRegistryWallet(operatorKeyPair);
+  });
+
+  afterEach(async () => {
+    await wait(1000);
   });
 
   after(async () => {

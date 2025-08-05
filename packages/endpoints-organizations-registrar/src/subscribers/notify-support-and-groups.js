@@ -38,7 +38,7 @@ const notifySupportAndGroups = async (fastify) => {
         context
       ) => {
         return Promise.all([
-          sendOrganizationCreatedNotification(organization),
+          sendOrganizationCreatedNotification({ organization }, context),
           sendServiceNotificationToGroup(
             {
               organization,

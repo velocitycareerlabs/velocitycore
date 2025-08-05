@@ -3,8 +3,8 @@ import VCLExchange from '../../../api/entities/VCLExchange';
 import VCLExchangeDescriptor from '../../../api/entities/VCLExchangeDescriptor';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import ExchangeProgressRepository from '../../domain/repositories/ExchangeProgressRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class ExchangeProgressRepositoryImpl
     implements ExchangeProgressRepository
@@ -15,18 +15,15 @@ export default class ExchangeProgressRepositoryImpl
         exchangeDescriptor: VCLExchangeDescriptor
     ): Promise<VCLExchange> {
         const exchangeProgressResponse = await this.networkService.sendRequest({
-            useCaches: false,
             method: HttpMethod.GET,
             endpoint: `${exchangeDescriptor.processUri}?${
                 VCLExchangeDescriptor.KeyExchangeId
             }=${encodeURIComponent(exchangeDescriptor.exchangeId)}`,
             headers: {
-                [HeaderKeys.HeaderKeyAuthorization]: `${HeaderKeys.HeaderValuePrefixBearer} ${exchangeDescriptor.sessionToken.value}`,
+                [HeaderKeys.Authorization]: `${HeaderValues.PrefixBearer} ${exchangeDescriptor.sessionToken.value}`,
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
-            body: null,
-            contentType: null,
         });
 
         return this.parseExchange(exchangeProgressResponse.payload);

@@ -6,11 +6,12 @@ import CredentialTypeSchemaRepositoryImpl from '../../src/impl/data/repositories
 import { CredentialTypeSchemaMocks } from '../infrastructure/resources/valid/CredentialTypeSchemaMocks';
 
 describe('CredentialTypeSchemaUseCase Tests', () => {
+    const expectedCredentialTypeSchemasPayload = JSON.parse(
+        CredentialTypeSchemaMocks.CredentialTypeSchemaJson
+    );
     const subject = new CredentialTypeSchemasUseCaseImpl(
         new CredentialTypeSchemaRepositoryImpl(
-            new NetworkServiceSuccess(
-                JSON.parse(CredentialTypeSchemaMocks.CredentialTypeSchemaJson)
-            )
+            new NetworkServiceSuccess(expectedCredentialTypeSchemasPayload)
         ),
         CredentialTypeSchemaMocks.CredentialTypes
     );
@@ -22,8 +23,6 @@ describe('CredentialTypeSchemaUseCase Tests', () => {
             credTypeSchemas.all[
                 CredentialTypeSchemaMocks.CredentialType.schemaName
             ]?.payload
-        ).toStrictEqual(
-            JSON.parse(CredentialTypeSchemaMocks.CredentialTypeSchemaJson)
-        );
+        ).toStrictEqual(expectedCredentialTypeSchemasPayload);
     });
 });

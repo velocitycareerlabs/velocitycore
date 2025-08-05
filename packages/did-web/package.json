@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "expect": "29.7.0",
-    "nock": "14.0.4"
+    "nock": "14.0.6"
   },
   "nx": {
     "tags": ["lib"]

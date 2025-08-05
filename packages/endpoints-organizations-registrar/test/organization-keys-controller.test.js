@@ -45,21 +45,21 @@ const mockAuth0ClientGrantDelete = mock.fn(async ({ id }) => {
 const mockAuth0ClientCreate = mock.fn(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 client ${id}`);
-  return { client_id: id, client_secret: nanoid(), ...obj };
+  return  { data: { client_id: id, client_secret: nanoid(), ...obj }};
 });
 const mockAuth0ClientGrantCreate = mock.fn(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 clientGrant ${id}`);
-  return { id: nanoid(), ...obj };
+  return  { data: { id: nanoid(), ...obj }};
 });
 const mockAuth0UserUpdate = mock.fn(async ({ id }, obj) => {
   console.log(`update auth0 user ${id}`);
-  return { id, ...obj };
+  return  { data: { id, ...obj }};
 });
 const mockAuth0GetUsers = mock.fn(() =>
-  Promise.resolve({
+  Promise.resolve( { data: {
     email: `${mockAuth0GetUsers.mock.callCount()}@localhost.test`,
-  })
+  }})
 );
 
 class ManagementClient {
@@ -639,7 +639,7 @@ describe('Organization Registrar Test Suite', () => {
                 id: kidFragment,
                 controller: organization.didDoc.id,
                 type: 'JsonWebKey2020',
-                publicKeyJwk: publicJwkMatcher,
+                publicKeyJwk: publicJwkMatcher(),
               },
             ],
           },
@@ -712,13 +712,13 @@ describe('Organization Registrar Test Suite', () => {
                 id: '#fragment-1',
                 controller: organization.didDoc.id,
                 type: 'JsonWebKey2020',
-                publicKeyJwk: publicJwkMatcher,
+                publicKeyJwk: publicJwkMatcher(),
               },
               {
                 id: '#fragment-2',
                 controller: organization.didDoc.id,
                 type: 'JsonWebKey2020',
-                publicKeyJwk: publicJwkMatcher,
+                publicKeyJwk: publicJwkMatcher(),
               },
             ],
           },
@@ -783,7 +783,7 @@ describe('Organization Registrar Test Suite', () => {
                 id: kidFragment,
                 controller: organization.didDoc.id,
                 type: 'JsonWebKey2020',
-                publicKeyJwk: publicJwkMatcher,
+                publicKeyJwk: publicJwkMatcher(),
               },
             ],
           },

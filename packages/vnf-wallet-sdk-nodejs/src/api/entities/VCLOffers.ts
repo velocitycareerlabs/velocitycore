@@ -38,17 +38,12 @@ export default class VCLOffers {
         return new VCLOffers({}, [], responseCode, sessionToken);
     };
 
-    private static readonly offersFromJsonArray = (
+    static readonly offersFromJsonArray = (
         offersJsonArray: Dictionary<any>[]
     ): VCLOffer[] => {
-        const allOffers: VCLOffer[] = [];
-        for (let i = 0; i < offersJsonArray.length; i++) {
-            const offerJsonObject = offersJsonArray[i];
-            if (offerJsonObject) {
-                allOffers.push(new VCLOffer(offerJsonObject));
-            }
-        }
-        return allOffers;
+        return offersJsonArray
+            .filter((offerJsonObject) => offerJsonObject != null)
+            .map((offerJsonObject) => new VCLOffer(offerJsonObject));
     };
 
     static CodingKeys = {

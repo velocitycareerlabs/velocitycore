@@ -39,25 +39,26 @@
     "nanoid": "~3.3.8"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "3.800.0",
+    "@aws-sdk/client-s3": "3.820.0",
     "@spencejs/spence-factories": "0.10.2",
+    "@velocitycareerlabs/crypto": "0.5.0-build",
     "@velocitycareerlabs/sample-data": "0.5.0-build",
     "@velocitycareerlabs/server-provider": "0.5.0-build",
     "@velocitycareerlabs/test-regexes": "0.5.0-build",
     "@velocitycareerlabs/tests-helpers": "0.5.0-build",
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
-    "eslint-config-prettier": "8.10.0",
+    "eslint-config-prettier": "8.10.2",
     "eslint-plugin-autofix": "1.1.0",
     "eslint-plugin-better-mutation": "1.7.0",
-    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-import": "2.32.0",
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
-    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-prettier": "4.2.5",
     "eslint-watch": "7.0.0",
-    "form-data": "4.0.2",
+    "form-data": "4.0.4",
     "expect": "29.7.0",
-    "mongodb": "6.16.0",
-    "nock": "14.0.4",
+    "mongodb": "6.17.0",
+    "nock": "14.0.6",
     "prettier": "2.8.8"
   }
 }

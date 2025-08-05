@@ -19,12 +19,12 @@ describe('GlobalConfig', () => {
             true
         );
 
-        expect(GlobalConfig.IsDebugOn).toBe(false);
-        expect(GlobalConfig.CurrentEnvironment).toBe(VCLEnvironment.Prod);
-        expect(GlobalConfig.XVnfProtocolVersion).toBe(
+        expect(GlobalConfig.IsDebugOn).toEqual(false);
+        expect(GlobalConfig.CurrentEnvironment).toEqual(VCLEnvironment.Prod);
+        expect(GlobalConfig.XVnfProtocolVersion).toEqual(
             VCLXVnfProtocolVersion.XVnfProtocolVersion1
         );
-        expect(GlobalConfig.IsDirectIssuerOn).toBe(true);
+        expect(GlobalConfig.IsDirectIssuerOn).toEqual(true);
     });
 
     test('should set custom values during initialization', () => {
@@ -35,13 +35,13 @@ describe('GlobalConfig', () => {
             false
         );
 
-        expect(GlobalConfig.CurrentEnvironment).toBe(VCLEnvironment.Staging);
-        expect(GlobalConfig.XVnfProtocolVersion).toBe(
+        expect(GlobalConfig.CurrentEnvironment).toEqual(VCLEnvironment.Staging);
+        expect(GlobalConfig.XVnfProtocolVersion).toEqual(
             VCLXVnfProtocolVersion.XVnfProtocolVersion2
         );
-        expect(GlobalConfig.IsDirectIssuerOn).toBe(false);
-        expect(GlobalConfig.IsDebugOn).toBe(true);
-        expect(GlobalConfig.IsLoggerOn).toBe(true);
+        expect(GlobalConfig.IsDirectIssuerOn).toEqual(false);
+        expect(GlobalConfig.IsDebugOn).toEqual(true);
+        expect(GlobalConfig.IsLoggerOn).toEqual(true);
     });
 
     test('should correctly determine if logger is on', () => {
@@ -57,8 +57,8 @@ describe('GlobalConfig', () => {
             VCLXVnfProtocolVersion.XVnfProtocolVersion1,
             true
         );
-        expect(GlobalConfig.IsDebugOn).toBe(true);
-        expect(GlobalConfig.IsLoggerOn).toBe(true);
+        expect(GlobalConfig.IsDebugOn).toEqual(true);
+        expect(GlobalConfig.IsLoggerOn).toEqual(true);
     });
 
     test('should initialize logger with VCLLogService', () => {
@@ -69,8 +69,8 @@ describe('GlobalConfig', () => {
             true
         );
 
-        expect(GlobalConfig.IsDebugOn).toBe(true);
-        expect(GlobalConfig.IsLoggerOn).toBe(true);
+        expect(GlobalConfig.IsDebugOn).toEqual(true);
+        expect(GlobalConfig.IsLoggerOn).toEqual(true);
     });
 
     test('test debug & logger for Prod', () => {
@@ -81,8 +81,8 @@ describe('GlobalConfig', () => {
             true
         );
 
-        expect(GlobalConfig.IsDebugOn).toBe(false);
-        expect(GlobalConfig.IsLoggerOn).toBe(false);
+        expect(GlobalConfig.IsDebugOn).toEqual(false);
+        expect(GlobalConfig.IsLoggerOn).toEqual(false);
     });
 
     test('test debug & logger for Staging', () => {
@@ -93,8 +93,8 @@ describe('GlobalConfig', () => {
             true
         );
 
-        expect(GlobalConfig.IsDebugOn).toBe(false);
-        expect(GlobalConfig.IsLoggerOn).toBe(false);
+        expect(GlobalConfig.IsDebugOn).toEqual(false);
+        expect(GlobalConfig.IsLoggerOn).toEqual(false);
     });
 
     test('test debug & logger for Qa', () => {
@@ -105,8 +105,8 @@ describe('GlobalConfig', () => {
             true
         );
 
-        expect(GlobalConfig.IsDebugOn).toBe(false);
-        expect(GlobalConfig.IsLoggerOn).toBe(true);
+        expect(GlobalConfig.IsDebugOn).toEqual(false);
+        expect(GlobalConfig.IsLoggerOn).toEqual(true);
     });
 
     test('test debug & logger for Dev', () => {
@@ -117,7 +117,7 @@ describe('GlobalConfig', () => {
             true
         );
 
-        expect(GlobalConfig.IsDebugOn).toBe(false);
-        expect(GlobalConfig.IsLoggerOn).toBe(true);
+        expect(GlobalConfig.IsDebugOn).toEqual(false);
+        expect(GlobalConfig.IsLoggerOn).toEqual(true);
     });
 });

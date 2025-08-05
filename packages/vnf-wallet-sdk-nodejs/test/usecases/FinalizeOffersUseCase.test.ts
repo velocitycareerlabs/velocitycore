@@ -32,6 +32,8 @@ import {
     OffersByDeepLinkVerifierImpl,
 } from '../../src/impl/data/verifiers';
 import { CredentialTypesModelMock } from '../infrastructure/resources/valid/CredentialTypesModelMock';
+import ResolveDidDocumentRepositoryImpl from '../../src/impl/data/repositories/ResolveDidDocumentRepositoryImpl';
+import { DidDocumentMocks } from '../infrastructure/resources/valid/DidDocumentMocks';
 
 describe('FinalizeOffersUseCase Tests', () => {
     let subject1: FinalizeOffersUseCase;
@@ -79,14 +81,16 @@ describe('FinalizeOffersUseCase Tests', () => {
         );
         const offers = await new GenerateOffersUseCaseImpl(
             new GenerateOffersRepositoryImpl(
-                new NetworkServiceSuccess(
-                    JSON.parse(GenerateOffersMocks.GeneratedOffers)
-                )
+                new NetworkServiceSuccess(GenerateOffersMocks.GeneratedOffers)
             ),
-            new OffersByDeepLinkVerifierImpl()
+            new OffersByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         ).generateOffers(generateOffersDescriptor, new VCLToken(''));
 
-        expect(offers.challenge).toBe(GenerateOffersMocks.Challenge);
+        expect(offers.challenge).toEqual(GenerateOffersMocks.Challenge);
 
         credentialManifestFailed = new VCLCredentialManifest(
             vclJwtFailed,
@@ -138,7 +142,11 @@ describe('FinalizeOffersUseCase Tests', () => {
                 )
             ),
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         try {
@@ -146,9 +154,9 @@ describe('FinalizeOffersUseCase Tests', () => {
                 finalizeOffersDescriptorFailed,
                 new VCLToken('')
             );
-            expect(true).toBe(false);
+            expect(true).toEqual(false);
         } catch (error: any) {
-            expect(error.errorCode).toBe(
+            expect(error.errorCode).toEqual(
                 VCLErrorCode.IssuerRequiresNotaryPermission
             );
         }
@@ -171,7 +179,11 @@ describe('FinalizeOffersUseCase Tests', () => {
                 )
             ),
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const finalizeOffers = await subject2.finalizeOffers(
@@ -179,22 +191,24 @@ describe('FinalizeOffersUseCase Tests', () => {
             new VCLToken('')
         );
 
-        expect(finalizeOffers.passedCredentials.length).toBe(credentialsAmount);
+        expect(finalizeOffers.passedCredentials.length).toEqual(
+            credentialsAmount
+        );
         expect(
             finalizeOffers.passedCredentials.some(
                 (cred) =>
                     cred.encodedJwt ===
                     CredentialMocks.JwtCredentialEducationDegreeRegistrationFromRegularIssuer
             )
-        ).toBe(true);
+        ).toEqual(true);
         expect(
             finalizeOffers.passedCredentials.some(
                 (cred) =>
                     cred.encodedJwt ===
                     CredentialMocks.JwtCredentialEmploymentPastFromRegularIssuer
             )
-        ).toBe(true);
-        expect(finalizeOffers.failedCredentials.length).toBe(0);
+        ).toEqual(true);
+        expect(finalizeOffers.failedCredentials.length).toEqual(0);
     });
 
     test('testEmptyCredentials', async () => {
@@ -214,7 +228,11 @@ describe('FinalizeOffersUseCase Tests', () => {
                 )
             ),
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         const finalizeOffers = await subject3.finalizeOffers(
@@ -222,8 +240,8 @@ describe('FinalizeOffersUseCase Tests', () => {
             new VCLToken('')
         );
 
-        expect(finalizeOffers.failedCredentials.length).toBe(0);
-        expect(finalizeOffers.passedCredentials.length).toBe(0);
+        expect(finalizeOffers.failedCredentials.length).toEqual(0);
+        expect(finalizeOffers.passedCredentials.length).toEqual(0);
     });
 
     test('testFailure', async () => {
@@ -241,7 +259,11 @@ describe('FinalizeOffersUseCase Tests', () => {
                 )
             ),
             new CredentialDidVerifierImpl(),
-            new CredentialsByDeepLinkVerifierImpl()
+            new CredentialsByDeepLinkVerifierImpl(
+                new ResolveDidDocumentRepositoryImpl(
+                    new NetworkServiceSuccess(DidDocumentMocks.DidDocumentMock)
+                )
+            )
         );
 
         try {
@@ -249,9 +271,9 @@ describe('FinalizeOffersUseCase Tests', () => {
                 finalizeOffersDescriptorPassed,
                 new VCLToken('')
             );
-            expect(true).toBe(false);
+            expect(true).toEqual(false);
         } catch (error: any) {
-            expect(error.errorCode).toBe(VCLErrorCode.SdkError);
+            expect(error.errorCode).toEqual(VCLErrorCode.SdkError);
         }
     });
 });

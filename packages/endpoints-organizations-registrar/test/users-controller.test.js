@@ -26,7 +26,7 @@ const {
 
 const mockAuth0CreateUser = mock.fn(async () => {
   const id = nanoid();
-  return { user_id: id };
+  return { data: { user_id: id }};
 });
 const mockUser = {
   id: 'auth0|1',
@@ -36,21 +36,21 @@ const mockUser = {
   app_metadata: { groupId: testRegistrarUser[VNF_GROUP_ID_CLAIM] },
 };
 
-const mockAuth0AddRoleToUser = mock.fn(() => Promise.resolve({ undefined }));
-const mockAuth0GetUser = mock.fn(() => Promise.resolve(mockUser));
-const mockAuth0UpdateUser = mock.fn(async ({ id }, obj) => ({
+const mockAuth0AddRoleToUser = mock.fn(() => Promise.resolve({ data: { undefined }}));
+const mockAuth0GetUser = mock.fn(() => Promise.resolve({ data: mockUser}));
+const mockAuth0UpdateUser = mock.fn(async ({ id }, obj) => ({ data: {
   user_id: id,
   ...obj,
-}));
+}}));
 
 const mockAuth0GetUserRoles = mock.fn(() =>
-  Promise.resolve([{ id: 'rol_sQZLrbwBEblVBNDj' }])
+  Promise.resolve({ data: [{ id: 'rol_sQZLrbwBEblVBNDj' }]})
 );
 
 const mockAuth0CreatePasswordChangeTicket = mock.fn(() =>
-  Promise.resolve({
+  Promise.resolve({ data: {
     ticket: 'http://localhost/ticket',
-  })
+  }})
 );
 
 class ManagementClient {
@@ -60,8 +60,8 @@ class ManagementClient {
       assignRoles: mockAuth0AddRoleToUser,
       update: mockAuth0UpdateUser,
       get: mockAuth0GetUser,
+        getRoles: mockAuth0GetUserRoles
     };
-    this.getUserRoles = mockAuth0GetUserRoles;
     this.tickets = {
       changePassword: mockAuth0CreatePasswordChangeTicket,
     };
@@ -796,8 +796,10 @@ describe('Users Registrar Test Suite', () => {
 
       it("Should 404 if user does not exist in user's group", async () => {
         mockAuth0GetUser.mock.mockImplementationOnce(async () => ({
-          ...mockUser,
-          groupId: 'otherGroup',
+          data: {
+            ...mockUser,
+            groupId: 'otherGroup',
+          },
         }));
         const response = await fastify.injectJson({
           method: 'GET',

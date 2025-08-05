@@ -15,7 +15,7 @@ describe('ExchangeProgressUseCase Tests', () => {
     const subject1 = new ExchangeProgressUseCaseImpl(
         new ExchangeProgressRepositoryImpl(
             new NetworkServiceSuccess(
-                JSON.parse(ExchangeProgressMocks.ExchangeProgressJsonStr)
+                ExchangeProgressMocks.ExchangeProgressJson
             )
         )
     );
@@ -31,30 +31,26 @@ describe('ExchangeProgressUseCase Tests', () => {
     test('testGetExchangeProgressSuccess', async () => {
         const exchange = await subject1.getExchangeProgress(exchangeDescriptor);
 
-        expect(exchange).toStrictEqual(
-            expectedExchange(
-                JSON.parse(ExchangeProgressMocks.ExchangeProgressJsonStr)
-            )
+        expect(exchange.id).toEqual(
+            ExchangeProgressMocks.ExchangeProgressJson.id
+        );
+        expect(exchange.type).toEqual(
+            ExchangeProgressMocks.ExchangeProgressJson.type
+        );
+        expect(exchange.exchangeComplete).toEqual(
+            ExchangeProgressMocks.ExchangeProgressJson.exchangeComplete
+        );
+        expect(exchange.disclosureComplete).toEqual(
+            ExchangeProgressMocks.ExchangeProgressJson.disclosureComplete
         );
     });
 
     test('testGetExchangeProgressFailure', async () => {
         const exchange = await subject2.getExchangeProgress(exchangeDescriptor);
 
-        expect(exchange.id).toBe(undefined);
-        expect(exchange.type).toBe(undefined);
-        expect(exchange.disclosureComplete).toBe(undefined);
-        expect(exchange.exchangeComplete).toBe(undefined);
+        expect(exchange.id).toEqual(undefined);
+        expect(exchange.type).toEqual(undefined);
+        expect(exchange.disclosureComplete).toEqual(undefined);
+        expect(exchange.exchangeComplete).toEqual(undefined);
     });
-
-    const expectedExchange = (
-        exchangeJsonObj: Dictionary<any>
-    ): VCLExchange => {
-        return new VCLExchange(
-            exchangeJsonObj[VCLExchange.KeyId],
-            exchangeJsonObj[VCLExchange.KeyType],
-            exchangeJsonObj[VCLExchange.KeyDisclosureComplete],
-            exchangeJsonObj[VCLExchange.KeyExchangeComplete]
-        );
-    };
 });

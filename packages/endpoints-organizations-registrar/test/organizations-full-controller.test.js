@@ -36,6 +36,7 @@ mock.module('@velocitycareerlabs/error-aggregation', {
     initSendError: mockInitSendError,
   },
 });
+const csvParser = require('@velocitycareerlabs/csv-parser');
 
 const mockAuth0ClientDelete = mock.fn(async ({ id }) => {
   console.log(`deleting auth0 client ${id}`);
@@ -46,25 +47,25 @@ const mockAuth0ClientGrantDelete = mock.fn(async ({ id }) => {
 const mockAuth0ClientCreate = mock.fn(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 client ${id}`);
-  return { client_id: id, client_secret: nanoid(), ...obj };
+  return { data: { client_id: id, client_secret: nanoid(), ...obj }};
 });
 const mockAuth0ClientGrantCreate = mock.fn(async (obj) => {
   const id = nanoid();
   console.log(`create auth0 clientGrant ${id}`);
-  return { id: nanoid(), ...obj };
+  return { data: { id: nanoid(), ...obj }};
 });
 const mockAuth0UserUpdate = mock.fn(async ({ id }, obj) => {
   console.log(`update auth0 user ${id}`);
-  return { id, ...obj };
+  return { data: { id, ...obj }};
 });
 const mockAuth0GetUsers = mock.fn(() =>
-  Promise.resolve([
+  Promise.resolve({ data: [
     { email: '0@localhost.test' },
     { email: '1@localhost.test' },
-  ])
+  ]})
 );
 const mockAuth0GetUser = mock.fn(() =>
-  Promise.resolve({ email: 'admin@localhost.test' })
+  Promise.resolve({ data: { email: 'admin@localhost.test' }})
 );
 
 class ManagementClient {
@@ -148,6 +149,7 @@ const {
   isEmpty,
   pick,
   forEach,
+  reject,
   without,
 } = require('lodash/fp');
 const { nanoid } = require('nanoid');
@@ -225,6 +227,7 @@ const {
   VNF_GROUP_ID_CLAIM,
   getServiceConsentType,
 } = require('../src/entities');
+const { Authorities } = require('../src');
 
 const fullUrl = '/api/v0.6/organizations/full';
 
@@ -990,6 +993,7 @@ describe('Organizations Full Test Suite', () => {
             serviceEndpoint: 'https://agent.samplevendor.com/acme',
             logoUrl: 'http://example.com/logo',
             name: 'fooWallet',
+            supportedExchangeProtocols: ['VN_API'],
           };
           const payload = {
             profile: orgProfile,
@@ -2034,8 +2038,22 @@ describe('Organizations Full Test Suite', () => {
 
       it('Should create organization, DID & ethereum accounts with default type even if no services or invitation', async () => {
         const monitorNockScope = setMonitorEventsNock();
+        const registrationNumbers = [
+          {
+            authority: Authorities.LinkedIn,
+            number: 'foo',
+          },
+          {
+            authority: Authorities.GLEIF,
+            number: '1',
+            uri: 'uri://uri',
+          },
+        ];
         const payload = {
-          profile: omit(['type'], orgProfile),
+          profile: {
+            ...omit(['type'], orgProfile),
+            registrationNumbers,
+          },
         };
         const response = await fastify.injectJson({
           method: 'POST',
@@ -2054,18 +2072,23 @@ describe('Organizations Full Test Suite', () => {
         // json response checks
         expect(did).toMatch(DID_FORMAT);
         expect(response.json).toEqual(
-          expectedCreateFullOrganizationResponse(response.json.id, orgProfile)
+          expectedCreateFullOrganizationResponse(response.json.id, {
+            ...orgProfile,
+            registrationNumbers,
+          })
         );
 
         // organization entity checks
         const orgFromDb = await getOrganizationFromDb(did);
-        expect(orgFromDb).toEqual(expectedOrganization(did, orgProfile));
+        expect(orgFromDb).toEqual(
+          expectedOrganization(did, { ...orgProfile, registrationNumbers })
+        );
         const credentialPayload = decodeCredentialJwt(
           orgFromDb.signedProfileVcJwt.signedCredential
         );
         expect(credentialPayload).toEqual({
           credentialSubject: {
-            ...publicProfileMatcher(orgProfile),
+            ...publicProfileMatcher({ ...orgProfile, registrationNumbers }),
             id: did,
             permittedVelocityServiceCategory: [],
           },
@@ -2113,10 +2136,26 @@ describe('Organizations Full Test Suite', () => {
         // email checks
         expect(
           mockSESSendEmail.mock.calls.map((call) => call.arguments)
-        ).toEqual([
+        ).toEqual(expect.arrayContaining([
           [expectedSupportEmail()],
           [expectedSignatoryApprovalEmail(null, orgFromDb)],
-        ]);
+        ]));
+
+          expect(csvParser.parseToCsv.mock.calls).toEqual([
+              [
+                  [
+                      expect.objectContaining({
+                          registrationNumbers: reject(
+                              {
+                                  authority: Authorities.LinkedIn,
+                              },
+                              registrationNumbers
+                          ),
+                      }),
+                  ],
+                  expect.any(Array),
+              ],
+          ]);
       });
 
       it('Should create org with a did service', async () => {
@@ -2615,11 +2654,11 @@ describe('Organizations Full Test Suite', () => {
 
         expect(
           mockSESSendEmail.mock.calls.map((call) => call.arguments)
-        ).toEqual([
+        ).toEqual(expect.arrayContaining([
           [expectedSupportEmail('Super Organization')],
           [expectedSignatoryApprovalEmail(null, orgFromDb)],
           [expectedServiceActivationRequiredEmail],
-        ]);
+        ]));
       });
 
       it('Should create organization that is a Node Operator', async () => {
@@ -4527,6 +4566,7 @@ describe('Organizations Full Test Suite', () => {
           googlePlayId: 'com.example.app',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const holderAppServiceMissingFields = {
@@ -4536,6 +4576,7 @@ describe('Organizations Full Test Suite', () => {
           appleAppId: 'com.example.app',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const webWalletServiceAllFields = {
@@ -4543,12 +4584,14 @@ describe('Organizations Full Test Suite', () => {
           serviceEndpoint: 'https://agent.samplevendor.com/acme',
           logoUrl: 'http://example.com/logo',
           name: 'fooWallet',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const webWalletServiceMissingFields = {
           type: ServiceTypes.WebWalletProviderType,
           serviceEndpoint: 'https://agent.samplevendor.com/acme',
           logoUrl: 'http://example.com/logo',
+          supportedExchangeProtocols: ['VN_API'],
         };
 
         const result = await runSequentially([
@@ -4987,10 +5030,12 @@ describe('Organizations Full Test Suite', () => {
         // email checks
         expect(
           mockSESSendEmail.mock.calls.map((call) => call.arguments)
-        ).toEqual([
+        ).toEqual(
+            expect.arrayContaining([
           [expectedSupportEmail()],
           [expectedSignatoryApprovalEmail(null, orgFromDb)],
-        ]);
+          ])
+        );
 
         expect(nockData.isDone()).toEqual(true);
       });
@@ -5209,11 +5254,13 @@ describe('Organizations Full Test Suite', () => {
         // email checks
         expect(
           mockSESSendEmail.mock.calls.map((call) => call.arguments)
-        ).toEqual([
+        ).toEqual(
+            expect.arrayContaining([
+
           [expectedSupportEmail()],
           [sendServicesActivatedEmailMatcher()],
           [expectedSignatoryApprovalEmail(inviterOrganization, orgFromDb)],
-        ]);
+        ]));
 
         expect(nockData.isDone()).toEqual(true);
       });

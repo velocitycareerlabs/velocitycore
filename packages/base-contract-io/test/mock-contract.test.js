@@ -48,6 +48,7 @@ const { generateKeyPair } = require('@velocitycareerlabs/crypto');
 const { env: config } = require('@spencejs/spence-config');
 const console = require('console');
 
+const { wait } = require('@velocitycareerlabs/common-functions');
 const testEventsAbi = require('./data/test-events-abi.json');
 
 const { initContractClient, initProvider } = require('../index');
@@ -58,6 +59,10 @@ const context = {
 };
 describe.skip('Mocked Contract Client Test Suite', () => {
   const authenticate = () => 'TOKEN';
+
+  afterEach(async () => {
+    await wait(1000);
+  });
 
   beforeEach(() => {
     // mockContract.mock.resetCalls();

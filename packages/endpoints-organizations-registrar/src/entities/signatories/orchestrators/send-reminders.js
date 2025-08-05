@@ -12,7 +12,6 @@ const sendReminders = async (
   const { repos, config, log } = req;
   const { signatoryLinkResend } = config;
   const signatoryStatuses = await repos.signatoryStatus.findByEvent(
-    SignatoryEventStatus.LINK_SENT,
     subMinutes(signatoryLinkResend, currentTime)
   );
   if (isEmpty(signatoryStatuses)) {

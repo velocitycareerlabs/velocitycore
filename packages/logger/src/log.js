@@ -144,7 +144,7 @@ const loggerProvider = ({
   };
   const redact = {};
   redact.paths =
-    /^debug$/i.test(logSeverity) && nodeEnv !== 'dev'
+    /^debug$/i.test(logSeverity) && nodeEnv === 'dev'
       ? SPAM_PATHS
       : [...SPAM_PATHS, ...SECURITY_PATHS, ...JSON_VC_PATHS];
   redact.censor = (value, path) => {

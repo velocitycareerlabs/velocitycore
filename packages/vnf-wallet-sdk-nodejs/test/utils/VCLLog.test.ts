@@ -14,14 +14,14 @@ describe('VCLLog', () => {
         mockLoggerService.error.mock.resetCalls();
         mockLoggerService.warn.mock.resetCalls();
         mockLoggerService.info.mock.resetCalls();
-        VCLLog.LoggerService = mockLoggerService;
-        GlobalConfig.IsDebugOn = true;
+        VCLLog.setLoggerService(mockLoggerService);
+        GlobalConfig.setIsDebugOn(true);
     });
 
     describe('LoggerService', () => {
         it('should set and get the LoggerService correctly', () => {
-            VCLLog.LoggerService = mockLoggerService;
-            expect(VCLLog.LoggerService).toBe(mockLoggerService);
+            VCLLog.setLoggerService(mockLoggerService);
+            expect(VCLLog.LoggerService).toEqual(mockLoggerService);
         });
     });
 
@@ -51,7 +51,7 @@ describe('VCLLog', () => {
         });
 
         it('should not call LoggerService.warn if IsLoggerOn is false', () => {
-            GlobalConfig.IsDebugOn = false;
+            GlobalConfig.setIsDebugOn(false);
             VCLLog.warn({ warn: 'obj' }, 'Warn message', 'arg1', 'arg2');
             expect(mockLoggerService.warn.mock.callCount()).toEqual(0);
         });
@@ -70,7 +70,7 @@ describe('VCLLog', () => {
         });
 
         it('should not call LoggerService.info if IsLoggerOn is false', () => {
-            GlobalConfig.IsDebugOn = false;
+            GlobalConfig.setIsDebugOn(false);
             VCLLog.info({ info: 'obj' }, 'Info message', 'arg1', 'arg2');
             expect(mockLoggerService.info.mock.callCount()).toEqual(0);
         });

@@ -36,9 +36,9 @@ describe('CredentialTypesUseCaseImpl Tests', () => {
     test('testGetCountriesFailure', async () => {
         try {
             await subject2.getCredentialTypes();
-            expect(false).toBe(true);
+            expect(false).toEqual(true);
         } catch (error: any) {
-            expect(error.errorCode).toBe(VCLErrorCode.SdkError.toString());
+            expect(error.errorCode).toEqual(VCLErrorCode.SdkError.toString());
         }
     });
 
@@ -50,20 +50,22 @@ describe('CredentialTypesUseCaseImpl Tests', () => {
             expect(credentialTypesArr1[i].payload).toStrictEqual(
                 credentialTypesArr2[i].payload
             );
-            expect(credentialTypesArr1[i].id).toBe(credentialTypesArr2[i].id);
-            expect(credentialTypesArr1[i].schema).toBe(
+            expect(credentialTypesArr1[i].id).toEqual(
+                credentialTypesArr2[i].id
+            );
+            expect(credentialTypesArr1[i].schema).toEqual(
                 credentialTypesArr2[i].schema
             );
-            expect(credentialTypesArr1[i].createdAt).toBe(
+            expect(credentialTypesArr1[i].createdAt).toEqual(
                 credentialTypesArr2[i].createdAt
             );
-            expect(credentialTypesArr1[i].schemaName).toBe(
+            expect(credentialTypesArr1[i].schemaName).toEqual(
                 credentialTypesArr2[i].schemaName
             );
-            expect(credentialTypesArr1[i].credentialType).toBe(
+            expect(credentialTypesArr1[i].credentialType).toEqual(
                 credentialTypesArr2[i].credentialType
             );
-            expect(credentialTypesArr1[i].recommended).toBe(
+            expect(credentialTypesArr1[i].recommended).toEqual(
                 credentialTypesArr2[i].recommended
             );
         }

@@ -3,8 +3,8 @@ import VCLPresentationRequest from '../../../api/entities/VCLPresentationRequest
 import VCLPresentationRequestDescriptor from '../../../api/entities/VCLPresentationRequestDescriptor';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import PresentationRequestRepository from '../../domain/repositories/PresentationRequestRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from './Urls';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export default class PresentationRequestRepositoryImpl
     implements PresentationRequestRepository
@@ -22,14 +22,11 @@ export default class PresentationRequestRepositoryImpl
         const presentationRequestResponse =
             await this.networkService.sendRequest({
                 endpoint,
-                contentType: null,
                 method: HttpMethod.GET,
                 headers: {
                     [HeaderKeys.XVnfProtocolVersion]:
                         HeaderValues.XVnfProtocolVersion,
                 },
-                body: null,
-                useCaches: false,
             });
         return presentationRequestResponse.payload[
             VCLPresentationRequest.KeyPresentationRequest

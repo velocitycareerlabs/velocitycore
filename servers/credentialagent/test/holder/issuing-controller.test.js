@@ -3057,6 +3057,7 @@ describe('Holder Issuing Test Suite', () => {
         },
         issuer: {
           id: tenant.did,
+          type: ['Issuer'],
           name: 'mock',
           image: 'mock',
           badProperty: 'should be ignored',
@@ -4150,7 +4151,7 @@ describe('Holder Issuing Test Suite', () => {
           tenant,
           exchange,
           user,
-          issuer: { image: 'image', name: 'name' },
+          issuer: { type: 'Brand', image: 'image', name: 'name' },
         })
       );
       nock(mockVendorUrl)
@@ -4182,6 +4183,7 @@ describe('Holder Issuing Test Suite', () => {
               tenant,
             }),
             issuer: {
+              type: 'Brand',
               image: 'image',
               name: 'name',
               id: tenant.did,

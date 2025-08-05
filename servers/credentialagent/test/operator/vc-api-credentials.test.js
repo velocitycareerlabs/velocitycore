@@ -340,7 +340,7 @@ describe('vc-api credentials endpoints', () => {
           mockAddCredentialMetadataEntry.mock.calls.map(
             (call) => call.arguments
           )
-        ).toEqual([[expect.any(Object), expect.any(String), 'did:ion:cao']]);
+        ).toEqual([[expect.any(Object), expect.any(String), 'did:ion:cao', 'cosekey:aes-256-gcm']]);
       });
 
       it("should issue a credential without a credential subject's DID", async () => {
@@ -734,8 +734,8 @@ describe('vc-api credentials endpoints', () => {
               'payload.vc.credentialSubject.type': 'AchievementSubject',
               'payload.vc.credentialSubject.@context': undefined,
               'payload.vc.credentialSchema': {
-                id: 'https://imsglobal.org/schemas/open-badge-v3.0-schema.json',
-                type: 'JsonSchemaValidator2018',
+                type: '1EdTechJsonSchemaValidator2019',
+                id: 'http://example.com/schema.json',
               },
             },
           })

@@ -1,0 +1,4 @@
+#!/bin/bash
+NPM_VER_NUM="$CURR_VERSION-pre.$VER_SEQ_NUM"
+
+echo "NPM_VER_NUM=$NPM_VER_NUM" >> $GITHUB_ENV

@@ -4,9 +4,9 @@ import VCLFinalizeOffersDescriptor from '../../../api/entities/VCLFinalizeOffers
 import VCLToken from '../../../api/entities/VCLToken';
 import NetworkService from '../../domain/infrastructure/network/NetworkService';
 import FinalizeOffersRepository from '../../domain/repositories/FinalizeOffersRepository';
-import { HttpMethod } from '../infrastructure/network/Request';
 import { HeaderKeys, HeaderValues } from './Urls';
 import VCLJwt from '../../../api/entities/VCLJwt';
+import { HttpMethod } from '../infrastructure/network/HttpMethod';
 
 export class FinalizeOffersRepositoryImpl implements FinalizeOffersRepository {
     constructor(private networkService: NetworkService) {}
@@ -17,15 +17,13 @@ export class FinalizeOffersRepositoryImpl implements FinalizeOffersRepository {
         proof: Nullish<VCLJwt> = null
     ): Promise<VCLJwt[]> {
         const finalizedOffersResponse = await this.networkService.sendRequest({
-            useCaches: false,
             endpoint: finalizeOffersDescriptor.finalizeOffersUri,
             body: finalizeOffersDescriptor.generateRequestBody(proof),
             headers: {
-                [HeaderKeys.HeaderKeyAuthorization]: `${HeaderKeys.HeaderValuePrefixBearer} ${sessionToken.value}`,
+                [HeaderKeys.Authorization]: `${HeaderValues.PrefixBearer} ${sessionToken.value}`,
                 [HeaderKeys.XVnfProtocolVersion]:
                     HeaderValues.XVnfProtocolVersion,
             },
-            contentType: 'application/json',
             method: HttpMethod.POST,
         });
 

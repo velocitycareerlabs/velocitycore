@@ -37,6 +37,10 @@ export default class Urls {
         return `${Urls.BaseUrlServices}/api/v0.6/resolve-kid/`;
     }
 
+    static get ResolveDid(): string {
+        return `${Urls.BaseUrlServices}/api/v0.6/resolve-did/`;
+    }
+
     static get CredentialTypesFormSchema(): string {
         return `${Urls.BaseUrlServices}/api/v0.6/form-schemas?credentialType=${Params.CredentialType}`;
     }
@@ -53,14 +57,14 @@ export class Params {
 }
 
 export class HeaderKeys {
-    static readonly HeaderKeyAuthorization = 'Authorization';
-
-    static readonly HeaderValuePrefixBearer = 'Bearer';
+    static readonly Authorization = 'Authorization';
 
     static readonly XVnfProtocolVersion = 'x-vnf-protocol-version';
 }
 
 export class HeaderValues {
+    static readonly PrefixBearer = 'Bearer';
+
     static get XVnfProtocolVersion() {
         return GlobalConfig.XVnfProtocolVersion.toString();
     }

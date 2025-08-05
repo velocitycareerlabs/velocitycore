@@ -14,44 +14,99 @@
  * limitations under the License.
  */
 
+import { useState, useCallback } from 'react';
 import { Form, TextInput, SaveButton, required } from 'react-admin';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import PropTypes from 'prop-types';
 import { Stack } from '@mui/material';
+import { useIsIssuingInspection } from '@/pages/services/hooks/useIsIssuingInspection';
 
 import Popup from '../common/Popup.jsx';
 import { validateServiceEndpoint } from '../organizations/CreateOrganization.utils';
 
-const ServicesEdit = ({ onClose, onSave, selectedService }) => {
+const ServicesEdit = ({ onClose, onSave, selectedService, InterceptOnCreate }) => {
+  const { isIssuingOrInspection, isCAO } = useIsIssuingInspection({ id: selectedService?.type });
+  const [isInterceptOnCreateOpen, setIsInterceptOnCreateOpen] = useState(false);
+  const [selectedCAO, setSelectedCAO] = useState(
+    isIssuingOrInspection ? selectedService?.serviceEndpoint.split('#')[0] : null,
+  );
+  const handleOnSave = useCallback(
+    (data) => {
+      onSave(data);
+      if (InterceptOnCreate) {
+        setSelectedCAO(() => data.serviceEndpoint.split('#')[0]);
+        setIsInterceptOnCreateOpen(() => true);
+      }
+    },
+    [onSave, InterceptOnCreate],
+  );
+
+  const handleOnClose = useCallback(() => {
+    setIsInterceptOnCreateOpen(false);
+    onClose();
+  }, [onClose]);
+
+  const isModifyingServiceEnabled = !!InterceptOnCreate;
+
   return (
-    <Popup
-      title="Edit your service details here:"
-      onClose={onClose}
-      isOpen={Boolean(selectedService)}
-    >
-      <Form
-        record={{ serviceEndpoint: selectedService?.serviceEndpoint }}
-        onSubmit={onSave}
-        mode="onChange"
+    <>
+      <Popup
+        title="Edit your service details here:"
+        onClose={onClose}
+        isOpen={Boolean(selectedService)}
       >
-        <FormContent />
-      </Form>
-    </Popup>
+        <Form
+          record={{ serviceEndpoint: selectedService?.serviceEndpoint }}
+          onSubmit={handleOnSave}
+          mode="onChange"
+        >
+          <FormContent
+            isIssuingOrInspection={isIssuingOrInspection}
+            isModifyingServiceEnabled={isModifyingServiceEnabled}
+          />
+        </Form>
+      </Popup>
+      <InterceptOnCreate
+        isInterceptOnCreateOpen={isInterceptOnCreateOpen}
+        serviceId={selectedService?.id}
+        onNext={() => onClose()}
+        onClose={handleOnClose}
+        isIssueOrInspection={isIssuingOrInspection}
+        selectedCAO={selectedCAO}
+        isCAO={isCAO}
+      />
+    </>
   );
 };
 
-const FormContent = () => {
+const FormContent = ({ isIssuingOrInspection, isModifyingServiceEnabled }) => {
+  const validateArray = [required('Service endpoint URL field is required')];
+  if (!isIssuingOrInspection) {
+    validateArray.push(...validateServiceEndpoint);
+  }
   return (
     <Stack>
       <TextInput
         source="serviceEndpoint"
         label="Service endpoint URL"
-        validate={[required('Service endpoint URL field is required'), ...validateServiceEndpoint]}
+        validate={validateArray}
         parse={(value) => value.trim()}
       />
-      <SaveButton variant="outlined" icon={null} label="Modify" sx={sx.saveButton} />
+      <SaveButton
+        variant="outlined"
+        icon={null}
+        label="Save"
+        sx={sx.saveButton}
+        alwaysEnable={isModifyingServiceEnabled}
+      />
     </Stack>
   );
+};
+
+// eslint-disable-next-line better-mutation/no-mutation
+FormContent.propTypes = {
+  isIssuingOrInspection: PropTypes.bool.isRequired,
+  isModifyingServiceEnabled: PropTypes.bool.isRequired,
 };
 
 // eslint-disable-next-line better-mutation/no-mutation
@@ -60,6 +115,7 @@ ServicesEdit.propTypes = {
   onSave: PropTypes.func,
   // eslint-disable-next-line react/forbid-prop-types
   selectedService: PropTypes.object,
+  InterceptOnCreate: PropTypes.elementType,
 };
 
 const sx = {

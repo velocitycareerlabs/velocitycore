@@ -7,12 +7,15 @@ import VCLToken from './VCLToken';
 import VCLDidJwk from './VCLDidJwk';
 
 export default class VCLCredentialManifestDescriptorByService extends VCLCredentialManifestDescriptor {
+    private readonly didInput: string;
+
     constructor(
         service: VCLService,
         issuingType: VCLIssuingType = VCLIssuingType.Career,
         credentialTypes: Nullish<string[]> = null,
         pushDelegate: Nullish<VCLPushDelegate> = null,
         didJwk: VCLDidJwk,
+        did: string,
         remoteCryptoServicesToken: Nullish<VCLToken> = null
     ) {
         super(
@@ -25,5 +28,10 @@ export default class VCLCredentialManifestDescriptorByService extends VCLCredent
             didJwk,
             remoteCryptoServicesToken
         );
+        this.didInput = did;
+    }
+
+    get did(): string {
+        return this.didInput;
     }
 }
