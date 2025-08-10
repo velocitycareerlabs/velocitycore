@@ -99,7 +99,7 @@
     "@swc/core": "1.13.3",
     "@swc/jest": "0.2.39",
     "@testing-library/react": "16.3.0",
-    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/jest-dom": "6.6.4",
     "@types/react": "19.1.9",
     "@types/react-dom": "19.1.7",
     "@vitejs/plugin-react-swc": "3.11.0",
