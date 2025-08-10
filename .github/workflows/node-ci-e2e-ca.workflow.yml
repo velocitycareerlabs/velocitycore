@@ -17,7 +17,7 @@ jobs:
         node-version: [22.x]
     steps:
     - name: Login to GitHub Registry
-      uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
+      uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3
       with:
         registry: ${{ env.DOCKER_REG }}
         username: $GITHUB_ACTOR
@@ -35,7 +35,7 @@ jobs:
       run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
     - name: Restore yarn cached
       id: cache-yarn-restore
-      uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+      uses: actions/cache/restore@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
       with:
         path: |
           ${{ steps.yarn-cache-dir-path.outputs.dir }}
