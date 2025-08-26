@@ -8,7 +8,7 @@
     }
   ],
   "timezone": "Asia/Jerusalem",
-  "enabled": false
+  "enabled": false,
   "extends": [
     "config:best-practices",  
     "npm:unpublishSafe",
